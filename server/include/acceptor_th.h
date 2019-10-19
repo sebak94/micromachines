@@ -3,16 +3,18 @@
 
 #include "../../common/include/thread.h"
 #include "../../common/include/socket.h"
+#include "./micromachines.h"
 
 class AcceptorTh: public Thread {
     private:
     Socket skt;
     bool keep_accepting;
+    Micromachines micromachines;
 
     public:
-    AcceptorTh(const char *service);
+    AcceptorTh(const char *service, Micromachines micromachines);
     virtual void run() override;
-    void stop();
+    virtual void stop() override;
     ~AcceptorTh();
 };
 

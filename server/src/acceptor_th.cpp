@@ -1,11 +1,13 @@
 #include "../include/acceptor_th.h"
 #include "../include/client_th.h"
+#include "../include/micromachines.h"
 #include "../../common/include/socket.h"
 #include "../../common/include/socket_error.h"
 #include "iostream"
 #include "vector"
 
-AcceptorTh::AcceptorTh(const char *service): keep_accepting(true) {
+AcceptorTh::AcceptorTh(const char *service, Micromachines micromachines):
+    keep_accepting(true), micromachines(micromachines) {
     try {
         skt.BindAndListen(service);
     } catch(const SocketError &e) {

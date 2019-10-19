@@ -19,7 +19,7 @@ class ClientTh: public Thread {
     public:
     ClientTh(Socket *peer);
     virtual void run() override;
-    void stop();
+    virtual void stop() override;
     bool isDead();
     ~ClientTh();
 };

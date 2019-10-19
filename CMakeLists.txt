@@ -9,6 +9,13 @@ set(SOURCE_FILES_SERVER
     server/src/acceptor_th.cpp
     server/include/client_th.h
     server/src/client_th.cpp
+    server/include/game_loop_th.h
+    server/src/game_loop_th.cpp
+    server/include/micromachines.h
+    server/src/micromachines.cpp
+    server/include/model/model.h
+    server/include/model/car.h
+    server/src/model/car.cpp
     common/include/socket.h
     common/src/socket.cpp
     common/include/socket_error.h
