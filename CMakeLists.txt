@@ -5,6 +5,8 @@ project(Micromachines)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
 
 set(SOURCE_FILES_SERVER
+    server/include/mm_server.h
+    server/src/mm_server.cpp
     server/include/acceptor_th.h
     server/src/acceptor_th.cpp
     server/include/client_th.h
