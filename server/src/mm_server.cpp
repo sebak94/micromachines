@@ -1,7 +1,7 @@
 #include "../include/mm_server.h"
 #include "../include/acceptor_th.h"
 #include "../include/game_loop_th.h"
-#include "../include/micromachines.h"
+#include "../include/model/micromachines.h"
 #include "../../common/include/thread.h"
 #include "../../common/include/socket_error.h"
 #include <iostream>

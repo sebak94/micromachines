@@ -3,7 +3,7 @@
 
 #include "../../common/include/thread.h"
 #include "../../common/include/socket.h"
-#include "./micromachines.h"
+#include "model/micromachines.h"
 
 class AcceptorTh: public Thread {
     private:

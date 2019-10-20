@@ -1,5 +1,5 @@
 #include "../include/game_loop_th.h"
-#include "../include/micromachines.h"
+#include "../include/model/micromachines.h"
 #include <chrono>
 
 #define MS_PER_UPDATE 16 // 60 FPS

@@ -1,6 +1,6 @@
 #include "../include/acceptor_th.h"
 #include "../include/client_th.h"
-#include "../include/micromachines.h"
+#include "../include/model/micromachines.h"
 #include "../../common/include/socket.h"
 #include "../../common/include/socket_error.h"
 #include "iostream"

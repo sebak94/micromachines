@@ -13,11 +13,15 @@ set(SOURCE_FILES_SERVER
     server/src/client_th.cpp
     server/include/game_loop_th.h
     server/src/game_loop_th.cpp
-    server/include/micromachines.h
-    server/src/micromachines.cpp
+    server/include/model/micromachines.h
+    server/src/model/micromachines.cpp
     server/include/model/model.h
     server/include/model/car.h
     server/src/model/car.cpp
+    server/include/model/point.h
+    server/src/model/point.cpp
+    server/include/model/track.h
+    server/src/model/track.cpp
     common/include/socket.h
     common/src/socket.cpp
     common/include/socket_error.h

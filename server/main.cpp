@@ -1,4 +1,4 @@
-#include "./include/mm_server.h"
+#include "include/mm_server.h"
 #include <iostream>
 
 #define SUCCESS 0
