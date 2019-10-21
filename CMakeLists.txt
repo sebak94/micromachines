@@ -20,6 +20,16 @@ set(SOURCE_FILES_SERVER
 set(SOURCE_FILES_CLIENT
     client/include/server.h
     client/src/server.cpp
+	client/include/sdl/SdlAnimation.h
+	client/src/sdl/SdlAnimation.cpp
+	client/include/sdl/SdlException.h
+	client/src/sdl/SdlException.cpp
+	client/include/sdl/SdlSurface.h
+	client/src/sdl/SdlSurface.cpp
+	client/include/sdl/SdlTexture.h
+	client/src/sdl/SdlTexture.cpp
+	client/include/sdl/SdlWindow.h
+	client/src/sdl/SdlWindow.cpp
     common/include/socket.h
     common/src/socket.cpp
     common/include/socket_error.h
