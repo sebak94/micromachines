@@ -6,7 +6,7 @@
 #include "iostream"
 #include "vector"
 
-AcceptorTh::AcceptorTh(const char *service, Micromachines micromachines):
+AcceptorTh::AcceptorTh(const char *service, Micromachines &micromachines):
     keep_accepting(true), micromachines(micromachines) {
     try {
         skt.BindAndListen(service);
@@ -46,7 +46,7 @@ void AcceptorTh::run() {
             Socket *peer = new Socket();
             sockets.push_back(peer);
             skt.Accept(peer);
-            ClientTh *client_th = new ClientTh(peer);
+            ClientTh *client_th = new ClientTh(peer, micromachines);
             clients.push_back(client_th);
             client_th->start();
             deleteDeadClients();

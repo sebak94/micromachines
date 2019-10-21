@@ -16,8 +16,10 @@ set(SOURCE_FILES_SERVER
     server/include/model/micromachines.h
     server/src/model/micromachines.cpp
     server/include/model/model.h
-    server/include/model/car.h
-    server/src/model/car.cpp
+    server/include/model/cars/car.h
+    server/src/model/cars/car.cpp
+    server/include/model/cars/blue_car.h
+    server/src/model/cars/blue_car.cpp
     server/include/model/point.h
     server/src/model/point.cpp
     server/include/model/track.h

@@ -1,12 +1,12 @@
 #ifndef __CAR_H__
 #define __CAR_H__
 
-#include "model.h"
-#include "point.h"
+#include "../model.h"
+#include "../point.h"
 #include <cstdint>
 
 class Car: public Model {
-    private:
+    protected:
     const uint8_t width;
     const uint8_t height;
     const uint8_t max_velocity;
@@ -18,9 +18,9 @@ class Car: public Model {
     Point position;
 
     public:
-    Car(Point initial_position, uint8_t width, uint8_t height);
-    virtual void update() override;
-    virtual void serialize() override;
+    Car(uint8_t width, uint8_t height, uint8_t max_velocity,
+        uint8_t acceleration, uint8_t grip, uint8_t maneuverability,
+        Point initial_position);
 };
 
 #endif

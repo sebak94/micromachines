@@ -1,12 +1,16 @@
 #include "../include/client_th.h"
+#include "../include/model/cars/blue_car.h"
 #include "../../common/include/socket.h"
 #include "../../common/include/socket_error.h"
 #include "iostream"
 #include "vector"
 #include "string"
 
-ClientTh::ClientTh(Socket *peer): keep_talking(true),
-    is_running(true), peer(peer) {
+ClientTh::ClientTh(Socket *peer, Micromachines &micromachines):
+    keep_talking(true), is_running(true), peer(peer),
+    micromachines(micromachines) {
+    car = new BlueCar();
+    micromachines.addCar(car);
     std::string welcome_msg = "Bienvenido!\n";
     send(welcome_msg);
 }
@@ -48,4 +52,7 @@ bool ClientTh::isDead() {
     return !is_running;
 }
 
-ClientTh::~ClientTh() {}
+ClientTh::~ClientTh() {
+    micromachines.removeCar(car);
+    delete car;
+}

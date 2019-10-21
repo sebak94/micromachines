@@ -18,7 +18,7 @@ class AcceptorTh: public Thread {
     void deleteResources();
 
     public:
-    AcceptorTh(const char *service, Micromachines micromachines);
+    AcceptorTh(const char *service, Micromachines &micromachines);
     virtual void run() override;
     virtual void stop() override;
     ~AcceptorTh();

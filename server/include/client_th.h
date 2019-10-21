@@ -3,6 +3,8 @@
 
 #include "../../common/include/thread.h"
 #include "../../common/include/socket.h"
+#include "model/micromachines.h"
+#include "model/cars/car.h"
 #include <string>
 #include <vector>
 #include <atomic>
@@ -12,12 +14,14 @@ class ClientTh: public Thread {
     std::atomic<bool> keep_talking;
     std::atomic<bool> is_running;
     Socket *peer;
+    Micromachines micromachines;
+    Car *car;
 
     void receive(std::vector<char> &command);
     void send(std::string &response);
 
     public:
-    ClientTh(Socket *peer);
+    ClientTh(Socket *peer, Micromachines &micromachines);
     virtual void run() override;
     virtual void stop() override;
     bool isDead();
