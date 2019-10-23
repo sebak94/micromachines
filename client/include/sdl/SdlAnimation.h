@@ -8,14 +8,13 @@
 class SdlAnimation {
 private:
     int frames;
-    SdlWindow &window;
-    SdlTexture texture;
+    SdlTexture &texture;
     std::vector<SDL_Rect> spriteClips;
 
 public:
-    SdlAnimation(int framesInX, int framesInY, const char* filename, SdlWindow &window, int widthFrame, int heightFrame);
+    SdlAnimation(SdlTexture &texture, int framesInX, int framesInY, int widthFrame, int heightFrame);
     ~SdlAnimation();
-    void render(SDL_Rect sdlDest);
+    void render(SDL_Rect sdlDest, SdlWindow &window);
 };
 
 #endif

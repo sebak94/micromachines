@@ -30,13 +30,14 @@ set(SOURCE_FILES_CLIENT
 	client/src/sdl/SdlTexture.cpp
 	client/include/sdl/SdlWindow.h
 	client/src/sdl/SdlWindow.cpp
+	client/include/PictureLoader.h
+    client/src/PictureLoader.cpp
     common/include/socket.h
     common/src/socket.cpp
     common/include/socket_error.h
     common/src/socket_error.cpp
     common/include/thread.h
-    common/src/thread.cpp
-)
+    common/src/thread.cpp)
 
 add_executable(micromachines-sv ${SOURCE_FILES_SERVER} server/main.cpp)
 add_executable(micromachines-cl ${SOURCE_FILES_CLIENT} client/main.cpp)

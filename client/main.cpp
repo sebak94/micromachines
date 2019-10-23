@@ -2,11 +2,13 @@
 #include <string>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL.h>
+#include <map>
 #include "include/server.h"
 #include "../common/include/socket_error.h"
 #include "include/sdl/SdlWindow.h"
 #include "include/sdl/SdlAnimation.h"
 #include "include/sdl/SdlSurface.h"
+#include "include/PictureLoader.h"
 
 #define SUCCESS 0
 
@@ -23,29 +25,29 @@ void run(const char *hostname, const char *service) {
     } catch(const SocketError &e) {}
 }
 
-void showAnimations(SdlWindow &window) {
-    //Animacion explosion
+void showAnimation(SdlWindow &window) {
     int framesInX = 5;
     int framesInY = 2;
     //Divido el ancho de la imagen por la cantidad de frames a lo ancho
     int widthFrame = 960 / framesInX;
     //Divido el largo de la imagen por la cantidad de frames a lo largo
     int heightFrame = 384 / framesInY;
-    SdlAnimation anim4(framesInX, framesInY, "images/explosion.png", window, widthFrame, heightFrame);
-    SDL_Rect sdlDest3 = {(window.getWidth() - widthFrame) / 2, (window.getHeight() - heightFrame) / 2, widthFrame, heightFrame};
-    anim4.render(sdlDest3);
+
+    SdlTexture texture("images/explosion.png", window);
+    SdlAnimation anim(texture, framesInX, framesInY, widthFrame, heightFrame);
+    SDL_Rect sdlDest = {(window.getWidth() - widthFrame) / 2, (window.getHeight() - heightFrame) / 2, widthFrame, heightFrame};
+    anim.render(sdlDest, window);
 }
 
-void showBackground(SdlWindow &window, int xPos, int yPos) {
-    SdlSurface imageGrass("images/Grass_Tile.png", window);
-    //Pinto todo el backgroud de pasto
+void showBackground(SdlWindow &window, int xPos, int yPos, std::map<std::string, SdlSurface*> &pictures) {
+    //Pinto el backgroud de pasto
     int x = 0, y = 0;
     int width = window.getWidth() / 3;
     int height = window.getHeight() / 2;
     while (y < window.getHeight()) {
         while (x < window.getWidth()) {
             SDL_Rect sdlDestGrass = {x, y, width, height};
-            imageGrass.render(sdlDestGrass);
+            pictures["GRASS"]->render(sdlDestGrass, window);
             x += width;
         }
         x = 0;
@@ -53,39 +55,48 @@ void showBackground(SdlWindow &window, int xPos, int yPos) {
     }
 
     //Agrego arriba la ruta
-    SdlSurface imageRoad("images/Road_01_Tile_03.png", window);
-    SdlSurface imageRoadCurve("images/Road_01_Tile_08.png", window);
-    int routeWidth = 500; //el ancho de la ruta es siempre el mismo y siempre en el medio de la pantalla
-    int routeHeight = window.getHeight() / 2; //muestro de a 2 imagenes de ruta
+    int routeWidth = 400;
+    int routeHeight = 400;
     int halfWidth = (window.getWidth() - routeWidth) / 2;
     int beginHeight = - window.getHeight(); //la altura tiene el eje al reves de lo "comun"
 
-    //Supongamos que la pista tiene 3 imagenes rectas
-    for (int i = 0; i < 3; i++) {
-        SDL_Rect sdlDestRoad1 = {halfWidth + xPos, -beginHeight - routeHeight + yPos, routeWidth, routeHeight};
-        imageRoad.render(sdlDestRoad1);
-        beginHeight += routeHeight;
+    x = halfWidth;
+    y = beginHeight;
+    SDL_Rect sdlDestRoad;
+    //Supongamos que la pista tiene 2 imagenes rectas
+    for (int i = 0; i < 2; i++) {
+        y += routeHeight;
+        sdlDestRoad = {x + xPos, -y + yPos, routeWidth, routeHeight};
+        pictures["LINEROAD"]->render(sdlDestRoad, window);
     }
-    SDL_Rect sdlDestRoad2 = {halfWidth + xPos, -beginHeight - routeHeight + yPos, routeWidth, routeHeight};
-    imageRoadCurve.render(sdlDestRoad2);
+    //Agrego una curva
+    y += routeHeight;
+    y -= (routeHeight - 100) / 10; //esto para la curva (saca el espacio que sobra)
+    sdlDestRoad = {x + xPos, -y + yPos, routeWidth, routeHeight};
+    pictures["CURVEROAD"]->render(sdlDestRoad, window);
+    //Agrego una imagen mas despues de la curva
+    x += routeWidth;
+    x -= (routeWidth - 100) / 10; //esto despues de la curva (saca el espacio que sobra)
+    sdlDestRoad = {x + xPos, -y + yPos, routeWidth, routeHeight};
+    pictures["LINEROAD"]->renderRotate(sdlDestRoad, 90, SDL_FLIP_NONE, window);
 }
 
 int testSdl() {
+    std::map<std::string, SdlSurface*> pictures;
+    PictureLoader loader(pictures);
     try {
         SdlWindow window(900, 600);
-        showAnimations(window);
-
+        showAnimation(window);
         window.fill();
-        SdlSurface image("images/pitstop_car_1.png", window);
         bool running = true;
-        int widthCar = 100, heightCar = 200;
+        int widthCar = 80, heightCar = 170;
         int x = 0, y = 0; //Son para mover la pista, el auto es fijo, se mueve la pista
         while (running) {
             window.fill();
-            showBackground(window, x, y);
+            showBackground(window, x, y, pictures);
             //Ubico el auto siempre en el medio
             SDL_Rect sdlDestCar = {(window.getWidth() - widthCar) / 2, (window.getHeight() - heightCar) / 2, widthCar, heightCar};
-            image.render(sdlDestCar);
+            pictures["CAR"]->render(sdlDestCar, window);
 
             SDL_Event event;
             SDL_WaitEvent(&event);

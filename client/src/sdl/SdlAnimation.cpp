@@ -3,8 +3,7 @@
 #include "../../include/sdl/SdlAnimation.h"
 #include "../../include/sdl/SdlSurface.h"
 
-SdlAnimation::SdlAnimation(int framesInX, int framesInY, const char* filename, SdlWindow &window, int widthFrame, int heightFrame) :
-        window(window), texture(filename, window) {
+SdlAnimation::SdlAnimation(SdlTexture &texture, int framesInX, int framesInY, int widthFrame, int heightFrame) : texture(texture) {
     this->frames = framesInX * framesInY;
     int xValue = 0;
     int yValue = 0;
@@ -22,7 +21,7 @@ SdlAnimation::SdlAnimation(int framesInX, int framesInY, const char* filename, S
 
 SdlAnimation::~SdlAnimation() {}
 
-void SdlAnimation::render(SDL_Rect sdlDest) {
+void SdlAnimation::render(SDL_Rect sdlDest, SdlWindow &window) {
     int startTime = SDL_GetTicks();
     int animationRate = this->frames;
     int animationLength = this->frames + 1; //cantidad de frames + 1
@@ -33,9 +32,9 @@ void SdlAnimation::render(SDL_Rect sdlDest) {
         frameToDraw = ((SDL_GetTicks() - startTime) * animationRate / milliseconds) % animationLength;
         SDL_Rect currentClip = this->spriteClips[frameToDraw];
         //Lleno la pantalla para "borrar" lo anterior
-        this->window.fill(); //window.fill() tiene que cargar todo el fondo
+        window.fill(); //window.fill() tiene que cargar todo el fondo
         this->texture.render(currentClip, sdlDest);
         //Update screen
-        this->window.render();
+        window.render();
     }
 }
