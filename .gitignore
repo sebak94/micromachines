@@ -33,6 +33,8 @@
 
 # VSCode
 .vscode
+.idea/
 
 # Builds
 /build
+client/lua/build
