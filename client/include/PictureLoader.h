@@ -3,13 +3,14 @@
 
 #include <map>
 #include "sdl/SdlSurface.h"
+#include "PicType.h"
 
 class PictureLoader {
 private:
-    std::map<std::string, SdlSurface*> &pictures;
+    std::map<PicType, SdlSurface*> &pictures;
 
 public:
-    PictureLoader(std::map<std::string, SdlSurface*> &pictures);
+    PictureLoader(std::map<PicType, SdlSurface*> &pictures);
     ~PictureLoader();
 };
 

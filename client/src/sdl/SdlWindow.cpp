@@ -25,6 +25,7 @@ SdlWindow::~SdlWindow() {
         SDL_DestroyWindow(this->window);
         this->window = nullptr;
     }
+    SDL_Quit();
 }
 
 int SdlWindow::getWidth() const {

@@ -14,7 +14,7 @@ private:
 public:
     SdlAnimation(SdlTexture &texture, int framesInX, int framesInY, int widthFrame, int heightFrame);
     ~SdlAnimation();
-    void render(SDL_Rect sdlDest, SdlWindow &window);
+    void render(SDL_Rect &sdlDest, SdlWindow &window);
 };
 
 #endif

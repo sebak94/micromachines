@@ -12,7 +12,7 @@ private:
 public:
     SdlTexture(const std::string &filename, const SdlWindow& window);
     ~SdlTexture();
-    int render(SDL_Rect sdlSrc, SDL_Rect sdlDest) const;
+    int render(SDL_Rect &sdlSrc, SDL_Rect &sdlDest) const;
 
 private:
     SDL_Texture* loadTexture(const std::string &filename);

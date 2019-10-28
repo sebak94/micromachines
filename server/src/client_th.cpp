@@ -7,15 +7,20 @@
 
 ClientTh::ClientTh(Socket *peer): keep_talking(true),
     is_running(true), peer(peer) {
-    std::string welcome_msg = "Bienvenido!\n";
-    send(welcome_msg);
+    //std::string welcome_msg = "Bienvenido!\n";
+    //send(welcome_msg);
 }
 
 void ClientTh::run() {
     while (keep_talking) {
         try {
-            // receive(v_cmd);
-            // send(response);
+            std::vector<char> v_cmd;
+            receive(v_cmd);
+            printf("recibo: %s\n", &v_cmd.front());
+
+            std::string response(1, v_cmd.front());
+            send(response);
+            printf("envio: %s\n\n", response.c_str());
         } catch(const SocketError &e) {
             keep_talking = false;
             std::cout << e.what() << "\n";
@@ -28,10 +33,12 @@ void ClientTh::run() {
 void ClientTh::receive(std::vector<char> &command) {
     char c;
     peer->Receive(&c, 1);
-    while (c != '\n') {
+    command.push_back(c);
+
+    /*while (c != '\n') {
         command.push_back(c);
         peer->Receive(&c, 1);
-    }
+    }*/
 }
 
 void ClientTh::send(std::string &response) {

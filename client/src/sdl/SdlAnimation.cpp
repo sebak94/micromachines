@@ -21,7 +21,7 @@ SdlAnimation::SdlAnimation(SdlTexture &texture, int framesInX, int framesInY, in
 
 SdlAnimation::~SdlAnimation() {}
 
-void SdlAnimation::render(SDL_Rect sdlDest, SdlWindow &window) {
+void SdlAnimation::render(SDL_Rect &sdlDest, SdlWindow &window) {
     int startTime = SDL_GetTicks();
     int animationRate = this->frames;
     int animationLength = this->frames + 1; //cantidad de frames + 1

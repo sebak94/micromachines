@@ -32,12 +32,30 @@ set(SOURCE_FILES_CLIENT
 	client/src/sdl/SdlWindow.cpp
 	client/include/PictureLoader.h
     client/src/PictureLoader.cpp
+	client/include/ThreadSafeQueue.h
+	client/src/ThreadSafeQueue.cpp
+	client/include/EventLoopSDL.h
+	client/src/EventLoopSDL.cpp
+	client/include/Dispatcher.h
+	client/src/Dispatcher.cpp
+	client/include/Block.h
+	client/src/Block.cpp
+	client/include/Drawer.h
+	client/src/Drawer.cpp
+	client/include/PicType.h
+	client/include/Car.h
+	client/src/Car.cpp
+	client/include/Model.h
+	client/src/Model.cpp
+	client/include/Camera.h
+	client/src/Camera.cpp
     common/include/socket.h
     common/src/socket.cpp
     common/include/socket_error.h
     common/src/socket_error.cpp
     common/include/thread.h
-    common/src/thread.cpp)
+    common/src/thread.cpp
+)
 
 add_executable(micromachines-sv ${SOURCE_FILES_SERVER} server/main.cpp)
 add_executable(micromachines-cl ${SOURCE_FILES_CLIENT} client/main.cpp)

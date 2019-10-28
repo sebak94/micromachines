@@ -19,12 +19,12 @@ SDL_Surface* SdlSurface::loadSurface(const std::string &filename) {
     return surface;
 }
 
-int SdlSurface::render(SDL_Rect sdlDest, const SdlWindow& window) const {
+int SdlSurface::render(SDL_Rect& sdlDest, const SdlWindow& window) const {
     SDL_Texture* texture = SDL_CreateTextureFromSurface(window.getRenderer(), this->surface);
     return SDL_RenderCopy(window.getRenderer(), texture, NULL, &sdlDest);
 }
 
-int SdlSurface::renderRotate(SDL_Rect sdlDest, double angle, SDL_RendererFlip flip, const SdlWindow& window) const {
+int SdlSurface::renderRotate(SDL_Rect& sdlDest, double angle, SDL_RendererFlip flip, const SdlWindow& window) const {
     SDL_Texture* texture = SDL_CreateTextureFromSurface(window.getRenderer(), this->surface);
     return SDL_RenderCopyEx(window.getRenderer(), texture, NULL, &sdlDest, angle, NULL, flip);
 }
