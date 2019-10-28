@@ -1,4 +1,6 @@
 #include "../include/client_th.h"
+#include "../include/blocking_queue.h"
+#include "../include/player_action.h"
 #include "../include/model/cars/blue_car.h"
 #include "../../common/include/socket.h"
 #include "../../common/include/socket_error.h"
@@ -18,8 +20,9 @@ ClientTh::ClientTh(Socket *peer, Micromachines &micromachines):
 void ClientTh::run() {
     while (keep_talking) {
         try {
-            // receive(v_cmd);
-            // send(response);
+            char action;
+            receive(&action);
+            actions.push(PlayerAction(action));
         } catch(const SocketError &e) {
             keep_talking = false;
             std::cout << e.what() << "\n";
@@ -29,13 +32,8 @@ void ClientTh::run() {
     is_running = false;
 }
 
-void ClientTh::receive(std::vector<char> &command) {
-    char c;
-    peer->Receive(&c, 1);
-    while (c != '\n') {
-        command.push_back(c);
-        peer->Receive(&c, 1);
-    }
+void ClientTh::receive(char *action) {
+    peer->Receive(action, 1);
 }
 
 void ClientTh::send(std::string &response) {

@@ -5,6 +5,7 @@
 #include "../../common/include/socket.h"
 #include "model/micromachines.h"
 #include "model/cars/car.h"
+#include "blocking_queue.h"
 #include <string>
 #include <vector>
 #include <atomic>
@@ -16,8 +17,9 @@ class ClientTh: public Thread {
     Socket *peer;
     Micromachines micromachines;
     Car *car;
+    BlockingQueue actions;
 
-    void receive(std::vector<char> &command);
+    void receive(char *action);
     void send(std::string &response);
 
     public:
