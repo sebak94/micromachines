@@ -16,6 +16,7 @@ class Server {
     public:
     Server(const char *hostname, const char *service);
     ~Server();
+    void runThreads();
 };
 
 #endif

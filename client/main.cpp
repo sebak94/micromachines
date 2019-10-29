@@ -9,5 +9,6 @@ int main(int argc, char const *argv[]) {
         return SUCCESS;
     }
     Server server(argv[1], argv[2]);
+    server.runThreads();
     return SUCCESS;
 }
