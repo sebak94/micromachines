@@ -1,11 +1,11 @@
-#ifndef __CAR_STATES_H__
-#define __CAR_STATES_H__
+#ifndef __CAR_STATE_H__
+#define __CAR_STATE_H__
 
-#include "../cars/car.h"
+class Car;
 
 class CarState {
     public:
-    virtual void apply(Car &car) = 0; 
+    virtual void apply(Car *car) = 0; 
 };
 
 #endif

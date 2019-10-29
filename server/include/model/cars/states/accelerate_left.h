@@ -5,7 +5,7 @@
 
 class AccelerateLeft: public CarState {
     public:
-    virtual void apply(Car &car) override;
+    virtual void apply(Car *car) override;
 };
 
 #endif
