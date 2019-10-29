@@ -1,2 +1,2 @@
-add_executable(ia ia.c)
-target_link_libraries(ia lua5.3)
+add_executable(ai ai.c)
+target_link_libraries(ai lua5.3)

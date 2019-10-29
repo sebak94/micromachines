@@ -15,55 +15,55 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
 
-#define IA_PATH "ia.lua"
+#define AI_PATH "ai.lua"
 #define MOV_PATH "movements.lua"
 
 int getNextPosition(lua_State *L, int positionX, int positionY);
 
 int main(int argc, char *argv[]) {
     int result;
+    char pwd_mv[1024];
+    char pwd_ai[1024];
+
     lua_State *L = luaL_newstate();
     luaL_openlibs(L);
-    result = luaL_dofile(L, MOV_PATH);
-    result = luaL_dofile(L, IA_PATH);
+
+    getcwd(pwd_mv, sizeof(pwd_mv));
+    strcpy(pwd_ai, pwd_mv);
+    strcat(pwd_mv, MOV_PATH);
+    strcat(pwd_ai, AI_PATH);
+
+    result = luaL_dofile(L, pwd_mv);
+    result = luaL_dofile(L, pwd_ai);
+
     if (result == 0) {
-        result = getNextPosition(L, 0, 1);
+        for (int i = 1; i <= 2; ++i) {
+            for (int j = 1; j <= 2; ++j) {
+                getNextPosition(L, i, j);
+            }
+        }
     } else {
-        printf("Faltan los archivos .lua\n");
-        printf("%s\n", MOV_PATH);
-        printf("%s\n", IA_PATH);
+        printf("Faltan los archivos lua:\n");
+        printf("%s\n", pwd_mv);
+        printf("%s\n", pwd_ai);
     }
     lua_close(L);
     return result;
 }
 
 int getNextPosition(lua_State *L, int positionX, int positionY) {
-    // Chequeo el tamaño del stack de variables del motor de lua
-    int stackSize = lua_gettop(L);
-    printf("Tamaño del stack: %d\n", stackSize);
-    // Agrego al stack la función a llamar
     lua_getglobal(L, "getNextMove");
-    // Agrego al stack los parámetros de la función a llamar
     lua_pushnumber(L, positionX);
     lua_pushnumber(L, positionY);
-    // Llamo a la función
-    // lua_call(L, numParamsEntrada, numParamsSalida)
-    // La función recibe 2 parámetros y devuelve 1
     lua_call(L, 2, 1);
-
     const char *nextMove;
     size_t strLen = 0;
     nextMove = lua_tolstring(L, 1, &strLen);
     printf("El nuevo movimiento es: %s\n", nextMove);
     printf("strLen: %zu\n", strLen);
-
-    stackSize = lua_gettop(L);
-    printf("Tamaño del stack post pushes: %d\n", stackSize);
     // Limpio el stack
     lua_pop(L, 1);
-    // Verifico que efectivamente decrementó su tamaño
-    stackSize = lua_gettop(L);
-    printf("Tamaño final del stack: %d\n", stackSize);
     return 0;
 }

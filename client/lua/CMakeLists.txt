@@ -19,5 +19,5 @@ set(CMAKE_BUILD_TYPE "Release")
 
 add_subdirectory(src)
 
-install(FILES src/ia.lua DESTINATION
-        ${CMAKE_BINARY_DIR})
+install(FILES src/ai.lua DESTINATION ${CMAKE_BINARY_DIR})
+install(FILES src/movements.lua DESTINATION ${CMAKE_BINARY_DIR})

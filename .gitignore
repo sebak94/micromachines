@@ -33,7 +33,10 @@
 
 # VSCode
 .vscode
+
+# CLion
 .idea/
+cmake-build-debug/
 
 # Builds
 /build
