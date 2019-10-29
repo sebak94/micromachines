@@ -2,15 +2,14 @@
 #include <iostream>
 #include "../include/Drawer.h"
 #include "../include/sdl/SdlAnimation.h"
-#include "../include/Block.h"
 #include "../include/PicType.h"
 #include "../include/Model.h"
 #include "../include/Camera.h"
 
-#define ROUTEWIDTH 400
-#define ROUTEHEIGHT 400
+#define WIDTH 900
+#define HEIGHT 600
 
-Drawer::Drawer(Socket &socket) : socket(socket), window(900, 600), loader(pictures) {
+Drawer::Drawer(Socket &socket) : socket(socket), window(WIDTH, HEIGHT), loader(pictures) {
     //para dibujar la primera vez, en realidad dibujo lo que venga del servidor
     testSdl(pictures, "asd");
 }
@@ -42,6 +41,7 @@ std::string Drawer::receive() {
 }
 
 void Drawer::showAnimation(SdlWindow &window) {
+    //Muestro una animacion de prueba
     int framesInX = 5;
     int framesInY = 2;
     //Divido el ancho de la imagen por la cantidad de frames a lo ancho
@@ -53,46 +53,6 @@ void Drawer::showAnimation(SdlWindow &window) {
     SdlAnimation anim(texture, framesInX, framesInY, widthFrame, heightFrame);
     SDL_Rect sdlDest = {(window.getWidth() - widthFrame) / 2, (window.getHeight() - heightFrame) / 2, widthFrame, heightFrame};
     anim.render(sdlDest, window);
-}
-
-void Drawer::showBackground(int xPos, int yPos, std::map<PicType, SdlSurface*> &pictures, std::vector<Block> &blocks, Camera &camera) {
-    //Pinto el backgroud de pasto
-    int x = 0, y = 0;
-    int width = window.getWidth() / 3;
-    int height = window.getHeight() / 2;
-    while (y < window.getHeight()) {
-        while (x < window.getWidth()) {
-            SDL_Rect sdlDestGrass = {x, y, width, height};
-            pictures[PicType::GRASS_BACK]->render(sdlDestGrass, window);
-            x += width;
-        }
-        x = 0;
-        y += height;
-    }
-
-    //Agrego la pista
-    int xBegin = 0;
-    int yBegin = ROUTEHEIGHT;
-    for (int i = 0; i < blocks.size(); i++) {
-        Block block = blocks[i];
-        PicType type = block.getType();
-        x = blocks[i].getX() * (ROUTEWIDTH / 100);
-        y = blocks[i].getY() * (ROUTEHEIGHT / 100);
-        SDL_Rect sdlDestRoad = {x + xBegin + xPos, -y - yBegin + yPos, ROUTEWIDTH, ROUTEHEIGHT};
-        pictures[PicType::ROAD_BACK]->render(sdlDestRoad, window);
-        pictures[type]->render(sdlDestRoad, window);
-    }
-}
-
-void Drawer::showCars(int xPos, int yPos, std::vector<Car> &cars, Camera &camera) {
-    int widthCar = 80, heightCar = 170;
-    for (int i = 0; i < cars.size(); i++) {
-        //cars[i].x viene del modelo, lo multiplico porque en realidad lo represento mas grande (acorde a la ventana)
-        int x = cars[i].getX() * (ROUTEWIDTH / 100) - (widthCar / 2);
-        int y = cars[i].getY() * (ROUTEHEIGHT / 100) + (heightCar / 2);
-        SDL_Rect sdlDestCar = {x + xPos, - y + yPos, widthCar, heightCar};
-        pictures[cars[i].getType()]->renderRotate(sdlDestCar, cars[i].getDegrees(), SDL_FLIP_NONE, window);
-    }
 }
 
 int Drawer::testSdl(std::map<PicType, SdlSurface*> &pictures, std::string text) {
@@ -107,10 +67,11 @@ int Drawer::testSdl(std::map<PicType, SdlSurface*> &pictures, std::string text) 
             x += 20;
         }
         Model model(8); //Modelo hardcodeado
-        Camera camera(model, window.getWidth(), window.getHeight());
+        Camera camera(window, model, pictures);
         window.fill();
-        showBackground(x, y, pictures, model.getBlocks(), camera);
-        showCars(x, y, model.getCars(), camera);
+        camera.showBackground();
+        camera.showTrack(50, 150, x, y);
+        camera.showCars(50, 150, x, y);
         window.render();
     } catch (std::exception& e) {
         std::cout << e.what() << std::endl;

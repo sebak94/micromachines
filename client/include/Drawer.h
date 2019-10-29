@@ -32,8 +32,6 @@ public:
 private:
     std::string receive();
     void showAnimation(SdlWindow &window);
-    void showBackground(int xPos, int yPos, std::map<PicType, SdlSurface*> &pictures, std::vector<Block> &blocks, Camera &camera);
-    void showCars(int xPos, int yPos, std::vector<Car> &cars, Camera &camera);
 };
 
 #endif
