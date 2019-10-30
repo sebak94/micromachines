@@ -9,8 +9,8 @@
 
 using namespace std;
 
-void TestLib::init() {
-    printf("TestLib::init: Hello World!! \n");
+void TestLib::execute() {
+    printf("TestLib::execute: Hello World!! \n");
 }
 
 extern "C" TestLib *create() {

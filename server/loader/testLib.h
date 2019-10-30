@@ -9,7 +9,7 @@
 
 class TestLib : TestVir {
 public:
-    void init();
+    void execute();
 };
 
 #endif //MICROMACHINES_TESTLIB_H
