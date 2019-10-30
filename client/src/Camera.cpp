@@ -37,7 +37,6 @@ void Camera::showTrack(int xMyCar, int yMyCar, int xPos, int yPos) {
         double x = model.getBlocks()[i].getX() * (blockWidth / 100);
         double y = model.getBlocks()[i].getY() * (blockHeight / 100);
         SDL_Rect sdlDestRoad = {(int) (x + xBegin + xPos), (int) (-y - yBegin + yPos), (int) blockWidth, (int) blockHeight};
-        pictures[PicType::ROAD_BACK]->render(sdlDestRoad, window);
         pictures[block.getType()]->render(sdlDestRoad, window);
     }
 }
