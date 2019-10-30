@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(Micromachines)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread -ldl")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
 
 
 set(SOURCE_FILES_SERVER
@@ -35,3 +35,4 @@ add_executable(micromachines-sv ${SOURCE_FILES_SERVER} server/main.cpp)
 add_executable(micromachines-cl ${SOURCE_FILES_CLIENT} client/main.cpp)
 
 target_link_libraries(micromachines-cl SDL2 SDL2_image)
+target_link_libraries(micromachines-sv -ldl)

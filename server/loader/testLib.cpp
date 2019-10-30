@@ -2,21 +2,13 @@
 // Created by mati on 10/29/19.
 //
 
-//g++ -shared -fPIC testLib.cpp -o testLib.so
+//g++ -shared -fPIC testLib.cpp testLib2.cpp -o libs/lib.so
 
 #include <iostream>
 #include "testLib.h"
 
 using namespace std;
 
-void TestLib::execute() {
+extern "C" void TestLib::execute() {
     printf("TestLib::execute: Hello World!! \n");
-}
-
-extern "C" TestLib *create() {
-    return new TestLib;
-}
-
-extern "C" void destroy(TestLib *Tl) {
-    delete Tl;
 }
