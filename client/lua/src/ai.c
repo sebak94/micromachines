@@ -17,26 +17,19 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#define AI_PATH "ai.lua"
-#define MOV_PATH "movements.lua"
+#define AI_PATH "../src/movements.lua"
+#define MOV_PATH "../src/ai.lua"
 
 int getNextPosition(lua_State *L, int positionX, int positionY);
 
 int main(int argc, char *argv[]) {
     int result;
-    char pwd_mv[1024];
-    char pwd_ai[1024];
 
     lua_State *L = luaL_newstate();
     luaL_openlibs(L);
 
-    getcwd(pwd_mv, sizeof(pwd_mv));
-    strcpy(pwd_ai, pwd_mv);
-    strcat(pwd_mv, MOV_PATH);
-    strcat(pwd_ai, AI_PATH);
-
-    result = luaL_dofile(L, pwd_mv);
-    result = luaL_dofile(L, pwd_ai);
+    result = luaL_dofile(L, MOV_PATH);
+    result = luaL_dofile(L, AI_PATH);
 
     if (result == 0) {
         for (int i = 1; i <= 2; ++i) {
