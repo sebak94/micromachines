@@ -15,6 +15,8 @@ set(SOURCE_FILES_SERVER
     common/src/socket_error.cpp
     common/include/thread.h
     common/src/thread.cpp
+        common/include/directory_parser.h
+        common/src/directory_parser.cpp
 )
 
 set(SOURCE_FILES_CLIENT
