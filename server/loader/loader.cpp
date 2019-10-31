@@ -2,32 +2,40 @@
 // Created by mati on 30/10/19.
 //
 
+#define LIBS_PATH "../server/loader/libs/"
+
 #include "loader.h"
 
-Loader::Loader(const char *path) : parser(path) {}
+Loader::Loader() : parser(LIBS_PATH) {}
 
 void Loader::load_dynamic_libraries() {
     std::vector<std::string> dir;
     this->parser.read_directory(dir);
 
-    for (int i = 0; i < (int) dir.size(); ++i) {
-        std::string lib_name = "../server/loader/libs/" + dir[i];
+    for (const auto &i : dir) {
         void *handle;
+        std::string lib_name = LIBS_PATH + i;
         handle = dlopen(lib_name.c_str(), RTLD_NOW);
 
         if (!handle) {
             printf("The error is %s", dlerror());
-            return;
+            continue;
         }
 
-        typedef TestVir *execute_t();
+        auto *execute = (execute_t *) dlsym(handle, "execute");
 
-        execute_t *execute = (execute_t *) dlsym(handle, "execute");
+        if (!execute) {
+            printf("The error is %s\n", dlerror());
+            continue;
+        }
 
-        if (!execute) printf("The error is %s\n", dlerror());
-
-        execute();
+        this->functors.emplace_back(execute);
     }
 }
 
-Loader::~Loader() {}
+void Loader::execute() {
+    for (auto &functor : this->functors)
+        functor();
+}
+
+Loader::~Loader() = default;

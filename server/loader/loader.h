@@ -10,16 +10,21 @@
 #include <dlfcn.h>
 #include "testVir.h"
 
+typedef TestVir *execute_t();
+
 class Loader {
 private:
     DirectoryParser parser;
+    std::vector<execute_t *> functors;
 
 public:
-    Loader(const char * path);
+    Loader();
 
     ~Loader();
 
     void load_dynamic_libraries();
+
+    void execute();
 };
 
 

@@ -7,6 +7,6 @@
 
 using namespace std;
 
-extern "C" void TestLib2::execute() {
+extern "C" void execute() {
     printf("TestLib2::execute: Hello World!! \n");
 }

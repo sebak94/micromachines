@@ -1,6 +1,5 @@
 #include "include/acceptor_th.h"
 #include "../common/include/socket_error.h"
-#include "loader/loader.h"
 #include <iostream>
 #include <string>
 
@@ -19,9 +18,6 @@ void run(const char* service) {
 }
 
 int main(int argc, char const *argv[]) {
-    Loader loader(argv[1]);
-    loader.load_dynamic_libraries();
-    return 0;
     if (argc != 2) {
         std::cout << "El comando es: ./micromachines-sv <service>\n";
         return SUCCESS;
