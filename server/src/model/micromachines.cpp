@@ -1,6 +1,7 @@
 #include "../../include/model/micromachines.h"
 #include "../../include/model/cars/car.h"
 #include "../../include/client_th.h"
+#include <vector>
 
 void Micromachines::update() {
     // for (size_t i = 0; i < cars.size(); i++) {
@@ -9,7 +10,11 @@ void Micromachines::update() {
 }
 
 void Micromachines::addClient(ClientTh *client) {
-    clients.push_back(client);
+    players.push_back(client);
+}
+
+std::vector<ClientTh*>* Micromachines::clients() {
+    return &players;
 }
 
 size_t Micromachines::removeCar(Car *car) {

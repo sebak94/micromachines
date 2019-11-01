@@ -2,7 +2,8 @@
 // Created by mati on 11/1/19.
 //
 
-#include "interpreter.h"
+#include "../../include/model/interpreter.h"
+#include <utility>
 
 CarState* Interpreter::interpret(PlayerAction pa) {
     switch (pa.getAction()) {

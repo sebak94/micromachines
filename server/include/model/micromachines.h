@@ -9,12 +9,13 @@
 class Micromachines {
     private:
     Track track;
-    std::vector<ClientTh*> clients;
+    std::vector<ClientTh*> players;
 
     public:
     void update();
     void addClient(ClientTh *client);
-    
+    std::vector<ClientTh*>* clients();
+
     size_t removeCar(Car *car);
 };
 

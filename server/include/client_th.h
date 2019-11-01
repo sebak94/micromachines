@@ -5,6 +5,7 @@
 #include "../../common/include/socket.h"
 #include "model/micromachines.h"
 #include "model/cars/car.h"
+#include "model/cars/states/car_state.h"
 #include "blocking_queue.h"
 #include <string>
 #include <vector>
@@ -24,6 +25,8 @@ class ClientTh: public Thread {
 
     public:
     ClientTh(Socket *peer, Micromachines &micromachines);
+    PlayerAction popAction();
+    void updateCarState(CarState* newCarState);
     virtual void run() override;
     virtual void stop() override;
     bool isDead();
