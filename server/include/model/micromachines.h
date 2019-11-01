@@ -3,16 +3,18 @@
 
 #include "cars/car.h"
 #include "tracks/track.h"
+#include "../client_th.h"
 #include <vector>
 
 class Micromachines {
     private:
     Track track;
-    std::vector<Car*> cars;
+    std::vector<ClientTh*> clients;
 
     public:
     void update();
-    void addCar(Car *car);
+    void addClient(ClientTh *client);
+    
     size_t removeCar(Car *car);
 };
 
