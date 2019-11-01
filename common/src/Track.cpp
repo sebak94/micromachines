@@ -6,29 +6,31 @@
 #include "Track.h"
 #include "TrackList.h"
 
-void Track::loadTrack(const Json::Value &maps, int trackNumber) {
-    trackLayout.clear();
-    name.clear();
-    for (int j = 0; j < maps[TRACKS_ID][trackNumber][LAYOUT_ID].size(); j++) {
-        trackLayout.emplace_back(maps[TRACKS_ID][trackNumber][LAYOUT_ID][j].asString());
-    }
-    width = maps[TRACKS_ID][trackNumber][WIDTH_ID].asInt();
-    height = maps[TRACKS_ID][trackNumber][HEIGHT_ID].asInt();
-    name = maps[TRACKS_ID][trackNumber][NAME_ID].asString();
-    startRow = maps[TRACKS_ID][trackNumber][START_ID][0].asInt();  // row
-    startCol = maps[TRACKS_ID][trackNumber][START_ID][1].asInt();  // col
-    initLayout();
-    configure();
+// Loads data of 1 track in position <trackNumber> of the json file.
+void Track::loadTrack(const Json::Value &fileTracks, int trackNumber) {
+    // loads list of elements as string temporarily
+    for (int j = 0; j < fileTracks[TRACKS_ID][trackNumber][LAYOUT_ID].size(); j++)
+        trackLayout.emplace_back(fileTracks[TRACKS_ID][trackNumber][LAYOUT_ID][j].asString());
+    width = fileTracks[TRACKS_ID][trackNumber][WIDTH_ID].asInt();  // track width in blocks
+    height = fileTracks[TRACKS_ID][trackNumber][HEIGHT_ID].asInt();  // track width in blocks
+    name = fileTracks[TRACKS_ID][trackNumber][NAME_ID].asString();
+    startRow = fileTracks[TRACKS_ID][trackNumber][START_ID][0].asInt();  // row
+    startCol = fileTracks[TRACKS_ID][trackNumber][START_ID][1].asInt();  // col
+    initLayout();  // fills all blocks as empty (grass)
+    configure();  // sets not empty blocks in matricial order
+    trackLayout.clear();  // releases temporal strings
 }
 
+// Gets track name
 std::string Track::getName() {
     return name;
 }
 
+// Print tracks sketch to terminal
 void Track::print() {
     int column = 0;
-    for (int i=0; i < layout.size(); i++) {
-        printElem(layout[i]);
+    for (int i=0; i < trackPartData.size(); i++) {
+        printElem(trackPartData[i]);
         column++;
         if (column == width) {
             std::cout << std::endl;
@@ -37,37 +39,46 @@ void Track::print() {
     }
 }
 
-void Track::printElem(const trackElem & elem) {
-    if (elem==empty)
+// Prints individual parts of the track
+void Track::printElem(const TrackPartData & part) {
+    if (part.getType()==empty)
         std::cout << "░";
-    if (elem==downRight)
+    if (part.getType()==downRight)
         std::cout << "╔";
-    if (elem==downLeft)
+    if (part.getType()==downLeft)
         std::cout << "╗";
-    if (elem==upRight)
+    if (part.getType()==upRight)
         std::cout << "╚";
-    if (elem==upLeft)
+    if (part.getType()==upLeft)
         std::cout << "╝";
-    if (elem==horizontal)
+    if (part.getType()==horizontal)
         std::cout << "═";
-    if (elem==vertical)
+    if (part.getType()==vertical)
         std::cout << "║";
 }
 
-// Counts rows and cols from 0
+// Counts rows and cols from 0. Loads postion of element in meters.
 void Track::loadElem(int row, int col, trackElem elem) {
-    layout[row*width + col] = elem;
+    TrackPartData part;
+    part.loadType(elem);
+    part.loadPos(row, height - col);
+    part.setID(partCounter);
+    partCounter++;
+    trackPartData[row*width + col] = part;
 }
 
-trackElem Track::getElem(int row, int col) {
-    return layout[row*width + col];
+// Gets type (curve, straight line, etc)
+trackElem Track::getElemType(int row, int col) {
+    return trackPartData[row*width + col].getType();
 }
 
+/* Transforms sequencial order of the track (json)
+ * to a matricial layout */
 void Track::configure() {
     int row = startRow;
     int col = startCol;
     loadElem(row, col, identifyElem(trackLayout[0]));
-    trackElem prevElem = getElem(row, col);
+    trackElem prevElem = getElemType(row, col);
     trackElem actualElem;
     col++;  // assumes top-left corner is a down-right curve
     for (int i=1; i < trackLayout.size(); i++){
@@ -83,18 +94,19 @@ bool Track::isCurve(const trackElem & elem) {
     return !(elem == horizontal || elem == vertical);
 }
 
+// Transforms json strings to elements of track
 trackElem Track::identifyElem(const std::string & layoutElem){
     if (layoutElem == LAYOUT_DL)
         return downLeft;
-    if (layoutElem == LAYOUT_DR)
+    else if (layoutElem == LAYOUT_DR)
         return downRight;
-    if (layoutElem == LAYOUT_H)
+    else if (layoutElem == LAYOUT_H)
         return horizontal;
-    if (layoutElem == LAYOUT_UL)
+    else if (layoutElem == LAYOUT_UL)
         return upLeft;
-    if (layoutElem == LAYOUT_UR)
+    else if (layoutElem == LAYOUT_UR)
         return upRight;
-    if (layoutElem == LAYOUT_V)
+    else if (layoutElem == LAYOUT_V)
         return vertical;
 }
 
@@ -130,10 +142,14 @@ void Track::setNextCoord(int & row,
         col++;
 }
 
+// fills whole track as empty (grass)
 void Track::initLayout() {
-    layout.clear();
-    layout.reserve(width*height);
-    for (int i=0; i < width*height; i++) {
-        layout.emplace_back(empty);
-    }
+    TrackPartData emptyPart;
+    trackPartData.clear();
+    trackPartData.reserve(width * height);
+    for (int i = 0; i < width * height; i++)
+        trackPartData.emplace_back(emptyPart);
 }
+
+// gets X position
+int Track::getPosX

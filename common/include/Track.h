@@ -8,6 +8,11 @@
 
 #include <string>
 #include <vector>
+#include <jsoncpp/json/json.h>
+
+#define BLOCKSIZE 100  // meters
+
+class TrackPartData;
 
 typedef enum {
     empty,
@@ -21,27 +26,28 @@ typedef enum {
 
 class Track {
 private:
-    int width = 0;
-    int height = 0;
     int startCol = 0;
     int startRow = 0;
+    int width = 0;  // blocks
+    int height = 0;  // blocks
+    int partCounter = 0;  // number of track elements
     std::vector<std::string> trackLayout{};
     std::vector<trackElem> layout{};
+    std::vector<TrackPartData> trackPartData{};
     std::string name{};
 
 public:
-    void loadTrack(const Json::Value &maps, int trackNumber);
+    void loadTrack(const Json::Value &fileTracks, int trackNumber);
     std::string getName();
     void print();
     void initLayout();
     void loadElem(int row, int col, trackElem elem);
     static trackElem identifyElem(const std::string &layoutElem);
     void configure();
-    trackElem getElem(int row, int col);
+    trackElem getElemType(int row, int col);
     static void setNextCoord(int &row, int &col, trackElem elem, trackElem prev);
     static bool isCurve(const trackElem & elem);
-    void printElem(const trackElem &elem);
+    static void printElem(const TrackPartData &part);
 };
-
 
 #endif //MAP_TRACK_H

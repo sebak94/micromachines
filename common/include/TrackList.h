@@ -27,6 +27,8 @@
 #define LAYOUT_UL "up-left"
 #define LAYOUT_UR "up-right"
 
+#include "TrackPartData.h"
+
 class TrackList {
 private:
     std::map<std::string, Track> tracks;
@@ -36,6 +38,5 @@ public:
     void printTrack(const std::string &name);
     Track &getTrack(const std::string &name);
 };
-
 
 #endif //MAP_TRACKLIST_H
