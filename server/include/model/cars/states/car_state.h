@@ -5,7 +5,7 @@ class Car;
 
 class CarState {
     public:
-    virtual void apply(Car *car) = 0; 
+    virtual void apply(const CarState &previous) = 0;
 };
 
 #endif
