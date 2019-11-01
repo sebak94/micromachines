@@ -24,6 +24,6 @@ size_t Micromachines::removeCar(Car *car) {
     // if (index_to_remove != -1) {
     //     cars.erase(cars.begin() + index_to_remove);
     // }
-    
+
     // return index_to_remove;
 }

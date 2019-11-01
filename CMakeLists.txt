@@ -29,6 +29,7 @@ set(SOURCE_FILES_SERVER
     server/include/model/tracks/track.h
     server/include/model/tracks/track_part_data.h
     server/include/model/tracks/track_parts.h
+    server/src/model/interpreter.h
     server/src/mm_server.cpp
     server/src/acceptor_th.cpp
     server/src/client_th.cpp
@@ -56,6 +57,7 @@ set(SOURCE_FILES_SERVER
     common/src/socket.cpp
     common/src/socket_error.cpp
     common/src/thread.cpp
+    server/src/model/interpreter.cpp
 )
 
 set(SOURCE_FILES_CLIENT

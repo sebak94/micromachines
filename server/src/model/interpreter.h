@@ -6,8 +6,17 @@
 #define MICROMACHINES_INTERPRETER_H
 
 
-class interpreter {
+#include "../../include/model/cars/states/car_state.h"
+#include "../../include/model/cars/states/accelerate.h"
+#include "../../include/model/cars/states/left.h"
+#include "../../include/model/cars/states/right.h"
+#include "../../include/model/cars/states/break.h"
+#include "../../include/player_action.h"
 
+
+class Interpreter {
+public:
+    CarState *interpret(PlayerAction pa);
 };
 
 

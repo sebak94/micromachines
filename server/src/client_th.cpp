@@ -12,7 +12,7 @@ ClientTh::ClientTh(Socket *peer, Micromachines &micromachines):
     keep_talking(true), is_running(true), peer(peer),
     micromachines(micromachines) {
     car = new BlueCar();
-    micromachines.addCar(car);
+    micromachines.addClient(this);
     std::string welcome_msg = "Bienvenido!\n";
     send(welcome_msg);
 }
