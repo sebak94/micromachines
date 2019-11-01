@@ -1,5 +1,6 @@
 #include "../include/game_loop_th.h"
 #include "../include/model/micromachines.h"
+#include "../include/model/interpreter.h"
 #include <chrono>
 
 #define MS_PER_UPDATE 16 // 60 FPS
@@ -16,7 +17,13 @@ void GameLoopTh::run() {
         previous = current;
         lag += elapsed.count();
 
-        // for (size_t i = 0; i < micromachines)
+        std::vector<ClientTh*> clients = micromachines.clients;
+        for (size_t i = 0; i < clients.size; i++) {
+            ClientTh* client = clients[i];
+            Interpreter interp;
+            CarState* newCarState = interp.interpret(client->popAction());
+            client->updateCarState(newCarState);
+        }
 
         while (lag >= MS_PER_UPDATE) {
             micromachines.update();

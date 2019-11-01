@@ -2,6 +2,7 @@
 #include "../include/blocking_queue.h"
 #include "../include/player_action.h"
 #include "../include/model/cars/blue_car.h"
+#include "../include/model/cars/states/car_state.h"
 #include "../../common/include/socket.h"
 #include "../../common/include/socket_error.h"
 #include "iostream"
@@ -30,6 +31,14 @@ void ClientTh::run() {
     }
 
     is_running = false;
+}
+
+PlayerAction ClientTh::popAction() {
+    return actions.pop();
+}
+
+void ClientTh::updateCarState(CarState* newCarState) {
+    car->setState(newCarState);
 }
 
 void ClientTh::receive(char *action) {

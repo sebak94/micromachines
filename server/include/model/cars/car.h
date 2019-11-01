@@ -26,7 +26,7 @@ class Car: public Model {
     Car(uint8_t width, uint8_t height, uint8_t max_velocity,
         uint8_t acceleration, uint8_t grip, uint8_t maneuverability,
         Point initial_position, Color color);
-    void changeState(PlayerAction action);
+    void setState(CarState *newCarState);
     ~Car();
 };
 

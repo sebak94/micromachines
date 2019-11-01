@@ -9,11 +9,14 @@ Car::Car(uint8_t width, uint8_t height, uint8_t max_velocity,
     Point initial_position, Color color): width(width), height(height),
     max_velocity(max_velocity), acceleration(acceleration), grip(grip),
     maneuverability(maneuverability), position(initial_position),
-    color(color), state(new Nothing()) {}
+    color(color) {
+    // arreglar esto, usar move
+    Nothing nothing_state;
+    state = &nothing_state;
+}
 
-void Car::changeState(PlayerAction action) {
-    // delete state;
-    // state = new State(); <- una clase derivada de CarState
+void Car::setState(CarState *newCarState) {
+    state = newCarState;
 }
 
 Car::~Car() {
