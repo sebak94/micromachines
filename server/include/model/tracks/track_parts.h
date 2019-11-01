@@ -3,7 +3,7 @@
 
 enum TrackPart {
     curve_left_to_up,
-    line_verticaL_up,
+    line_vertical_up,
     curve_up_to_right,
     line_horizontal_right,
     curve_right_to_down,

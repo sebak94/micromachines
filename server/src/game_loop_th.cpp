@@ -16,6 +16,8 @@ void GameLoopTh::run() {
         previous = current;
         lag += elapsed.count();
 
+        // for (size_t i = 0; i < micromachines)
+
         while (lag >= MS_PER_UPDATE) {
             micromachines.update();
             lag -= MS_PER_UPDATE;
