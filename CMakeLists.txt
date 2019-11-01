@@ -1,34 +1,25 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.10)
+project(tp)
 
-project(Micromachines)
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Werror -pedantic -pthread")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
-set(SOURCE_FILES_SERVER
-    server/include/acceptor_th.h
-    server/src/acceptor_th.cpp
-    server/include/client_th.h
-    server/src/client_th.cpp
-    common/include/socket.h
-    common/src/socket.cpp
-    common/include/socket_error.h
-    common/src/socket_error.cpp
-    common/include/thread.h
-    common/src/thread.cpp
-)
+add_executable(tp
+        main.cpp
+        Car.cpp Car.h
+        Window.cpp Window.h
+        Error.cpp Error.h
+        Button.cpp Button.h
+        Record.cpp Record.h)
 
-set(SOURCE_FILES_CLIENT
-    client/include/server.h
-    client/src/server.cpp
-    common/include/socket.h
-    common/src/socket.cpp
-    common/include/socket_error.h
-    common/src/socket_error.cpp
-    common/include/thread.h
-    common/src/thread.cpp
-)
-
-add_executable(micromachines-sv ${SOURCE_FILES_SERVER} server/main.cpp)
-add_executable(micromachines-cl ${SOURCE_FILES_CLIENT} client/main.cpp)
-
-target_link_libraries(micromachines-cl SDL2 SDL2_image)
+target_link_libraries(tp
+        SDL2
+        SDL2_image
+        SDL2_mixer
+        SDL2_ttf
+        avutil
+        avformat
+        swscale
+        avcodec)
