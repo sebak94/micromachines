@@ -30,3 +30,5 @@ void TrackList::printTrack(const std::string & name) {
 Track & TrackList::getTrack(const std::string & name) {
     return tracks[name];
 }
+
+Track::Track() = default;

@@ -5,7 +5,7 @@
 #include "TrackPartData.h"
 
 // Loads type of element
-void TrackPartData::loadType(trackElem elem) {
+void TrackPartData::loadType(trackPartType elem) {
     type = elem;
 }
 
@@ -20,7 +20,7 @@ void TrackPartData::loadPos(int row, int col) {
 }
 
 // Returns track element type
-trackElem TrackPartData::getType() const{
+trackPartType TrackPartData::getType() const{
     return type;
 }
 
@@ -37,4 +37,13 @@ int TrackPartData::getPosY() {
 // Sets ID to recognize track elements traverse order
 void TrackPartData::setID(int ID) {
     trackElemID = ID;
+}
+
+std::string TrackPartData::serialize() {
+    return std::to_string(posX) +
+           "," +
+           std::to_string(posY) +
+           "," +
+           std::to_string(type) +
+           "\n";
 }

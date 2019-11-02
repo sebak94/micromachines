@@ -9,17 +9,16 @@
 
 // Loads data of 1 track in position <trackNumber> of the json file.
 void Track::loadTrack(const Json::Value &fileTracks, int trackNumber) {
-    // loads list of elements as string temporarily
-    for (int j = 0; j < fileTracks[TRACKS_ID][trackNumber][LAYOUT_ID].size(); j++)
-        trackLayout.emplace_back(fileTracks[TRACKS_ID][trackNumber][LAYOUT_ID][j].asString());
+    std::vector<std::string> fileLayout{}; // loads list of elements as temporal strings
+    for (const auto & j : fileTracks[TRACKS_ID][trackNumber][LAYOUT_ID])
+        fileLayout.emplace_back(j.asString());
     width = fileTracks[TRACKS_ID][trackNumber][WIDTH_ID].asInt();  // track width in blocks
     height = fileTracks[TRACKS_ID][trackNumber][HEIGHT_ID].asInt();  // track width in blocks
     name = fileTracks[TRACKS_ID][trackNumber][NAME_ID].asString();
     startRow = fileTracks[TRACKS_ID][trackNumber][START_ID][0].asInt();  // row
     startCol = fileTracks[TRACKS_ID][trackNumber][START_ID][1].asInt();  // col
     initLayout();  // fills all blocks as empty (grass)
-    configure();  // sets not empty blocks in matricial order
-    trackLayout.clear();  // releases temporal strings
+    initTrackParts(fileLayout);  // sets not empty blocks in matrix order
 }
 
 // Gets track name
@@ -59,7 +58,7 @@ void Track::printElem(const TrackPartData & part) {
 }
 
 // Counts rows and cols from 0. Loads position of element in meters.
-void Track::loadElem(int row, int col, trackElem elem) {
+void Track::loadPart(int row, int col, trackPartType elem) {
     TrackPartData part;
     part.loadType(elem);
     part.loadPos(height - row, col);
@@ -69,20 +68,18 @@ void Track::loadElem(int row, int col, trackElem elem) {
 }
 
 // Gets type (curve, straight line, etc)
-trackElem Track::getElemType(int row, int col) {
+trackPartType Track::getPartType(int row, int col) {
     return trackPartData[row*width + col].getType();
 }
 
 // Checks if on Track based on car position [meters]
 bool Track::isOnTrack(int posX, int posY) {
     TrackPartData part = getTrackPart(posX, posY);
-    trackElem type = part.getType();
+    trackPartType type = part.getType();
     int x = posX - part.getPosX(); // to relative coords
     int y = posY - part.getPosY(); // to relative coords
-    if (type == horizontal || type == vertical) {
+    if (!isCurve(type)) {
         return true;
-    } else if (type == empty) {
-        return false;
     } else if (type == downLeft) {
         return inCurveRange(false, false, x, y);
     } else if (type == downRight){
@@ -106,29 +103,29 @@ bool Track::inCurveRange(bool invertedX, bool invertedY, int x, int y) {
 }
 
 /* Transforms sequential order of the track (json)
- * to a matricial layout */
-void Track::configure() {
+ * to a matrix layout */
+void Track::initTrackParts(const std::vector<std::string> & trackLayout) {
     int row = startRow;
     int col = startCol;
-    loadElem(row, col, identifyElem(trackLayout[0]));
-    trackElem prevElem = getElemType(row, col);
-    trackElem actualElem;
+    loadPart(row, col, identifyElem(trackLayout[0]));
+    trackPartType prevElem = getPartType(row, col);
+    trackPartType actualElem;
     col++;  // assumes top-left corner is a down-right curve
     for (int i=1; i < trackLayout.size(); i++){
         actualElem = identifyElem(trackLayout[i]);
-        loadElem(row, col, actualElem);
+        loadPart(row, col, actualElem);
         setNextCoord(row, col, actualElem, prevElem);
         if (isCurve(actualElem))
             prevElem = actualElem;
     }
 }
 
-bool Track::isCurve(const trackElem & elem) {
+bool Track::isCurve(const trackPartType & elem) {
     return !(elem == horizontal || elem == vertical);
 }
 
 // Transforms json strings to elements of track
-trackElem Track::identifyElem(const std::string & layoutElem){
+trackPartType Track::identifyElem(const std::string & layoutElem){
     if (layoutElem == LAYOUT_DL)
         return downLeft;
     else if (layoutElem == LAYOUT_DR)
@@ -147,8 +144,8 @@ trackElem Track::identifyElem(const std::string & layoutElem){
  * track piece based on the last curve */
 void Track::setNextCoord(int & row,
                          int & col,
-                         trackElem elem,
-                         trackElem prev){
+                         trackPartType elem,
+                         trackPartType prev){
     if (elem == horizontal && (prev == upRight || prev == downRight))
         col++;
     else if (elem == horizontal && (prev == upLeft || prev == downLeft))
@@ -192,7 +189,7 @@ TrackPartData & Track::getTrackPart(int posX, int posY) {
     return trackPartData[row*width + col];
 }
 
-// Finds nearest bottom-left corner in BLOCKSIZE multiples
+// Finds nearest bottom-left corner in BLOCKSIZE multiples [meters]
 int Track::findNearestPos(int pos) {
     for(int nearest = 0; nearest < MAXTRACKSIZE; nearest+=BLOCKSIZE ) {
         if(pos >= nearest && pos < nearest + BLOCKSIZE)
@@ -201,7 +198,71 @@ int Track::findNearestPos(int pos) {
     return -1;  // not found
 }
 
-// Transforms from meters to matricial display indexes
+// Transforms from meters to matrix display indexes
 int Track::posToIndex(int pos) {
     return pos/BLOCKSIZE;
+}
+
+// Transforms data structure of whole track into a string
+std::string Track::serialize() {
+    std::string msg;
+    msg = std::to_string(startCol) +
+          "," +
+          std::to_string(startRow) +
+          "," +
+          std::to_string(width) +
+          "," +
+          std::to_string(height) +
+          "," +
+          std::to_string(partCounter) +
+          "," +
+          name +
+          '\n';
+    for (auto & it : trackPartData)
+        msg += it.serialize();
+    return msg;
+}
+
+// Constructor: Creates track based on serialized string
+Track::Track(const std::string & trackStr) {
+    size_t pos = 0;
+
+    startCol = std::stoi(parseTrackParam(trackStr, pos, ','));
+    startRow = std::stoi(parseTrackParam(trackStr, pos, ','));
+    width = std::stoi(parseTrackParam(trackStr, pos, ','));
+    height = std::stoi(parseTrackParam(trackStr, pos, ','));
+    partCounter = std::stoi(parseTrackParam(trackStr, pos, ','));
+    name = parseTrackParam(trackStr, pos, '\n');
+    parseTrackParts(trackStr, pos);
+}
+
+// Parses track parts in string to create a track (posx, posy, type)
+void Track::parseTrackParts(const std::string & trackStr, size_t & pos) {
+    int x;
+    int y;
+    trackPartType type;
+    TrackPartData part;
+    for (int i=1; i <= width*height; i++){
+        x = std::stoi(parseTrackParam(trackStr, pos, ','));
+        y = std::stoi(parseTrackParam(trackStr, pos, ','));
+        type = static_cast<trackPartType>(std::stoi(parseTrackParam(trackStr,
+                                                                     pos,
+                                                                     '\n')));
+        part.loadPos(x,y);
+        part.loadType(type);
+        trackPartData.emplace_back(part);
+    }
+}
+
+// Parses initial non-parts attributes of track
+std::string Track::parseTrackParam(const std::string & initString,
+                                   size_t & pos,
+                                   const char delim) {
+    std::string substr;
+
+    size_t nextPos = initString.find(delim, pos);
+    size_t len = nextPos - pos;
+    substr = initString.substr(pos, len);
+    pos = nextPos + 1;
+    return substr;
 }

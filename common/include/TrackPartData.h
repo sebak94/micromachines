@@ -9,19 +9,20 @@
 
 class TrackPartData {
 private:
-    trackElem type = empty;
+    trackPartType type = empty;
     int trackElemID = 0;
     int posX = 0;
     int posY = 0;
 
 public:
-    void loadType(trackElem elem);
+    void loadType(trackPartType elem);
     void loadPos(int row, int col);
-    trackElem getType() const;
+    trackPartType getType() const;
     int getPosX();
     int getPosY();
     void setID(int ID);
     int getID();
+    std::string serialize();
 };
 
 

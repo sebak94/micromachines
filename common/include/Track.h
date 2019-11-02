@@ -23,37 +23,46 @@ typedef enum {
     upLeft,
     horizontal,
     vertical
-} trackElem;
+} trackPartType;
 
 class Track {
 private:
+
+
     int startCol = 0;
     int startRow = 0;
     int width = 0;  // blocks
     int height = 0;  // blocks
     int partCounter = 0;  // number of track elements
-    std::vector<std::string> trackLayout{};
     std::vector<TrackPartData> trackPartData{};
     std::string name{};
 
 public:
+    Track();
+    explicit Track(const std::string &trackStr);
+
     void loadTrack(const Json::Value &fileTracks, int trackNumber);
     void print();
     void initLayout();
-    void loadElem(int row, int col, trackElem elem);
-    void configure();
-    static trackElem identifyElem(const std::string &layoutElem);
+    void loadPart(int row, int col, trackPartType elem);
+    void initTrackParts(const std::vector<std::string> & trackLayout);
+    static trackPartType identifyElem(const std::string &layoutElem);
     std::string getName();
-    trackElem getElemType(int row, int col);
-    static void setNextCoord(int &row, int &col, trackElem elem, trackElem prev);
-    static bool isCurve(const trackElem & elem);
+    trackPartType getPartType(int row, int col);
+    static void setNextCoord(int &row, int &col, trackPartType elem, trackPartType prev);
+    static bool isCurve(const trackPartType & elem);
     static void printElem(const TrackPartData &part);
     TrackPartData & getTrackPart(int posX, int posY);
     static int findNearestPos(int pos);
     static int posToIndex(int pos);
     bool isOnTrack(int posX, int posY);
-    int toRadius(int posX, int posY);
-    bool inCurveRange(bool invertedX, bool invertedY, int x, int y);
+    static bool inCurveRange(bool invertedX, bool invertedY, int x, int y);
+
+    std::string serialize();
+
+    static std::string parseTrackParam(const std::string &initString, size_t &pos, const char delim);
+
+    void parseTrackParts(const std::string &trackStr, size_t &pos);
 };
 
 #endif //MAP_TRACK_H
