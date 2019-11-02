@@ -3,6 +3,7 @@
 //
 
 #include <jsoncpp/json/json.h>
+#include <cmath>
 #include "Track.h"
 #include "TrackList.h"
 
@@ -57,11 +58,11 @@ void Track::printElem(const TrackPartData & part) {
         std::cout << "║";
 }
 
-// Counts rows and cols from 0. Loads postion of element in meters.
+// Counts rows and cols from 0. Loads position of element in meters.
 void Track::loadElem(int row, int col, trackElem elem) {
     TrackPartData part;
     part.loadType(elem);
-    part.loadPos(row, height - col);
+    part.loadPos(height - row, col);
     part.setID(partCounter);
     partCounter++;
     trackPartData[row*width + col] = part;
@@ -72,7 +73,39 @@ trackElem Track::getElemType(int row, int col) {
     return trackPartData[row*width + col].getType();
 }
 
-/* Transforms sequencial order of the track (json)
+// Checks if on Track based on car position [meters]
+bool Track::isOnTrack(int posX, int posY) {
+    TrackPartData part = getTrackPart(posX, posY);
+    trackElem type = part.getType();
+    int x = posX - part.getPosX(); // to relative coords
+    int y = posY - part.getPosY(); // to relative coords
+    if (type == horizontal || type == vertical) {
+        return true;
+    } else if (type == empty) {
+        return false;
+    } else if (type == downLeft) {
+        return inCurveRange(false, false, x, y);
+    } else if (type == downRight){
+        return inCurveRange(true, false, x, y);
+    } else if (type == upRight){
+        return inCurveRange(true, true, x, y);
+    } else if (type == upLeft){
+        return inCurveRange(false, true, x, y);
+    } else {
+        return false;
+    }
+}
+
+// Checks if car is out of radius of curve using polar coordinates.
+bool Track::inCurveRange(bool invertedX, bool invertedY, int x, int y) {
+    if ( invertedX )
+        x = BLOCKSIZE - x;
+    if ( invertedY )
+        y = BLOCKSIZE - y;
+    return sqrt(x*x+y*y) < BLOCKSIZE;
+}
+
+/* Transforms sequential order of the track (json)
  * to a matricial layout */
 void Track::configure() {
     int row = startRow;
@@ -151,5 +184,24 @@ void Track::initLayout() {
         trackPartData.emplace_back(emptyPart);
 }
 
-// gets X position
-int Track::getPosX
+/* Transforms positions in meters to indexes of matrix.
+ *-1 to transform to display coordinates. See loadPos().*/
+TrackPartData & Track::getTrackPart(int posX, int posY) {
+    int row = posToIndex((height-1)*BLOCKSIZE - findNearestPos(posY));
+    int col = posToIndex(findNearestPos(posX));
+    return trackPartData[row*width + col];
+}
+
+// Finds nearest bottom-left corner in BLOCKSIZE multiples
+int Track::findNearestPos(int pos) {
+    for(int nearest = 0; nearest < MAXTRACKSIZE; nearest+=BLOCKSIZE ) {
+        if(pos >= nearest && pos < nearest + BLOCKSIZE)
+            return nearest;
+    }
+    return -1;  // not found
+}
+
+// Transforms from meters to matricial display indexes
+int Track::posToIndex(int pos) {
+    return pos/BLOCKSIZE;
+}

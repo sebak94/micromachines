@@ -9,10 +9,14 @@ void TrackPartData::loadType(trackElem elem) {
     type = elem;
 }
 
-// Loads into cardinal meters
+/* Loads into cardinal meters.
+ * Display coordinates: (0,0) starts
+ * in top-left corner.
+ * Cardinal coordinates: (0,0) starts
+ * in bottom-left corner.*/
 void TrackPartData::loadPos(int row, int col) {
-    posX = row*BLOCKSIZE;
-    posY = (col - 1)*BLOCKSIZE;
+    posX = col*BLOCKSIZE;
+    posY = (row - 1)*BLOCKSIZE;  //-1 for "display coordinates"
 }
 
 // Returns track element type
@@ -30,6 +34,7 @@ int TrackPartData::getPosY() {
     return posY;
 }
 
+// Sets ID to recognize track elements traverse order
 void TrackPartData::setID(int ID) {
     trackElemID = ID;
 }
