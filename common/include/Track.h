@@ -48,17 +48,11 @@ public:
     static void setNextCoord(int &row, int &col, trackElem elem, trackElem prev);
     static bool isCurve(const trackElem & elem);
     static void printElem(const TrackPartData &part);
-
     TrackPartData & getTrackPart(int posX, int posY);
-
     static int findNearestPos(int pos);
-
     static int posToIndex(int pos);
-
-    bool isOnTrack(int row, int col);
-
+    bool isOnTrack(int posX, int posY);
     int toRadius(int posX, int posY);
-
     bool inCurveRange(bool invertedX, bool invertedY, int x, int y);
 };
 
