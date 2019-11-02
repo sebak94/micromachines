@@ -3,9 +3,7 @@
 
 #include "car_state.h"
 
-class AccelerateLeft: public CarState {
-    public:
-    virtual void apply(Car *car) override;
+class AccelerateLeft {
 };
 
 #endif

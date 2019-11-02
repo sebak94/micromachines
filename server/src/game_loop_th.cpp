@@ -11,18 +11,19 @@ GameLoopTh::GameLoopTh(Micromachines micromachines): running(true),
 void GameLoopTh::run() {
     auto previous = std::chrono::system_clock::now();
     double lag = 0.0;
+
     while (running) {
         auto current = std::chrono::system_clock::now();
         auto elapsed = current - previous;
         previous = current;
         lag += elapsed.count();
 
-        std::vector<ClientTh*> clients = micromachines.clients;
-        for (size_t i = 0; i < clients.size; i++) {
-            ClientTh* client = clients[i];
+        std::vector<ClientTh*>* clients = micromachines.clients();
+        for (size_t i = 0; i < clients->size(); i++) {
+            ClientTh* client = (*clients)[i];
             Interpreter interp;
-            CarState* newCarState = interp.interpret(client->popAction());
-            client->updateCarState(newCarState);
+            CarState* state_received = interp.interpret(client->popAction());
+            client->updateCarState(state_received);
         }
 
         while (lag >= MS_PER_UPDATE) {

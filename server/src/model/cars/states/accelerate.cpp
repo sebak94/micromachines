@@ -1,22 +1,30 @@
 #include "../../../../include/model/cars/states/accelerate.h"
+#include "../../../../include/model/cars/states/break.h"
+#include "../../../../include/model/cars/states/left.h"
+#include "../../../../include/model/cars/states/right.h"
+#include "../../../../include/model/cars/car.h"
+#include <memory>
 
-void Accelerate::apply(const Break &previous) {
-    printf("Break\n");
+CarState* Accelerate::newState(Break *previous) {
+    Accelerate ac;
+    return std::move(&ac);
 }
 
-void Accelerate::apply(const Left &previous) {
-    printf("Acelerate left\n");
+CarState* Accelerate::newState(Left *previous) {
+    Accelerate ac;
+    return std::move(&ac);
 }
 
-void Accelerate::apply(const Right &previous) {
-    printf("Acelerate Right\n");
+CarState* Accelerate::newState(Right *previous) {
+    Accelerate ac;
+    return std::move(&ac);
 }
 
-void Accelerate::apply(const Accelerate &previous) {
-    printf("acelerate\n");
+CarState* Accelerate::newState(Accelerate *previous) {
+    Accelerate ac;
+    return std::move(&ac);
 }
 
-void Accelerate::apply(const CarState &previous) {
+void Accelerate::apply(Car *car) {
 
 }
-

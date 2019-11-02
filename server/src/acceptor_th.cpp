@@ -46,7 +46,8 @@ void AcceptorTh::run() {
             Socket *peer = new Socket();
             sockets.push_back(peer);
             skt.Accept(peer);
-            ClientTh *client_th = new ClientTh(peer, micromachines);
+            ClientTh *client_th = new ClientTh(peer);
+            micromachines.addClient(client_th);
             clients.push_back(client_th);
             client_th->start();
             deleteDeadClients();

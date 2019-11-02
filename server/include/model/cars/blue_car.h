@@ -6,8 +6,6 @@
 class BlueCar: public Car {
     public:
     BlueCar();
-    virtual void update() override;
-    virtual void serialize() override;
     ~BlueCar();
 };
 

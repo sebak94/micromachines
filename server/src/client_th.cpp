@@ -9,11 +9,9 @@
 #include "vector"
 #include "string"
 
-ClientTh::ClientTh(Socket *peer, Micromachines &micromachines):
-    keep_talking(true), is_running(true), peer(peer),
-    micromachines(micromachines) {
+ClientTh::ClientTh(Socket *peer): keep_talking(true), is_running(true),
+    peer(peer) {
     car = new BlueCar();
-    micromachines.addClient(this);
     std::string welcome_msg = "Bienvenido!\n";
     send(welcome_msg);
 }
@@ -60,6 +58,5 @@ bool ClientTh::isDead() {
 }
 
 ClientTh::~ClientTh() {
-    micromachines.removeCar(car);
     delete car;
 }

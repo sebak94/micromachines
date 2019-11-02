@@ -15,8 +15,6 @@ class Micromachines {
     void update();
     void addClient(ClientTh *client);
     std::vector<ClientTh*>* clients();
-
-    size_t removeCar(Car *car);
 };
 
 #endif

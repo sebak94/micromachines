@@ -3,7 +3,6 @@
 
 #include "../../common/include/thread.h"
 #include "../../common/include/socket.h"
-#include "model/micromachines.h"
 #include "model/cars/car.h"
 #include "model/cars/states/car_state.h"
 #include "blocking_queue.h"
@@ -16,7 +15,6 @@ class ClientTh: public Thread {
     std::atomic<bool> keep_talking;
     std::atomic<bool> is_running;
     Socket *peer;
-    Micromachines micromachines;
     Car *car;
     BlockingQueue actions;
 
@@ -24,7 +22,7 @@ class ClientTh: public Thread {
     void send(std::string &response);
 
     public:
-    ClientTh(Socket *peer, Micromachines &micromachines);
+    ClientTh(Socket *peer);
     PlayerAction popAction();
     void updateCarState(CarState* newCarState);
     virtual void run() override;

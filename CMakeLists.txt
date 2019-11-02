@@ -14,6 +14,7 @@ set(SOURCE_FILES_SERVER
     server/include/model/micromachines.h
     server/include/model/model.h
     server/include/model/point.h
+    server/include/model/interpreter.h
     server/include/model/cars/car.h
     server/include/model/cars/blue_car.h
     server/include/model/cars/states/car_state.h
@@ -29,7 +30,6 @@ set(SOURCE_FILES_SERVER
     server/include/model/tracks/track.h
     server/include/model/tracks/track_part_data.h
     server/include/model/tracks/track_parts.h
-    server/src/model/interpreter.h
     server/src/mm_server.cpp
     server/src/acceptor_th.cpp
     server/src/client_th.cpp
@@ -39,6 +39,7 @@ set(SOURCE_FILES_SERVER
     server/src/model/micromachines.cpp
     server/src/model/point.cpp
     server/src/model/point.cpp
+    server/src/model/interpreter.cpp
     server/src/model/tracks/track.cpp
     server/src/model/cars/car.cpp
     server/src/model/cars/blue_car.cpp
@@ -57,7 +58,6 @@ set(SOURCE_FILES_SERVER
     common/src/socket.cpp
     common/src/socket_error.cpp
     common/src/thread.cpp
-    server/src/model/interpreter.cpp
 )
 
 set(SOURCE_FILES_CLIENT
