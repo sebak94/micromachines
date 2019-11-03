@@ -3,11 +3,14 @@
 
 #include "../../common/include/thread.h"
 #include "model/micromachines.h"
+#include <cstdint>
 
 class GameLoopTh: public Thread {
     private:
     bool running;
     Micromachines &micromachines;
+    
+    uint64_t GetTickCountMs();
 
     public:
     GameLoopTh(Micromachines &micromachines);

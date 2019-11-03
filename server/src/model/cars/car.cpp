@@ -21,6 +21,14 @@ void Car::setState(CarState *state_received) {
     state = new_state;
 }
 
+Point Car::getPosition() {
+    return position;
+}
+
+void Car::setPosition(Point new_position) {
+    position = new_position;
+}
+
 void Car::update() {
     state->apply(this);
 }

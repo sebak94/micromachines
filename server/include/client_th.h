@@ -5,10 +5,10 @@
 #include "../../common/include/socket.h"
 #include "model/cars/car.h"
 #include "model/cars/states/car_state.h"
-#include "blocking_queue.h"
 #include <string>
 #include <vector>
 #include <atomic>
+#include <queue>
 
 class ClientTh: public Thread {
     private:
@@ -16,19 +16,20 @@ class ClientTh: public Thread {
     std::atomic<bool> is_running;
     Socket *peer;
     Car *car;
-    BlockingQueue actions;
+    std::queue<char> actions;
 
     void sendWelcomeMsg();
     void sendTrackData();
-    void sendCarData();
     void receive(char *action);
     void send(std::string &response);
 
     public:
     ClientTh(Socket *peer);
+    bool hasNewAction();
     char popAction();
     void updateCarState(CarState *state_received);
     void updateCar();
+    void sendCarData();
     virtual void run() override;
     virtual void stop() override;
     bool isDead();

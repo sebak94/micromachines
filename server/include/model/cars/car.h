@@ -28,6 +28,8 @@ class Car: public Model {
         uint8_t acceleration, uint8_t grip, uint8_t maneuverability,
         Point initial_position, ColorType color);
     void setState(CarState *state_received);
+    void setPosition(Point new_position);
+    Point getPosition();
     virtual void update() override;
     virtual std::string serialize() override;
     ~Car();

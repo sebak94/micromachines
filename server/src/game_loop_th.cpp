@@ -1,31 +1,37 @@
 #include "../include/game_loop_th.h"
 #include "../include/model/micromachines.h"
-#include <chrono>
 #include <iostream>
+#include <cstdint>
 
-#define MS_PER_UPDATE 16 // 60 FPS
+#define TICKS_PER_SECOND 60
+#define SKIP_TICKS 1000 / TICKS_PER_SECOND
+#define MAX_FRAMESKIP 10
 
 GameLoopTh::GameLoopTh(Micromachines &micromachines): running(true),
     micromachines(micromachines) {}
 
+uint64_t GameLoopTh::GetTickCountMs() {
+    timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return (uint64_t)(ts.tv_nsec / 1000000) + ((uint64_t)ts.tv_sec * 1000ull);
+}
+
 void GameLoopTh::run() {
-    auto previous = std::chrono::system_clock::now();
-    double lag = 0.0;
+    uint64_t next_game_tick = GetTickCountMs();
+    uint64_t loops;
 
     while (running) {
-        auto current = std::chrono::system_clock::now();
-        auto elapsed = current - previous;
-        previous = current;
-        lag += elapsed.count();
-
+        loops = 0;
         micromachines.updatePlayersState();
-        
-        while (lag >= MS_PER_UPDATE) {
+
+        while (GetTickCountMs() > next_game_tick && loops < MAX_FRAMESKIP) {
             micromachines.update();
-            lag -= MS_PER_UPDATE;
+            next_game_tick += SKIP_TICKS;
+            loops++;
         }
 
-        // render();
+        std::cout << "game loop sendNewStateToPlayers\n";
+        micromachines.sendNewStateToPlayers();
     }
 }
 

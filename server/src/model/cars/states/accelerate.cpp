@@ -3,6 +3,7 @@
 #include "../../../../include/model/cars/states/left.h"
 #include "../../../../include/model/cars/states/right.h"
 #include "../../../../include/model/cars/car.h"
+#include "../../../../include/model/point.h"
 #include <memory>
 #include <stdio.h>
 
@@ -23,5 +24,6 @@ CarState* Accelerate::newState(Accelerate *previous) {
 }
 
 void Accelerate::apply(Car *car) {
-    // printf("Update car\n");
+    Point current_position = car->getPosition();
+    car->setPosition(Point(current_position.getX() + 1, current_position.getY()));
 }

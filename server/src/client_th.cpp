@@ -25,6 +25,7 @@ void ClientTh::sendTrackData() {
 }
 
 void ClientTh::sendCarData() {
+    std::cout << "mandar auto a jugador \n";
     std::string car_msg = car->serialize();
     send(car_msg);
 }
@@ -44,8 +45,14 @@ void ClientTh::run() {
     is_running = false;
 }
 
+bool ClientTh::hasNewAction() {
+    return !actions.empty();
+}
+
 char ClientTh::popAction() {
-    return actions.pop();
+    char a = actions.front();
+    actions.pop();
+    return a;
 }
 
 void ClientTh::updateCarState(CarState *state_received) {

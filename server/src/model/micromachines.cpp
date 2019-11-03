@@ -22,11 +22,19 @@ void Micromachines::updatePlayersState() {
     Lock l(m);
     Interpreter interp;
     for (size_t i = 0; i < players.size(); i++) {
-        std::shared_ptr<CarState> state_received = interp.interpret(players[i]->popAction());
-        players[i]->updateCarState(state_received.get());
+        if (players[i]->hasNewAction()) {
+            std::shared_ptr<CarState> state_received = interp.interpret(players[i]->popAction());
+            players[i]->updateCarState(state_received.get());
+        }
     }
 }
 
 void Micromachines::cleanPlayers() {
     players.clear();
+}
+
+void Micromachines::sendNewStateToPlayers() {
+    for (size_t i = 0; i < players.size(); i++) {
+        players[i]->sendCarData();
+    }
 }
