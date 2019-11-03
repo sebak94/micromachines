@@ -3,9 +3,10 @@
 
 #include "../model.h"
 #include "../point.h"
-#include "colors.h"
+#include "color.h"
 #include "states/car_state.h"
 #include <cstdint>
+#include <string>
 
 class Car: public Model {
     protected:
@@ -25,10 +26,10 @@ class Car: public Model {
     public:
     Car(uint8_t width, uint8_t height, uint8_t max_velocity,
         uint8_t acceleration, uint8_t grip, uint8_t maneuverability,
-        Point initial_position, Color color);
+        Point initial_position, ColorType color);
     void setState(CarState *state_received);
     virtual void update() override;
-    virtual void serialize() override;
+    virtual std::string serialize() override;
     ~Car();
 };
 

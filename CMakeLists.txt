@@ -14,6 +14,7 @@ set(SOURCE_FILES_SERVER
     server/include/model/model.h
     server/include/model/point.h
     server/include/model/interpreter.h
+    server/include/model/cars/color.h
     server/include/model/cars/car.h
     server/include/model/cars/blue_car.h
     server/include/model/cars/states/car_state.h
@@ -39,6 +40,7 @@ set(SOURCE_FILES_SERVER
     server/src/model/point.cpp
     server/src/model/interpreter.cpp
     server/src/model/tracks/track.cpp
+    server/src/model/cars/color.cpp
     server/src/model/cars/car.cpp
     server/src/model/cars/blue_car.cpp
     server/src/model/cars/states/accelerate_left.cpp

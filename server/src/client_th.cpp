@@ -9,10 +9,24 @@
 #include "string"
 
 ClientTh::ClientTh(Socket *peer): keep_talking(true), is_running(true),
-    peer(peer) {
-    car = new BlueCar();
+    peer(peer), car(new BlueCar()) {
+    sendWelcomeMsg();
+    sendTrackData();
+    sendCarData();
+}
+
+void ClientTh::sendWelcomeMsg() {
     std::string welcome_msg = "Bienvenido!\n";
     send(welcome_msg);
+}
+
+void ClientTh::sendTrackData() {
+
+}
+
+void ClientTh::sendCarData() {
+    std::string car_msg = car->serialize();
+    send(car_msg);
 }
 
 void ClientTh::run() {

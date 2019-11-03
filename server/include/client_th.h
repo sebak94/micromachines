@@ -18,6 +18,9 @@ class ClientTh: public Thread {
     Car *car;
     BlockingQueue actions;
 
+    void sendWelcomeMsg();
+    void sendTrackData();
+    void sendCarData();
     void receive(char *action);
     void send(std::string &response);
 
