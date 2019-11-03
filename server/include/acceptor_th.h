@@ -11,7 +11,7 @@ class AcceptorTh: public Thread {
     private:
     Socket skt;
     bool keep_accepting;
-    Micromachines micromachines;
+    Micromachines &micromachines;
     std::vector<ClientTh*> clients;
     std::vector<Socket*> sockets;
     void deleteDeadClients();

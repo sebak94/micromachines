@@ -4,7 +4,7 @@
 
 #define MS_PER_UPDATE 16 // 60 FPS
 
-GameLoopTh::GameLoopTh(Micromachines micromachines): running(true),
+GameLoopTh::GameLoopTh(Micromachines &micromachines): running(true),
     micromachines(micromachines) {}
 
 void GameLoopTh::run() {

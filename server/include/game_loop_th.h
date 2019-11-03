@@ -7,10 +7,10 @@
 class GameLoopTh: public Thread {
     private:
     bool running;
-    Micromachines micromachines;
+    Micromachines &micromachines;
 
     public:
-    GameLoopTh(Micromachines micromachines);
+    GameLoopTh(Micromachines &micromachines);
     virtual void run() override;
     virtual void stop() override;
     ~GameLoopTh();

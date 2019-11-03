@@ -55,9 +55,11 @@ set(SOURCE_FILES_SERVER
     common/include/socket.h
     common/include/socket_error.h
     common/include/thread.h
+    common/include/lock.h
     common/src/socket.cpp
     common/src/socket_error.cpp
     common/src/thread.cpp
+    common/src/lock.cpp
 )
 
 set(SOURCE_FILES_CLIENT

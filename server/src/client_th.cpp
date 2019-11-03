@@ -22,6 +22,7 @@ void ClientTh::run() {
             char action;
             receive(&action);
             actions.push(PlayerAction(action));
+            std::cout << "la accion del jugador se metio en la cola \n";
         } catch(const SocketError &e) {
             keep_talking = false;
             std::cout << e.what() << "\n";

@@ -5,9 +5,11 @@
 #include "tracks/track.h"
 #include "../client_th.h"
 #include <vector>
+#include <mutex>
 
 class Micromachines {
     private:
+    std::mutex m;
     Track track;
     std::vector<ClientTh*> players;
 
