@@ -7,26 +7,21 @@
 #include <stdio.h>
 
 CarState* Accelerate::newState(Break *previous) {
-    Accelerate ac;
-    return std::move(&ac);
+    return new Accelerate();
 }
 
 CarState* Accelerate::newState(Left *previous) {
-    Accelerate ac;
-    return std::move(&ac);
+    return new Accelerate();
 }
 
 CarState* Accelerate::newState(Right *previous) {
-    Accelerate ac;
-    return std::move(&ac);
+    return new Accelerate();
 }
 
 CarState* Accelerate::newState(Accelerate *previous) {
-    printf("Accelerate::newState(Accelerate *previous)\n");
-    Accelerate ac;
-    return std::move(&ac);
+    return new Accelerate();
 }
 
 void Accelerate::apply(Car *car) {
-
+    // printf("Update car\n");
 }

@@ -21,10 +21,8 @@ void Micromachines::addClient(ClientTh *client) {
 void Micromachines::updatePlayersState() {
     Lock l(m);
     Interpreter interp;
-    std::cout << "clientes: " << players.size() << "\n";
     for (size_t i = 0; i < players.size(); i++) {
-        std::cout << "action: " << players[i]->popAction().getAction() << "\n";
-        CarState* state_received = interp.interpret(players[i]->popAction());
-        players[i]->updateCarState(state_received);
+        std::shared_ptr<CarState> state_received = interp.interpret(players[i]->popAction());
+        players[i]->updateCarState(state_received.get());
     }
 }

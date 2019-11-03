@@ -1,23 +1,22 @@
 #include "../include/blocking_queue.h"
-#include "../include/player_action.h"
 #include <condition_variable>
 #include <mutex>
 #include <iostream>
 
 BlockingQueue::BlockingQueue() {}
 
-void BlockingQueue::push(PlayerAction pa) {
+void BlockingQueue::push(char action) {
     std::unique_lock<std::mutex> lock(m);
-    q.push(pa);
+    q.push(action);
 }
 
-PlayerAction BlockingQueue::pop() {
+char BlockingQueue::pop() {
     std::unique_lock<std::mutex> lock(m);
 
     while (q.empty()) {
         pop_cv.wait(lock);
     }
-    PlayerAction pa = q.front();
+    char pa = q.front();
     q.pop();
     return pa;
 }

@@ -23,7 +23,7 @@ class ClientTh: public Thread {
 
     public:
     ClientTh(Socket *peer);
-    PlayerAction popAction();
+    char popAction();
     void updateCarState(CarState *state_received);
     void updateCar();
     virtual void run() override;

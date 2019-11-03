@@ -8,24 +8,14 @@
 #include "../../include/model/cars/states/right.h"
 #include "../../include/model/cars/states/break.h"
 #include <memory>
+#include "iostream"
 
-CarState* Interpreter::interpret(PlayerAction pa) {
-    switch (pa.getAction()) {
-        case A: {
-            Accelerate a;
-            return std::move(&a);
-        }
-        case L: {
-            Left l;
-            return std::move(&l);
-        }
-        case R: {
-            Right r;
-            return std::move(&r);
-        }
-        case B: {
-            Break b;
-            return std::move(&b);
-        }
+std::shared_ptr<CarState> Interpreter::interpret(char action) {
+    switch (action) {
+        case 'A': return std::shared_ptr<Accelerate>(new Accelerate());
+        case 'L': return std::shared_ptr<Left>(new Left());
+        case 'R': return std::shared_ptr<Right>(new Right());
+        case 'B': return std::shared_ptr<Break>(new Break());
+        default: std::cout << "Accion inválida\n";
     }
 }

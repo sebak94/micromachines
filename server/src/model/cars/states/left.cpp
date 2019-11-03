@@ -7,23 +7,19 @@
 #include <memory>
 
 CarState* Left::newState(Break *previous) {
-    Left l;
-    return std::move(&l);
+    return new Left();
 }
 
 CarState* Left::newState(Left *previous) {
-    Left l;
-    return std::move(&l);
+    return new Left();
 }
 
 CarState* Left::newState(Right *previous) {
-    Left l;
-    return std::move(&l);
+    return new Left();
 }
 
 CarState* Left::newState(Accelerate *previous) {
-    Left l;
-    return std::move(&l);
+    return new Left();
 }
 
 void Left::apply(Car *car) {

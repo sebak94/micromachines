@@ -1,7 +1,6 @@
 #ifndef __CAR_H__
 #define __CAR_H__
 
-#include "../../player_action.h"
 #include "../model.h"
 #include "../point.h"
 #include "colors.h"

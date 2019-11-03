@@ -7,12 +7,11 @@
 
 
 #include "../../include/model/cars/states/car_state.h"
-#include "../../include/player_action.h"
 #include <memory>
 
 class Interpreter {
 public:
-    CarState* interpret(PlayerAction pa);
+    std::shared_ptr<CarState> interpret(char action);
 };
 
 

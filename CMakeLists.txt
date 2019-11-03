@@ -9,7 +9,6 @@ set(SOURCE_FILES_SERVER
     server/include/acceptor_th.h
     server/include/client_th.h
     server/include/game_loop_th.h
-    server/include/player_action.h
     server/include/blocking_queue.h
     server/include/model/micromachines.h
     server/include/model/model.h
@@ -34,7 +33,6 @@ set(SOURCE_FILES_SERVER
     server/src/acceptor_th.cpp
     server/src/client_th.cpp
     server/src/game_loop_th.cpp
-    server/src/player_action.cpp
     server/src/blocking_queue.cpp
     server/src/model/micromachines.cpp
     server/src/model/point.cpp

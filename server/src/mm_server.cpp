@@ -28,8 +28,8 @@ void MMServer::start(const char *service) {
         Micromachines micromachines;
         GameLoopTh game_loop_th(micromachines);
         AcceptorTh acceptor_th(service, micromachines);
-        threads.push_back(&game_loop_th);
         threads.push_back(&acceptor_th);
+        threads.push_back(&game_loop_th);
         startThreads();
         while (getc(stdin) != 'q') {}
         finishThreads();

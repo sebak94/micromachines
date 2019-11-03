@@ -1,6 +1,5 @@
 #include "../include/client_th.h"
 #include "../include/blocking_queue.h"
-#include "../include/player_action.h"
 #include "../include/model/cars/blue_car.h"
 #include "../include/model/cars/states/car_state.h"
 #include "../../common/include/socket.h"
@@ -21,8 +20,7 @@ void ClientTh::run() {
         try {
             char action;
             receive(&action);
-            actions.push(PlayerAction(action));
-            std::cout << "la accion del jugador se metio en la cola \n";
+            actions.push(action);
         } catch(const SocketError &e) {
             keep_talking = false;
             std::cout << e.what() << "\n";
@@ -32,7 +30,7 @@ void ClientTh::run() {
     is_running = false;
 }
 
-PlayerAction ClientTh::popAction() {
+char ClientTh::popAction() {
     return actions.pop();
 }
 

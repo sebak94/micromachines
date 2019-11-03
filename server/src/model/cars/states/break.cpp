@@ -7,23 +7,19 @@
 #include <memory>
 
 CarState* Break::newState(Break *previous) {
-    Break b;
-    return std::move(&b);
+    return new Break;
 }
 
 CarState* Break::newState(Left *previous) {
-    Break b;
-    return std::move(&b);
+    return new Break;
 }
 
 CarState* Break::newState(Right *previous) {
-    Break b;
-    return std::move(&b);
+    return new Break;
 }
 
 CarState* Break::newState(Accelerate *previous) {
-    Break b;
-    return std::move(&b);
+    return new Break;
 }
 
 void Break::apply(Car *car) {
