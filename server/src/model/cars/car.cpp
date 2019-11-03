@@ -12,12 +12,13 @@ Car::Car(uint8_t width, uint8_t height, uint8_t max_velocity,
     max_velocity(max_velocity), acceleration(acceleration), grip(grip),
     maneuverability(maneuverability), current_velocity(0), health(100),
     rotation(0), position(initial_position), color(color) {
-    Accelerate acc;
-    state = std::move(&acc);
+    Accelerate ac;
+    state = std::move(&ac);
 }
 
 void Car::setState(CarState *state_received) {
-    state = state_received->newState(state);
+    Accelerate ac;
+    state = state_received->newState(&ac);
 }
 
 void Car::update() {
@@ -28,6 +29,4 @@ void Car::serialize() {
 
 }
 
-Car::~Car() {
-    delete state;
-}
+Car::~Car() {}

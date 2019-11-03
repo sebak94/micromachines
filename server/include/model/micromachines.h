@@ -14,7 +14,7 @@ class Micromachines {
     public:
     void update();
     void addClient(ClientTh *client);
-    std::vector<ClientTh*>* clients();
+    void updatePlayersState();
 };
 
 #endif

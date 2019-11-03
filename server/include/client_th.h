@@ -24,7 +24,8 @@ class ClientTh: public Thread {
     public:
     ClientTh(Socket *peer);
     PlayerAction popAction();
-    void updateCarState(CarState* newCarState);
+    void updateCarState(CarState *state_received);
+    void updateCar();
     virtual void run() override;
     virtual void stop() override;
     bool isDead();

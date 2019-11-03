@@ -4,6 +4,7 @@
 #include "../../../../include/model/cars/states/right.h"
 #include "../../../../include/model/cars/car.h"
 #include <memory>
+#include <stdio.h>
 
 CarState* Accelerate::newState(Break *previous) {
     Accelerate ac;
@@ -21,6 +22,7 @@ CarState* Accelerate::newState(Right *previous) {
 }
 
 CarState* Accelerate::newState(Accelerate *previous) {
+    printf("Accelerate::newState(Accelerate *previous)\n");
     Accelerate ac;
     return std::move(&ac);
 }

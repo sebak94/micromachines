@@ -35,8 +35,12 @@ PlayerAction ClientTh::popAction() {
     return actions.pop();
 }
 
-void ClientTh::updateCarState(CarState* newCarState) {
-    car->setState(newCarState);
+void ClientTh::updateCarState(CarState *state_received) {
+    car->setState(state_received);
+}
+
+void ClientTh::updateCar() {
+    car->update();
 }
 
 void ClientTh::receive(char *action) {

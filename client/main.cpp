@@ -13,7 +13,8 @@ void run(const char *hostname, const char *service) {
 
         while (running) {
             std::cout << server.receive();
-            running = false;
+            server.send("A");
+            // running = false;
         }
     } catch(const SocketError &e) {}
 }
