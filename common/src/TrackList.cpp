@@ -2,7 +2,7 @@
 // Created by fperezboco on 27/10/19.
 //
 
-#include "TrackList.h"
+#include "../include/TrackList.h"
 
 // loads all tracks in a list
 void TrackList::readTracks() {

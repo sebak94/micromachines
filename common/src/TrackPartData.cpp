@@ -2,7 +2,7 @@
 // Created by fede on 1/11/19.
 //
 
-#include "TrackPartData.h"
+#include "../include/TrackPartData.h"
 
 // Loads type of element
 void TrackPartData::loadType(trackPartType elem) {

@@ -4,8 +4,8 @@
 
 #include <jsoncpp/json/json.h>
 #include <cmath>
-#include "Track.h"
-#include "TrackList.h"
+#include "../include/Track.h"
+#include "../include/TrackList.h"
 
 // Loads data of 1 track in position <trackNumber> of the json file.
 void Track::loadTrack(const Json::Value &fileTracks, int trackNumber) {

@@ -12,7 +12,7 @@
 #include <vector>
 #include "Track.h"
 
-#define TRACKS_FILE_PATH "../tracks_layout.json"
+#define TRACKS_FILE_PATH "tracks_layout.json"
 #define LAYOUT_ID "layout"
 #define TRACKS_ID "tracks"
 #define NAME_ID "name"
