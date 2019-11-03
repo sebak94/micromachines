@@ -63,6 +63,7 @@ void AcceptorTh::run() {
 void AcceptorTh::stop() {
     keep_accepting = false;
     skt.Release();
+    micromachines.cleanPlayers();
 }
 
 AcceptorTh::~AcceptorTh() {}

@@ -17,6 +17,7 @@ class Micromachines {
     void update();
     void addClient(ClientTh *client);
     void updatePlayersState();
+    void cleanPlayers();
 };
 
 #endif

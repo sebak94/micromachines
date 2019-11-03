@@ -1,6 +1,7 @@
 #include "../include/game_loop_th.h"
 #include "../include/model/micromachines.h"
 #include <chrono>
+#include <iostream>
 
 #define MS_PER_UPDATE 16 // 60 FPS
 

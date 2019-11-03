@@ -26,3 +26,7 @@ void Micromachines::updatePlayersState() {
         players[i]->updateCarState(state_received.get());
     }
 }
+
+void Micromachines::cleanPlayers() {
+    players.clear();
+}
