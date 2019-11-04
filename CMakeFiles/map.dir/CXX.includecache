@@ -1,0 +1,54 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/sebastian/Escritorio/Taller de Programación I - Veiga/TPs/TPFinal/micromachines/common/include/Track.h
+string
+-
+vector
+-
+jsoncpp/json/json.h
+-
+
+/home/sebastian/Escritorio/Taller de Programación I - Veiga/TPs/TPFinal/micromachines/common/include/TrackList.h
+jsoncpp/json/json.h
+-
+jsoncpp/json/value.h
+-
+iostream
+-
+fstream
+-
+vector
+-
+Track.h
+/home/sebastian/Escritorio/Taller de Programación I - Veiga/TPs/TPFinal/micromachines/common/include/Track.h
+TrackPartData.h
+/home/sebastian/Escritorio/Taller de Programación I - Veiga/TPs/TPFinal/micromachines/common/include/TrackPartData.h
+
+/home/sebastian/Escritorio/Taller de Programación I - Veiga/TPs/TPFinal/micromachines/common/include/TrackPartData.h
+Track.h
+/home/sebastian/Escritorio/Taller de Programación I - Veiga/TPs/TPFinal/micromachines/common/include/Track.h
+
+/home/sebastian/Escritorio/Taller de Programación I - Veiga/TPs/TPFinal/micromachines/common/src/Track.cpp
+jsoncpp/json/json.h
+-
+cmath
+-
+../include/Track.h
+/home/sebastian/Escritorio/Taller de Programación I - Veiga/TPs/TPFinal/micromachines/common/include/Track.h
+../include/TrackList.h
+/home/sebastian/Escritorio/Taller de Programación I - Veiga/TPs/TPFinal/micromachines/common/include/TrackList.h
+
+/home/sebastian/Escritorio/Taller de Programación I - Veiga/TPs/TPFinal/micromachines/common/src/TrackList.cpp
+../include/TrackList.h
+/home/sebastian/Escritorio/Taller de Programación I - Veiga/TPs/TPFinal/micromachines/common/include/TrackList.h
+
+/home/sebastian/Escritorio/Taller de Programación I - Veiga/TPs/TPFinal/micromachines/main.cpp
+common/include/TrackList.h
+/home/sebastian/Escritorio/Taller de Programación I - Veiga/TPs/TPFinal/micromachines/common/include/TrackList.h
+
