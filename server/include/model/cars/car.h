@@ -18,7 +18,7 @@ class Car: public Model {
     const uint8_t maneuverability;
     uint8_t current_velocity;
     uint8_t health;
-    uint16_t rotation;
+    int16_t rotation;
     Point position;
     Color color;
     CarState *state;
@@ -27,9 +27,10 @@ class Car: public Model {
     Car(uint8_t width, uint8_t height, uint8_t max_velocity,
         uint8_t acceleration, uint8_t grip, uint8_t maneuverability,
         Point initial_position, ColorType color);
-    void setState(CarState *state_received);
-    void setPosition(Point new_position);
-    Point getPosition();
+    void updateState(char action);
+    void addPositionX(uint16_t x);
+    void addPositionY(uint16_t y);
+    void addRotation(int16_t rotation);
     virtual void update() override;
     virtual std::string serialize() override;
     ~Car();

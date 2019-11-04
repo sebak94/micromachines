@@ -1,5 +1,4 @@
 #include "../../include/model/micromachines.h"
-#include "../../include/model/interpreter.h"
 #include "../../include/model/cars/car.h"
 #include "../../include/client_th.h"
 #include "../../../common/include/lock.h"
@@ -13,27 +12,41 @@ void Micromachines::update() {
     }
 }
 
-void Micromachines::addClient(ClientTh *client) {
+void Micromachines::addPlayer(ClientTh *client) {
     Lock l(m);
     players.push_back(client);
 }
 
+void Micromachines::removePlayer(ClientTh *client) {
+    Lock l(m);
+    size_t index_to_remove = -1;
+
+    for (size_t i = 0; i < players.size(); i++) {
+        if (players[i] == client) {
+            index_to_remove = i;
+            break;
+        }
+    }
+
+    if (index_to_remove != -1) {
+        players.erase(players.begin() + index_to_remove);
+    }
+}
+
 void Micromachines::updatePlayersState() {
     Lock l(m);
-    Interpreter interp;
     for (size_t i = 0; i < players.size(); i++) {
-        if (players[i]->hasNewAction()) {
-            std::shared_ptr<CarState> state_received = interp.interpret(players[i]->popAction());
-            players[i]->updateCarState(state_received.get());
-        }
+        players[i]->processNextAction();
     }
 }
 
 void Micromachines::cleanPlayers() {
+    Lock l(m);
     players.clear();
 }
 
 void Micromachines::sendNewStateToPlayers() {
+    Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
         players[i]->sendCarData();
     }

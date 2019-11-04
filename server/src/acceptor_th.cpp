@@ -19,6 +19,7 @@ void AcceptorTh::deleteDeadClients() {
     std::vector<ClientTh*>::iterator it = clients.begin();
     while (it != clients.end()) {
         if ((*it)->isDead()) {
+            micromachines.removePlayer((*it));
             (*it)->join();
             delete (*it);
             clients.erase(it);
@@ -47,7 +48,7 @@ void AcceptorTh::run() {
             sockets.push_back(peer);
             skt.Accept(peer);
             ClientTh *client_th = new ClientTh(peer);
-            micromachines.addClient(client_th);
+            micromachines.addPlayer(client_th);
             clients.push_back(client_th);
             client_th->start();
             deleteDeadClients();

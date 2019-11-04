@@ -25,9 +25,7 @@ class ClientTh: public Thread {
 
     public:
     ClientTh(Socket *peer);
-    bool hasNewAction();
-    char popAction();
-    void updateCarState(CarState *state_received);
+    void processNextAction();
     void updateCar();
     void sendCarData();
     virtual void run() override;

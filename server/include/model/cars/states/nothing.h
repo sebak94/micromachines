@@ -3,7 +3,9 @@
 
 #include "car_state.h"
 
-class Nothing {
+class Nothing: public CarState {
+    public:
+    virtual void apply(Car *car) override;
 };
 
 #endif

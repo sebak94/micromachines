@@ -1,6 +1,5 @@
 #include "../include/game_loop_th.h"
 #include "../include/model/micromachines.h"
-#include <iostream>
 #include <cstdint>
 
 #define TICKS_PER_SECOND 60
@@ -30,7 +29,6 @@ void GameLoopTh::run() {
             loops++;
         }
 
-        std::cout << "game loop sendNewStateToPlayers\n";
         micromachines.sendNewStateToPlayers();
     }
 }

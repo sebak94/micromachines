@@ -10,10 +10,13 @@ void run(const char *hostname, const char *service) {
         bool running = true;
         std::string str;
         Server server(hostname, service);
+        std::cout << server.receive();
 
         while (running) {
-            std::cout << server.receive();
             server.send("A");
+            std::cout << server.receive();
+            server.send("L");
+            std::cout << server.receive();
             // running = false;
         }
     } catch(const SocketError &e) {}

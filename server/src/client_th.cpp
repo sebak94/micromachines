@@ -1,5 +1,4 @@
 #include "../include/client_th.h"
-#include "../include/blocking_queue.h"
 #include "../include/model/cars/blue_car.h"
 #include "../include/model/cars/states/car_state.h"
 #include "../../common/include/socket.h"
@@ -28,35 +27,25 @@ void ClientTh::sendCarData() {
     std::cout << "mandar auto a jugador \n";
     std::string car_msg = car->serialize();
     send(car_msg);
+    std::cout << "se mandó auto \n";
 }
 
 void ClientTh::run() {
     while (keep_talking) {
-        try {
-            char action;
-            receive(&action);
-            actions.push(action);
-        } catch(const SocketError &e) {
-            keep_talking = false;
-            std::cout << e.what() << "\n";
-        }
+        char action;
+        receive(&action);
+        actions.push(action);
     }
 
     is_running = false;
 }
 
-bool ClientTh::hasNewAction() {
-    return !actions.empty();
-}
-
-char ClientTh::popAction() {
-    char a = actions.front();
-    actions.pop();
-    return a;
-}
-
-void ClientTh::updateCarState(CarState *state_received) {
-    car->setState(state_received);
+void ClientTh::processNextAction() {
+    if (!actions.empty()) {
+        char a = actions.front();
+        actions.pop();
+        car->updateState(a);
+    }
 }
 
 void ClientTh::updateCar() {
@@ -64,12 +53,22 @@ void ClientTh::updateCar() {
 }
 
 void ClientTh::receive(char *action) {
-    peer->Receive(action, 1);
+    try {
+        peer->Receive(action, 1);
+    } catch(const SocketError &e) {
+        keep_talking = false;
+        std::cout << e.what() << "\n";
+    }
 }
 
 void ClientTh::send(std::string &response) {
-    const char *resp = response.c_str();
-    peer->Send(resp, response.length());
+    try {
+        const char *resp = response.c_str();
+        peer->Send(resp, response.length());
+    } catch(const SocketError &e) {
+        keep_talking = false;
+        std::cout << e.what() << "\n";
+    }
 }
 
 void ClientTh::stop() {

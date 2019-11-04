@@ -12,7 +12,6 @@ set(SOURCE_FILES_SERVER
     server/include/model/micromachines.h
     server/include/model/model.h
     server/include/model/point.h
-    server/include/model/interpreter.h
     server/include/model/cars/color.h
     server/include/model/cars/car.h
     server/include/model/cars/blue_car.h
@@ -36,7 +35,6 @@ set(SOURCE_FILES_SERVER
     server/src/model/micromachines.cpp
     server/src/model/point.cpp
     server/src/model/point.cpp
-    server/src/model/interpreter.cpp
     server/src/model/tracks/track.cpp
     server/src/model/cars/color.cpp
     server/src/model/cars/car.cpp
