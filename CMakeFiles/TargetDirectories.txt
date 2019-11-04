@@ -1,3 +1,0 @@
-/home/sebastian/Escritorio/Taller de Programación I - Veiga/TPs/TPFinal/micromachines/CMakeFiles/rebuild_cache.dir
-/home/sebastian/Escritorio/Taller de Programación I - Veiga/TPs/TPFinal/micromachines/CMakeFiles/map.dir
-/home/sebastian/Escritorio/Taller de Programación I - Veiga/TPs/TPFinal/micromachines/CMakeFiles/edit_cache.dir

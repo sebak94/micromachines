@@ -44,6 +44,5 @@ std::string TrackPartData::serialize() {
            "," +
            std::to_string(posY) +
            "," +
-           std::to_string(type) +
-           "\n";
+           std::to_string(type);
 }

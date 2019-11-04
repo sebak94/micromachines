@@ -50,6 +50,7 @@ void AcceptorTh::run() {
             ClientTh *client_th = new ClientTh(peer);
             micromachines.addPlayer(client_th);
             clients.push_back(client_th);
+            client_th->sendTrackData(micromachines.trackSerialized());
             client_th->start();
             deleteDeadClients();
         } catch(const SocketError &e) {

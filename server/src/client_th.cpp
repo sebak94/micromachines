@@ -24,10 +24,12 @@ void ClientTh::sendTrackData() {
 }
 
 void ClientTh::sendCarData() {
-    std::cout << "mandar auto a jugador \n";
     std::string car_msg = car->serialize();
     send(car_msg);
-    std::cout << "se mandó auto \n";
+}
+
+void ClientTh::sendTrackData(std::string track_serialized) {
+    send(track_serialized);
 }
 
 void ClientTh::run() {

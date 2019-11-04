@@ -2,8 +2,14 @@
 #include "../../include/model/cars/car.h"
 #include "../../include/client_th.h"
 #include "../../../common/include/lock.h"
+#include "../../../common/include/TrackList.h"
+#include "../../../common/include/Track.h"
 #include <vector>
 #include "iostream"
+
+Micromachines::Micromachines() {
+    tracks.readTracks();
+}
 
 void Micromachines::update() {
     Lock l(m);
@@ -50,4 +56,8 @@ void Micromachines::sendNewStateToPlayers() {
     for (size_t i = 0; i < players.size(); i++) {
         players[i]->sendCarData();
     }
+}
+
+std::string Micromachines::trackSerialized() {
+    return tracks.getTrack("mini").serialize();
 }

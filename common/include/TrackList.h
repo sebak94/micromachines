@@ -12,7 +12,7 @@
 #include <vector>
 #include "Track.h"
 
-#define TRACKS_FILE_PATH "tracks_layout.json"
+#define TRACKS_FILE_PATH "../tracks_layout.json"
 #define LAYOUT_ID "layout"
 #define TRACKS_ID "tracks"
 #define NAME_ID "name"
@@ -36,7 +36,7 @@ private:
 public:
     void readTracks();
     void printTrack(const std::string &name);
-    Track &getTrack(const std::string &name);
+    Track& getTrack(const std::string &name);
 };
 
 #endif //MAP_TRACKLIST_H

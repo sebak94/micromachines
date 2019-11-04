@@ -1,11 +1,10 @@
 cmake_minimum_required(VERSION 3.15)
-project(map)
+project(Micromachines)
 
 set(CMAKE_CXX_STANDARD 11)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(JSONCPP jsoncpp)
 link_libraries(${JSONCPP_LIBRARIES})
-add_executable(map main.cpp common/src/TrackList.cpp common/include/TrackList.h common/src/Track.cpp common/include/Track.h common/src/TrackPartData.cpp common/include/TrackPartData.h)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
 
@@ -30,9 +29,6 @@ set(SOURCE_FILES_SERVER
     server/include/model/cars/states/left.h
     server/include/model/cars/states/right.h
     server/include/model/cars/states/nothing.h
-    server/include/model/tracks/track.h
-    server/include/model/tracks/track_part_data.h
-    server/include/model/tracks/track_parts.h
     server/src/mm_server.cpp
     server/src/acceptor_th.cpp
     server/src/client_th.cpp
@@ -40,7 +36,6 @@ set(SOURCE_FILES_SERVER
     server/src/model/micromachines.cpp
     server/src/model/point.cpp
     server/src/model/point.cpp
-    server/src/model/tracks/track.cpp
     server/src/model/cars/color.cpp
     server/src/model/cars/car.cpp
     server/src/model/cars/blue_car.cpp
@@ -57,10 +52,16 @@ set(SOURCE_FILES_SERVER
     common/include/socket_error.h
     common/include/thread.h
     common/include/lock.h
+    common/include/Track.h
+    common/include/TrackList.h
+    common/include/TrackPartData.h
     common/src/socket.cpp
     common/src/socket_error.cpp
     common/src/thread.cpp
     common/src/lock.cpp
+    common/src/Track.cpp
+    common/src/TrackList.cpp
+    common/src/TrackPartData.cpp
 )
 
 set(SOURCE_FILES_CLIENT

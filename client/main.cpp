@@ -10,7 +10,9 @@ void run(const char *hostname, const char *service) {
         bool running = true;
         std::string str;
         Server server(hostname, service);
-        std::cout << server.receive();
+        std::cout << server.receive(); // Recibe mensaje de bienvenida
+        std::cout << server.receive(); // Recibe auto
+        std::cout << server.receive(); // Recibe pista
 
         while (running) {
             server.send("A");

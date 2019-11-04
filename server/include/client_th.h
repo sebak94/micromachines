@@ -28,6 +28,7 @@ class ClientTh: public Thread {
     void processNextAction();
     void updateCar();
     void sendCarData();
+    void sendTrackData(std::string track_serialized);
     virtual void run() override;
     virtual void stop() override;
     bool isDead();

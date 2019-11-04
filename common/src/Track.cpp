@@ -216,10 +216,11 @@ std::string Track::serialize() {
           "," +
           std::to_string(partCounter) +
           "," +
-          name +
-          '\n';
-    for (auto & it : trackPartData)
-        msg += it.serialize();
+          name;
+    for (auto & it : trackPartData) {
+        msg += "," + it.serialize();
+    }
+    msg += "\n";
     return msg;
 }
 
