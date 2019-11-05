@@ -18,7 +18,8 @@ public:
     int getY() const;
     int getDegrees() const;
     int getHealth() const;
-    std::string getColor() const;
+    std::string getMyColor() const;
+    void update(int x, int y, int degrees, int health, std::string color);
 };
 
 #endif

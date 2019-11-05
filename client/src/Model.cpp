@@ -22,6 +22,10 @@ std::vector<TrackPartData> Model::getTrackPartData() const {
     return this->trackPartData;
 }
 
+std::string Model::getMyColor() const {
+    return myColor;
+}
+
 void Model::addCar(std::string str) {
     //serializacion: current_velocity, health, rotation, x, y, color\n
     size_t pos = 0;
@@ -32,6 +36,19 @@ void Model::addCar(std::string str) {
     int y = std::stoi(parse(str, pos, ','));
     std::string color = parse(str, pos, '\n');
     cars[color] = new Car(x, y, rotation, health, color);
+    myColor = color; //ESTO SOLO POR AHORA
+}
+
+void Model::updateCar(std::string str) {
+    //serializacion: current_velocity, health, rotation, x, y, color\n
+    size_t pos = 0;
+    int velocity = std::stoi(parse(str, pos, ','));
+    int health = std::stoi(parse(str, pos, ','));
+    int rotation = std::stoi(parse(str, pos, ','));
+    int x = std::stoi(parse(str, pos, ','));
+    int y = std::stoi(parse(str, pos, ','));
+    std::string color = parse(str, pos, '\n');
+    cars[color]->update(x, y, rotation, health, color);
 }
 
 std::string Model::parse(const std::string &str, size_t &pos, const char delim) {

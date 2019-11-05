@@ -11,6 +11,7 @@ void Dispatcher::run() {
         std::string text = this->queue.pop();
         if (text == "Q") {
             running = false;
+            socket.Release();
         }
         try {
             printf("envio: %s\n", text.c_str());

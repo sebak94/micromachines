@@ -29,9 +29,8 @@ void Drawer::run() {
     while (running) {
         try {
             std::string text = receive();
-            //printf("recibo: %s\n\n", text.c_str());
-            //ACTUALIZAR MODELO
-            //draw();
+            model.updateCar(text);
+            draw();
         } catch (std::exception &e) {
             printf("murio el socket en el drawer\n");
             running = false;
@@ -47,8 +46,10 @@ int Drawer::draw() {
     try {
         window.fill();
         camera.showBackground();
-        camera.showTrack(50, 50);
-        camera.showCars(50, 50);
+        int x = model.getCars()[model.getMyColor()]->getX();
+        int y = model.getCars()[model.getMyColor()]->getY();
+        camera.showTrack(x, y);
+        camera.showCars(x, y);
         window.render();
     } catch (std::exception& e) {
         std::cout << e.what() << std::endl;

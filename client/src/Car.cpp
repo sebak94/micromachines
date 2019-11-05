@@ -28,6 +28,14 @@ int Car::getHealth() const {
     return this->health;
 }
 
-std::string Car::getColor() const {
+std::string Car::getMyColor() const {
     return this->color;
+}
+
+void Car::update(int x, int y, int degrees, int health, std::string color) {
+    this->x = x;
+    this->y = y;
+    this->degrees = degrees;
+    this->health = health;
+    this->color = color;
 }

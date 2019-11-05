@@ -9,6 +9,7 @@ class Model {
 private:
     std::map<std::string, Car*> cars;
     std::vector<TrackPartData> trackPartData;
+    std::string myColor;
 
 public:
     Model();
@@ -16,7 +17,9 @@ public:
     std::map<std::string, Car*>& getCars();
     void setTrackPartData(std::vector<TrackPartData> trackPartData);
     std::vector<TrackPartData> getTrackPartData() const;
+    std::string getMyColor() const;
     void addCar(std::string str);
+    void updateCar(std::string str);
 
 private:
     std::string parse(const std::string &str, size_t &pos, const char delim);

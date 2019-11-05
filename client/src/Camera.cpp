@@ -55,6 +55,6 @@ void Camera::showCars(int xMyCar, int yMyCar) {
         double x = car->getX() * (blockWidth / 100) - (widthCar / 2);
         double y = car->getY() * (blockHeight / 100) + (heightCar / 2);
         SDL_Rect sdlDestCar = {(int)(x + xBegin), (int)(- y - yBegin), (int)widthCar, (int)heightCar};
-        pictures[car->getColor()]->renderRotate(sdlDestCar, car->getDegrees(), SDL_FLIP_NONE, window);
+        pictures[car->getMyColor()]->renderRotate(sdlDestCar, car->getDegrees(), SDL_FLIP_NONE, window);
     }
 }
