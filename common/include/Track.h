@@ -63,6 +63,8 @@ public:
     static std::string parseTrackParam(const std::string &initString, size_t &pos, const char delim);
 
     void parseTrackParts(const std::string &trackStr, size_t &pos);
+
+    std::vector<TrackPartData> getTrackPartData() const;
 };
 
 #endif //MAP_TRACK_H

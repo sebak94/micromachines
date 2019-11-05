@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.5)
 project(Micromachines)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -85,8 +85,6 @@ set(SOURCE_FILES_CLIENT
 	client/src/EventLoopSDL.cpp
 	client/include/Dispatcher.h
 	client/src/Dispatcher.cpp
-	client/include/Block.h
-	client/src/Block.cpp
 	client/include/Drawer.h
 	client/src/Drawer.cpp
 	client/include/PicType.h
@@ -96,12 +94,18 @@ set(SOURCE_FILES_CLIENT
 	client/src/Model.cpp
 	client/include/Camera.h
 	client/src/Camera.cpp
-    common/include/socket.h
+	common/include/socket.h
     common/include/socket_error.h
     common/include/thread.h
+    common/include/Track.h
+    common/include/TrackList.h
+    common/include/TrackPartData.h
     common/src/socket.cpp
     common/src/socket_error.cpp
     common/src/thread.cpp
+    common/src/Track.cpp
+    common/src/TrackList.cpp
+    common/src/TrackPartData.cpp
 )
 
 add_executable(micromachines-sv ${SOURCE_FILES_SERVER} server/main.cpp)

@@ -15,6 +15,7 @@ public:
     Dispatcher(ThreadSafeQueue &queue, Socket &socket);
     ~Dispatcher();
     virtual void run() override;
+    virtual void stop() override;
 };
 
 #endif

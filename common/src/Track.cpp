@@ -138,6 +138,7 @@ trackPartType Track::identifyElem(const std::string & layoutElem){
         return upRight;
     else if (layoutElem == LAYOUT_V)
         return vertical;
+    return empty;
 }
 
 /* Finds next position to emplace the
@@ -233,7 +234,7 @@ Track::Track(const std::string & trackStr) {
     width = std::stoi(parseTrackParam(trackStr, pos, ','));
     height = std::stoi(parseTrackParam(trackStr, pos, ','));
     partCounter = std::stoi(parseTrackParam(trackStr, pos, ','));
-    name = parseTrackParam(trackStr, pos, '\n');
+    name = parseTrackParam(trackStr, pos, ',');
     parseTrackParts(trackStr, pos);
 }
 
@@ -248,8 +249,8 @@ void Track::parseTrackParts(const std::string & trackStr, size_t & pos) {
         y = std::stoi(parseTrackParam(trackStr, pos, ','));
         type = static_cast<trackPartType>(std::stoi(parseTrackParam(trackStr,
                                                                      pos,
-                                                                     '\n')));
-        part.loadPos(x,y);
+                                                                     ',')));
+        part.loadPosClient(x,y);
         part.loadType(type);
         trackPartData.emplace_back(part);
     }
@@ -266,4 +267,8 @@ std::string Track::parseTrackParam(const std::string & initString,
     substr = initString.substr(pos, len);
     pos = nextPos + 1;
     return substr;
+}
+
+std::vector<TrackPartData> Track::getTrackPartData() const {
+    return trackPartData;
 }

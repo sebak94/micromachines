@@ -17,6 +17,7 @@ private:
 public:
     void loadType(trackPartType elem);
     void loadPos(int row, int col);
+    void loadPosClient(int row, int col);
     trackPartType getType() const;
     int getPosX();
     int getPosY();

@@ -21,3 +21,7 @@ void Dispatcher::run() {
         }
     }
 }
+
+void Dispatcher::stop() {
+
+}

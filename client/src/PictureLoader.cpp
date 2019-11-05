@@ -1,25 +1,15 @@
 #include "../include/PictureLoader.h"
 #include "../include/PicType.h"
 
-PictureLoader::PictureLoader(std::map<PicType, SdlSurface*> &pictures) : pictures(pictures) {
+PictureLoader::PictureLoader(std::map<PicType, SdlSurface*> &pictures, std::map<trackPartType, SdlSurface*> &trackPictures) : pictures(pictures), trackPictures(trackPictures) {
     //Imagenes para la pista
-    pictures[PicType::GRASS_BACK] = new SdlSurface("images/grass.png");
-    pictures[PicType::ROAD_BACK] = new SdlSurface("images/back.png");
-
-    pictures[PicType::LINE_VERTICAL_UP] = new SdlSurface("images/line_vertical_up.png");
-    pictures[PicType::LINE_VERTICAL_DOWN] = new SdlSurface("images/line_vertical_down.png");
-    pictures[PicType::LINE_HORIZONTAL_LEFT] = new SdlSurface("images/line_horizontal_left.png");
-    pictures[PicType::LINE_HORIZONTAL_RIGHT] = new SdlSurface("images/line_horizontal_right.png");
-
-    pictures[PicType::CURVE_UP_TO_RIGHT] = new SdlSurface("images/up_to_right.png");
-    pictures[PicType::CURVE_DOWN_TO_LEFT] = new SdlSurface("images/down_to_left.png");
-    pictures[PicType::CURVE_LEFT_TO_UP] = new SdlSurface("images/left_to_up.png");
-    pictures[PicType::CURVE_RIGHT_TO_DOWN] = new SdlSurface("images/right_to_down.png");
-
-    pictures[PicType::CURVE_DOWN_TO_RIGHT] = new SdlSurface("images/down_to_right.png");
-    pictures[PicType::CURVE_UP_TO_LEFT] = new SdlSurface("images/up_to_left.png");
-    pictures[PicType::CURVE_RIGHT_TO_UP] = new SdlSurface("images/right_to_up.png");
-    pictures[PicType::CURVE_LEFT_TO_DOWN] = new SdlSurface("images/left_to_down.png");
+    trackPictures[empty] = new SdlSurface("images/grass.png");
+    trackPictures[downRight] = new SdlSurface("images/downRight.png");
+    trackPictures[downLeft] = new SdlSurface("images/downLeft.png");
+    trackPictures[upRight] = new SdlSurface("images/upRight.png");
+    trackPictures[upLeft] = new SdlSurface("images/upLeft.png");
+    trackPictures[horizontal] = new SdlSurface("images/horizontal.png");
+    trackPictures[vertical] = new SdlSurface("images/vertical.png");
 
     //Imagenes de los autos
     pictures[PicType::CAR_RED] = new SdlSurface("images/car_red.png");

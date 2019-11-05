@@ -19,6 +19,11 @@ void TrackPartData::loadPos(int row, int col) {
     posY = (row - 1)*BLOCKSIZE;  //-1 for "display coordinates"
 }
 
+void TrackPartData::loadPosClient(int row, int col) {
+    posX = row; //al cliente ya le llega la fila y columna en metros
+    posY = col;
+}
+
 // Returns track element type
 trackPartType TrackPartData::getType() const{
     return type;
