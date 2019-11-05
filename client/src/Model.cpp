@@ -22,21 +22,22 @@ std::vector<TrackPartData> Model::getTrackPartData() const {
     return this->trackPartData;
 }
 
+//Se usa una sola vez, para setear el color de mi auto
+void Model::setMyColor(std::string str) {
+    size_t pos = str.find_last_of(',') + 1;
+    std::string color = parse(str, pos, '\n');
+    myColor = color;
+}
+
 std::string Model::getMyColor() const {
     return myColor;
 }
 
 void Model::addCar(std::string str) {
-    //serializacion: current_velocity, health, rotation, x, y, color\n
-    size_t pos = 0;
-    int velocity = std::stoi(parse(str, pos, ','));
-    int health = std::stoi(parse(str, pos, ','));
-    int rotation = std::stoi(parse(str, pos, ','));
-    int x = std::stoi(parse(str, pos, ','));
-    int y = std::stoi(parse(str, pos, ','));
+    size_t pos = str.find_last_of(',') + 1;
     std::string color = parse(str, pos, '\n');
-    cars[color] = new Car(x, y, rotation, health, color);
-    myColor = color; //ESTO SOLO POR AHORA
+    cars[color] = new Car(color);
+    updateCar(str);
 }
 
 void Model::updateCar(std::string str) {
@@ -48,7 +49,7 @@ void Model::updateCar(std::string str) {
     int x = std::stoi(parse(str, pos, ','));
     int y = std::stoi(parse(str, pos, ','));
     std::string color = parse(str, pos, '\n');
-    cars[color]->update(x, y, rotation, health, color);
+    cars[color]->update(x, y, rotation, health);
 }
 
 std::string Model::parse(const std::string &str, size_t &pos, const char delim) {

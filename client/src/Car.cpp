@@ -1,10 +1,6 @@
 #include "../include/Car.h"
 
-Car::Car(int x, int y, int degrees, int health, std::string color) {
-    this->x = x;
-    this->y = y;
-    this->degrees = degrees;
-    this->health = health;
+Car::Car(std::string color) {
     this->color = color;
 }
 
@@ -32,10 +28,9 @@ std::string Car::getMyColor() const {
     return this->color;
 }
 
-void Car::update(int x, int y, int degrees, int health, std::string color) {
+void Car::update(int x, int y, int degrees, int health) {
     this->x = x;
     this->y = y;
     this->degrees = degrees;
     this->health = health;
-    this->color = color;
 }

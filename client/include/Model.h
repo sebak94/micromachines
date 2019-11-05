@@ -17,6 +17,7 @@ public:
     std::map<std::string, Car*>& getCars();
     void setTrackPartData(std::vector<TrackPartData> trackPartData);
     std::vector<TrackPartData> getTrackPartData() const;
+    void setMyColor(std::string str);
     std::string getMyColor() const;
     void addCar(std::string str);
     void updateCar(std::string str);

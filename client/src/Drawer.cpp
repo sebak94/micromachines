@@ -11,14 +11,15 @@ Drawer::Drawer(Socket &socket) : socket(socket), window(WIDTH, HEIGHT),
     loader(pictures, trackPictures), camera(window, model, pictures, trackPictures) {
     std::string welcome =  receive(); // Recibe mensaje de bienvenida
     std::cout << welcome;
-    std::string car = receive(); // Recibe auto
-    std::cout << car;
+    std::string carStr = receive(); // Recibe auto
+    std::cout << carStr;
     std::string trackStr = receive(); // Recibe pista
     std::cout << trackStr;
 
     Track track = Track(trackStr);
     model.setTrackPartData(track.getTrackPartData());
-    model.addCar(car);
+    model.setMyColor(carStr);
+    model.addCar(carStr);
 }
 
 Drawer::~Drawer() {}
