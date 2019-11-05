@@ -10,10 +10,11 @@
 
 Drawer::Drawer(Socket &socket) : socket(socket), window(WIDTH, HEIGHT),
     loader(pictures, trackPictures), camera(window, model, pictures, trackPictures) {
-    //std::string welcome =  receive(); // Recibe mensaje de bienvenida
+    std::string welcome =  receive(); // Recibe mensaje de bienvenida
+    std::cout << welcome;
     std::string car = receive(); // Recibe auto
-    std::string trackStr = receive(); // Recibe pista
     std::cout << car;
+    std::string trackStr = receive(); // Recibe pista
     std::cout << trackStr;
 
     Track track = Track(trackStr);

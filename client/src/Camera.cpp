@@ -34,12 +34,12 @@ void Camera::showTrack(int xMyCar, int yMyCar) {
 
     std::vector<TrackPartData> trackPartData = model.getTrackPartData();
     for (int i = 0; i < trackPartData.size(); i++) {
+        if (trackPartData[i].getType() == empty)
+            continue;
         double x = trackPartData[i].getPosX() * (blockWidth / 100);
         double y = trackPartData[i].getPosY() * (blockHeight / 100);
         SDL_Rect sdlDestRoad = {(int) (x + xBegin), (int) (-y - yBegin), (int) blockWidth, (int) blockHeight};
         trackPictures[trackPartData[i].getType()]->render(sdlDestRoad, window);
-        //printf("x: %d, y: %d, tipo: %d\n", trackPartData[i].getPosX(), trackPartData[i].getPosY(), trackPartData[i].getType());
-        //printf("x: %f, y: %f, tipo: %d\n\n", x, y, trackPartData[i].getType());
     }
 }
 
@@ -54,6 +54,5 @@ void Camera::showCars(int xMyCar, int yMyCar) {
         double y = model.getCars()[i].getY() * (blockHeight / 100) + (heightCar / 2);
         SDL_Rect sdlDestCar = {(int)(x + xBegin), (int)(- y - yBegin), (int)widthCar, (int)heightCar};
         pictures[model.getCars()[i].getType()]->renderRotate(sdlDestCar, model.getCars()[i].getDegrees(), SDL_FLIP_NONE, window);
-        //printf("auto x: %d, y: %d\n", model.getCars()[i].getX(), model.getCars()[i].getY());
     }
 }

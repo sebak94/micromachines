@@ -9,9 +9,9 @@
 
 ClientTh::ClientTh(Socket *peer): keep_talking(true), is_running(true),
     peer(peer), car(new BlueCar()) {
-    /*sendWelcomeMsg();
+    sendWelcomeMsg();
     sendTrackData();
-    sendCarData();*/
+    sendCarData();
 }
 
 void ClientTh::sendWelcomeMsg() {
@@ -29,7 +29,6 @@ void ClientTh::sendCarData() {
 }
 
 void ClientTh::sendTrackData(std::string track_serialized) {
-    std::cout << track_serialized;
     send(track_serialized);
 }
 
