@@ -7,6 +7,7 @@
 #include "states/car_state.h"
 #include <cstdint>
 #include <string>
+#include <unordered_map>
 
 class Car: public Model {
     protected:
@@ -22,6 +23,7 @@ class Car: public Model {
     Point position;
     Color color;
     CarState *state;
+    std::unordered_map<std::string, bool> states;
 
     public:
     Car(uint8_t width, uint8_t height, uint8_t max_velocity,
@@ -34,6 +36,16 @@ class Car: public Model {
     virtual void update() override;
     virtual std::string serialize() override;
     ~Car();
+
+    void accelerateCar();
+
+    void leftCar();
+
+    void rightCar();
+
+    void breakCar();
+
+    void updateCarPosition();
 };
 
 #endif
