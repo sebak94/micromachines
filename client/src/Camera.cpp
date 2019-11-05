@@ -1,6 +1,6 @@
 #include "../include/Camera.h"
 
-Camera::Camera(SdlWindow &window, Model &model, std::map<PicType, SdlSurface*> &pictures, std::map<trackPartType, SdlSurface*> &trackPictures) : window(window), model(model), pictures(pictures), trackPictures(trackPictures) {
+Camera::Camera(SdlWindow &window, Model &model, std::map<std::string, SdlSurface*> &pictures, std::map<trackPartType, SdlSurface*> &trackPictures) : window(window), model(model), pictures(pictures), trackPictures(trackPictures) {
     //Las imagenes son cuadradas, asi que le pongo el mismo ancho que largo
     blockWidth = (window.getWidth() + window.getHeight()) / 4;
     blockHeight = (window.getWidth() + window.getHeight()) / 4;
@@ -49,10 +49,12 @@ void Camera::showCars(int xMyCar, int yMyCar) {
     double xBegin = - xMyCar * (blockWidth / 100) + (window.getWidth() / 2);
     double yBegin = - yMyCar * (blockHeight / 100) - (window.getHeight() / 2);
 
-    for (int i = 0; i < model.getCars().size(); i++) {
-        double x = model.getCars()[i].getX() * (blockWidth / 100) - (widthCar / 2);
-        double y = model.getCars()[i].getY() * (blockHeight / 100) + (heightCar / 2);
+    std::map<std::string, Car*> cars = model.getCars();
+    for (std::map<std::string, Car*>::iterator it = cars.begin(); it != cars.end(); ++it) {
+        Car* car = it->second;
+        double x = car->getX() * (blockWidth / 100) - (widthCar / 2);
+        double y = car->getY() * (blockHeight / 100) + (heightCar / 2);
         SDL_Rect sdlDestCar = {(int)(x + xBegin), (int)(- y - yBegin), (int)widthCar, (int)heightCar};
-        pictures[model.getCars()[i].getType()]->renderRotate(sdlDestCar, model.getCars()[i].getDegrees(), SDL_FLIP_NONE, window);
+        pictures[car->getColor()]->renderRotate(sdlDestCar, car->getDegrees(), SDL_FLIP_NONE, window);
     }
 }

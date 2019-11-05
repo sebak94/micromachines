@@ -9,13 +9,13 @@ class Camera {
 private:
     SdlWindow &window;
     Model &model;
-    std::map<PicType, SdlSurface*> &pictures;
+    std::map<std::string, SdlSurface*> &pictures;
     std::map<trackPartType, SdlSurface*> &trackPictures;
     double blockWidth;
     double blockHeight;
 
 public:
-    Camera(SdlWindow &window, Model &model, std::map<PicType, SdlSurface*> &pictures, std::map<trackPartType, SdlSurface*> &trackPictures);
+    Camera(SdlWindow &window, Model &model, std::map<std::string, SdlSurface*> &pictures, std::map<trackPartType, SdlSurface*> &trackPictures);
     ~Camera();
     void showBackground();
     void showTrack(int xMyCar, int yMyCar);

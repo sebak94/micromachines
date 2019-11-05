@@ -59,5 +59,5 @@ void Micromachines::sendNewStateToPlayers() {
 }
 
 std::string Micromachines::trackSerialized() {
-    return tracks.getTrack("mini").serialize();
+    return tracks.getTrack("classic").serialize();
 }

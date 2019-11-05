@@ -2,7 +2,6 @@
 #include <iostream>
 #include "../include/Drawer.h"
 #include "../include/sdl/SdlAnimation.h"
-#include "../include/PicType.h"
 #include "../include/Model.h"
 
 #define WIDTH 900
@@ -19,6 +18,7 @@ Drawer::Drawer(Socket &socket) : socket(socket), window(WIDTH, HEIGHT),
 
     Track track = Track(trackStr);
     model.setTrackPartData(track.getTrackPartData());
+    model.addCar(car);
 }
 
 Drawer::~Drawer() {}
@@ -47,8 +47,8 @@ int Drawer::draw() {
     try {
         window.fill();
         camera.showBackground();
-        camera.showTrack(150, 100);
-        camera.showCars(150, 100);
+        camera.showTrack(50, 50);
+        camera.showCars(50, 50);
         window.render();
     } catch (std::exception& e) {
         std::cout << e.what() << std::endl;

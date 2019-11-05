@@ -7,7 +7,6 @@
 #include "sdl/SdlWindow.h"
 #include "sdl/SdlSurface.h"
 #include "PictureLoader.h"
-#include "PicType.h"
 #include "Car.h"
 #include "Camera.h"
 
@@ -16,7 +15,7 @@ private:
     bool running;
     Socket &socket;
     SdlWindow window;
-    std::map<PicType, SdlSurface*> pictures;
+    std::map<std::string, SdlSurface*> pictures;
     std::map<trackPartType, SdlSurface*> trackPictures;
     PictureLoader loader;
     Model model;

@@ -87,8 +87,7 @@ set(SOURCE_FILES_CLIENT
 	client/src/Dispatcher.cpp
 	client/include/Drawer.h
 	client/src/Drawer.cpp
-	client/include/PicType.h
-	client/include/Car.h
+    client/include/Car.h
 	client/src/Car.cpp
 	client/include/Model.h
 	client/src/Model.cpp

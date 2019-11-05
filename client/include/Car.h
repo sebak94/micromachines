@@ -1,7 +1,7 @@
 #ifndef __CAR_H__
 #define __CAR_H__
 
-#include "PicType.h"
+#include <string>
 
 class Car {
 private:
@@ -9,16 +9,16 @@ private:
     int y;
     int degrees;
     int health;
-    PicType type;
+    std::string color;
 
 public:
-    Car(int x, int y, int degrees, int health, PicType type);
+    Car(int x, int y, int degrees, int health, std::string color);
     ~Car();
     int getX() const;
     int getY() const;
     int getDegrees() const;
     int getHealth() const;
-    PicType getType() const;
+    std::string getColor() const;
 };
 
 #endif

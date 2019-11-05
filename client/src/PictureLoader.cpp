@@ -1,7 +1,14 @@
 #include "../include/PictureLoader.h"
-#include "../include/PicType.h"
 
-PictureLoader::PictureLoader(std::map<PicType, SdlSurface*> &pictures, std::map<trackPartType, SdlSurface*> &trackPictures) : pictures(pictures), trackPictures(trackPictures) {
+#define CAR_RED "red"
+#define CAR_BLACK "black"
+#define CAR_BLUE "blue"
+#define CAR_GREEN "green"
+#define CAR_ORANGE "orange"
+#define CAR_WHITE "white"
+#define CAR_YELLOW "yellow"
+
+PictureLoader::PictureLoader(std::map<std::string, SdlSurface*> &pictures, std::map<trackPartType, SdlSurface*> &trackPictures) : pictures(pictures), trackPictures(trackPictures) {
     //Imagenes para la pista
     trackPictures[empty] = new SdlSurface("images/grass.png");
     trackPictures[downRight] = new SdlSurface("images/downRight.png");
@@ -12,13 +19,13 @@ PictureLoader::PictureLoader(std::map<PicType, SdlSurface*> &pictures, std::map<
     trackPictures[vertical] = new SdlSurface("images/vertical.png");
 
     //Imagenes de los autos
-    pictures[PicType::CAR_RED] = new SdlSurface("images/car_red.png");
-    pictures[PicType::CAR_BLACK] = new SdlSurface("images/car_black.png");
-    pictures[PicType::CAR_BLUE] = new SdlSurface("images/car_blue.png");
-    pictures[PicType::CAR_GREEN] = new SdlSurface("images/car_green.png");
-    pictures[PicType::CAR_ORANGE] = new SdlSurface("images/car_orange.png");
-    pictures[PicType::CAR_WHITE] = new SdlSurface("images/car_white.png");
-    pictures[PicType::CAR_YELLOW] = new SdlSurface("images/car_yellow.png");
+    pictures[CAR_RED] = new SdlSurface("images/car_red.png");
+    pictures[CAR_BLACK] = new SdlSurface("images/car_black.png");
+    pictures[CAR_BLUE] = new SdlSurface("images/car_blue.png");
+    pictures[CAR_GREEN] = new SdlSurface("images/car_green.png");
+    pictures[CAR_ORANGE] = new SdlSurface("images/car_orange.png");
+    pictures[CAR_WHITE] = new SdlSurface("images/car_white.png");
+    pictures[CAR_YELLOW] = new SdlSurface("images/car_yellow.png");
 
     //Agregar todas las imagenes faltantes
 }
