@@ -39,14 +39,14 @@ void Socket::BindAndListen(const char *service) {
 	}
 
 	status = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val));
-	if (status == -1) {
+	if (status == INVALID_FD) {
 		close(fd);
 		freeaddrinfo(result);
 		throw SocketError("Error al invocar setsockopt. ", gai_strerror(status));
 	}
 
 	status = bind(fd, result->ai_addr, result->ai_addrlen);
-	if (status == -1) {
+	if (status == INVALID_FD) {
 		close(fd);
 		freeaddrinfo(result);
 		throw SocketError("Error al hacer el bind. ", gai_strerror(status));
@@ -55,7 +55,7 @@ void Socket::BindAndListen(const char *service) {
 	freeaddrinfo(result);
 
 	status = listen(fd, 1);
-	if (status == -1) {
+	if (status == INVALID_FD) {
 		close(fd);
 		throw SocketError("Error al hacer el listen. ", gai_strerror(status));
 	}
@@ -83,7 +83,7 @@ void Socket::Connect(const char *hostname, const char *service) {
 		fd = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
 		if (fd != INVALID_FD) {
 			status = connect(fd, ptr->ai_addr, ptr->ai_addrlen);
-			if (status == -1) {
+			if (status == INVALID_FD) {
 				close(fd);
 			}
 			are_we_connected = status != -1;
@@ -99,6 +99,9 @@ void Socket::Connect(const char *hostname, const char *service) {
 
 void Socket::Accept(Socket *peerskt) {
 	peerskt->fd = accept(fd, NULL, NULL);
+	if (peerskt->fd == INVALID_FD) {
+		throw SocketError("Error al aceptar nueva conexión. ", gai_strerror(peerskt->fd));
+	}
 }
 
 int Socket::Send(const char *buf, size_t length) {
@@ -108,7 +111,7 @@ int Socket::Send(const char *buf, size_t length) {
     while (bytes_sent < length) {
 		status = send(fd, &buf[bytes_sent], length - bytes_sent, MSG_NOSIGNAL);
 
-		if (status == -1) {
+		if (status == INVALID_FD) {
         	throw SocketError("Error al enviar los bytes. ",
 				gai_strerror(status));
 		}
@@ -130,7 +133,7 @@ int Socket::Receive(char *buf, size_t length) {
     while (bytes_recv < length) {
 		status = recv(fd, &buf[bytes_recv], length - bytes_recv, 0);
 
-		if (status == -1) {
+		if (status == INVALID_FD) {
         	throw SocketError("Error al recibir los bytes. ",
 				gai_strerror(status));
 		}

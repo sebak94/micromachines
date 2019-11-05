@@ -1,20 +1,67 @@
-cmake_minimum_required(VERSION 2.8)
-
+cmake_minimum_required(VERSION 3.15)
 project(Micromachines)
+
+set(CMAKE_CXX_STANDARD 11)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(JSONCPP jsoncpp)
+link_libraries(${JSONCPP_LIBRARIES})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
 
 set(SOURCE_FILES_SERVER
+    server/include/mm_server.h
     server/include/acceptor_th.h
-    server/src/acceptor_th.cpp
     server/include/client_th.h
+    server/include/game_loop_th.h
+    server/include/model/micromachines.h
+    server/include/model/model.h
+    server/include/model/point.h
+    server/include/model/cars/color.h
+    server/include/model/cars/car.h
+    server/include/model/cars/blue_car.h
+    server/include/model/cars/states/car_state.h
+    server/include/model/cars/states/accelerate_left.h
+    server/include/model/cars/states/accelerate_right.h
+    server/include/model/cars/states/accelerate.h
+    server/include/model/cars/states/break_left.h
+    server/include/model/cars/states/break_right.h
+    server/include/model/cars/states/break.h
+    server/include/model/cars/states/left.h
+    server/include/model/cars/states/right.h
+    server/include/model/cars/states/nothing.h
+    server/src/mm_server.cpp
+    server/src/acceptor_th.cpp
     server/src/client_th.cpp
+    server/src/game_loop_th.cpp
+    server/src/model/micromachines.cpp
+    server/src/model/point.cpp
+    server/src/model/point.cpp
+    server/src/model/cars/color.cpp
+    server/src/model/cars/car.cpp
+    server/src/model/cars/blue_car.cpp
+    server/src/model/cars/states/accelerate_left.cpp
+    server/src/model/cars/states/accelerate_right.cpp
+    server/src/model/cars/states/accelerate.cpp
+    server/src/model/cars/states/break_left.cpp
+    server/src/model/cars/states/break_right.cpp
+    server/src/model/cars/states/break.cpp
+    server/src/model/cars/states/left.cpp
+    server/src/model/cars/states/right.cpp
+    server/src/model/cars/states/nothing.cpp
     common/include/socket.h
-    common/src/socket.cpp
     common/include/socket_error.h
-    common/src/socket_error.cpp
     common/include/thread.h
+    common/include/lock.h
+    common/include/Track.h
+    common/include/TrackList.h
+    common/include/TrackPartData.h
+    common/src/socket.cpp
+    common/src/socket_error.cpp
     common/src/thread.cpp
+    common/src/lock.cpp
+    common/src/Track.cpp
+    common/src/TrackList.cpp
+    common/src/TrackPartData.cpp
 )
 
 set(SOURCE_FILES_CLIENT
@@ -50,10 +97,10 @@ set(SOURCE_FILES_CLIENT
 	client/include/Camera.h
 	client/src/Camera.cpp
     common/include/socket.h
-    common/src/socket.cpp
     common/include/socket_error.h
-    common/src/socket_error.cpp
     common/include/thread.h
+    common/src/socket.cpp
+    common/src/socket_error.cpp
     common/src/thread.cpp
 )
 
