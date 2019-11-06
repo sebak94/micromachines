@@ -3,6 +3,7 @@
 #include "../include/model/cars/states/car_state.h"
 #include "../../common/include/socket.h"
 #include "../../common/include/socket_error.h"
+#include "../../common/include/lock.h"
 #include "iostream"
 #include "vector"
 #include "string"
@@ -36,6 +37,8 @@ void ClientTh::run() {
     while (keep_talking) {
         char action;
         receive(&action);
+        std::cout << action << "\n";
+        Lock l(m);
         actions.push(action);
     }
 
@@ -43,11 +46,15 @@ void ClientTh::run() {
 }
 
 void ClientTh::processNextAction() {
-    if (!actions.empty()) {
+    std::cout << "PROCESANDO..." << "\n";
+    Lock l(m);
+    while (!actions.empty()) {
         char a = actions.front();
+        std::cout << a << "\n";
         actions.pop();
         car->updateState(a);
     }
+    std::cout << "FIN PROCESADO" << "\n";
 }
 
 void ClientTh::updateCar() {

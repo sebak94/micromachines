@@ -9,6 +9,7 @@
 #include <vector>
 #include <atomic>
 #include <queue>
+#include <mutex>
 
 class ClientTh: public Thread {
     private:
@@ -17,6 +18,7 @@ class ClientTh: public Thread {
     Socket *peer;
     Car *car;
     std::queue<char> actions;
+    std::mutex m;
 
     void sendWelcomeMsg();
     void sendTrackData();

@@ -30,6 +30,7 @@ void Drawer::run() {
     while (running) {
         try {
             std::string text = receive();
+            std::cout << text << "\n";
             model.updateCar(text);
             draw();
         } catch (std::exception &e) {
