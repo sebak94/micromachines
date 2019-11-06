@@ -10,19 +10,14 @@ Model::~Model() {
     }
 }
 
-std::map<std::string, Car*>& Model::getCars() {
-    return this->cars;
+void Model::setTrack(std::vector<TrackPartData> track) {
+    this->track = track;
 }
 
-void Model::setTrackPartData(std::vector<TrackPartData> trackPartData) {
-    this->trackPartData = trackPartData;
+std::vector<TrackPartData>& Model::getTrack() {
+    return this->track;
 }
 
-std::vector<TrackPartData> Model::getTrackPartData() const {
-    return this->trackPartData;
-}
-
-//Se usa una sola vez, para setear el color de mi auto
 void Model::setMyColor(std::string str) {
     size_t pos = str.find_last_of(',') + 1;
     std::string color = parse(str, pos, '\n');
@@ -33,11 +28,14 @@ std::string Model::getMyColor() const {
     return myColor;
 }
 
+std::map<std::string, Car*>& Model::getCars() {
+    return this->cars;
+}
+
 void Model::addCar(std::string str) {
     size_t pos = str.find_last_of(',') + 1;
     std::string color = parse(str, pos, '\n');
     cars[color] = new Car(color);
-    updateCar(str);
 }
 
 void Model::updateCar(std::string str) {

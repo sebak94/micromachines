@@ -8,17 +8,17 @@
 class Model {
 private:
     std::map<std::string, Car*> cars;
-    std::vector<TrackPartData> trackPartData;
+    std::vector<TrackPartData> track;
     std::string myColor;
 
 public:
     Model();
     ~Model();
-    std::map<std::string, Car*>& getCars();
-    void setTrackPartData(std::vector<TrackPartData> trackPartData);
-    std::vector<TrackPartData> getTrackPartData() const;
-    void setMyColor(std::string str);
+    void setTrack(std::vector<TrackPartData> track);
+    std::vector<TrackPartData>& getTrack();
+    void setMyColor(std::string str); //Se usa una sola vez, para setear el color de mi auto
     std::string getMyColor() const;
+    std::map<std::string, Car*>& getCars();
     void addCar(std::string str);
     void updateCar(std::string str);
 

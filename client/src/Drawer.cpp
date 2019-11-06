@@ -2,73 +2,50 @@
 #include <iostream>
 #include "../include/Drawer.h"
 #include "../include/sdl/SdlAnimation.h"
-#include "../include/Model.h"
+#include <unistd.h>
 
 #define WIDTH 900
 #define HEIGHT 600
+#define MICROSECS_WAIT 500000 //es medio segundo
+//ahora se esta dibujando una vez cada medio segundo
+//16000 seria que en un segundo se dibujen aprox 60 veces
 
-Drawer::Drawer(Socket &socket) : socket(socket), window(WIDTH, HEIGHT),
-    loader(pictures, trackPictures), camera(window, model, pictures, trackPictures) {
-    std::string welcome =  receive(); // Recibe mensaje de bienvenida
-    std::cout << welcome;
-    std::string carStr = receive(); // Recibe auto
-    std::cout << carStr;
-    std::string trackStr = receive(); // Recibe pista
-    std::cout << trackStr;
-
-    Track track = Track(trackStr);
-    model.setTrackPartData(track.getTrackPartData());
-    model.setMyColor(carStr);
-    model.addCar(carStr);
-}
+Drawer::Drawer(ModelMonitor &modelMonitor) :
+    window(WIDTH, HEIGHT),
+    loader(pictures, trackPictures),
+    camera(window, pictures, trackPictures),
+    modelMonitor(modelMonitor) {}
 
 Drawer::~Drawer() {}
 
 void Drawer::run() {
-    this->running = true;
-    draw();
+    running = true;
     while (running) {
+        auto start = std::chrono::system_clock::now();
         try {
-            std::string text = receive();
-            model.updateCar(text);
             draw();
+            printf("dibujo\n");
         } catch (std::exception &e) {
-            printf("murio el socket en el drawer\n");
             running = false;
         }
+        auto end = std::chrono::system_clock::now();
+        int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        usleep(MICROSECS_WAIT - microsecsPassed);
     }
 }
 
 void Drawer::stop() {
-
+    running = false;
 }
 
-int Drawer::draw() {
-    try {
-        window.fill();
-        camera.showBackground();
-        int x = model.getCars()[model.getMyColor()]->getX();
-        int y = model.getCars()[model.getMyColor()]->getY();
-        camera.showTrack(x, y);
-        camera.showCars(x, y);
-        window.render();
-    } catch (std::exception& e) {
-        std::cout << e.what() << std::endl;
-        return 1;
-    }
-    return 0;
-}
-
-std::string Drawer::receive() {
-    std::vector<char> response;
-    char c;
-    this->socket.Receive(&c, 1);
-    while (c != '\n') {
-        response.push_back(c);
-        this->socket.Receive(&c, 1);
-    }
-    std::string str_resp(response.begin(), response.end());
-    return str_resp + "\n";
+void Drawer::draw() {
+    window.fill();
+    camera.showBackground();
+    int x = modelMonitor.getCars()[modelMonitor.getMyColor()]->getX();
+    int y = modelMonitor.getCars()[modelMonitor.getMyColor()]->getY();
+    camera.showTrack(x, y, modelMonitor.getTrack());
+    camera.showCars(x, y, modelMonitor.getCars());
+    window.render();
 }
 
 void Drawer::showAnimation(SdlWindow &window) {

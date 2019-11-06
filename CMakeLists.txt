@@ -93,6 +93,10 @@ set(SOURCE_FILES_CLIENT
 	client/src/Model.cpp
 	client/include/Camera.h
 	client/src/Camera.cpp
+	client/include/ModelUpdater.h
+	client/src/ModelUpdater.cpp
+	client/include/ModelMonitor.h
+	client/src/ModelMonitor.cpp
 	common/include/socket.h
     common/include/socket_error.h
     common/include/thread.h

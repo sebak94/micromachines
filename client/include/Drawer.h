@@ -9,27 +9,26 @@
 #include "PictureLoader.h"
 #include "Car.h"
 #include "Camera.h"
+#include "../include/ModelMonitor.h"
 
 class Drawer : public Thread {
 private:
     bool running;
-    Socket &socket;
     SdlWindow window;
     std::map<std::string, SdlSurface*> pictures;
     std::map<trackPartType, SdlSurface*> trackPictures;
     PictureLoader loader;
-    Model model;
+    ModelMonitor &modelMonitor;
     Camera camera;
 
 public:
-    Drawer(Socket &socket);
+    Drawer(ModelMonitor &modelMonitor);
     ~Drawer();
     virtual void run() override;
     virtual void stop() override;
-    int draw();
+    void draw();
 
 private:
-    std::string receive();
     void showAnimation(SdlWindow &window);
 };
 

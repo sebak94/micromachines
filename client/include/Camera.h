@@ -8,18 +8,17 @@
 class Camera {
 private:
     SdlWindow &window;
-    Model &model;
     std::map<std::string, SdlSurface*> &pictures;
     std::map<trackPartType, SdlSurface*> &trackPictures;
     double blockWidth;
     double blockHeight;
 
 public:
-    Camera(SdlWindow &window, Model &model, std::map<std::string, SdlSurface*> &pictures, std::map<trackPartType, SdlSurface*> &trackPictures);
+    Camera(SdlWindow &window, std::map<std::string, SdlSurface*> &pictures, std::map<trackPartType, SdlSurface*> &trackPictures);
     ~Camera();
     void showBackground();
-    void showTrack(int xMyCar, int yMyCar);
-    void showCars(int xMyCar, int yMyCar);
+    void showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> &track);
+    void showCars(int xMyCar, int yMyCar, std::map<std::string, Car*> &cars);
 };
 
 #endif

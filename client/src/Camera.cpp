@@ -1,6 +1,8 @@
 #include "../include/Camera.h"
 
-Camera::Camera(SdlWindow &window, Model &model, std::map<std::string, SdlSurface*> &pictures, std::map<trackPartType, SdlSurface*> &trackPictures) : window(window), model(model), pictures(pictures), trackPictures(trackPictures) {
+Camera::Camera(SdlWindow &window, std::map<std::string, SdlSurface*> &pictures,
+        std::map<trackPartType, SdlSurface*> &trackPictures) :
+        window(window), pictures(pictures), trackPictures(trackPictures) {
     //Las imagenes son cuadradas, asi que le pongo el mismo ancho que largo
     blockWidth = (window.getWidth() + window.getHeight()) / 4;
     blockHeight = (window.getWidth() + window.getHeight()) / 4;
@@ -26,30 +28,28 @@ void Camera::showBackground() {
     }
 }
 
-void Camera::showTrack(int xMyCar, int yMyCar) {
+void Camera::showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> &track) {
     //Transformo las coordenadas para que mi auto quede en el medio de la pantalla
     //y se muestre la parte de la pista correspondiente
     double xBegin = - xMyCar * (blockWidth / 100) + (window.getWidth() / 2);
     double yBegin = - yMyCar * (blockHeight / 100) - (window.getHeight() / 2) + blockHeight;
 
-    std::vector<TrackPartData> trackPartData = model.getTrackPartData();
-    for (int i = 0; i < trackPartData.size(); i++) {
-        if (trackPartData[i].getType() == empty)
+    for (int i = 0; i < track.size(); i++) {
+        if (track[i].getType() == empty)
             continue;
-        double x = trackPartData[i].getPosX() * (blockWidth / 100);
-        double y = trackPartData[i].getPosY() * (blockHeight / 100);
+        double x = track[i].getPosX() * (blockWidth / 100);
+        double y = track[i].getPosY() * (blockHeight / 100);
         SDL_Rect sdlDestRoad = {(int) (x + xBegin), (int) (-y - yBegin), (int) blockWidth, (int) blockHeight};
-        trackPictures[trackPartData[i].getType()]->render(sdlDestRoad, window);
+        trackPictures[track[i].getType()]->render(sdlDestRoad, window);
     }
 }
 
-void Camera::showCars(int xMyCar, int yMyCar) {
+void Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car*> &cars) {
     double widthCar = window.getWidth() / 15;
     double heightCar = widthCar * 2;
     double xBegin = - xMyCar * (blockWidth / 100) + (window.getWidth() / 2);
     double yBegin = - yMyCar * (blockHeight / 100) - (window.getHeight() / 2);
 
-    std::map<std::string, Car*> cars = model.getCars();
     for (std::map<std::string, Car*>::iterator it = cars.begin(); it != cars.end(); ++it) {
         Car* car = it->second;
         double x = car->getX() * (blockWidth / 100) - (widthCar / 2);

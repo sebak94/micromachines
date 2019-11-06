@@ -1,6 +1,7 @@
 #include "../include/server.h"
 #include "../../common/include/socket_error.h"
 #include "iostream"
+#include "../include/ModelUpdater.h"
 #include <vector>
 #include <string>
 
@@ -22,9 +23,15 @@ Server::~Server() {
 }
 
 void Server::runThreads() {
+    Model model;
+    ModelMonitor modelMonitor(model);
+    Thread* drawer = new Drawer(modelMonitor);
+
     threads.push_back(new EventLoopSDL(queue)); //o evento de Lua
     threads.push_back(new Dispatcher(queue, skt));
-    threads.push_back(new Drawer(skt));
+    threads.push_back(new ModelUpdater(skt, modelMonitor, drawer));
+    threads.push_back(drawer);
+    //Cuando el ModelUpdater finaliza, le hace stop al Drawer
 
     for (int i = 0; i < threads.size(); i++) {
         threads[i]->start();
