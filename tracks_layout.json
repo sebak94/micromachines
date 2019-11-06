@@ -122,6 +122,22 @@
          "name" : "tallere",
          "start" : [ 0, 0 ],
          "width" : 2
+      },
+      {
+         "height" : 12,
+         "layout" : [
+            "down-right",
+            "horizontal",
+            "down-left",
+            "vertical",
+            "up-left",
+            "horizontal",
+            "up-right",
+            "vertical"
+         ],
+         "name" : "sad",
+         "start" : [ 1, 2 ],
+         "width" : 12
       }
    ]
 }

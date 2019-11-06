@@ -11,8 +11,8 @@
 #include "../../editor/include/Window.h"
 #include "Button.h"
 
-#define PROMPT_FONT "../../fonts/OpenSans-Bold.ttf"
-#define FIELD_FONT "../../fonts/OpenSans-Regular.ttf"
+#define PROMPT_FONT "../common/fonts/OpenSans-Bold.ttf"
+#define FIELD_FONT "../common/fonts/OpenSans-Regular.ttf"
 #define MSG_TRACK_NAME "Track name:"
 #define MSG_TRACK_WIDTH "Track width (16 max. 2 min.):"
 #define MSG_TRACK_HEIGHT "Track height (16 max. 2 min.):"
@@ -23,7 +23,7 @@
 #define MSG_DIM_WIDTH "Track width invalid."
 #define MSG_DIM_HEIGHT "Track height invalid."
 #define SAVE_BUTTON_PATH "../common/images/button.png"
-#define TITLE_PATH "./images/title.png"
+#define TITLE_PATH "../editor/images/title.png"
 
 #define MAX_LENGTH_TRACK_NAME 30
 #define MIN_LENGTH_TRACK_NAME 2
@@ -87,11 +87,8 @@ public:
     void createSaveButton(Window &game);
     void createTitle(Window &game);
     bool validNameSize();
-
     std::string getTrackName();
-
     int getWidth();
-
     int getHeight();
 };
 
