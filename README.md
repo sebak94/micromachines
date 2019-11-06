@@ -33,4 +33,42 @@ Ej:
 ./micromachines-cl localhost 3000
 ```
 
+## Bibliotecas
+### JSONCPP
+* Instalar:
+```
+sudo apt-get install libjsoncpp-dev
+```
+* Cmake:
+```
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(JSONCPP jsoncpp)
+link_libraries(${JSONCPP_LIBRARIES})
+add_executable(map main.cpp)
+```
+
+### SDL
+* Instalar:
+```
+sudo apt-get install libsd12-2.0
+sudo apt-get install libsdl2-dev
+sudo apt-get install libavformat-dev
+sudo apt-get install libavformat57
+sudo apt-get install libsdl2-image-dev
+sudo apt-get install libsdl2-ttf-dev
+sudo apt-get install libsdl2-mixer-dev
+sudo apt-get install libswscale-dev
+sudo apt install libdvdnav4 libdvdread4 gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly libdvd-pkg
+sudo apt install ubuntu-restricted-extras
+```
+
+* Cmake:
+```
+target_link_libraries(mapEditor
+        SDL2
+        SDL2_image
+        SDL2_mixer
+        SDL2_ttf
+        swscale)
+```
 ***NOTA: Cualquier modificación de estos pasos hacer el cambio correspondiente en este Readme.***
