@@ -5,8 +5,6 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_ttf.h>
 #include "../../common/include/Prompt.h"
-#include "../include/TrackEditor.h"
-#include "../include/TrackGrid.h"
 
 /* Runs track editor from configuration to end */
 void TrackEditor::run(Window & editor) {
@@ -47,6 +45,7 @@ void TrackEditor::saveTrack() {
     if (saveButton.isClicked()){
         createTrack();
         if (trackValid()){
+            std::cout << "saved" << std::endl;
             trackToFileLayout();
             updateTrackFile();
         }

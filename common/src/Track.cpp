@@ -186,9 +186,17 @@ bool Track::validateConnection(trackPartType prev, trackPartType actual) {
         return true;
     else if (actual == upRight && prev == downLeft)
         return true;
+    else if (actual == upRight && prev == downRight)
+        return true;
     else if (actual == downLeft && prev == downRight)
         return true;
+    else if (actual == downLeft && prev == upLeft)
+        return true;
+    else if (actual == downLeft && prev == upRight)
+        return true;
     else if (actual == upLeft && prev == upRight)
+        return true;
+    else if (actual == upLeft && prev == downRight)
         return true;
     else if (actual == upLeft && prev == downLeft)
         return true;
@@ -267,14 +275,28 @@ int Track::setNextCoord(int &row,
         row--;
     else if (!sameRow && elem == upRight && prev == downLeft)
         col++;
+    else if (elem == upRight && prev == downRight)
+        col++;
     else if (elem == downLeft && prev == downRight)
+        row++;
+    else if (elem == downLeft && prev == upLeft)
+        col--;
+    else if (!sameRow && elem == downLeft && prev == upRight)
+        col--;
+    else if (sameRow && elem == downLeft && prev == upRight)
         row++;
     else if (elem == upLeft && prev == upRight)
         row--;
     else if (elem == upLeft && prev == downLeft)
         col--;
+    else if (!sameRow && elem == upLeft && prev == downRight)
+        col--;
+    else if (sameRow && elem == upLeft && prev == downRight)
+        row--;
+    else if (elem == upLeft && prev == downLeft)
+        col--;
     else if (elem == downRight && prev == upRight)
-        col++; //row--;
+        col++;
     else if (!sameRow && elem == downRight && prev == upLeft)
         col++;
     else if (sameRow && elem == downRight && prev == upLeft)

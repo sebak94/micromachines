@@ -4,7 +4,6 @@
 
 #include "../include/Track.h"
 #include "../include/TrackPartData.h"
-#include "../../editor/include/TrackBlock.h"
 
 // Loads type of element
 void TrackPartData::loadType(trackPartType elem) {

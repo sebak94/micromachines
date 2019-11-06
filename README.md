@@ -32,19 +32,6 @@ Ej:
 ```
 ./micromachines-cl localhost 3000
 ```
-## Bibliotecas
-### JSONCPP
-* Instalar:
-```
-sudo apt-get install libjsoncpp-dev
-```
-* Cmake:
-```
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(JSONCPP jsoncpp)
-link_libraries(${JSONCPP_LIBRARIES})
-add_executable(map main.cpp)
-```
 
 ## Bibliotecas
 ### JSONCPP
@@ -57,14 +44,17 @@ sudo apt-get install libjsoncpp-dev
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(JSONCPP jsoncpp)
 link_libraries(${JSONCPP_LIBRARIES})
-add_executable(map main.cpp)
 ```
 
 ### SDL
-* Instalar:
+* Instalar (server):
 ```
-sudo apt-get install libsd12-2.0
 sudo apt-get install libsdl2-dev
+```
+
+* Instalar (client):
+```
+sudo apt-get install li
 sudo apt-get install libavformat-dev
 sudo apt-get install libavformat57
 sudo apt-get install libsdl2-image-dev
@@ -77,7 +67,7 @@ sudo apt install ubuntu-restricted-extras
 
 * Cmake:
 ```
-target_link_libraries(mapEditor
+target_link_libraries(main
         SDL2
         SDL2_image
         SDL2_mixer

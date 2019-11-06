@@ -144,7 +144,4 @@ target_link_libraries(micromachines-ed
 
 target_link_libraries(micromachines-cl
 		SDL2
-		SDL2_image
-		SDL2_mixer
-		SDL2_ttf
-		swscale)
+		SDL2_image)

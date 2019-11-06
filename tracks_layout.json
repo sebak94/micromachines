@@ -82,13 +82,6 @@
          "width" : 9
       },
       {
-         "height" : 4,
-         "layout" : [ "down-right", "down-left", "up-left", "up-right" ],
-         "name" : "test",
-         "start" : [ 0, 0 ],
-         "width" : 4
-      },
-      {
          "height" : 16,
          "layout" : [
             "down-right",
@@ -137,6 +130,46 @@
          ],
          "name" : "sad",
          "start" : [ 1, 2 ],
+         "width" : 12
+      },
+      {
+         "height" : 12,
+         "layout" : [
+            "down-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left"
+         ],
+         "name" : "test",
+         "start" : [ 0, 3 ],
          "width" : 12
       }
    ]

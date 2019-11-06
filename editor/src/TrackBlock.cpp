@@ -5,8 +5,6 @@
 #include <SDL2/SDL_system.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_image.h>
-#include <iostream>
-#include "../../common/include/Track.h"
 #include "../../common/include/TrackPartData.h"
 #include "../include/TrackBlock.h"
 #include "../../common/include/Button.h"
@@ -91,7 +89,9 @@ void TrackBlock::updateSamplePosition() {
 void TrackBlock::applySampleToGrid(TrackBlock & gridBlock) {
     int x, y;
     SDL_GetMouseState(&x, &y);
-    if (gridBlock.isInMouseArea(x, y) && mouseReleased()){
+    if (gridBlock.isInMouseArea(x, y) &&
+        mouseReleased() &&
+        inMouseArea){
         gridBlock.type = this->type;
         gridBlock.texture = this->texture;
     }
