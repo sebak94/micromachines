@@ -1,38 +1,62 @@
 #include "../include/Model.h"
 
-Model::Model(int cantBlocks) {
-    //Invento una pista
-    Block block1(0, 0, PicType::CURVE_LEFT_TO_UP);
-    Block block2(0, 100, PicType::LINE_VERTICAL_UP);
-    Block block3(0, 200, PicType::CURVE_UP_TO_RIGHT);
-    Block block4(100, 200, PicType::LINE_HORIZONTAL_RIGHT);
-    Block block5(200, 200, PicType::CURVE_RIGHT_TO_DOWN);
-    Block block6(200, 100, PicType::LINE_VERTICAL_DOWN);
-    Block block7(200, 0, PicType::CURVE_DOWN_TO_LEFT);
-    Block block8(100, 0, PicType::LINE_HORIZONTAL_LEFT);
-    blocks.push_back(block1);
-    blocks.push_back(block2);
-    blocks.push_back(block3);
-    blocks.push_back(block4);
-    blocks.push_back(block5);
-    blocks.push_back(block6);
-    blocks.push_back(block7);
-    blocks.push_back(block8);
+Model::Model() {
 
-    Car car1(50, 250, 45, 100, PicType::CAR_RED);
-    Car car2(50, 150, 0, 100, PicType::CAR_WHITE);
-    cars.push_back(car1);
-    cars.push_back(car2);
 }
 
 Model::~Model() {
-
+    for (const auto pair : cars) {
+        delete pair.second;
+    }
 }
 
-std::vector<Block>& Model::getBlocks() {
-    return this->blocks;
-}
-
-std::vector<Car>& Model::getCars() {
+std::map<std::string, Car*>& Model::getCars() {
     return this->cars;
+}
+
+void Model::setTrackPartData(std::vector<TrackPartData> trackPartData) {
+    this->trackPartData = trackPartData;
+}
+
+std::vector<TrackPartData> Model::getTrackPartData() const {
+    return this->trackPartData;
+}
+
+//Se usa una sola vez, para setear el color de mi auto
+void Model::setMyColor(std::string str) {
+    size_t pos = str.find_last_of(',') + 1;
+    std::string color = parse(str, pos, '\n');
+    myColor = color;
+}
+
+std::string Model::getMyColor() const {
+    return myColor;
+}
+
+void Model::addCar(std::string str) {
+    size_t pos = str.find_last_of(',') + 1;
+    std::string color = parse(str, pos, '\n');
+    cars[color] = new Car(color);
+    updateCar(str);
+}
+
+void Model::updateCar(std::string str) {
+    //serializacion: current_velocity, health, rotation, x, y, color\n
+    size_t pos = 0;
+    int velocity = std::stoi(parse(str, pos, ','));
+    int health = std::stoi(parse(str, pos, ','));
+    int rotation = std::stoi(parse(str, pos, ','));
+    int x = std::stoi(parse(str, pos, ','));
+    int y = std::stoi(parse(str, pos, ','));
+    std::string color = parse(str, pos, '\n');
+    cars[color]->update(x, y, rotation, health);
+}
+
+std::string Model::parse(const std::string &str, size_t &pos, const char delim) {
+    std::string substr;
+    size_t nextPos = str.find(delim, pos);
+    size_t len = nextPos - pos;
+    substr = str.substr(pos, len);
+    pos = nextPos + 1;
+    return substr;
 }

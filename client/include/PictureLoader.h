@@ -3,14 +3,16 @@
 
 #include <map>
 #include "sdl/SdlSurface.h"
-#include "PicType.h"
+#include "../../common/include/TrackPartData.h"
+#include "../../common/include/Track.h"
 
 class PictureLoader {
 private:
-    std::map<PicType, SdlSurface*> &pictures;
+    std::map<std::string, SdlSurface*> &pictures;
+    std::map<trackPartType, SdlSurface*> &trackPictures;
 
 public:
-    PictureLoader(std::map<PicType, SdlSurface*> &pictures);
+    PictureLoader(std::map<std::string, SdlSurface*> &pictures, std::map<trackPartType, SdlSurface*> &trackPictures);
     ~PictureLoader();
 };
 

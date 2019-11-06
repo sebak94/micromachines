@@ -3,23 +3,36 @@
 
 #include "../../common/include/thread.h"
 #include "../../common/include/socket.h"
+#include "model/cars/car.h"
+#include "model/cars/states/car_state.h"
 #include <string>
 #include <vector>
 #include <atomic>
+#include <queue>
+#include <mutex>
 
 class ClientTh: public Thread {
     private:
     std::atomic<bool> keep_talking;
     std::atomic<bool> is_running;
     Socket *peer;
+    Car *car;
+    std::queue<char> actions;
+    std::mutex m;
 
-    void receive(std::vector<char> &command);
+    void sendWelcomeMsg();
+    void sendTrackData();
+    void receive(char *action);
     void send(std::string &response);
 
     public:
     ClientTh(Socket *peer);
+    void processNextAction();
+    void updateCar();
+    void sendCarData();
+    void sendTrackData(std::string track_serialized);
     virtual void run() override;
-    void stop();
+    virtual void stop() override;
     bool isDead();
     ~ClientTh();
 };

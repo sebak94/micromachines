@@ -34,5 +34,13 @@
 # VSCode
 .vscode
 
+# Clion
+.idea/
+cmake-build-debug
+
 # Builds
 /build
+/cmake-build-debug/
+/.idea/modules.xml
+/.idea/micromachines.iml
+/.idea/misc.xml

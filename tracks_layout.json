@@ -1,0 +1,59 @@
+{
+  "tracks":
+  [
+    {
+      "name": "classic",
+      "start": [0, 0],
+      "width": 3,
+      "height": 3,
+      "layout": [
+        "down-right",
+        "horizontal",
+        "down-left",
+        "vertical",
+        "up-left",
+        "horizontal",
+        "up-right",
+        "vertical"
+      ]
+    },
+    {
+      "name": "mini",
+      "start": [1, 1],
+      "width": 3,
+      "height": 3,
+      "layout": [
+        "down-right",
+        "down-left",
+        "up-left",
+        "up-right"
+      ]
+    },
+    {
+      "name": "pro",
+      "start": [1, 1],
+      "width": 9,
+      "height": 5,
+      "layout": [
+        "down-right",
+        "horizontal",
+        "horizontal",
+        "horizontal",
+        "down-left",
+        "up-right",
+        "up-left",
+        "down-right",
+        "down-left",
+        "vertical",
+        "up-left",
+        "horizontal",
+        "horizontal",
+        "horizontal",
+        "horizontal",
+        "horizontal",
+        "up-right",
+        "vertical"
+      ]
+    }
+  ]
+}

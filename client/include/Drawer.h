@@ -7,8 +7,6 @@
 #include "sdl/SdlWindow.h"
 #include "sdl/SdlSurface.h"
 #include "PictureLoader.h"
-#include "PicType.h"
-#include "Block.h"
 #include "Car.h"
 #include "Camera.h"
 
@@ -17,17 +15,18 @@ private:
     bool running;
     Socket &socket;
     SdlWindow window;
-    std::map<PicType, SdlSurface*> pictures;
+    std::map<std::string, SdlSurface*> pictures;
+    std::map<trackPartType, SdlSurface*> trackPictures;
     PictureLoader loader;
-    //x e y son para mover la pista, el auto es fijo, se mueve la pista. Las inicio en el (0,0)
-    int x = 0;
-    int y = 0;
+    Model model;
+    Camera camera;
 
 public:
     Drawer(Socket &socket);
     ~Drawer();
     virtual void run() override;
-    int testSdl(std::map<PicType, SdlSurface*> &pictures, std::string text);
+    virtual void stop() override;
+    int draw();
 
 private:
     std::string receive();

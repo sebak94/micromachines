@@ -37,3 +37,7 @@ void EventLoopSDL::run() {
         }
     }
 }
+
+void EventLoopSDL::stop() {
+
+}

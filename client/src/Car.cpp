@@ -1,11 +1,7 @@
 #include "../include/Car.h"
 
-Car::Car(int x, int y, int degrees, int health, PicType type) {
-    this->x = x;
-    this->y = y;
-    this->degrees = degrees;
-    this->health = health;
-    this->type = type;
+Car::Car(std::string color) {
+    this->color = color;
 }
 
 Car::~Car() {
@@ -28,6 +24,13 @@ int Car::getHealth() const {
     return this->health;
 }
 
-PicType Car::getType() const {
-    return this->type;
+std::string Car::getMyColor() const {
+    return this->color;
+}
+
+void Car::update(int x, int y, int degrees, int health) {
+    this->x = x;
+    this->y = y;
+    this->degrees = degrees;
+    this->health = health;
 }

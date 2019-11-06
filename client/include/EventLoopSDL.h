@@ -14,6 +14,7 @@ public:
     EventLoopSDL(ThreadSafeQueue &queue);
     ~EventLoopSDL();
     virtual void run() override;
+    virtual void stop() override;
 
 private:
     void enqueueKeyboardEvent(SDL_KeyboardEvent& keyEvent);
