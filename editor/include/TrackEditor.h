@@ -9,7 +9,7 @@
 #include <SDL2/SDL_events.h>
 #include "Window.h"
 #include "TrackGrid.h"
-#include "Button.h"
+#include "../../common/include/Button.h"
 
 #define SAVE_BUTTON_WIDTH 150
 #define SAVE_BUTTON_HEIGHT 65

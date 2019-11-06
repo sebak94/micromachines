@@ -5,7 +5,22 @@
 #ifndef MAP_TRACKPARTDATA_H
 #define MAP_TRACKPARTDATA_H
 
-#include "Track.h"
+#include <string>
+
+#ifndef MAP_TRACKTYPE
+#define MAP_TRACKTYPE
+typedef enum {
+    empty,
+    downRight,
+    downLeft,
+    upRight,
+    upLeft,
+    horizontal,
+    vertical
+} trackPartType;
+#endif
+
+class Track;
 
 class TrackPartData {
 private:
@@ -24,6 +39,8 @@ public:
     void setID(int ID);
     int getID();
     std::string serialize();
+
+    bool validateConnection(trackPartType previous);
 };
 
 

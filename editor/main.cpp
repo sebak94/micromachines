@@ -1,5 +1,5 @@
-#include "Window.h"
-#include "TrackEditor.h"
+#include "include/Window.h"
+#include "include/TrackEditor.h"
 
 int main() {
     TrackEditor editor;

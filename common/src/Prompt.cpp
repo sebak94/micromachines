@@ -2,9 +2,9 @@
 // Created by fperezboco on 4/11/19.
 //
 
-#include "TrackEditor.h"
-#include "Prompt.h"
-#include "Button.h"
+#include "../../editor/include/TrackEditor.h"
+#include "../include/Prompt.h"
+#include "../include/Button.h"
 #include <algorithm>
 #include <SDL2/SDL_ttf.h>
 
@@ -52,7 +52,7 @@ void Prompt::drawAll(Window & game) {
 /* Creates dialog for user to config NAME of track to edit */
 void Prompt::inputTrackName(Window & game) {
     TrackList trackList;
-    std::vector<std::string> trackNames = TrackList::getTrackNames();
+    std::vector<std::string> trackNames = trackList.getTrackNames();
     while (!quit && !nameAccepted) {
         initTextPrompt(game.renderer, std::string(MSG_TRACK_NAME));
         getNameEvent();

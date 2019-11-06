@@ -4,9 +4,9 @@
 
 #include <SDL2/SDL_ttf.h>
 #include <string>
-#include "TextTexture.h"
-#include "Error.h"
-#include "Window.h"
+#include "../include/TextTexture.h"
+#include "../../editor/include/Error.h"
+#include "../../editor/include/Window.h"
 #define BOX_BORDER_THICKNESS 3
 
 /* Transforms string to texture with specific color, font and fontsize */

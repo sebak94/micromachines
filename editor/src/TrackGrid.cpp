@@ -4,8 +4,8 @@
 
 #include <SDL2/SDL_image.h>
 
-#include "TrackGrid.h"
-#include "Window.h"
+#include "../include/TrackGrid.h"
+#include "../include/Window.h"
 
 /* Creates track grid of trackBlocks for editor */
 TrackGrid::TrackGrid(Window & game, int widthBlocks, int heightBlocks) {

@@ -2,7 +2,7 @@
 // Created by fperezboco on 18/10/19.
 //
 
-#include "Window.h"
+#include "../include/Window.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
 #include <SDL2/SDL_system.h>

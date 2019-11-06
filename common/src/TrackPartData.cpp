@@ -2,7 +2,9 @@
 // Created by fede on 1/11/19.
 //
 
+#include "../include/Track.h"
 #include "../include/TrackPartData.h"
+#include "../../editor/include/TrackBlock.h"
 
 // Loads type of element
 void TrackPartData::loadType(trackPartType elem) {
@@ -44,6 +46,7 @@ void TrackPartData::setID(int ID) {
     trackElemID = ID;
 }
 
+/* Converts part to string for serialization */
 std::string TrackPartData::serialize() {
     return std::to_string(posX) +
            "," +

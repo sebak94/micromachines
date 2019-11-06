@@ -9,12 +9,15 @@
 #include <string>
 #include <vector>
 #include <jsoncpp/json/json.h>
+#include "TrackPartData.h"
 
 #define BLOCKSIZE 100  // meters
 #define MAXTRACKSIZE 150000 // meters (per axis)
 
 class TrackPartData;
 
+#ifndef MAP_TRACKTYPE
+#define MAP_TRACKTYPE
 typedef enum {
     empty,
     downRight,
@@ -24,11 +27,10 @@ typedef enum {
     horizontal,
     vertical
 } trackPartType;
+#endif
 
 class Track {
 private:
-
-
     int startCol = 0;
     int startRow = 0;
     int width = 0;  // blocks
@@ -38,9 +40,9 @@ private:
     std::string name{};
 
 public:
+    Track(int width, int height, const std::string &name);
     Track();
     explicit Track(const std::string &trackStr);
-
     void loadTrack(const Json::Value &fileTracks, int trackNumber);
     void print();
     void initLayout();
@@ -57,14 +59,15 @@ public:
     static int posToIndex(int pos);
     bool isOnTrack(int posX, int posY);
     static bool inCurveRange(bool invertedX, bool invertedY, int x, int y);
-
     std::string serialize();
-
     static std::string parseTrackParam(const std::string &initString, size_t &pos, const char delim);
-
     void parseTrackParts(const std::string &trackStr, size_t &pos);
-
     std::vector<TrackPartData> getTrackPartData() const;
+    bool validateTrack();
+    int findFirstCorner();
+    bool validateConnection(trackPartType prev, trackPartType actual);
+    std::string typeToFileType(int row, int col);
+    int setNextCoord(int &row, int &col, trackPartType elem, trackPartType prev, int lastRow);
 };
 
 #endif //MAP_TRACK_H

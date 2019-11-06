@@ -2,7 +2,7 @@
 // Created by fperezboco on 18/10/19.
 //
 
-#include "Error.h"
+#include "../include/Error.h"
 #include <cstdio>
 #include <iostream>
 

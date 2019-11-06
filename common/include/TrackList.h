@@ -26,6 +26,7 @@
 #define LAYOUT_V "vertical"
 #define LAYOUT_UL "up-left"
 #define LAYOUT_UR "up-right"
+#define LAYOUT_E "empty"
 
 #include "TrackPartData.h"
 
@@ -37,6 +38,8 @@ public:
     void readTracks();
     void printTrack(const std::string &name);
     Track& getTrack(const std::string &name);
+
+    std::vector<std::string> getTrackNames();
 };
 
 #endif //MAP_TRACKLIST_H

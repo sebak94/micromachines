@@ -5,21 +5,20 @@
 #ifndef MAP_TRACKGRID_H
 #define MAP_TRACKGRID_H
 
-
 #include <vector>
 #include <map>
 #include "TrackBlock.h"
 #include "Window.h"
-#include "Track.h"
-#include "Button.h"
+#include "../../common/include/Track.h"
+#include "../../common/include/Button.h"
 
-#define IMG_GRASS_PATH "../grass.png"
-#define IMG_DOWNRIGHT_PATH "../downRight.png"
-#define IMG_DOWNLEFT_PATH "../downLeft.png"
-#define IMG_UPRIGHT_PATH "../upRight.png"
-#define IMG_UPLEFT_PATH "../upLeft.png"
-#define IMG_HORIZONTAL_PATH "../horizontal.png"
-#define IMG_VERTICAL_PATH "../vertical.png"
+#define IMG_GRASS_PATH "../../common/images/grass.png"
+#define IMG_DOWNRIGHT_PATH "../../common/images/downRight.png"
+#define IMG_DOWNLEFT_PATH "../../common/images/downLeft.png"
+#define IMG_UPRIGHT_PATH "../../common/images/upRight.png"
+#define IMG_UPLEFT_PATH "../../common/images/upLeft.png"
+#define IMG_HORIZONTAL_PATH "../../common/images/horizontal.png"
+#define IMG_VERTICAL_PATH "../../common/images/vertical.png"
 
 #define TEX_GRASS "grass"
 #define TEX_DOWNRIGHT "downRight"

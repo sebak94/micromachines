@@ -2,14 +2,15 @@
 // Created by fperezboco on 4/11/19.
 //
 
-#include "TrackBlock.h"
-
 #include <SDL2/SDL_system.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>
-#include "Button.h"
-#include "Error.h"
+#include "../../common/include/Track.h"
+#include "../../common/include/TrackPartData.h"
+#include "../include/TrackBlock.h"
+#include "../../common/include/Button.h"
+#include "../include/Error.h"
 
 /* Creates track block of specific area and applies specific texture */
 TrackBlock::TrackBlock(SDL_Renderer *renderer, SDL_Rect &area, const std::string &path) {

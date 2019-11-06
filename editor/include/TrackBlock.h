@@ -5,13 +5,26 @@
 #ifndef MAP_TRACKBLOCK_H
 #define MAP_TRACKBLOCK_H
 
-
 #include <SDL2/SDL_system.h>
 #include <string>
 #include <SDL2/SDL_events.h>
-#include "Track.h"
 
 #define SHADOW_FACTOR 150
+
+#ifndef MAP_TRACKTYPE
+#define MAP_TRACKTYPE
+typedef enum {
+    empty,
+    downRight,
+    downLeft,
+    upRight,
+    upLeft,
+    horizontal,
+    vertical
+} trackPartType;
+#endif
+
+class TrackPartData;
 
 class TrackBlock {
 private:

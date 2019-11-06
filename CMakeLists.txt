@@ -107,7 +107,44 @@ set(SOURCE_FILES_CLIENT
     common/src/TrackPartData.cpp
 )
 
+set(SOURCE_FILES_EDITOR
+	common/src/TrackList.cpp
+	common/include/TrackList.h
+	common/src/Track.cpp
+	common/include/Track.h
+	common/src/TrackPartData.cpp
+	common/include/TrackPartData.h
+	editor/src/TrackEditor.cpp
+	editor/include/TrackEditor.h
+	editor/src/Window.cpp
+	editor/include/Window.h
+	editor/src/Error.cpp
+	editor/include/Error.h
+	common/src/Button.cpp
+	common/include/Button.h
+	common/src/TextTexture.cpp
+	common/include/TextTexture.h
+	common/src/Prompt.cpp
+	common/include/Prompt.h
+	editor/src/TrackBlock.cpp
+	editor/include/TrackBlock.h
+	editor/src/TrackGrid.cpp
+	editor/include/TrackGrid.h)
+
 add_executable(micromachines-sv ${SOURCE_FILES_SERVER} server/main.cpp)
 add_executable(micromachines-cl ${SOURCE_FILES_CLIENT} client/main.cpp)
+add_executable(micromachines-ed ${SOURCE_FILES_EDITOR} editor/main.cpp)
 
-target_link_libraries(micromachines-cl SDL2 SDL2_image)
+target_link_libraries(micromachines-ed
+		SDL2
+		SDL2_image
+		SDL2_mixer
+		SDL2_ttf
+		swscale)
+
+target_link_libraries(micromachines-cl
+		SDL2
+		SDL2_image
+		SDL2_mixer
+		SDL2_ttf
+		swscale)

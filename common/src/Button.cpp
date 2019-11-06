@@ -6,8 +6,8 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>
-#include "Button.h"
-#include "Error.h"
+#include "../include/Button.h"
+#include "../../editor/include/Error.h"
 
 
 Button::Button() = default;

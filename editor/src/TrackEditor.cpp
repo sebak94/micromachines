@@ -4,9 +4,9 @@
 
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_ttf.h>
-#include "Prompt.h"
-#include "TrackEditor.h"
-#include "TrackGrid.h"
+#include "../../common/include/Prompt.h"
+#include "../include/TrackEditor.h"
+#include "../include/TrackGrid.h"
 
 /* Runs track editor from configuration to end */
 void TrackEditor::run(Window & editor) {
