@@ -1,10 +1,12 @@
 #include "../include/game_loop_th.h"
 #include "../include/model/micromachines.h"
 #include <cstdint>
+#include <unistd.h>
 
 #define TICKS_PER_SECOND 60
 #define SKIP_TICKS 1000 / TICKS_PER_SECOND
 #define MAX_FRAMESKIP 10
+#define MICROSECS_WAIT 16000 //seria que en un segundo se dibujen aprox 60 veces
 
 GameLoopTh::GameLoopTh(Micromachines &micromachines):
     running(true), micromachines(micromachines) {}
@@ -38,7 +40,9 @@ void GameLoopTh::run() {
                 end - begin);
         /*std::this_thread::sleep_for(
                 std::chrono::seconds(1 / TICKS_PER_SECOND) - duration);*/
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        //std::this_thread::sleep_for(std::chrono::seconds(1));
+        int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(duration).count();
+        usleep(MICROSECS_WAIT - microsecsPassed);
     }
 }
 
