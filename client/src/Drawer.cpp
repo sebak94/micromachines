@@ -6,9 +6,8 @@
 
 #define WIDTH 900
 #define HEIGHT 600
-#define MICROSECS_WAIT 500000 //es medio segundo
-//ahora se esta dibujando una vez cada medio segundo
-//16000 seria que en un segundo se dibujen aprox 60 veces
+#define MICROSECS_WAIT 16000 //seria que en un segundo se dibujen aprox 60 veces
+//500000 es para dibujar ua vez cada medio segundo
 
 Drawer::Drawer(ModelMonitor &modelMonitor) :
     window(WIDTH, HEIGHT),
