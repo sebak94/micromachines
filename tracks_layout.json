@@ -1,59 +1,177 @@
 {
-  "tracks":
-  [
-    {
-      "name": "classic",
-      "start": [0, 0],
-      "width": 3,
-      "height": 3,
-      "layout": [
-        "down-right",
-        "horizontal",
-        "down-left",
-        "vertical",
-        "up-left",
-        "horizontal",
-        "up-right",
-        "vertical"
-      ]
-    },
-    {
-      "name": "mini",
-      "start": [1, 1],
-      "width": 3,
-      "height": 3,
-      "layout": [
-        "down-right",
-        "down-left",
-        "up-left",
-        "up-right"
-      ]
-    },
-    {
-      "name": "pro",
-      "start": [1, 1],
-      "width": 9,
-      "height": 5,
-      "layout": [
-        "down-right",
-        "horizontal",
-        "horizontal",
-        "horizontal",
-        "down-left",
-        "up-right",
-        "up-left",
-        "down-right",
-        "down-left",
-        "vertical",
-        "up-left",
-        "horizontal",
-        "horizontal",
-        "horizontal",
-        "horizontal",
-        "horizontal",
-        "up-right",
-        "vertical"
-      ]
-    }
-  ]
+   "tracks" : [
+      {
+         "height" : 3,
+         "layout" : [
+            "down-right",
+            "horizontal",
+            "down-left",
+            "vertical",
+            "up-left",
+            "horizontal",
+            "up-right",
+            "vertical"
+         ],
+         "name" : "classic",
+         "start" : [ 0, 0 ],
+         "width" : 3
+      },
+      {
+         "height" : 3,
+         "layout" : [ "down-right", "down-left", "up-left", "up-right" ],
+         "name" : "mini",
+         "start" : [ 1, 1 ],
+         "width" : 3
+      },
+      {
+         "height" : 5,
+         "layout" : [
+            "down-right",
+            "horizontal",
+            "horizontal",
+            "horizontal",
+            "down-left",
+            "up-right",
+            "up-left",
+            "down-right",
+            "down-left",
+            "vertical",
+            "up-left",
+            "horizontal",
+            "horizontal",
+            "horizontal",
+            "horizontal",
+            "horizontal",
+            "up-right",
+            "vertical"
+         ],
+         "name" : "pro",
+         "start" : [ 1, 1 ],
+         "width" : 9
+      },
+      {
+         "height" : 5,
+         "layout" : [ "down-right", "down-right", "down-right", "down-right" ],
+         "name" : "wrong",
+         "start" : [ 1, 1 ],
+         "width" : 9
+      },
+      {
+         "height" : 5,
+         "layout" : [
+            "down-right",
+            "horizontal",
+            "horizontal",
+            "horizontal",
+            "down-left",
+            "up-right",
+            "up-left",
+            "down-right",
+            "down-left",
+            "vertical",
+            "up-left",
+            "horizontal",
+            "horizontal",
+            "horizontal",
+            "horizontal",
+            "horizontal",
+            "up-right"
+         ],
+         "name" : "wrong_pro",
+         "start" : [ 1, 1 ],
+         "width" : 9
+      },
+      {
+         "height" : 16,
+         "layout" : [
+            "down-right",
+            "horizontal",
+            "horizontal",
+            "horizontal",
+            "horizontal",
+            "down-left",
+            "vertical",
+            "vertical",
+            "vertical",
+            "vertical",
+            "up-left",
+            "horizontal",
+            "horizontal",
+            "horizontal",
+            "horizontal",
+            "up-right",
+            "vertical",
+            "vertical",
+            "vertical",
+            "vertical"
+         ],
+         "name" : "taller",
+         "start" : [ 5, 5 ],
+         "width" : 16
+      },
+      {
+         "height" : 2,
+         "layout" : [ "down-right", "down-left", "up-left", "up-right" ],
+         "name" : "tallere",
+         "start" : [ 0, 0 ],
+         "width" : 2
+      },
+      {
+         "height" : 12,
+         "layout" : [
+            "down-right",
+            "horizontal",
+            "down-left",
+            "vertical",
+            "up-left",
+            "horizontal",
+            "up-right",
+            "vertical"
+         ],
+         "name" : "sad",
+         "start" : [ 1, 2 ],
+         "width" : 12
+      },
+      {
+         "height" : 12,
+         "layout" : [
+            "down-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left",
+            "up-right",
+            "down-left"
+         ],
+         "name" : "test",
+         "start" : [ 0, 3 ],
+         "width" : 12
+      }
+   ]
 }
+

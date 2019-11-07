@@ -4,8 +4,22 @@
 
 #include <jsoncpp/json/json.h>
 #include <cmath>
+#include "../include/TrackPartData.h"
 #include "../include/Track.h"
 #include "../include/TrackList.h"
+
+/* Constructor: Creates track for track editor */
+Track::Track(int width, int height, const std::string &name) {
+    TrackPartData emptyPart;
+    this->name = name;
+    this->width = width;
+    this->height = height;
+    partCounter = 0;
+    trackPartData.clear();
+    trackPartData.reserve(width * height);
+    for (int i = 0; i < width * height; i++)
+        trackPartData.emplace_back(emptyPart);
+}
 
 // Loads data of 1 track in position <trackNumber> of the json file.
 void Track::loadTrack(const Json::Value &fileTracks, int trackNumber) {
@@ -63,8 +77,8 @@ void Track::loadPart(int row, int col, trackPartType elem) {
     part.loadType(elem);
     part.loadPos(height - row, col);
     part.setID(partCounter);
-    partCounter++;
     trackPartData[row*width + col] = part;
+    if (elem!=empty) partCounter++;
 }
 
 // Gets type (curve, straight line, etc)
@@ -106,6 +120,7 @@ bool Track::inCurveRange(bool invertedX, bool invertedY, int x, int y) {
  * to a matrix layout */
 void Track::initTrackParts(const std::vector<std::string> & trackLayout) {
     int row = startRow;
+    int lastRow = row;
     int col = startCol;
     loadPart(row, col, identifyElem(trackLayout[0]));
     trackPartType prevElem = getPartType(row, col);
@@ -114,12 +129,86 @@ void Track::initTrackParts(const std::vector<std::string> & trackLayout) {
     for (int i=1; i < trackLayout.size(); i++){
         actualElem = identifyElem(trackLayout[i]);
         loadPart(row, col, actualElem);
-        setNextCoord(row, col, actualElem, prevElem);
+        lastRow = setNextCoord(row, col, actualElem, prevElem, lastRow);
         if (isCurve(actualElem))
             prevElem = actualElem;
     }
 }
 
+// Checks if track parts are properly connected. Assumes first is downRight
+bool Track::validateTrack() {
+    int row = startRow;
+    int lastRow = row;
+    int col = startCol;
+    int i = 0;
+    trackPartType actual;
+    trackPartType previous = getPartType(row, col);
+    if (previous != downRight)
+        return false;
+    col++;  // assumes top-left corner is a down-right curve
+    // +1 to form a closed loop with the track
+    for (int j = 1; j <= partCounter + 1; j++){
+        actual = getPartType(row, col);
+        if (!validateConnection(previous, actual))
+            return false;
+        lastRow = setNextCoord(row, col, actual, previous, lastRow);
+        if (isCurve(actual))
+            previous = actual;
+    }
+    return true;
+}
+
+/* Finds first downRight corner for file processing*/
+int Track::findFirstCorner() {
+    int f = -1;
+    for (int i = 0; i < trackPartData.size() && f == -1; i++){
+        if (trackPartData[i].getType() == downRight)
+            f = i;
+    }
+    startRow = f / width;
+    startCol = f % width;
+    return f;
+}
+
+// Checks if "actual" Part is properly connected based on last curve "prev"
+bool Track::validateConnection(trackPartType prev, trackPartType actual) {
+    if (actual == horizontal && (prev == upRight || prev == downRight))
+        return true;
+    else if (actual == horizontal && (prev == upLeft || prev == downLeft))
+        return true;
+    else if (actual == vertical && (prev == upRight || prev == upLeft))
+        return true;
+    else if(actual == vertical && (prev == downRight || prev == downLeft))
+        return true;
+    else if (actual == downRight && prev == downLeft)
+        return true;
+    else if (actual == upRight && prev == upLeft)
+        return true;
+    else if (actual == upRight && prev == downLeft)
+        return true;
+    else if (actual == upRight && prev == downRight)
+        return true;
+    else if (actual == downLeft && prev == downRight)
+        return true;
+    else if (actual == downLeft && prev == upLeft)
+        return true;
+    else if (actual == downLeft && prev == upRight)
+        return true;
+    else if (actual == upLeft && prev == upRight)
+        return true;
+    else if (actual == upLeft && prev == downRight)
+        return true;
+    else if (actual == upLeft && prev == downLeft)
+        return true;
+    else if (actual == downRight && prev == upRight)
+        return true;
+    else if (actual == downRight && prev == upLeft)
+        return true;
+    else
+        return false;
+}
+
+// Checks if track part is a curve
 bool Track::isCurve(const trackPartType & elem) {
     return !(elem == horizontal || elem == vertical);
 }
@@ -138,15 +227,38 @@ trackPartType Track::identifyElem(const std::string & layoutElem){
         return upRight;
     else if (layoutElem == LAYOUT_V)
         return vertical;
-    return empty;
+}
+
+/* Returns Json string track-type format based on part type*/
+std::string Track::typeToFileType(int row, int col) {
+    trackPartType t = getPartType(row, col);
+    switch (t){
+        case horizontal:
+            return LAYOUT_H;
+        case vertical:
+            return LAYOUT_V;
+        case downLeft:
+            return LAYOUT_DL;
+        case downRight:
+            return LAYOUT_DR;
+        case upLeft:
+            return LAYOUT_UL;
+        case upRight:
+            return LAYOUT_UR;
+        default:
+            return LAYOUT_E;
+    }
 }
 
 /* Finds next position to emplace the
  * track piece based on the last curve */
-void Track::setNextCoord(int & row,
-                         int & col,
+int Track::setNextCoord(int &row,
+                         int &col,
                          trackPartType elem,
-                         trackPartType prev){
+                         trackPartType prev,
+                         int lastRow) {
+    bool sameRow = (row == lastRow);  // elem and prev on same row
+    lastRow = row;
     if (elem == horizontal && (prev == upRight || prev == downRight))
         col++;
     else if (elem == horizontal && (prev == upLeft || prev == downLeft))
@@ -159,23 +271,43 @@ void Track::setNextCoord(int & row,
         row++;
     else if (elem == upRight && prev == upLeft)
         row--;
-    else if (elem == upRight && prev == downLeft)
+    else if (sameRow && elem == upRight && prev == downLeft)
+        row--;
+    else if (!sameRow && elem == upRight && prev == downLeft)
+        col++;
+    else if (elem == upRight && prev == downRight)
         col++;
     else if (elem == downLeft && prev == downRight)
+        row++;
+    else if (elem == downLeft && prev == upLeft)
+        col--;
+    else if (!sameRow && elem == downLeft && prev == upRight)
+        col--;
+    else if (sameRow && elem == downLeft && prev == upRight)
         row++;
     else if (elem == upLeft && prev == upRight)
         row--;
     else if (elem == upLeft && prev == downLeft)
         col--;
-    else if (elem == downRight && prev == upRight)
+    else if (!sameRow && elem == upLeft && prev == downRight)
+        col--;
+    else if (sameRow && elem == upLeft && prev == downRight)
         row--;
-    else if (elem == downRight && prev == upLeft)
+    else if (elem == upLeft && prev == downLeft)
+        col--;
+    else if (elem == downRight && prev == upRight)
         col++;
+    else if (!sameRow && elem == downRight && prev == upLeft)
+        col++;
+    else if (sameRow && elem == downRight && prev == upLeft)
+        row++;
+    return lastRow;
 }
 
 // fills whole track as empty (grass)
 void Track::initLayout() {
     TrackPartData emptyPart;
+    partCounter = 0;
     trackPartData.clear();
     trackPartData.reserve(width * height);
     for (int i = 0; i < width * height; i++)

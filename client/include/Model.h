@@ -2,6 +2,7 @@
 #define __MODEL_H__
 
 #include <vector>
+#include <map>
 #include "Car.h"
 #include "../../common/include/TrackPartData.h"
 

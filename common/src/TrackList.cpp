@@ -31,4 +31,22 @@ Track & TrackList::getTrack(const std::string & name) {
     return tracks[name];
 }
 
+/* Gets all track names from Json file */
+std::vector<std::string> TrackList::getTrackNames() {
+    std::vector<std::string> nameList{};
+    Track track;
+    Json::Value maps;
+    Json::Reader reader;
+    std::ifstream tracksFile(TRACKS_FILE_PATH, std::ifstream::binary);
+    if (!reader.parse(tracksFile, maps )){
+        std::cout << reader.getFormattedErrorMessages() << std::endl;
+    } else {
+        for (int i = 0; i < maps[TRACKS_ID].size(); i++) {
+             nameList.push_back(maps[TRACKS_ID][i][NAME_ID].asString());
+        }
+    }
+    tracksFile.close();
+    return nameList;
+}
+
 Track::Track() = default;
