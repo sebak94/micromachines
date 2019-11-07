@@ -16,7 +16,7 @@ class Car: public Model {
     const uint8_t acceleration;
     const uint8_t grip;
     const uint8_t maneuverability;
-    uint8_t current_velocity;
+    int current_velocity;
     uint8_t health;
     int16_t rotation;
     Point position;

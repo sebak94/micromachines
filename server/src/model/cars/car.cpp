@@ -33,14 +33,33 @@ void Car::updateState(char action) {
         case 'B':
             this->states["break"] = true;
             break;
+        case 'Y':
+            this->states["accelerate"] = false;
+            break;
+        case 'W':
+            this->states["left"] = false;
+            break;
+        case 'X':
+            this->states["right"] = false;
+            break;
+        case 'Z':
+            this->states["break"] = false;
+            break;
     }
 }
 
 void Car::update() {
-    if (this->states["left"]) this->leftCar();
-    if (this->states["right"]) this->rightCar();
-    if (this->states["accelerate"]) this->accelerateCar();
-    if (this->states["break"]) this->breakCar();
+    printf("VELOCIDAD: %i\n", this->current_velocity);
+    printf("POS (X%i,Y%i): \n", position.getX(), position.getY());
+    printf("ANGULO: %i\n", this->rotation);
+    printf("\n");
+
+    this->leftCar();
+    this->rightCar();
+    this->accelerateCar();
+    this->breakCar();
+
+    this->updateCarPosition();
 }
 
 void Car::updateCarPosition() {
@@ -51,25 +70,46 @@ void Car::updateCarPosition() {
 }
 
 void Car::accelerateCar() {
-    if (this->current_velocity < this->max_velocity)
-        this->current_velocity += this->acceleration;
-
-    this->updateCarPosition();
+    if (this->states["accelerate"]) {
+        if ((this->current_velocity + this->acceleration) < this->max_velocity)
+            this->current_velocity += this->acceleration;
+        else
+            this->current_velocity = this->max_velocity;
+    } else if ((!this->states["break"]) && (this->current_velocity > 0)) {
+        if ((this->current_velocity - this->acceleration) > 0)
+            this->current_velocity -= this->acceleration;
+        else
+            this->current_velocity = 0;
+    }
 }
 
 void Car::breakCar() {
-    if ((this->current_velocity * -1) < this->max_velocity)
-        this->current_velocity -= this->acceleration;
-
-    this->updateCarPosition();
+    if (this->states["break"]) {
+        if ((this->current_velocity - this->acceleration) >
+            (this->max_velocity * -1))
+            this->current_velocity -= this->acceleration;
+        else
+            this->current_velocity = (this->max_velocity * -1);
+    } else if ((!this->states["accelerate"]) && (this->current_velocity < 0)) {
+        if ((this->current_velocity + this->acceleration) < 0)
+            this->current_velocity += this->acceleration;
+        else
+            this->current_velocity = 0;
+    }
 }
 
 void Car::leftCar() {
-    this->addRotation(-1);
+    if (this->states["left"])
+        this->addRotation(20);
+    else if (!this->states["right"])
+        this->addRotation(-10);
 }
 
 void Car::rightCar() {
-    this->addRotation(1);
+    if (this->states["right"])
+        this->addRotation(-20);
+    else if (!this->states["left"])
+        this->addRotation(10);
 }
 
 void Car::addPositionX(uint16_t x) {

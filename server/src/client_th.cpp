@@ -38,14 +38,12 @@ void ClientTh::run() {
 }
 
 void ClientTh::processNextAction() {
-    std::cout << "PROCESANDO..." << "\n";
     Lock l(m);
     while (!actions.empty()) {
         char a = actions.front();
         actions.pop();
         car->updateState(a);
     }
-    std::cout << "FIN PROCESADO" << "\n";
 }
 
 void ClientTh::updateCar() {
