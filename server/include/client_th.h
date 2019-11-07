@@ -20,7 +20,6 @@ class ClientTh: public Thread {
     std::mutex m;
 
     void sendWelcomeMsg();
-    void sendTrackData();
     void receive(char *action);
     void send(std::string &response);
 

@@ -65,11 +65,11 @@ void Car::breakCar() {
 }
 
 void Car::leftCar() {
-    this->addRotation(20);
+    this->addRotation(-1);
 }
 
 void Car::rightCar() {
-    this->addRotation(-20);
+    this->addRotation(1);
 }
 
 void Car::addPositionX(uint16_t x) {

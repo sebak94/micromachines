@@ -10,17 +10,12 @@
 ClientTh::ClientTh(Socket *peer): keep_talking(true), is_running(true),
     peer(peer), car(new BlueCar()) {
     sendWelcomeMsg();
-    sendTrackData();
     sendCarData();
 }
 
 void ClientTh::sendWelcomeMsg() {
     std::string welcome_msg = "Bienvenido!\n";
     send(welcome_msg);
-}
-
-void ClientTh::sendTrackData() {
-
 }
 
 void ClientTh::sendCarData() {
@@ -39,7 +34,6 @@ void ClientTh::run() {
         Lock l(m);
         actions.push(action);
     }
-
     is_running = false;
 }
 
@@ -74,6 +68,7 @@ void ClientTh::send(std::string &response) {
     } catch(const SocketError &e) {
         keep_talking = false;
         std::cout << e.what() << "\n";
+        throw e;
     }
 }
 

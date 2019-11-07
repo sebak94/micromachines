@@ -4,6 +4,7 @@
 #include "../../../common/include/lock.h"
 #include "../../../common/include/TrackList.h"
 #include "../../../common/include/Track.h"
+#include "../../../common/include/socket_error.h"
 #include <vector>
 #include "iostream"
 
@@ -25,15 +26,18 @@ void Micromachines::addPlayer(ClientTh *client) {
 
 void Micromachines::removePlayer(ClientTh *client) {
     Lock l(m);
+    removePlayerFromVector(client);
+}
+
+void Micromachines::removePlayerFromVector(ClientTh *player) {
     size_t index_to_remove = -1;
 
     for (size_t i = 0; i < players.size(); i++) {
-        if (players[i] == client) {
+        if (players[i] == player) {
             index_to_remove = i;
             break;
         }
     }
-
     if (index_to_remove != -1) {
         players.erase(players.begin() + index_to_remove);
     }
@@ -54,7 +58,11 @@ void Micromachines::cleanPlayers() {
 void Micromachines::sendNewStateToPlayers() {
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
-        players[i]->sendCarData();
+        try {
+            players[i]->sendCarData();
+        } catch(const SocketError &e) {
+            removePlayerFromVector(players[i]);
+        }
     }
 }
 
