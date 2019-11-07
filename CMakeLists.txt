@@ -19,16 +19,6 @@ set(SOURCE_FILES_SERVER
     server/include/model/cars/color.h
     server/include/model/cars/car.h
     server/include/model/cars/blue_car.h
-    server/include/model/cars/states/car_state.h
-    server/include/model/cars/states/accelerate_left.h
-    server/include/model/cars/states/accelerate_right.h
-    server/include/model/cars/states/accelerate.h
-    server/include/model/cars/states/break_left.h
-    server/include/model/cars/states/break_right.h
-    server/include/model/cars/states/break.h
-    server/include/model/cars/states/left.h
-    server/include/model/cars/states/right.h
-    server/include/model/cars/states/nothing.h
     server/src/mm_server.cpp
     server/src/acceptor_th.cpp
     server/src/client_th.cpp
@@ -39,15 +29,6 @@ set(SOURCE_FILES_SERVER
     server/src/model/cars/color.cpp
     server/src/model/cars/car.cpp
     server/src/model/cars/blue_car.cpp
-    server/src/model/cars/states/accelerate_left.cpp
-    server/src/model/cars/states/accelerate_right.cpp
-    server/src/model/cars/states/accelerate.cpp
-    server/src/model/cars/states/break_left.cpp
-    server/src/model/cars/states/break_right.cpp
-    server/src/model/cars/states/break.cpp
-    server/src/model/cars/states/left.cpp
-    server/src/model/cars/states/right.cpp
-    server/src/model/cars/states/nothing.cpp
     common/include/socket.h
     common/include/socket_error.h
     common/include/thread.h

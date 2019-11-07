@@ -6,8 +6,8 @@
 #define SKIP_TICKS 1000 / TICKS_PER_SECOND
 #define MAX_FRAMESKIP 10
 
-GameLoopTh::GameLoopTh(Micromachines &micromachines) :
-        running(true), micromachines(micromachines) {}
+GameLoopTh::GameLoopTh(Micromachines &micromachines):
+    running(true), micromachines(micromachines) {}
 
 uint64_t GameLoopTh::GetTickCountMs() {
     timespec ts;

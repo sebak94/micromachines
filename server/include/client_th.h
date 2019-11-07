@@ -4,7 +4,6 @@
 #include "../../common/include/thread.h"
 #include "../../common/include/socket.h"
 #include "model/cars/car.h"
-#include "model/cars/states/car_state.h"
 #include <string>
 #include <vector>
 #include <atomic>
@@ -21,7 +20,6 @@ class ClientTh: public Thread {
     std::mutex m;
 
     void sendWelcomeMsg();
-    void sendTrackData();
     void receive(char *action);
     void send(std::string &response);
 

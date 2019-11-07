@@ -13,6 +13,8 @@ class Micromachines {
     std::mutex m;
     std::vector<ClientTh*> players;
 
+    void removePlayerFromVector(ClientTh *player);
+
     public:
     Micromachines();
     void update();

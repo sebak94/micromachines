@@ -1,13 +1,6 @@
 #include "../../../include/model/point.h"
 #include "../../../include/model/cars/car.h"
 #include "../../../include/model/cars/color.h"
-#include "../../../include/model/cars/states/car_state.h"
-#include "../../../include/model/cars/states/accelerate.h"
-#include "../../../include/model/cars/states/left.h"
-#include "../../../include/model/cars/states/right.h"
-#include "../../../include/model/cars/states/break.h"
-#include "../../../include/model/cars/states/nothing.h"
-#include "../../../include/model/cars/states/accelerate_right.h"
 #include <string>
 #include <cstdint>
 #include <math.h>
@@ -18,8 +11,7 @@ Car::Car(uint8_t width, uint8_t height, uint8_t max_velocity,
         width(width), height(height), max_velocity(max_velocity),
         acceleration(acceleration), grip(grip),
         maneuverability(maneuverability), current_velocity(0), health(100),
-        rotation(0), position(initial_position), color(color),
-        state(new Nothing()) {
+        rotation(0), position(initial_position), color(color) {
 
     this->states["accelerate"] = false;
     this->states["left"] = false;
@@ -73,11 +65,11 @@ void Car::breakCar() {
 }
 
 void Car::leftCar() {
-    this->addRotation(20);
+    this->addRotation(-1);
 }
 
 void Car::rightCar() {
-    this->addRotation(-20);
+    this->addRotation(1);
 }
 
 void Car::addPositionX(uint16_t x) {
@@ -92,10 +84,6 @@ void Car::addRotation(int16_t rotation) {
     this->rotation += rotation;
 }
 
-/*void Car::update() {
-    state->apply(this);
-}*/
-
 std::string Car::serialize() {
     // La serializacion es:
     // current_velocity, health, rotation, x, y, color\n
@@ -107,6 +95,4 @@ std::string Car::serialize() {
            + color.name() + "\n";
 }
 
-Car::~Car() {
-    delete state;
-}
+Car::~Car() {}
