@@ -1,6 +1,5 @@
 #include "../include/client_th.h"
 #include "../include/model/cars/blue_car.h"
-#include "../include/model/cars/states/car_state.h"
 #include "../../common/include/socket.h"
 #include "../../common/include/socket_error.h"
 #include "../../common/include/lock.h"
@@ -37,7 +36,6 @@ void ClientTh::run() {
     while (keep_talking) {
         char action;
         receive(&action);
-        std::cout << action << "\n";
         Lock l(m);
         actions.push(action);
     }
@@ -50,7 +48,6 @@ void ClientTh::processNextAction() {
     Lock l(m);
     while (!actions.empty()) {
         char a = actions.front();
-        std::cout << a << "\n";
         actions.pop();
         car->updateState(a);
     }

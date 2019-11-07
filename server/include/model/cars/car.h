@@ -4,7 +4,6 @@
 #include "../model.h"
 #include "../point.h"
 #include "color.h"
-#include "states/car_state.h"
 #include <cstdint>
 #include <string>
 #include <unordered_map>
@@ -22,7 +21,6 @@ class Car: public Model {
     int16_t rotation;
     Point position;
     Color color;
-    CarState *state;
     std::unordered_map<std::string, bool> states;
 
     public:
@@ -35,17 +33,13 @@ class Car: public Model {
     void addRotation(int16_t rotation);
     virtual void update() override;
     virtual std::string serialize() override;
+    void accelerateCar();
+    void leftCar();
+    void rightCar();
+    void breakCar();
+    void updateCarPosition();
     ~Car();
 
-    void accelerateCar();
-
-    void leftCar();
-
-    void rightCar();
-
-    void breakCar();
-
-    void updateCarPosition();
 };
 
 #endif

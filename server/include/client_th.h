@@ -4,7 +4,6 @@
 #include "../../common/include/thread.h"
 #include "../../common/include/socket.h"
 #include "model/cars/car.h"
-#include "model/cars/states/car_state.h"
 #include <string>
 #include <vector>
 #include <atomic>
