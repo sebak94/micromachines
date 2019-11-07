@@ -3,8 +3,9 @@
 #include "../../include/sdl/SdlSurface.h"
 #include "../../include/sdl/SdlException.h"
 
-SdlSurface::SdlSurface(const std::string &filename) {
+SdlSurface::SdlSurface(const std::string &filename, const SdlWindow& window) : renderer(window.getRenderer()) {
     this->surface = loadSurface(filename);
+    this->texture = SDL_CreateTextureFromSurface(window.getRenderer(), this->surface);
 }
 
 SdlSurface::~SdlSurface() {
@@ -19,12 +20,10 @@ SDL_Surface* SdlSurface::loadSurface(const std::string &filename) {
     return surface;
 }
 
-int SdlSurface::render(SDL_Rect& sdlDest, const SdlWindow& window) const {
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(window.getRenderer(), this->surface);
-    return SDL_RenderCopy(window.getRenderer(), texture, NULL, &sdlDest);
+int SdlSurface::render(SDL_Rect& sdlDest) const {
+    return SDL_RenderCopy(renderer, texture, NULL, &sdlDest);
 }
 
-int SdlSurface::renderRotate(SDL_Rect& sdlDest, double angle, SDL_RendererFlip flip, const SdlWindow& window) const {
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(window.getRenderer(), this->surface);
-    return SDL_RenderCopyEx(window.getRenderer(), texture, NULL, &sdlDest, angle, NULL, flip);
+int SdlSurface::renderRotate(SDL_Rect& sdlDest, double angle, SDL_RendererFlip flip) const {
+    return SDL_RenderCopyEx(renderer, texture, NULL, &sdlDest, angle, NULL, flip);
 }

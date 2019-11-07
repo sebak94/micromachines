@@ -8,24 +8,26 @@
 #define CAR_WHITE "white"
 #define CAR_YELLOW "yellow"
 
-PictureLoader::PictureLoader(std::map<std::string, SdlSurface*> &pictures, std::map<trackPartType, SdlSurface*> &trackPictures) : pictures(pictures), trackPictures(trackPictures) {
+PictureLoader::PictureLoader(SdlWindow &window, std::map<std::string, SdlSurface*> &pictures,
+        std::map<trackPartType, SdlSurface*> &trackPictures) :
+        window(window), pictures(pictures), trackPictures(trackPictures) {
     //Imagenes para la pista
-    trackPictures[empty] = new SdlSurface("images/grass.png");
-    trackPictures[downRight] = new SdlSurface("images/downRight.png");
-    trackPictures[downLeft] = new SdlSurface("images/downLeft.png");
-    trackPictures[upRight] = new SdlSurface("images/upRight.png");
-    trackPictures[upLeft] = new SdlSurface("images/upLeft.png");
-    trackPictures[horizontal] = new SdlSurface("images/horizontal.png");
-    trackPictures[vertical] = new SdlSurface("images/vertical.png");
+    trackPictures[empty] = new SdlSurface("images/grass.png", window);
+    trackPictures[downRight] = new SdlSurface("images/downRight.png", window);
+    trackPictures[downLeft] = new SdlSurface("images/downLeft.png", window);
+    trackPictures[upRight] = new SdlSurface("images/upRight.png", window);
+    trackPictures[upLeft] = new SdlSurface("images/upLeft.png", window);
+    trackPictures[horizontal] = new SdlSurface("images/horizontal.png", window);
+    trackPictures[vertical] = new SdlSurface("images/vertical.png", window);
 
     //Imagenes de los autos
-    pictures[CAR_RED] = new SdlSurface("images/car_red.png");
-    pictures[CAR_BLACK] = new SdlSurface("images/car_black.png");
-    pictures[CAR_BLUE] = new SdlSurface("images/car_blue.png");
-    pictures[CAR_GREEN] = new SdlSurface("images/car_green.png");
-    pictures[CAR_ORANGE] = new SdlSurface("images/car_orange.png");
-    pictures[CAR_WHITE] = new SdlSurface("images/car_white.png");
-    pictures[CAR_YELLOW] = new SdlSurface("images/car_yellow.png");
+    pictures[CAR_RED] = new SdlSurface("images/car_red.png", window);
+    pictures[CAR_BLACK] = new SdlSurface("images/car_black.png", window);
+    pictures[CAR_BLUE] = new SdlSurface("images/car_blue.png", window);
+    pictures[CAR_GREEN] = new SdlSurface("images/car_green.png", window);
+    pictures[CAR_ORANGE] = new SdlSurface("images/car_orange.png", window);
+    pictures[CAR_WHITE] = new SdlSurface("images/car_white.png", window);
+    pictures[CAR_YELLOW] = new SdlSurface("images/car_yellow.png", window);
 
     //Agregar todas las imagenes faltantes
 }

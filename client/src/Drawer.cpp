@@ -12,7 +12,7 @@
 
 Drawer::Drawer(ModelMonitor &modelMonitor) :
     window(WIDTH, HEIGHT),
-    loader(pictures, trackPictures),
+    loader(window, pictures, trackPictures),
     camera(window, pictures, trackPictures),
     modelMonitor(modelMonitor) {}
 

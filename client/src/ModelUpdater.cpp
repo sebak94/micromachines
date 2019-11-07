@@ -25,7 +25,7 @@ void ModelUpdater::run() {
     while (running) {
         try {
             std::string text = receive();
-            //printf("recibo: %s\n\n", text.c_str());
+            printf("recibo: %s", text.c_str());
             modelMonitor.updateCar(text); //actualizar modelo
         } catch (std::exception &e) {
             printf("murio el socket en el updater\n");

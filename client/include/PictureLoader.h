@@ -8,11 +8,12 @@
 
 class PictureLoader {
 private:
+    SdlWindow &window;
     std::map<std::string, SdlSurface*> &pictures;
     std::map<trackPartType, SdlSurface*> &trackPictures;
 
 public:
-    PictureLoader(std::map<std::string, SdlSurface*> &pictures, std::map<trackPartType, SdlSurface*> &trackPictures);
+    PictureLoader(SdlWindow &window, std::map<std::string, SdlSurface*> &pictures, std::map<trackPartType, SdlSurface*> &trackPictures);
     ~PictureLoader();
 };
 
