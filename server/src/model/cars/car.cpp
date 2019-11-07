@@ -63,8 +63,8 @@ void Car::update() {
 }
 
 void Car::updateCarPosition() {
-    int x = (this->current_velocity) * ((int) pow(sin(this->rotation), 2));
-    int y = (this->current_velocity) * ((int) pow(cos(this->rotation), 2));
+    int x = (this->current_velocity) * ((int) pow(sin(this->rotation), 2)) / this->max_velocity;
+    int y = (this->current_velocity) * ((int) pow(cos(this->rotation), 2)) / this->max_velocity;
     this->addPositionX(x);
     this->addPositionY(y);
 }
@@ -100,16 +100,16 @@ void Car::breakCar() {
 
 void Car::leftCar() {
     if (this->states["left"])
-        this->addRotation(20);
+        this->addRotation(-2);
     else if (!this->states["right"])
-        this->addRotation(-10);
+        this->addRotation(1);
 }
 
 void Car::rightCar() {
     if (this->states["right"])
-        this->addRotation(-20);
+        this->addRotation(2);
     else if (!this->states["left"])
-        this->addRotation(10);
+        this->addRotation(-1);
 }
 
 void Car::addPositionX(uint16_t x) {
