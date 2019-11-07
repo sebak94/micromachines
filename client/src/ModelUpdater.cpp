@@ -28,7 +28,6 @@ void ModelUpdater::run() {
             printf("recibo: %s", text.c_str());
             modelMonitor.updateCar(text); //actualizar modelo
         } catch (std::exception &e) {
-            printf("murio el socket en el updater\n");
             running = false;
             drawer->stop();
         }

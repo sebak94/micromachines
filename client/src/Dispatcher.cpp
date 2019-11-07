@@ -11,16 +11,15 @@ void Dispatcher::run() {
         std::string text = this->queue.pop();
         if (text == "Q") {
             running = false;
-            socket.Release();
         }
         try {
-            printf("envio: %s\n", text.c_str());
             socket.Send(text.c_str(), text.size());
+            printf("envio: %s\n", text.c_str());
         } catch (std::exception &e) {
-            printf("murio el socket en el dispatcher\n");
             running = false;
         }
     }
+    socket.Release();
 }
 
 void Dispatcher::stop() {

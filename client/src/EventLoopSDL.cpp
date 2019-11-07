@@ -1,10 +1,15 @@
 #include "../include/EventLoopSDL.h"
 
+#define FAKE_KEYDOWN 1
+
 EventLoopSDL::EventLoopSDL(ThreadSafeQueue &queue) : queue(queue) {}
 
 EventLoopSDL::~EventLoopSDL() {}
 
-void EventLoopSDL::enqueueKeyboardEvent(SDL_KeyboardEvent& keyEvent) {
+void EventLoopSDL::enqueueKeyDownEvent(SDL_KeyboardEvent& keyEvent) {
+    if (keyEvent.repeat == FAKE_KEYDOWN)
+        return;
+
     switch (keyEvent.keysym.sym) {
         case SDLK_LEFT:
             this->queue.push("L"); //left
@@ -21,6 +26,23 @@ void EventLoopSDL::enqueueKeyboardEvent(SDL_KeyboardEvent& keyEvent) {
     }
 }
 
+void EventLoopSDL::enqueueKeyUpEvent(SDL_KeyboardEvent &keyEvent) {
+    switch (keyEvent.keysym.sym) {
+        case SDLK_LEFT:
+            this->queue.push("W"); //left
+            break;
+        case SDLK_RIGHT:
+            this->queue.push("X"); //right
+            break;
+        case SDLK_UP:
+            this->queue.push("Y"); //accelerate
+            break;
+        case SDLK_DOWN:
+            this->queue.push("Z"); //break
+            break;
+    }
+}
+
 void EventLoopSDL::run() {
     this->running = true;
     while (running) {
@@ -28,7 +50,10 @@ void EventLoopSDL::run() {
         SDL_WaitEvent(&event);
         switch (event.type) {
             case SDL_KEYDOWN:
-                enqueueKeyboardEvent((SDL_KeyboardEvent&)event);
+                enqueueKeyDownEvent((SDL_KeyboardEvent &) event);
+                break;
+            case SDL_KEYUP:
+                enqueueKeyUpEvent((SDL_KeyboardEvent &) event);
                 break;
             case SDL_QUIT:
                 this->queue.push("Q"); //encolo una Q para finalizar

@@ -10,7 +10,6 @@
 Server::Server(const char *hostname, const char *service) : queue(LIMIT_QUEUE) {
     try {
         skt.Connect(hostname, service);
-        printf("socket conectado\n");
     } catch(const SocketError &e) {
         std::cout << e.what() << "\n";
     }
@@ -38,6 +37,6 @@ void Server::runThreads() {
     }
     for (int i = 0; i < threads.size(); i++) {
         threads[i]->join();
-        printf("joineado el thread: %d\n", i);
+        //printf("joineado el thread: %d\n", i);
     }
 }

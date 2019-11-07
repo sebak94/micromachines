@@ -17,7 +17,8 @@ public:
     virtual void stop() override;
 
 private:
-    void enqueueKeyboardEvent(SDL_KeyboardEvent& keyEvent);
+    void enqueueKeyDownEvent(SDL_KeyboardEvent& keyEvent);
+    void enqueueKeyUpEvent(SDL_KeyboardEvent& keyEvent);
 };
 
 #endif
