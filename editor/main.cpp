@@ -3,10 +3,10 @@
 
 int main() {
     TrackEditor editor;
-    Window game;
+    Window window;
 
     try {
-        editor.run(game);
+        editor.run(window);
     } catch (Error & e) {
         e.printError();
     }

@@ -307,11 +307,14 @@ int Track::setNextCoord(int &row,
 // fills whole track as empty (grass)
 void Track::initLayout() {
     TrackPartData emptyPart;
+    int row = 0, col = 0;
     partCounter = 0;
     trackPartData.clear();
     trackPartData.reserve(width * height);
-    for (int i = 0; i < width * height; i++)
+    for (int i = 0; i < width * height; i++) {
+        emptyPart.loadPos(height - i/width, i%width);
         trackPartData.emplace_back(emptyPart);
+    }
 }
 
 /* Transforms positions in meters to indexes of matrix.

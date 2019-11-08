@@ -20,7 +20,7 @@ void Camera::showBackground() {
     while (y < window.getHeight()) {
         while (x < window.getWidth()) {
             SDL_Rect sdlDestGrass = {(int)x, (int)y, (int)width, (int)height};
-            trackPictures[empty]->render(sdlDestGrass);
+            //trackPictures[empty]->render(sdlDestGrass);
             x += width;
         }
         x = 0;
@@ -35,11 +35,11 @@ void Camera::showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> &track
     double yBegin = - yMyCar * (blockHeight / 100) - (window.getHeight() / 2) + blockHeight;
 
     for (int i = 0; i < track.size(); i++) {
-        if (track[i].getType() == empty)
-            continue;
         double x = track[i].getPosX() * (blockWidth / 100);
         double y = track[i].getPosY() * (blockHeight / 100);
         SDL_Rect sdlDestRoad = {(int) (x + xBegin), (int) (-y - yBegin), (int) blockWidth, (int) blockHeight};
+        //if (track[i].getType() == empty)
+            trackPictures[empty]->render(sdlDestRoad);
         trackPictures[track[i].getType()]->render(sdlDestRoad);
     }
 }
