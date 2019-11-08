@@ -4,13 +4,19 @@
 
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_ttf.h>
+#include <chrono>
+#include <zconf.h>
 #include "../../common/include/Prompt.h"
+#include "../../common/include/thread.h"
 
 /* Runs track editor from configuration to end */
 void TrackEditor::run(Window & editor) {
     editor.startGUI(WINDOW_NAME);
     quit = false;
-    inputTrackCharacteristics(editor);
+    //inputTrackCharacteristics(editor);
+    trackName = "test28";
+    trackWidth = 12;
+    trackHeight = 12;
     grid = TrackGrid(editor, trackWidth, trackHeight);
     backgroundGrid = TrackGrid(editor, trackWidth, trackHeight);
     grid.createSamples();
@@ -20,23 +26,35 @@ void TrackEditor::run(Window & editor) {
 
 /* Creates screen with grid and samples for track edition */
 void TrackEditor::editTrack(Window & editor){
+    std::thread drawer = std::thread(&TrackEditor::drawTh, this, std::ref(editor));
     while (!quit){
         while ( SDL_PollEvent( &event ) ) {
             if ( event.type == SDL_QUIT ) {
                 quit = true;
             }
-            editor.clearScreen();
-            editor.fillBackground(255, 255, 255, 0);
-            backgroundGrid.draw(editor.renderer);
             updateGridEvents();
             grid.updateSamples(&event);
             grid.applyAllSamplesToGrid();
-            grid.draw(editor.renderer);
             saveButton.updateEvent(&event);
-            saveButton.draw(editor.renderer);
-            SDL_RenderPresent(editor.renderer);
         }
         saveTrack();
+    }
+    drawer.join();
+}
+
+/* Draws editor in separated thread. FPS control. */
+void TrackEditor::drawTh(Window & editor){
+    while (!quit) {
+        auto start = std::chrono::system_clock::now();
+        editor.clearScreen();
+        editor.fillBackground(255, 255, 255, 0);
+        backgroundGrid.draw(editor.renderer);
+        grid.draw(editor.renderer);
+        saveButton.draw(editor.renderer);
+        SDL_RenderPresent(editor.renderer);
+        auto end = std::chrono::system_clock::now();
+        int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        usleep(1000000 * 1 / FPS - microsecsPassed);
     }
 }
 

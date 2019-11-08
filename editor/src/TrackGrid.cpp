@@ -21,13 +21,13 @@ TrackGrid::TrackGrid(Window & game, int widthBlocks, int heightBlocks) {
  * Considers non-square tracks.*/
 void TrackGrid::setGridSize() {
     if (wBlocks >= hBlocks) {
-        gridMarginWidth = WINDOW_W / GRID_MARGIN_FACTOR;
+        gridMarginWidth = GRID_MARGIN_SIZE + SAMPLES_MARGIN;
         gridSize = WINDOW_W - 2 * gridMarginWidth;
         blockWidth = gridSize / wBlocks;
         blockHeight = gridSize / wBlocks;
         gridMarginHeight = WINDOW_H / 2 - blockHeight*hBlocks/2;
     } else {
-        gridMarginHeight = WINDOW_H / GRID_MARGIN_FACTOR;
+        gridMarginHeight = GRID_MARGIN_SIZE;
         gridSize = WINDOW_H - 2 * gridMarginHeight;
         blockWidth = gridSize / hBlocks;
         blockHeight = gridSize / hBlocks;
@@ -41,29 +41,14 @@ void TrackGrid::initGrid() {
     int row = 0;
     int col = 0;
     for (int i = 1; i <= wBlocks*hBlocks; i++) {
-        if (col == wBlocks){
-            col = 0;
-            row++;
-        }
+        col = (i-1)%wBlocks, row = (i-1)/wBlocks;
         auxBlock.setBlock(textures[TEX_GRASS],
                 empty,
                 col * blockWidth + gridMarginWidth,
                 row * blockHeight + gridMarginHeight,
                 blockWidth, blockHeight);
         grid.emplace_back(auxBlock);
-        col++;
     }
-}
-
-/* Loads all textures */
-void TrackGrid::loadTextures(SDL_Renderer * renderer){
-    textures.emplace(TEX_GRASS, loadTexture(IMG_GRASS_PATH, renderer));
-    textures.emplace(TEX_HORIZONTAL, loadTexture(IMG_HORIZONTAL_PATH, renderer));
-    textures.emplace(TEX_VERTICAL, loadTexture(IMG_VERTICAL_PATH, renderer));
-    textures.emplace(TEX_DOWNLEFT, loadTexture(IMG_DOWNLEFT_PATH, renderer));
-    textures.emplace(TEX_DOWNRIGHT, loadTexture(IMG_DOWNRIGHT_PATH, renderer));
-    textures.emplace(TEX_UPLEFT, loadTexture(IMG_UPLEFT_PATH, renderer));
-    textures.emplace(TEX_UPRIGHT, loadTexture(IMG_UPRIGHT_PATH, renderer));
 }
 
 /* Loads one texture with blending options */
@@ -95,13 +80,8 @@ int TrackGrid::getSize() {
 void TrackGrid::draw(SDL_Renderer * renderer) {
     for (auto & trackBlock : grid)
         trackBlock.draw(renderer);
-    grassSample.draw(renderer);
-    horizSample.draw(renderer);
-    verticalSample.draw(renderer);
-    downRightSample.draw(renderer);
-    downLeftSample.draw(renderer);
-    upRightSample.draw(renderer);
-    upLeftSample.draw(renderer);
+    for (auto & trackSample : samples)
+        trackSample.draw(renderer);
 }
 
 /* Updates one block in grid */
@@ -111,63 +91,85 @@ void TrackGrid::updateTrackBlockEvent(const SDL_Event *event, int index) {
 
 /* Updates all samples events and positions */
 void TrackGrid::updateSamples(const SDL_Event *event) {
-    grassSample.updateSampleEvent(event);
-    grassSample.updateSamplePosition();
-    horizSample.updateSampleEvent(event);
-    horizSample.updateSamplePosition();
-    verticalSample.updateSampleEvent(event);
-    verticalSample.updateSamplePosition();
-    downRightSample.updateSampleEvent(event);
-    downRightSample.updateSamplePosition();
-    downLeftSample.updateSampleEvent(event);
-    downLeftSample.updateSamplePosition();
-    upRightSample.updateSampleEvent(event);
-    upRightSample.updateSamplePosition();
-    upLeftSample.updateSampleEvent(event);
-    upLeftSample.updateSamplePosition();
+    for (auto & trackSample : samples) {
+        trackSample.updateSampleEvent(event);
+        trackSample.updateSamplePosition();
+    }
+}
+
+/* Loads all textures */
+void TrackGrid::loadTextures(SDL_Renderer * renderer){
+    textures.emplace(TEX_GRASS, loadTexture(IMG_GRASS_PATH, renderer));
+    textures.emplace(TEX_HORIZONTAL, loadTexture(IMG_HORIZONTAL_PATH, renderer));
+    textures.emplace(TEX_VERTICAL, loadTexture(IMG_VERTICAL_PATH, renderer));
+    textures.emplace(TEX_DOWNLEFT, loadTexture(IMG_DOWNLEFT_PATH, renderer));
+    textures.emplace(TEX_DOWNRIGHT, loadTexture(IMG_DOWNRIGHT_PATH, renderer));
+    textures.emplace(TEX_UPLEFT, loadTexture(IMG_UPLEFT_PATH, renderer));
+    textures.emplace(TEX_UPRIGHT, loadTexture(IMG_UPRIGHT_PATH, renderer));
+    textures.emplace(TEX_FINISH_H, loadTexture(IMG_FINISH_HORIZ, renderer));
+    textures.emplace(TEX_FINISH_V, loadTexture(IMG_FINISH_VERT, renderer));
+    textures.emplace(TEX_PUB1DOWN, loadTexture(IMG_PUB1DOWN, renderer));
+    textures.emplace(TEX_PUB1LEFT, loadTexture(IMG_PUB1LEFT, renderer));
+    textures.emplace(TEX_PUB1RIGHT, loadTexture(IMG_PUB1RIGHT, renderer));
+    textures.emplace(TEX_PUB1UP, loadTexture(IMG_PUB1UP, renderer));
+
 }
 
 /* Loads and configs samples considering window and grid size */
 void TrackGrid::createSamples() {
-    int sep = WINDOW_W/SAMPLE_SEPARATION_FACTOR;  // between samples
-    int s = WINDOW_W/SAMPLE_SEPARATION_FACTOR;  // sample size in pixels
-    int x = (WINDOW_W - NUMBER_OF_SAMPLES * (s + sep) + sep) / 2;
-    int y = WINDOW_H/SAMPLE_SEPARATION_FACTOR;  // sample Y position
+    int sep = SAMPLE_SEPARATION_FACTOR;  // between samples
+    int samplesHeight = WINDOW_H - 2 * GRID_MARGIN_SIZE;  // height of grid
+    int s = (samplesHeight + sep) / NUMBER_OF_SAMPLES - sep;// // sample size
+    int y = GRID_MARGIN_SIZE;  // sample X position
+    int x = (gridMarginWidth - s)/2;  // sample Y position
+    TrackBlock auxBlock;
 
-    grassSample.setBlock(textures[TEX_GRASS], empty, x, y, s, s);
-    x += s + sep;
-    horizSample.setBlock(textures[TEX_HORIZONTAL], horizontal, x, y, s, s);
-    x += s + sep;
-    verticalSample.setBlock(textures[TEX_VERTICAL], vertical, x, y, s, s);
-    x += s + sep;
-    downLeftSample.setBlock(textures[TEX_DOWNLEFT], downLeft, x, y, s, s);
-    x += s + sep;
-    downRightSample.setBlock(textures[TEX_DOWNRIGHT], downRight, x, y, s, s);
-    x += s + sep;
-    upLeftSample.setBlock(textures[TEX_UPLEFT], upLeft, x, y, s, s);
-    x += s + sep;
-    upRightSample.setBlock(textures[TEX_UPRIGHT], upRight, x, y, s, s);
+    auxBlock.setBlock(textures[TEX_HORIZONTAL], horizontal, x, y, s, s);
+    y += s + sep; samples.emplace_back(auxBlock);
+    auxBlock.setBlock(textures[TEX_VERTICAL], vertical, x, y, s, s);
+    y += s + sep; samples.emplace_back(auxBlock);
+    auxBlock.setBlock(textures[TEX_DOWNLEFT], downLeft, x, y, s, s);
+    y += s + sep; samples.emplace_back(auxBlock);
+    auxBlock.setBlock(textures[TEX_DOWNRIGHT], downRight, x, y, s, s);
+    y += s + sep; samples.emplace_back(auxBlock);
+    auxBlock.setBlock(textures[TEX_UPLEFT], upLeft, x, y, s, s);
+    y += s + sep; samples.emplace_back(auxBlock);
+    auxBlock.setBlock(textures[TEX_UPRIGHT], upRight, x, y, s, s);
+    y += s + sep; samples.emplace_back(auxBlock);
+
+    y = GRID_MARGIN_SIZE;
+    x = WINDOW_W - (gridMarginWidth + s)/2;
+    auxBlock.setBlock(textures[TEX_FINISH_V], finishV, x, y, s, s);
+    y += s + sep; samples.emplace_back(auxBlock);
+    auxBlock.setBlock(textures[TEX_FINISH_H], finishH, x, y, s, s);
+    y += s + sep; samples.emplace_back(auxBlock);
+    auxBlock.setBlock(textures[TEX_PUB1UP], public1Up, x, y, s, s);
+    y += s + sep; samples.emplace_back(auxBlock);
+    auxBlock.setBlock(textures[TEX_PUB1RIGHT], public1Right, x, y, s, s);
+    y += s + sep; samples.emplace_back(auxBlock);
+    auxBlock.setBlock(textures[TEX_PUB1DOWN], public1Down, x, y, s, s);
+    y += s + sep; samples.emplace_back(auxBlock);
+    auxBlock.setBlock(textures[TEX_PUB1LEFT], public1Left, x, y, s, s);
+    samples.emplace_back(auxBlock);
 }
 
 /* Copies sample attributes to 1 block in grid if cursor position match*/
 void TrackGrid::applySampleToGrid(TrackBlock & sample) {
-    for (auto & trackBlock : grid)
+    for (auto & trackBlock : grid){
+        if (trackBlock.isRightClicked())
+            trackBlock.toEmpty();
         sample.applySampleToGrid(trackBlock);
+
+    }
 }
 
 /* Checks all samples with grid position */
 void TrackGrid::applyAllSamplesToGrid() {
-    applySampleToGrid(grassSample);
-    applySampleToGrid(horizSample);
-    applySampleToGrid(verticalSample);
-    applySampleToGrid(downRightSample);
-    applySampleToGrid(downLeftSample);
-    applySampleToGrid(upRightSample);
-    applySampleToGrid(upLeftSample);
+    for (auto & trackSample : samples)
+        applySampleToGrid(trackSample);
 }
 
 /* Returns size of top/bottom margin */
-
 int TrackGrid::getGridMarginHeight() {
     return gridMarginHeight;
 }

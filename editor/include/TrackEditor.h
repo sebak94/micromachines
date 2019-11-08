@@ -13,6 +13,7 @@
 
 #define SAVE_BUTTON_WIDTH 150
 #define SAVE_BUTTON_HEIGHT 65
+#define FPS 60
 
 class Prompt;
 
@@ -48,6 +49,8 @@ public:
     bool writeJsonValue(const Json::Value &newTrack);
 
     bool appendJsonValue(const Json::Value &newTrack, Json::Value &tracks);
+
+    void drawTh(Window &editor);
 };
 
 
