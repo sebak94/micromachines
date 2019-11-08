@@ -2,15 +2,9 @@
 
 Camera::Camera(SdlWindow &window, std::map<std::string, SdlSurface*> &pictures,
         std::map<trackPartType, SdlSurface*> &trackPictures) :
-        window(window), pictures(pictures), trackPictures(trackPictures) {
-    //Las imagenes son cuadradas, asi que le pongo el mismo ancho que largo
-    blockWidth = (window.getWidth() + window.getHeight()) / 4;
-    blockHeight = (window.getWidth() + window.getHeight()) / 4;
-}
+        window(window), pictures(pictures), trackPictures(trackPictures) {}
 
-Camera::~Camera() {
-
-}
+Camera::~Camera() {}
 
 void Camera::showBackground() {
     //Pinto el backgroud de pasto
@@ -57,4 +51,10 @@ void Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car*> &cars)
         SDL_Rect sdlDestCar = {(int)(x + xBegin), (int)(- y - yBegin), (int)widthCar, (int)heightCar};
         pictures[car->getMyColor()]->renderRotate(sdlDestCar, car->getDegrees(), SDL_FLIP_NONE);
     }
+}
+
+void Camera::updateBlockSize() {
+    //Las imagenes son cuadradas, asi que le pongo el mismo ancho que largo
+    blockWidth = (window.getWidth() + window.getHeight()) / 4;
+    blockHeight = (window.getWidth() + window.getHeight()) / 4;
 }

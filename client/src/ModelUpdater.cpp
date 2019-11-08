@@ -1,7 +1,8 @@
 #include <iostream>
 #include "../include/ModelUpdater.h"
 
-ModelUpdater::ModelUpdater(Socket &socket, ModelMonitor &modelMonitor, Thread* drawerThread) : socket(socket), modelMonitor(modelMonitor) {
+ModelUpdater::ModelUpdater(Socket &socket, ModelMonitor &modelMonitor, Drawer* drawerThread) :
+        socket(socket), modelMonitor(modelMonitor), drawer(drawerThread) {
     std::string welcome =  receive(); // Recibe mensaje de bienvenida
     std::cout << welcome;
     std::string carStr = receive(); // Recibo mi auto
@@ -13,7 +14,6 @@ ModelUpdater::ModelUpdater(Socket &socket, ModelMonitor &modelMonitor, Thread* d
     modelMonitor.setTrack(track.getTrackPartData());
     modelMonitor.setMyColor(carStr);
     modelMonitor.updateCar(carStr);
-    drawer = drawerThread;
 }
 
 ModelUpdater::~ModelUpdater() {

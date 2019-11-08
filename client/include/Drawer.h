@@ -26,9 +26,10 @@ public:
     ~Drawer();
     virtual void run() override;
     virtual void stop() override;
-    void draw();
+    void resize(int width, int height);
 
 private:
+    void draw();
     void showAnimation(SdlWindow &window);
 };
 

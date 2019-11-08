@@ -18,6 +18,7 @@ public:
     void fill();
     void render();
     SDL_Renderer* getRenderer() const;
+    void resize(int width, int height);
 };
 
 #endif

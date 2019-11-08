@@ -11,10 +11,10 @@ private:
     bool running;
     Socket &socket;
     ModelMonitor &modelMonitor;
-    Thread* drawer;
+    Drawer* drawer;
 
 public:
-    ModelUpdater(Socket &socket, ModelMonitor &modelMonitor, Thread* drawerThread);
+    ModelUpdater(Socket &socket, ModelMonitor &modelMonitor, Drawer* drawerThread);
     ~ModelUpdater();
     virtual void run() override;
     virtual void stop() override;
