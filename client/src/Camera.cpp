@@ -39,8 +39,8 @@ void Camera::showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> &track
 }
 
 void Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car*> &cars) {
-    double widthCar = window.getWidth() / 15;
-    double heightCar = widthCar * 2;
+    double widthCar = blockWidth / 6;
+    double heightCar = blockHeight / 3;
     double xBegin = - xMyCar * (blockWidth / 100) + (window.getWidth() / 2);
     double yBegin = - yMyCar * (blockHeight / 100) - (window.getHeight() / 2);
 
