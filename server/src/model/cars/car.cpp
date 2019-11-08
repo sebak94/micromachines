@@ -5,6 +5,8 @@
 #include <cstdint>
 #include <math.h>
 
+#define PI 3.14159265
+
 Car::Car(uint8_t width, uint8_t height, uint8_t max_velocity,
          uint8_t acceleration, uint8_t grip, uint8_t maneuverability,
          Point initial_position, ColorType color) :
@@ -63,8 +65,9 @@ void Car::update() {
 }
 
 void Car::updateCarPosition() {
-    int x = (this->current_velocity) * ((int) pow(sin(this->rotation), 2)) / this->max_velocity;
-    int y = (this->current_velocity) * ((int) pow(cos(this->rotation), 2)) / this->max_velocity;
+    //el seno y coseno son en radianes, asi que convierto el angulo de rotacion a radianes
+    int x = this->current_velocity * (sin(this->rotation * PI / 180)) / 50;
+    int y = this->current_velocity * (cos(this->rotation * PI / 180)) / 50;
     this->addPositionX(x);
     this->addPositionY(y);
 }
