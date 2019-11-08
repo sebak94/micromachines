@@ -23,7 +23,6 @@ void Drawer::run() {
         auto start = std::chrono::system_clock::now();
         try {
             draw();
-            printf("dibujo\n");
         } catch (std::exception &e) {
             running = false;
         }

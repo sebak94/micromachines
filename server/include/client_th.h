@@ -24,10 +24,11 @@ class ClientTh: public Thread {
     void send(std::string &response);
 
     public:
-    ClientTh(Socket *peer);
+    ClientTh(Socket *peer, Car* car);
     void processNextAction();
     void updateCar();
     void sendCarData();
+    void sendAllCarsToPlayer(std::vector<ClientTh*> players);
     void sendTrackData(std::string track_serialized);
     virtual void run() override;
     virtual void stop() override;

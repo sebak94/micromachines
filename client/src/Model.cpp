@@ -32,12 +32,6 @@ std::map<std::string, Car*>& Model::getCars() {
     return this->cars;
 }
 
-void Model::addCar(std::string str) {
-    size_t pos = str.find_last_of(',') + 1;
-    std::string color = parse(str, pos, '\n');
-    cars[color] = new Car(color);
-}
-
 void Model::updateCar(std::string str) {
     //serializacion: current_velocity, health, rotation, x, y, color\n
     size_t pos = 0;
@@ -47,6 +41,10 @@ void Model::updateCar(std::string str) {
     int x = std::stoi(parse(str, pos, ','));
     int y = std::stoi(parse(str, pos, ','));
     std::string color = parse(str, pos, '\n');
+
+    if (cars[color] == nullptr) {
+        cars[color] = new Car(color);
+    }
     cars[color]->update(x, y, rotation, health);
 }
 

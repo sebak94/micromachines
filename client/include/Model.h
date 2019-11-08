@@ -20,7 +20,6 @@ public:
     void setMyColor(std::string str); //Se usa una sola vez, para setear el color de mi auto
     std::string getMyColor() const;
     std::map<std::string, Car*>& getCars();
-    void addCar(std::string str);
     void updateCar(std::string str);
 
 private:
