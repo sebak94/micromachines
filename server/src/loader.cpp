@@ -2,7 +2,7 @@
 // Created by mati on 30/10/19.
 //
 
-#define LIBS_PATH "../server/include/libs/so"
+#define LIBS_PATH "../server/include/libs/so/"
 
 #include "../include/loader.h"
 

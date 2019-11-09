@@ -8,8 +8,10 @@
 #define MAX_FRAMESKIP 10
 #define MICROSECS_WAIT 16000 //seria que en un segundo se dibujen aprox 60 veces
 
-GameLoopTh::GameLoopTh(Micromachines &micromachines):
-    running(true), micromachines(micromachines) {}
+GameLoopTh::GameLoopTh(Micromachines &micromachines) :
+        running(true), micromachines(micromachines) {
+    this->loader.load_dynamic_libraries();
+}
 
 uint64_t GameLoopTh::GetTickCountMs() {
     timespec ts;
@@ -41,8 +43,20 @@ void GameLoopTh::run() {
         /*std::this_thread::sleep_for(
                 std::chrono::seconds(1 / TICKS_PER_SECOND) - duration);*/
         //std::this_thread::sleep_for(std::chrono::seconds(1));
-        int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(duration).count();
+        int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(
+                duration).count();
         usleep(MICROSECS_WAIT - microsecsPassed);
+
+        this->executeLibraries();
+    }
+}
+
+void GameLoopTh::executeLibraries() {
+    if ((this->game_loops % 100) == 0) {
+        this->loader.execute();
+        this->game_loops = 1;
+    } else {
+        this->game_loops++;
     }
 }
 

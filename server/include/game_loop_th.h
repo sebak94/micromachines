@@ -3,14 +3,18 @@
 
 #include "../../common/include/thread.h"
 #include "model/micromachines.h"
+#include "loader.h"
 #include <cstdint>
 
 class GameLoopTh: public Thread {
     private:
     bool running;
     Micromachines &micromachines;
-    
+    Loader loader;
+    uint8_t game_loops = 1;
+
     uint64_t GetTickCountMs();
+    void executeLibraries();
 
     public:
     GameLoopTh(Micromachines &micromachines);
