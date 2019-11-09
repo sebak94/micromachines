@@ -43,6 +43,10 @@ set(SOURCE_FILES_SERVER
     common/src/Track.cpp
     common/src/TrackList.cpp
     common/src/TrackPartData.cpp
+    common/include/directory_parser.h
+    common/src/directory_parser.cpp
+    server/include/loader.h
+    server/src/loader.cpp
 )
 
 set(SOURCE_FILES_CLIENT
@@ -130,3 +134,5 @@ target_link_libraries(micromachines-ed
 target_link_libraries(micromachines-cl
 		SDL2
 		SDL2_image)
+
+target_link_libraries(micromachines-sv -ldl)
