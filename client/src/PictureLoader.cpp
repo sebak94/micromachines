@@ -12,13 +12,15 @@ PictureLoader::PictureLoader(SdlWindow &window, std::map<std::string, SdlSurface
         std::map<trackPartType, SdlSurface*> &trackPictures) :
         window(window), pictures(pictures), trackPictures(trackPictures) {
     //Imagenes para la pista
-    trackPictures[empty] = new SdlSurface("images/grass.png", window);
-    trackPictures[downRight] = new SdlSurface("images/downRight.png", window);
-    trackPictures[downLeft] = new SdlSurface("images/downLeft.png", window);
-    trackPictures[upRight] = new SdlSurface("images/upRight.png", window);
-    trackPictures[upLeft] = new SdlSurface("images/upLeft.png", window);
-    trackPictures[horizontal] = new SdlSurface("images/horizontal.png", window);
-    trackPictures[vertical] = new SdlSurface("images/vertical.png", window);
+    trackPictures[empty] = new SdlSurface("../common/images/grass.png", window);
+    trackPictures[downRight] = new SdlSurface("../common/images/downRight.png", window);
+    trackPictures[downLeft] = new SdlSurface("../common/images/downLeft.png", window);
+    trackPictures[upRight] = new SdlSurface("../common/images/upRight.png", window);
+    trackPictures[upLeft] = new SdlSurface("../common/images/upLeft.png", window);
+    trackPictures[horizontal] = new SdlSurface("../common/images/horizontal.png", window);
+    trackPictures[vertical] = new SdlSurface("../common/images/vertical.png", window);
+    trackPictures[finishH] = new SdlSurface("../common/images/finishHorizontal.png", window);
+    trackPictures[finishV] = new SdlSurface("../common/images/finishVertical.png", window);
 
     //Imagenes de los autos
     pictures[CAR_RED] = new SdlSurface("images/car_red.png", window);

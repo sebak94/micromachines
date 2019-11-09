@@ -14,15 +14,17 @@
 #define PROMPT_FONT "../common/fonts/OpenSans-Bold.ttf"
 #define FIELD_FONT "../common/fonts/OpenSans-Regular.ttf"
 #define MSG_TRACK_NAME "Track name:"
-#define MSG_TRACK_WIDTH "Track width (16 max. 2 min.):"
-#define MSG_TRACK_HEIGHT "Track height (16 max. 2 min.):"
+#define MSG_TRACK_WIDTH "Track width (32 max. 2 min.):"
+#define MSG_TRACK_HEIGHT "Track height (32 max. 2 min.):"
 #define MSG_TOO_LARGE_NAME "Track name length limit reached."
 #define MSG_TOO_LARGE_SIZE "Max size limit reached."
 #define MSG_TOO_SHORT_NAME "Track name too short."
 #define MSG_NAME_ALREADY_EXISTS "Track name already exists."
 #define MSG_DIM_WIDTH "Track width invalid."
 #define MSG_DIM_HEIGHT "Track height invalid."
-#define SAVE_BUTTON_PATH "../common/images/button.png"
+#define SAVE_BUTTON_PATH "../common/images/buttons/saveButton.png"
+#define EXIT_BUTTON_PATH "../common/images/buttons/exitButton.png"
+#define WAY_BUTTON_PATH "../common/images/buttons/wayButton.png"
 #define TITLE_PATH "../editor/images/title.png"
 
 #define MAX_LENGTH_TRACK_NAME 30
@@ -31,7 +33,7 @@
 #define FONT_SIZE 40
 #define PROMPTXSPACING 30
 #define PROMPTYSPACING 20
-#define MAX_TRACK_SIZE 16
+#define MAX_TRACK_SIZE 32
 
 class Prompt : TrackEditor{
 private:
@@ -84,7 +86,7 @@ public:
     void inputTrackHeight(Window &game);
     void drawAll(Window &game);
     void setTextPosition();
-    void createSaveButton(Window &game);
+    void createButtons(Window &game);
     void createTitle(Window &game);
     bool validNameSize();
     std::string getTrackName();

@@ -51,7 +51,8 @@ set(SOURCE_FILES_SERVER
     common/src/Track.cpp
     common/src/TrackList.cpp
     common/src/TrackPartData.cpp
-)
+	common/src/Grandstand.cpp
+	common/include/Grandstand.h)
 
 set(SOURCE_FILES_CLIENT
     client/include/server.h
@@ -98,7 +99,8 @@ set(SOURCE_FILES_CLIENT
     common/src/Track.cpp
     common/src/TrackList.cpp
     common/src/TrackPartData.cpp
-)
+	common/src/Grandstand.cpp
+	common/include/Grandstand.h)
 
 set(SOURCE_FILES_EDITOR
 	common/src/TrackList.cpp
@@ -122,7 +124,9 @@ set(SOURCE_FILES_EDITOR
 	editor/src/TrackBlock.cpp
 	editor/include/TrackBlock.h
 	editor/src/TrackGrid.cpp
-	editor/include/TrackGrid.h)
+	editor/include/TrackGrid.h
+	common/src/Grandstand.cpp
+	common/include/Grandstand.h)
 
 add_executable(micromachines-sv ${SOURCE_FILES_SERVER} server/main.cpp)
 add_executable(micromachines-cl ${SOURCE_FILES_CLIENT} client/main.cpp)

@@ -7,20 +7,26 @@
 #include <chrono>
 #include <zconf.h>
 #include "../../common/include/Prompt.h"
-#include "../../common/include/thread.h"
 
 /* Runs track editor from configuration to end */
 void TrackEditor::run(Window & editor) {
     editor.startGUI(WINDOW_NAME);
     quit = false;
     //inputTrackCharacteristics(editor);
+    /*testing*/
     trackName = "test28";
-    trackWidth = 12;
-    trackHeight = 12;
+    trackWidth = 3;
+    trackHeight = 3;
+    TrackList tracklist;
+    tracklist.readTracks();
+    Track test = tracklist.getTrack("test28");
+    test.print();
+    /*endtesting*/
     grid = TrackGrid(editor, trackWidth, trackHeight);
     backgroundGrid = TrackGrid(editor, trackWidth, trackHeight);
     grid.createSamples();
-    createSaveButton(editor);
+    createButtons(editor);
+    createWayArrow(editor);
     editTrack(editor);
 }
 
@@ -36,8 +42,10 @@ void TrackEditor::editTrack(Window & editor){
             grid.updateSamples(&event);
             grid.applyAllSamplesToGrid();
             saveButton.updateEvent(&event);
+            wayButton.updateEvent(&event);
+            exitButton.updateEvent(&event);
         }
-        saveTrack();
+        processButtonClicks();
     }
     drawer.join();
 }
@@ -51,6 +59,9 @@ void TrackEditor::drawTh(Window & editor){
         backgroundGrid.draw(editor.renderer);
         grid.draw(editor.renderer);
         saveButton.draw(editor.renderer);
+        wayButton.draw(editor.renderer);
+        exitButton.draw(editor.renderer);
+        drawWayArrow(editor.renderer);
         SDL_RenderPresent(editor.renderer);
         auto end = std::chrono::system_clock::now();
         int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
@@ -58,36 +69,112 @@ void TrackEditor::drawTh(Window & editor){
     }
 }
 
+/* Updates based un clicks and buttons */
+void TrackEditor::processButtonClicks() {
+    if (saveButton.isClicked())
+        saveTrack();
+    if (wayButton.isClicked() && findStartLine()){
+        setWay(grid.getType(startRow, startCol));
+        std::cout <<"NEXTROW" << nextToStartRow << "NEXTCOL" << nextToStartCol << std::endl;
+    }
+    if (exitButton.isClicked())
+        quit = true;
+}
+
+/* Sets track way */
+void TrackEditor::setWay(trackPartType type) {
+    if (!waySet && type == finishH) {
+        nextToStartCol = startCol + 1;
+        nextToStartRow = startRow;
+        waySet = true;
+    } else if (!waySet && type == finishV) {
+        nextToStartCol = startCol;
+        nextToStartRow = startRow + 1;
+        waySet = true;
+    } else if (type == finishH) {
+        if (nextToStartCol > startCol) nextToStartCol -= 2;
+        else nextToStartCol +=2;
+    } else if (type == finishV) {
+        if (nextToStartRow > startRow) nextToStartRow -= 2;
+        else nextToStartRow +=2;
+    }
+}
+
+/* Creates finish line arrow */
+void TrackEditor::createWayArrow(Window & editor) {
+    int w = ARROW_SIZE, h = 2 * ARROW_SIZE, x = 0, y = 0;
+    SDL_Rect arrowPos = {x, y, w, h};
+    wayArrow = Button(editor.renderer, arrowPos, WAY_ARROW_PATH);
+}
+
+/* Draws finish line arrow depending on start block */
+void TrackEditor::drawWayArrow(SDL_Renderer * renderer) {
+    int w = ARROW_SIZE, h = 2 * ARROW_SIZE;
+    int x = grid.getPixelPosX(startCol) - w / 2;
+    int y = grid.getPixelPosY(startRow) - h / 2;
+    double angle = 0;
+    wayArrow.updatePos(x, y);
+    if (startCol > nextToStartCol)
+        angle = 270;
+    if (startCol < nextToStartCol)
+        angle = 90;
+    if (startRow > nextToStartRow)
+        angle = 0;
+    if (startRow < nextToStartRow)
+        angle = 180;
+    if(waySet)
+        wayArrow.drawRotated(renderer, angle);
+}
+
 /* Sends track to Json file if track is OK */
 void TrackEditor::saveTrack() {
-    if (saveButton.isClicked()){
         createTrack();
-        if (trackValid()){
+        if (findStartLine() && trackValid()){
             std::cout << "saved" << std::endl;
+            std::cout << "ROW=" << startRow << "COL=" << startCol << std::endl;
             trackToFileLayout();
             updateTrackFile();
         }
-    }
+}
+
+/* Looks for start line. Returns false if not present or duplicated */
+bool TrackEditor::findStartLine() {
+    int oldCol = startCol, oldRow = startRow;
+    bool found = grid.findStartLine(startCol, startRow);
+    if (found && (oldCol != startCol || oldRow != startRow))
+        waySet = false;
+    return found;
 }
 
 /* Creates string vector with grid data for Json file */
 void TrackEditor::trackToFileLayout() {
     fileLayout.clear();
-    int row = firstCornerIndex / trackWidth;
-    int col = firstCornerIndex % trackWidth;
-    int i = 0;
+    int row = startRow; //firstCornerIndex / trackWidth;
+    int lastRow = row;
+    int col = startCol; //firstCornerIndex % trackWidth;
     trackPartType actual;
-    trackPartType previous = track.getPartType(row, col);
+    trackPartType previous = setStartingPreviousTrackPart(row, col);
     fileLayout.emplace_back(track.typeToFileType(row, col));
-    col++;  // assumes top-left corner is a down-right curve
+    row = nextToStartRow; col = nextToStartCol;
+    //col++;  // assumes top-left corner is a down-right curve
     // +1 to form a closed loop with the track
     for (int j = 1; j < parts; j++){
+
         actual = track.getPartType(row, col);
         fileLayout.emplace_back(track.typeToFileType(row, col));
-        track.setNextCoord(row, col, actual, previous, 0);
+        lastRow = track.setNextCoord(row, col, actual, previous, lastRow);
         if (track.isCurve(actual))
             previous = actual;
     }
+}
+
+/* Auxiliar function to start traversing the track */
+trackPartType TrackEditor::setStartingPreviousTrackPart(int row, int col) {
+    int t = track.getPartType(row, col);
+    if (t == finishV && startRow < nextToStartRow) return downLeft;
+    if (t == finishV && startRow > nextToStartRow) return upLeft;
+    if (t == finishH && startCol < nextToStartCol) return upRight;
+    if (t == finishH && startCol > nextToStartRow) return upLeft;
 }
 
 /* Creates Json structure for new track and writes file */
@@ -102,8 +189,10 @@ bool TrackEditor::createJsonTrack(Json::Value & newTrack) {
     newTrack[NAME_ID] = track.getName();
     newTrack[WIDTH_ID] = trackWidth;
     newTrack[HEIGHT_ID] = trackHeight;
-    newTrack[START_ID][0] = firstCornerIndex / trackWidth;
-    newTrack[START_ID][1] = firstCornerIndex % trackWidth;
+    newTrack[START_ID][0] = startRow;
+    newTrack[START_ID][1] = startCol;
+    newTrack[NEXT_TO_START_ID][0] = nextToStartRow;
+    newTrack[NEXT_TO_START_ID][1] = nextToStartCol;
     for (int i = 0; i < parts; i++)
         newTrack[LAYOUT_ID][i] = fileLayout[i];
 }
@@ -155,17 +244,20 @@ void TrackEditor::createTrack() {
         if (col == trackWidth)
             col = 0, row++;
         track.loadPart(row, col, grid.getType(i));
-        if (track.getPartType(row, col) != empty) parts++;
+        if (track.isTrackPart(row, col)) parts++;
     }
-    firstCornerIndex = track.findFirstCorner();
 }
 
-/* Updates grid textures and attributes */
+/* Updates grid textures and attributes. Checks if finish still present. */
 void TrackEditor::updateGridEvents() {
+    trackPartType t;
     for (int i=0; i < grid.getSize(); i++){
         grid.updateTrackBlockEvent(&event, i);
         backgroundGrid.updateTrackBlockEvent(&event, i);
     }
+    t = grid.getType(startRow, startCol);
+    if (t != finishH && t != finishV)
+        waySet = false;
 }
 
 /* Creates an interface with the user to config name, width and height */
@@ -178,11 +270,15 @@ void TrackEditor::inputTrackCharacteristics(Window & game) {
 }
 
 /* Creates save button to save track */
-void TrackEditor::createSaveButton(Window & game) {
-    int w = SAVE_BUTTON_WIDTH;
-    int h = SAVE_BUTTON_HEIGHT;
-    int x = WINDOW_W/2 - w/2;
+void TrackEditor::createButtons(Window & game) {
+    int w = EDITOR_BUTTONS_WIDTH;
+    int h = EDITOR_BUTTONS_HEIGHT;
+    int x = (WINDOW_W - w)/(BUTTONS + 1);
     int y = WINDOW_H - (grid.getGridMarginHeight() + h)/2;
-    SDL_Rect saveButtonPos = {x, y, w, h};
-    saveButton = Button(game.renderer, saveButtonPos, SAVE_BUTTON_PATH);
+    SDL_Rect buttonPos = {x, y, w, h};
+    saveButton = Button(game.renderer, buttonPos, SAVE_BUTTON_PATH);
+    buttonPos.x = 2 * x;
+    wayButton = Button(game.renderer, buttonPos, WAY_BUTTON_PATH);
+    buttonPos.x = 3 * x;
+    exitButton = Button(game.renderer, buttonPos, EXIT_BUTTON_PATH);
 }

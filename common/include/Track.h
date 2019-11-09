@@ -10,13 +10,14 @@
 #include <vector>
 #include <jsoncpp/json/json.h>
 #include "TrackPartData.h"
+#include "../include/TrackList.h"
+
 
 #define BLOCKSIZE 100  // meters
 #define MAXTRACKSIZE 150000 // meters (per axis)
 
-class TrackPartData;
-
 #ifndef MAP_TRACKTYPE
+
 #define MAP_TRACKTYPE
 typedef enum {
     empty,
@@ -29,10 +30,14 @@ typedef enum {
 } trackPartType;
 #endif
 
+class TrackPartData;
+
 class Track {
-private:
+protected:
     int startCol = 0;
     int startRow = 0;
+    int nextToStartCol = 0;
+    int nextToStartRow = 0;
     int width = 0;  // blocks
     int height = 0;  // blocks
     int partCounter = 0;  // number of track elements
@@ -51,7 +56,6 @@ public:
     static trackPartType identifyElem(const std::string &layoutElem);
     std::string getName();
     trackPartType getPartType(int row, int col);
-    static void setNextCoord(int &row, int &col, trackPartType elem, trackPartType prev);
     static bool isCurve(const trackPartType & elem);
     static void printElem(const TrackPartData &part);
     TrackPartData & getTrackPart(int posX, int posY);
@@ -64,10 +68,14 @@ public:
     void parseTrackParts(const std::string &trackStr, size_t &pos);
     std::vector<TrackPartData> getTrackPartData() const;
     bool validateTrack();
-    int findFirstCorner();
     bool validateConnection(trackPartType prev, trackPartType actual);
     std::string typeToFileType(int row, int col);
     int setNextCoord(int &row, int &col, trackPartType elem, trackPartType prev, int lastRow);
+    trackPartType setStartingPreviousTrackPart(int row, int col);
+    static bool isTrackPart(trackPartType type);
+    static bool isTrackLinePart(trackPartType type);
+    bool isTrackPart(int row, int col);
 };
+
 
 #endif //MAP_TRACK_H

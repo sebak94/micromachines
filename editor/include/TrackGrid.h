@@ -23,8 +23,8 @@
 #define IMG_PUB1DOWN "../common/images/public1Down.png"
 #define IMG_PUB1RIGHT "../common/images/public1Right.png"
 #define IMG_PUB1LEFT "../common/images/public1Left.png"
-#define IMG_FINISH_VERT "../common/images/finishHorizontal.png"
-#define IMG_FINISH_HORIZ "../common/images/finishVertical.png"
+#define IMG_FINISH_HORIZ "../common/images/finishHorizontal.png"
+#define IMG_FINISH_VERT "../common/images/finishVertical.png"
 
 #define TEX_GRASS "grass"
 #define TEX_DOWNRIGHT "downRight"
@@ -74,6 +74,12 @@ public:
     void updateSamples(const SDL_Event *event);
     void applyAllSamplesToGrid();
     void applySampleToGrid(TrackBlock &sample);
+    bool findStartLine(int &startX, int &startY);
+    int getPixelPosX(int index);
+
+    int getPixelPosY(int row);
+
+    trackPartType getType(int col, int row);
 };
 
 

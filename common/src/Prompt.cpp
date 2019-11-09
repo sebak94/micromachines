@@ -4,13 +4,12 @@
 
 #include "../../editor/include/TrackEditor.h"
 #include "../include/Prompt.h"
-#include "../include/Button.h"
 #include <algorithm>
 #include <SDL2/SDL_ttf.h>
 
 /* Creates dialog for user to config new track to edit */
 void Prompt::inputTrackCharacteristics(Window & game){
-    createSaveButton(game);
+    createButtons(game);
     createTitle(game);
     inputTrackName(game);
     inputTrackWidth(game);
@@ -29,9 +28,9 @@ void Prompt::createTitle(Window & game) {
 }
 
 /* Creates save button to save config */
-void Prompt::createSaveButton(Window & game) {
-    int w = SAVE_BUTTON_WIDTH;
-    int h = SAVE_BUTTON_HEIGHT;
+void Prompt::createButtons(Window & game) {
+    int w = EDITOR_BUTTONS_WIDTH;
+    int h = EDITOR_BUTTONS_HEIGHT;
     int x = WINDOW_W/2 - w/2;
     int y = WINDOW_H*0.8;
     SDL_Rect saveButtonPos = {x, y, w, h};
