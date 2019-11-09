@@ -175,18 +175,18 @@
       {
          "height" : 3,
          "layout" : [
-            "finishH",
+            "finishV",
+            "down-right",
+            "horizontal",
             "down-left",
             "vertical",
             "up-left",
             "horizontal",
-            "up-right",
-            "vertical",
-            "down-right"
+            "up-right"
          ],
          "name" : "test28",
-         "next-to-start" : [ 0, 2 ],
-         "start" : [ 0, 1 ],
+         "next-to-start" : [ 0, 0 ],
+         "start" : [ 1, 0 ],
          "width" : 3
       }
    ]
