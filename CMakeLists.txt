@@ -51,8 +51,17 @@ set(SOURCE_FILES_SERVER
     common/src/Track.cpp
     common/src/TrackList.cpp
     common/src/TrackPartData.cpp
-	common/src/Grandstand.cpp
-	common/include/Grandstand.h)
+    common/include/directory_parser.h
+    common/src/directory_parser.cpp
+    server/include/loader.h
+    server/src/loader.cpp
+    common/src/Grandstand.cpp
+    common/include/Grandstand.h
+    common/include/directory_parser.h
+    common/src/directory_parser.cpp
+    server/include/loader.h
+    server/src/loader.cpp
+)
 
 set(SOURCE_FILES_CLIENT
     client/include/server.h
@@ -142,3 +151,5 @@ target_link_libraries(micromachines-ed
 target_link_libraries(micromachines-cl
 		SDL2
 		SDL2_image)
+
+target_link_libraries(micromachines-sv -ldl)
