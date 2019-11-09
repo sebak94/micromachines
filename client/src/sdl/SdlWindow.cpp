@@ -9,11 +9,12 @@ SdlWindow::SdlWindow(int width, int height) :
         throw SdlException("Error en la inicialización", SDL_GetError());
     }
     errCode = SDL_CreateWindowAndRenderer(
-            width, height, SDL_RENDERER_ACCELERATED,
+            width, height, SDL_RENDERER_ACCELERATED | SDL_WINDOW_RESIZABLE,
             &this->window, &this->renderer);
     if (errCode) {
         throw SdlException("Error al crear ventana", SDL_GetError());
     }
+    //SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 }
 
 SdlWindow::~SdlWindow() {
@@ -47,4 +48,9 @@ void SdlWindow::render() {
 
 SDL_Renderer* SdlWindow::getRenderer() const {
     return this->renderer;
+}
+
+void SdlWindow::resize(int width, int height) {
+    this->width = width;
+    this->height = height;
 }

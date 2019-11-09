@@ -1,12 +1,6 @@
 #include "../../include/model/micromachines.h"
-#include "../../include/model/cars/car.h"
-#include "../../include/client_th.h"
 #include "../../../common/include/lock.h"
-#include "../../../common/include/TrackList.h"
-#include "../../../common/include/Track.h"
 #include "../../../common/include/socket_error.h"
-#include <vector>
-#include "iostream"
 
 Micromachines::Micromachines() {
     tracks.readTracks();
@@ -59,7 +53,7 @@ void Micromachines::sendNewStateToPlayers() {
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
         try {
-            players[i]->sendCarData();
+            players[i]->sendAllCarsToPlayer(players);
         } catch(const SocketError &e) {
             removePlayerFromVector(players[i]);
         }

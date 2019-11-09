@@ -1,14 +1,13 @@
 #include "../include/client_th.h"
 #include "../include/model/cars/blue_car.h"
-#include "../../common/include/socket.h"
 #include "../../common/include/socket_error.h"
 #include "../../common/include/lock.h"
 #include "iostream"
 #include "vector"
 #include "string"
 
-ClientTh::ClientTh(Socket *peer): keep_talking(true), is_running(true),
-    peer(peer), car(new BlueCar()) {
+ClientTh::ClientTh(Socket *peer, Car* car): keep_talking(true), is_running(true),
+    peer(peer), car(car) {
     sendWelcomeMsg();
     sendCarData();
 }
@@ -21,6 +20,13 @@ void ClientTh::sendWelcomeMsg() {
 void ClientTh::sendCarData() {
     std::string car_msg = car->serialize();
     send(car_msg);
+}
+
+void ClientTh::sendAllCarsToPlayer(std::vector<ClientTh*> players) {
+    for (size_t i = 0; i < players.size(); i++) {
+        std::string s = players[i]->car->serialize();
+        send(s);
+    }
 }
 
 void ClientTh::sendTrackData(std::string track_serialized) {
@@ -80,5 +86,6 @@ bool ClientTh::isDead() {
 }
 
 ClientTh::~ClientTh() {
-    delete car;
+    //delete car;
+    //Por ahora hago el delete de todos los autos en acceptor_th
 }

@@ -19,6 +19,10 @@ set(SOURCE_FILES_SERVER
     server/include/model/cars/color.h
     server/include/model/cars/car.h
     server/include/model/cars/blue_car.h
+	server/include/model/cars/red_car.h
+    server/include/model/cars/white_car.h
+    server/include/model/cars/black_car.h
+    server/include/model/cars/yellow_car.h
     server/src/mm_server.cpp
     server/src/acceptor_th.cpp
     server/src/client_th.cpp
@@ -29,6 +33,10 @@ set(SOURCE_FILES_SERVER
     server/src/model/cars/color.cpp
     server/src/model/cars/car.cpp
     server/src/model/cars/blue_car.cpp
+	server/src/model/cars/red_car.cpp
+    server/src/model/cars/white_car.cpp
+    server/src/model/cars/black_car.cpp
+    server/src/model/cars/yellow_car.cpp
     common/include/socket.h
     common/include/socket_error.h
     common/include/thread.h

@@ -3,7 +3,7 @@
 
 #include <string>
 
-enum ColorType { blue, white, black, yellow };
+enum ColorType : int { blue, white, black, yellow, red };
 
 class Color {
     private:

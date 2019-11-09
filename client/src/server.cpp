@@ -24,9 +24,9 @@ Server::~Server() {
 void Server::runThreads() {
     Model model;
     ModelMonitor modelMonitor(model);
-    Thread* drawer = new Drawer(modelMonitor);
+    Drawer* drawer = new Drawer(modelMonitor);
 
-    threads.push_back(new EventLoopSDL(queue)); //o evento de Lua
+    threads.push_back(new EventLoopSDL(queue, drawer)); //o evento de Lua
     threads.push_back(new Dispatcher(queue, skt));
     threads.push_back(new ModelUpdater(skt, modelMonitor, drawer));
     threads.push_back(drawer);

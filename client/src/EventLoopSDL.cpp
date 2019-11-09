@@ -2,7 +2,7 @@
 
 #define FAKE_KEYDOWN 1
 
-EventLoopSDL::EventLoopSDL(ThreadSafeQueue &queue) : queue(queue) {}
+EventLoopSDL::EventLoopSDL(ThreadSafeQueue &queue, Drawer* drawerThread) : queue(queue), drawer(drawerThread) {}
 
 EventLoopSDL::~EventLoopSDL() {}
 
@@ -59,6 +59,12 @@ void EventLoopSDL::run() {
                 this->queue.push("Q"); //encolo una Q para finalizar
                 this->running = false;
                 break;
+            case SDL_WINDOWEVENT:
+                switch (event.window.event) {
+                    case SDL_WINDOWEVENT_SIZE_CHANGED:
+                        drawer->resize(event.window.data1, event.window.data2);
+                        break;
+                }
         }
     }
 }

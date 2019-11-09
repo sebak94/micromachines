@@ -23,7 +23,6 @@ void Drawer::run() {
         auto start = std::chrono::system_clock::now();
         try {
             draw();
-            printf("dibujo\n");
         } catch (std::exception &e) {
             running = false;
         }
@@ -37,8 +36,13 @@ void Drawer::stop() {
     running = false;
 }
 
+void Drawer::resize(int width, int height) {
+    window.resize(width, height);
+}
+
 void Drawer::draw() {
     window.fill();
+    camera.updateBlockSize();
     camera.showBackground();
     int x = modelMonitor.getCars()[modelMonitor.getMyColor()]->getX();
     int y = modelMonitor.getCars()[modelMonitor.getMyColor()]->getY();

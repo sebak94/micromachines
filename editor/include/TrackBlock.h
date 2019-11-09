@@ -20,7 +20,13 @@ typedef enum {
     upRight,
     upLeft,
     horizontal,
-    vertical
+    vertical,
+    finishH,
+    finishV,
+    public1Up,
+    public1Down,
+    public1Left,
+    public1Right
 } trackPartType;
 #endif
 
@@ -32,7 +38,9 @@ private:
     bool pressed = false;
     bool previousPressState = false;
     bool inMouseArea = false;
+    bool rightClicked = false;
     SDL_Texture * texture{};
+    SDL_Texture * startingTexture{};
     trackPartType type;
     int fixedPosX = 0;
     int fixedPosY = 0;
@@ -46,16 +54,13 @@ public:
     void setBlock(SDL_Texture *tex, trackPartType t, int x, int y, int w, int h);
     trackPartType getType();
     bool isInMouseArea(int x, int y);
-
     void updateSampleEvent(const SDL_Event *event);
-
     void updateSamplePosition();
-
     void applySampleToGrid(TrackBlock &gridBlock);
-
     bool mouseReleased();
-
     bool isClicked();
+    bool isRightClicked();
+    void toEmpty();
 };
 
 

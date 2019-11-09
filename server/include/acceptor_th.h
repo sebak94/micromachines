@@ -14,6 +14,7 @@ class AcceptorTh: public Thread {
     Micromachines &micromachines;
     std::vector<ClientTh*> clients;
     std::vector<Socket*> sockets;
+    std::map<ColorType, Car*> cars;
     void deleteDeadClients();
     void deleteResources();
 

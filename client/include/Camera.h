@@ -19,6 +19,7 @@ public:
     void showBackground();
     void showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> &track);
     void showCars(int xMyCar, int yMyCar, std::map<std::string, Car*> &cars);
+    void updateBlockSize();
 };
 
 #endif

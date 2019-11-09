@@ -16,7 +16,13 @@ typedef enum {
     upRight,
     upLeft,
     horizontal,
-    vertical
+    vertical,
+    finishH,
+    finishV,
+    public1Up,
+    public1Down,
+    public1Left,
+    public1Right
 } trackPartType;
 #endif
 

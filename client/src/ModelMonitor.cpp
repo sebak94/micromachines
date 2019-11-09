@@ -29,12 +29,6 @@ std::map<std::string, Car*>& ModelMonitor::getCars() {
     return model.getCars();
 }
 
-void ModelMonitor::addCar(std::string str) {
-    std::lock_guard<std::mutex> lock(m);
-    model.addCar(str);
-    model.updateCar(str);
-}
-
 void ModelMonitor::updateCar(std::string str) {
     std::lock_guard<std::mutex> lock(m);
     model.updateCar(str);

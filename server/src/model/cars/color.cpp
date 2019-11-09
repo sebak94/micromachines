@@ -9,6 +9,7 @@ std::string Color::name() {
         case white: return "white";
         case black: return "black";
         case yellow: return "yellow";
+        case red: return "red";
         default: return "";
     }
 }

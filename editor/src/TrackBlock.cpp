@@ -14,6 +14,7 @@
 TrackBlock::TrackBlock(SDL_Renderer *renderer, SDL_Rect &area, const std::string &path) {
     this->area = {area.x, area.y, area.w, area.h};
     texture = loadTexture(path, renderer);
+    startingTexture = texture;
 }
 
 /* Configs already existent block setting area, texture and type */
@@ -41,10 +42,14 @@ void TrackBlock::updateEvent(const SDL_Event * event){
     SDL_GetMouseState(&x, &y);
     if (event->type == SDL_MOUSEBUTTONDOWN &&
         isInMouseArea(event->button.x, event->button.y)) {
-            pressed = true;
+        pressed = true;
     } else if (event->type == SDL_MOUSEBUTTONUP &&
                event->button.button == SDL_BUTTON_LEFT) {
         pressed = false;
+    } if (event->type == SDL_MOUSEBUTTONDOWN &&
+          isInMouseArea(event->button.x, event->button.y) &&
+          event->button.button == SDL_BUTTON_RIGHT) {
+            rightClicked = true;
     } else inMouseArea = isInMouseArea(x, y);
 }
 
@@ -61,11 +66,24 @@ void TrackBlock::updateSampleEvent(const SDL_Event * event) {
     } else inMouseArea = isInMouseArea(x, y);
 }
 
-/* Checks if left mouse goes OFF->ON */
+/* Checks if left/right mouse goes OFF->ON */
 bool TrackBlock::isClicked() {
     bool clicked = (pressed != previousPressState && pressed);
     previousPressState = pressed;
     return clicked;
+}
+
+/* Checks if right mouse goes OFF->ON */
+bool TrackBlock::isRightClicked() {
+    bool clicked = (pressed != previousPressState && rightClicked);
+    previousPressState = pressed;
+    return clicked;
+}
+
+/* Sets starting texture and type */
+void TrackBlock::toEmpty() {
+    texture = startingTexture;
+    type = empty;
 }
 
 /* Moves sample attached to cursor if clicked */

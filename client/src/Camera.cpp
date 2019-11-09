@@ -2,15 +2,9 @@
 
 Camera::Camera(SdlWindow &window, std::map<std::string, SdlSurface*> &pictures,
         std::map<trackPartType, SdlSurface*> &trackPictures) :
-        window(window), pictures(pictures), trackPictures(trackPictures) {
-    //Las imagenes son cuadradas, asi que le pongo el mismo ancho que largo
-    blockWidth = (window.getWidth() + window.getHeight()) / 4;
-    blockHeight = (window.getWidth() + window.getHeight()) / 4;
-}
+        window(window), pictures(pictures), trackPictures(trackPictures) {}
 
-Camera::~Camera() {
-
-}
+Camera::~Camera() {}
 
 void Camera::showBackground() {
     //Pinto el backgroud de pasto
@@ -20,7 +14,7 @@ void Camera::showBackground() {
     while (y < window.getHeight()) {
         while (x < window.getWidth()) {
             SDL_Rect sdlDestGrass = {(int)x, (int)y, (int)width, (int)height};
-            trackPictures[empty]->render(sdlDestGrass);
+            //trackPictures[empty]->render(sdlDestGrass);
             x += width;
         }
         x = 0;
@@ -35,18 +29,18 @@ void Camera::showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> &track
     double yBegin = - yMyCar * (blockHeight / 100) - (window.getHeight() / 2) + blockHeight;
 
     for (int i = 0; i < track.size(); i++) {
-        if (track[i].getType() == empty)
-            continue;
         double x = track[i].getPosX() * (blockWidth / 100);
         double y = track[i].getPosY() * (blockHeight / 100);
         SDL_Rect sdlDestRoad = {(int) (x + xBegin), (int) (-y - yBegin), (int) blockWidth, (int) blockHeight};
+        //if (track[i].getType() == empty)
+            trackPictures[empty]->render(sdlDestRoad);
         trackPictures[track[i].getType()]->render(sdlDestRoad);
     }
 }
 
 void Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car*> &cars) {
-    double widthCar = window.getWidth() / 15;
-    double heightCar = widthCar * 2;
+    double widthCar = blockWidth / 6;
+    double heightCar = blockHeight / 3;
     double xBegin = - xMyCar * (blockWidth / 100) + (window.getWidth() / 2);
     double yBegin = - yMyCar * (blockHeight / 100) - (window.getHeight() / 2);
 
@@ -57,4 +51,10 @@ void Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car*> &cars)
         SDL_Rect sdlDestCar = {(int)(x + xBegin), (int)(- y - yBegin), (int)widthCar, (int)heightCar};
         pictures[car->getMyColor()]->renderRotate(sdlDestCar, car->getDegrees(), SDL_FLIP_NONE);
     }
+}
+
+void Camera::updateBlockSize() {
+    //Las imagenes son cuadradas, asi que le pongo el mismo ancho que largo
+    blockWidth = (window.getWidth() + window.getHeight()) / 4;
+    blockHeight = (window.getWidth() + window.getHeight()) / 4;
 }

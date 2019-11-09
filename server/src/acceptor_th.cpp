@@ -1,10 +1,13 @@
 #include "../include/acceptor_th.h"
-#include "../include/client_th.h"
 #include "../include/model/micromachines.h"
-#include "../../common/include/socket.h"
 #include "../../common/include/socket_error.h"
 #include "iostream"
 #include "vector"
+#include "../include/model/cars/blue_car.h"
+#include "../include/model/cars/red_car.h"
+#include "../include/model/cars/yellow_car.h"
+#include "../include/model/cars/black_car.h"
+#include "../include/model/cars/white_car.h"
 
 AcceptorTh::AcceptorTh(const char *service, Micromachines &micromachines):
     keep_accepting(true), micromachines(micromachines) {
@@ -13,6 +16,12 @@ AcceptorTh::AcceptorTh(const char *service, Micromachines &micromachines):
     } catch(const SocketError &e) {
         std::cout << e.what() << "\n";
     }
+    //Agrego todos los autos disponibles en un mapa de autos
+    cars[blue] = new BlueCar();
+    cars[white] = new WhiteCar();
+    cars[black] = new BlackCar();
+    cars[yellow] = new YellowCar();
+    cars[red] = new RedCar();
 }
 
 void AcceptorTh::deleteDeadClients() {
@@ -42,12 +51,13 @@ void AcceptorTh::deleteResources() {
 }
 
 void AcceptorTh::run() {
+    auto it = cars.begin();
     while (keep_accepting) {
         try {
             Socket *peer = new Socket();
             sockets.push_back(peer);
             skt.Accept(peer);
-            ClientTh *client_th = new ClientTh(peer);
+            ClientTh *client_th = new ClientTh(peer, (it++)->second);
             micromachines.addPlayer(client_th);
             clients.push_back(client_th);
             client_th->sendTrackData(micromachines.trackSerialized());
@@ -68,4 +78,8 @@ void AcceptorTh::stop() {
     micromachines.cleanPlayers();
 }
 
-AcceptorTh::~AcceptorTh() {}
+AcceptorTh::~AcceptorTh() {
+    for (const auto pair : cars) {
+        delete pair.second;
+    }
+}
