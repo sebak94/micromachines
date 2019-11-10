@@ -73,10 +73,8 @@ void TrackEditor::drawTh(Window & editor){
 void TrackEditor::processButtonClicks() {
     if (saveButton.isClicked())
         saveTrack();
-    if (wayButton.isClicked() && findStartLine()){
+    if (wayButton.isClicked() && findStartLine())
         setWay(grid.getType(startRow, startCol));
-        std::cout <<"NEXTROW" << nextToStartRow << "NEXTCOL" << nextToStartCol << std::endl;
-    }
     if (exitButton.isClicked())
         quit = true;
 }
@@ -116,12 +114,12 @@ void TrackEditor::drawWayArrow(SDL_Renderer * renderer) {
     wayArrow.updatePos(x, y);
     if (startCol > nextToStartCol)
         angle = 270;
-    if (startCol < nextToStartCol)
-        angle = 90;
-    if (startRow > nextToStartRow)
-        angle = 0;
-    if (startRow < nextToStartRow)
+    else if (startRow < nextToStartRow)
         angle = 180;
+    else if (startCol < nextToStartCol)
+        angle = 90;
+    else if (startRow > nextToStartRow)
+        angle = 0;
     if(waySet)
         wayArrow.drawRotated(renderer, angle);
 }
@@ -130,8 +128,7 @@ void TrackEditor::drawWayArrow(SDL_Renderer * renderer) {
 void TrackEditor::saveTrack() {
         createTrack();
         if (findStartLine() && trackValid()){
-            std::cout << "saved" << std::endl;
-            std::cout << "ROW=" << startRow << "COL=" << startCol << std::endl;
+            std::cout << "Track saved." << std::endl;
             trackToFileLayout();
             updateTrackFile();
         }
@@ -146,25 +143,21 @@ bool TrackEditor::findStartLine() {
     return found;
 }
 
-/* Creates string vector with grid data for Json file */
+/* Creates string vector with grid data for Json file.
+ * Previous must be a curve. */
 void TrackEditor::trackToFileLayout() {
     fileLayout.clear();
-    int row = startRow; //firstCornerIndex / trackWidth;
-    int lastRow = row;
-    int col = startCol; //firstCornerIndex % trackWidth;
     trackPartType actual;
-    trackPartType previous = setStartingPreviousTrackPart(row, col);
-    fileLayout.emplace_back(track.typeToFileType(row, col));
-    row = nextToStartRow; col = nextToStartCol;
-    //col++;  // assumes top-left corner is a down-right curve
-    // +1 to form a closed loop with the track
-    for (int j = 1; j < parts; j++){
+    int row = startRow, lastRow = row, col = startCol;
 
+    trackPartType previousCurve = setStartingPreviousTrackPart(row, col);
+    fileLayout.emplace_back(track.typeToFileType(row, col));
+    row = nextToStartRow, col = nextToStartCol;
+    for (int j = 1; j < parts; j++){
         actual = track.getPartType(row, col);
         fileLayout.emplace_back(track.typeToFileType(row, col));
-        lastRow = track.setNextCoord(row, col, actual, previous, lastRow);
-        if (track.isCurve(actual))
-            previous = actual;
+        lastRow = track.setNextCoord(row, col, actual, previousCurve, lastRow);
+        if (Track::isCurve(actual)) previousCurve = actual;
     }
 }
 
@@ -193,6 +186,11 @@ bool TrackEditor::createJsonTrack(Json::Value & newTrack) {
     newTrack[START_ID][1] = startCol;
     newTrack[NEXT_TO_START_ID][0] = nextToStartRow;
     newTrack[NEXT_TO_START_ID][1] = nextToStartCol;
+    for (int i = 0; i < grandstands.size(); i++){
+        newTrack[GRANDSTANDS_ID][i][0] = grandstands[i].getTypeAsString();
+        newTrack[GRANDSTANDS_ID][i][1] = grandstands[i].getRow();
+        newTrack[GRANDSTANDS_ID][i][2] = grandstands[i].getCol();
+    }
     for (int i = 0; i < parts; i++)
         newTrack[LAYOUT_ID][i] = fileLayout[i];
 }
@@ -237,14 +235,20 @@ bool TrackEditor::trackValid() {
 
 /* Creates track from grid */
 void TrackEditor::createTrack() {
-    parts = 0;
+    parts = 0; grandstands.clear();
     track = Track(trackWidth, trackHeight, trackName);
     int row = 0, col = 0;
-    for (int i = 0; i < grid.getSize(); i++, col++) {
-        if (col == trackWidth)
-            col = 0, row++;
+    for (int i = 0; i < grid.getSize(); i++) {
+        col = i % trackWidth, row = i / trackWidth;
         track.loadPart(row, col, grid.getType(i));
-        if (track.isTrackPart(row, col)) parts++;
+        if (track.isTrackPart(row, col))
+            parts++;
+        else if (Grandstand::isPublic(grid.getType(i)))
+            grandstands.emplace_back(Grandstand(grid.getType(i),
+                                     row,
+                                     col,
+                                     BLOCKSIZE,
+                                     trackHeight));
     }
 }
 
