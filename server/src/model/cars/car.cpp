@@ -7,13 +7,12 @@
 
 #define PI 3.14159265
 
-Car::Car(uint8_t width, uint8_t height, uint8_t max_velocity,
-         uint8_t acceleration, uint8_t grip, uint8_t maneuverability,
-         Point initial_position, ColorType color) :
+Car::Car(uint8_t width, uint8_t height, uint8_t max_velocity, uint8_t acceleration, uint8_t grip,
+         uint8_t maneuverability, Point initial_position, ColorType color, uint16_t rotation) :
         width(width), height(height), max_velocity(max_velocity),
         acceleration(acceleration), grip(grip),
         maneuverability(maneuverability), current_velocity(0), health(100),
-        rotation(0), position(initial_position), color(color) {
+        rotation(rotation), position(initial_position), color(color) {
 
     this->states["accelerate"] = false;
     this->states["left"] = false;

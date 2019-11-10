@@ -24,9 +24,8 @@ class Car: public Model {
     std::unordered_map<std::string, bool> states;
 
     public:
-    Car(uint8_t width, uint8_t height, uint8_t max_velocity,
-        uint8_t acceleration, uint8_t grip, uint8_t maneuverability,
-        Point initial_position, ColorType color);
+    Car(uint8_t width, uint8_t height, uint8_t max_velocity, uint8_t acceleration, uint8_t grip,
+        uint8_t maneuverability, Point initial_position, ColorType color, uint16_t rotation);
     void updateState(char action);
     void addPositionX(uint16_t x);
     void addPositionY(uint16_t y);

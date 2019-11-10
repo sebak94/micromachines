@@ -11,6 +11,7 @@
 #include "../../common/include/Button.h"
 #include "../../common/include/thread.h"
 #include "../../common/include/Grandstand.h"
+#include "../../server/include/model/point.h"
 
 #define WAY_ARROW_PATH "../editor/images/wayArrow.png"
 
@@ -21,6 +22,7 @@
 #define ARROW_SIZE 50
 
 class Prompt;
+class Point;
 
 class TrackEditor {
 protected:

@@ -12,6 +12,7 @@
 #include "Grandstand.h"
 #include "TrackPartData.h"
 #include "../include/TrackList.h"
+#include "../../server/include/model/point.h"
 
 
 #define BLOCKSIZE 100  // meters
@@ -38,6 +39,7 @@ typedef enum {
 #endif
 
 class TrackPartData;
+class Point;
 
 class Track {
 protected:
@@ -50,6 +52,7 @@ protected:
     int partCounter = 0;  // number of track elements
     std::vector<TrackPartData> trackPartData{};
     std::vector<Grandstand> grandstands;
+    std::map<int, Point> trackSequence;
     std::string name{};
 
 public:
@@ -87,6 +90,12 @@ public:
     void setTrackPartType(int row, int col, trackPartType type);
 
     void loadGrandstands(const Json::Value &fileTracks, int trackNumber);
+
+    Point getCarStartingPos(int order);
+
+    void saveTrackSequence(int row, int col);
+
+    uint16_t getCarStartingRotation(int order);
 };
 
 

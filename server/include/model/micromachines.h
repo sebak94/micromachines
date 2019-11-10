@@ -10,6 +10,7 @@
 class Micromachines {
     private:
     TrackList tracks;
+    Track track;
     std::mutex m;
     std::vector<ClientTh*> players;
 
@@ -24,6 +25,8 @@ class Micromachines {
     void cleanPlayers();
     void sendNewStateToPlayers();
     std::string trackSerialized();
+    Point getStartingPoint(int position);
+    uint16_t getStartingCarRot(int position);
 };
 
 #endif

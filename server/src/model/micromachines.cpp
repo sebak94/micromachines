@@ -4,6 +4,7 @@
 
 Micromachines::Micromachines() {
     tracks.readTracks();
+    track = tracks.getTrack("classic");
 }
 
 void Micromachines::update() {
@@ -62,4 +63,12 @@ void Micromachines::sendNewStateToPlayers() {
 
 std::string Micromachines::trackSerialized() {
     return tracks.getTrack("classic").serialize();
+}
+
+Point Micromachines::getStartingPoint(int position) {
+    return track.getCarStartingPos(position);
+}
+
+uint16_t Micromachines::getStartingCarRot(int position) {
+    return track.getCarStartingRotation(position);
 }
