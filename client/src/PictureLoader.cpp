@@ -23,13 +23,13 @@ PictureLoader::PictureLoader(SdlWindow &window, std::map<std::string, SdlSurface
     trackPictures[finishV] = new SdlSurface("../common/images/finishVertical.png", window);
 
     //Imagenes de los autos
-    pictures[CAR_RED] = new SdlSurface("images/car_red.png", window);
-    pictures[CAR_BLACK] = new SdlSurface("images/car_black.png", window);
-    pictures[CAR_BLUE] = new SdlSurface("images/car_blue.png", window);
-    pictures[CAR_GREEN] = new SdlSurface("images/car_green.png", window);
-    pictures[CAR_ORANGE] = new SdlSurface("images/car_orange.png", window);
-    pictures[CAR_WHITE] = new SdlSurface("images/car_white.png", window);
-    pictures[CAR_YELLOW] = new SdlSurface("images/car_yellow.png", window);
+    pictures[CAR_RED] = new SdlSurface("../common/images/car_red.png", window);
+    pictures[CAR_BLACK] = new SdlSurface("../common/images/car_black.png", window);
+    pictures[CAR_BLUE] = new SdlSurface("../common/images/car_blue.png", window);
+    pictures[CAR_GREEN] = new SdlSurface("../common/images/car_green.png", window);
+    pictures[CAR_ORANGE] = new SdlSurface("../common/images/car_orange.png", window);
+    pictures[CAR_WHITE] = new SdlSurface("../common/images/car_white.png", window);
+    pictures[CAR_YELLOW] = new SdlSurface("../common/images/car_yellow.png", window);
 
     //Agregar todas las imagenes faltantes
 }

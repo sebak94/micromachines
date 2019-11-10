@@ -7,7 +7,7 @@
 #define WIDTH 900
 #define HEIGHT 600
 #define MICROSECS_WAIT 16000 //seria que en un segundo se dibujen aprox 60 veces
-#define MUSICPATH "sounds/beat.wav"
+#define MUSICPATH "../common/sounds/beat.wav"
 
 Drawer::Drawer(ModelMonitor &modelMonitor) :
     window(WIDTH, HEIGHT),
