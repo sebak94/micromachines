@@ -19,6 +19,7 @@
 #define WIDTH_ID "width"
 #define HEIGHT_ID "height"
 #define START_ID "start"
+#define NEXT_TO_START_ID "next-to-start"
 
 #define LAYOUT_DR "down-right"
 #define LAYOUT_H "horizontal"
@@ -27,8 +28,12 @@
 #define LAYOUT_UL "up-left"
 #define LAYOUT_UR "up-right"
 #define LAYOUT_E "empty"
+#define LAYOUT_FH "finishH"
+#define LAYOUT_FV "finishV"
 
 #include "TrackPartData.h"
+
+class Track;
 
 class TrackList {
 private:

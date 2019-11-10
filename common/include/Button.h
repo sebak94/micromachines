@@ -22,6 +22,10 @@ public:
     void updateEvent(const SDL_Event *event);
     bool isClicked();
     static SDL_Texture *loadTexture(const std::string &img_path, SDL_Renderer *renderer);
+
+    void drawRotated(SDL_Renderer *renderer, double angle);
+
+    void updatePos(int x, int y);
 };
 
 

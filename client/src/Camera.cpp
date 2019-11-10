@@ -32,8 +32,7 @@ void Camera::showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> &track
         double x = track[i].getPosX() * (blockWidth / 100);
         double y = track[i].getPosY() * (blockHeight / 100);
         SDL_Rect sdlDestRoad = {(int) (x + xBegin), (int) (-y - yBegin), (int) blockWidth, (int) blockHeight};
-        //if (track[i].getType() == empty)
-            trackPictures[empty]->render(sdlDestRoad);
+        trackPictures[empty]->render(sdlDestRoad);
         trackPictures[track[i].getType()]->render(sdlDestRoad);
     }
 }

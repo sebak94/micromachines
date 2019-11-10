@@ -71,6 +71,10 @@ trackPartType TrackGrid::getType(int i) {
     return grid[i].getType();
 }
 
+trackPartType TrackGrid::getType(int row, int col) {
+    return grid[row * wBlocks + col].getType();
+}
+
 /* Gets grid size width*height */
 int TrackGrid::getSize() {
     return grid.size();
@@ -95,6 +99,32 @@ void TrackGrid::updateSamples(const SDL_Event *event) {
         trackSample.updateSampleEvent(event);
         trackSample.updateSamplePosition();
     }
+}
+
+/* Gets finish line position. Returns false if non-existent or duplicated */
+bool TrackGrid::findStartLine(int & startX, int & startY) {
+    trackPartType type;
+    bool found = false;
+    for (int i = 0; i < grid.size(); i++) {
+        type = grid[i].getType();
+        if ((type == finishH || type == finishV) && found)
+            return false;  // avoids double finish lines;
+        if ((type == finishH || type == finishV)) {
+            found = true;
+            startX = i%wBlocks;
+            startY = i/wBlocks;
+        }
+    }
+    if (found)
+        return true;
+}
+
+int TrackGrid::getPixelPosX(int col) {
+    return col*blockWidth + blockWidth/2 + gridMarginWidth;
+}
+
+int TrackGrid::getPixelPosY(int row) {
+    return row*blockHeight + blockHeight/2 + gridMarginHeight;
 }
 
 /* Loads all textures */
@@ -135,7 +165,7 @@ void TrackGrid::createSamples() {
     auxBlock.setBlock(textures[TEX_UPLEFT], upLeft, x, y, s, s);
     y += s + sep; samples.emplace_back(auxBlock);
     auxBlock.setBlock(textures[TEX_UPRIGHT], upRight, x, y, s, s);
-    y += s + sep; samples.emplace_back(auxBlock);
+    samples.emplace_back(auxBlock);
 
     y = GRID_MARGIN_SIZE;
     x = WINDOW_W - (gridMarginWidth + s)/2;

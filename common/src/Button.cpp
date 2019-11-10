@@ -17,10 +17,21 @@ Button::Button(SDL_Renderer *renderer, SDL_Rect &area, const std::string &path) 
     texture = loadTexture(path, renderer);
 }
 
+void Button::updatePos(int x, int y) {
+    area.x = x, area.y = y;
+}
+
 void Button::draw(SDL_Renderer * renderer) {
     uint8_t d = 200;  // darkness factor
     SDL_SetTextureAlphaMod(texture, pressed*d+(1-pressed)*255);
     SDL_RenderCopy( renderer, texture, nullptr, &area );
+}
+
+void Button::drawRotated(SDL_Renderer * renderer, double angle) {
+    uint8_t d = 200;  // darkness factor
+    SDL_SetTextureAlphaMod(texture, pressed*d+(1-pressed)*255);
+    SDL_RenderCopyEx( renderer, texture, nullptr, &area, angle, nullptr, SDL_FLIP_NONE );
+
 }
 
 void Button::updateEvent(const SDL_Event * event){

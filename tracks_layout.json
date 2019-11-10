@@ -173,25 +173,21 @@
          "width" : 12
       },
       {
-         "height" : 12,
+         "height" : 3,
          "layout" : [
+            "finishV",
             "down-right",
-            "horizontal",
             "horizontal",
             "down-left",
             "vertical",
-            "vertical",
             "up-left",
             "horizontal",
-            "horizontal",
-            "up-right",
-            "vertical",
-            "vertical",
-            "down-right"
+            "up-right"
          ],
          "name" : "test28",
-         "start" : [ 2, 3 ],
-         "width" : 12
+         "next-to-start" : [ 0, 0 ],
+         "start" : [ 1, 0 ],
+         "width" : 3
       }
    ]
 }
