@@ -1,10 +1,15 @@
 #include "../../include/model/micromachines.h"
 #include "../../../common/include/lock.h"
 #include "../../../common/include/socket_error.h"
+#include <Box2D/Box2D.h>
+
+#define DEGTORAD 0.0174532925199432957f
 
 Micromachines::Micromachines() {
     tracks.readTracks();
     track = tracks.getTrack("classic");
+    world = new b2World(b2Vec2(0, 0));
+    world->SetDestructionListener(&destruction_listener);
 }
 
 void Micromachines::update() {

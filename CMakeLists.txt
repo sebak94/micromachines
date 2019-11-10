@@ -23,6 +23,10 @@ set(SOURCE_FILES_SERVER
     server/include/model/cars/white_car.h
     server/include/model/cars/black_car.h
     server/include/model/cars/yellow_car.h
+	server/include/model/box2d-entities/destruction_listener.h
+	server/include/model/box2d-entities/fixture_user_data.h
+	server/include/model/box2d-entities/tdcar.h
+	server/include/model/box2d-entities/tdtire.h
     server/src/mm_server.cpp
     server/src/acceptor_th.cpp
     server/src/client_th.cpp
@@ -37,6 +41,8 @@ set(SOURCE_FILES_SERVER
     server/src/model/cars/white_car.cpp
     server/src/model/cars/black_car.cpp
     server/src/model/cars/yellow_car.cpp
+	server/src/model/box2d-entities/tdcar.cpp
+	server/src/model/box2d-entities/tdtire.cpp
     common/include/socket.h
     common/include/socket_error.h
     common/include/thread.h
@@ -163,4 +169,4 @@ target_link_libraries(micromachines-cl
 		SDL2_image
 		SDL2_mixer)
 
-target_link_libraries(micromachines-sv -ldl)
+target_link_libraries(micromachines-sv -ldl -lBox2D)

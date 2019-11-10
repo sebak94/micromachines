@@ -5,7 +5,7 @@
 
 class BlackCar: public Car {
     public:
-    BlackCar(const Point &startingPoint, uint16_t rot);
+    BlackCar(b2World *world, const Point &startingPoint, uint16_t rot);
     ~BlackCar();
 };
 

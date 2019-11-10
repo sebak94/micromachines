@@ -2,22 +2,27 @@
 #define __MICROMACHINES_H__
 
 #include "cars/car.h"
+#include "box2d-entities/destruction_listener.h"
 #include "../client_th.h"
 #include "../../../common/include/TrackList.h"
 #include <vector>
 #include <mutex>
 #include <cstring>
+#include <Box2D/Box2D.h>
 
 class Micromachines {
-private:
+    private:
     TrackList tracks;
     Track track;
     std::mutex m;
-    std::vector<ClientTh *> players;
+    std::vector<ClientTh*> players;
+    DestructionListener destruction_listener;
 
     void removePlayerFromVector(ClientTh *player);
 
-public:
+    public:
+    b2World *world;
+
     Micromachines();
     void update();
     void addPlayer(ClientTh *client);

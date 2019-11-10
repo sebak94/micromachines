@@ -18,11 +18,16 @@ AcceptorTh::AcceptorTh(const char *service, Micromachines &micromachines):
     }
 
     //Agrego todos los autos disponibles en un mapa de autos
-    cars[blue] = new BlueCar(micromachines.getStartingPoint(0), micromachines.getStartingCarRot(0));
-    cars[white] = new WhiteCar(micromachines.getStartingPoint(1), micromachines.getStartingCarRot(1));
-    cars[black] = new BlackCar(micromachines.getStartingPoint(2), micromachines.getStartingCarRot(2));
-    cars[yellow] = new YellowCar(micromachines.getStartingPoint(3), micromachines.getStartingCarRot(3));
-    cars[red] = new RedCar(micromachines.getStartingPoint(4), micromachines.getStartingCarRot(4));
+    cars[blue] = new BlueCar(micromachines.world,
+        micromachines.getStartingPoint(0), micromachines.getStartingCarRot(0));
+    cars[white] = new WhiteCar(micromachines.world,
+        micromachines.getStartingPoint(1), micromachines.getStartingCarRot(1));
+    cars[black] = new BlackCar(micromachines.world,
+        micromachines.getStartingPoint(2), micromachines.getStartingCarRot(2));
+    cars[yellow] = new YellowCar(micromachines.world,
+        micromachines.getStartingPoint(3), micromachines.getStartingCarRot(3));
+    cars[red] = new RedCar(micromachines.world,
+        micromachines.getStartingPoint(4), micromachines.getStartingCarRot(4));
 }
 
 void AcceptorTh::deleteDeadClients() {
