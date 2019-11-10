@@ -1,6 +1,6 @@
 {
    "tracks" : [
-       {
+      {
          "height" : 3,
          "layout" : [
             "finishH",
@@ -12,9 +12,29 @@
             "vertical",
             "down-right"
          ],
-         "name" : "classic",
+         "name" : "test28",
          "next-to-start" : [ 0, 2 ],
          "start" : [ 0, 1 ],
+         "width" : 3
+      },
+      {
+         "grandstands" : [
+            [ "pub1Right", 1, 1 ]
+         ],
+         "height" : 3,
+         "layout" : [
+            "finishV",
+            "up-left",
+            "horizontal",
+            "up-right",
+            "vertical",
+            "down-right",
+            "horizontal",
+            "down-left"
+         ],
+         "name" : "classic",
+         "next-to-start" : [ 2, 2 ],
+         "start" : [ 1, 2 ],
          "width" : 3
       }
    ]

@@ -21,6 +21,10 @@ PictureLoader::PictureLoader(SdlWindow &window, std::map<std::string, SdlSurface
     trackPictures[vertical] = new SdlSurface("../common/images/vertical.png", window);
     trackPictures[finishH] = new SdlSurface("../common/images/finishHorizontal.png", window);
     trackPictures[finishV] = new SdlSurface("../common/images/finishVertical.png", window);
+    trackPictures[public1Up] = new SdlSurface("../common/images/public1Up.png", window);
+    trackPictures[public1Right] = new SdlSurface("../common/images/public1Right.png", window);
+    trackPictures[public1Down] = new SdlSurface("../common/images/public1Down.png", window);
+    trackPictures[public1Left] = new SdlSurface("../common/images/public1Left.png", window);
 
     //Imagenes de los autos
     pictures[CAR_RED] = new SdlSurface("../common/images/car_red.png", window);

@@ -10,6 +10,7 @@
 #include "TrackGrid.h"
 #include "../../common/include/Button.h"
 #include "../../common/include/thread.h"
+#include "../../common/include/Grandstand.h"
 
 #define WAY_ARROW_PATH "../editor/images/wayArrow.png"
 
@@ -24,8 +25,8 @@ class Prompt;
 class TrackEditor {
 protected:
     SDL_Event event{};
-    bool quit = false;
     std::string trackName{};
+    bool quit = false;
     int trackWidth = 0;
     int trackHeight = 0;
     TrackGrid grid;
@@ -36,6 +37,7 @@ protected:
     Button exitButton;
     Track track;
     std::vector<std::string> fileLayout;
+    std::vector<Grandstand> grandstands;
     int firstCornerIndex = 0;
     int parts = 0;
     int startCol = 0;
@@ -62,10 +64,9 @@ public:
     bool appendJsonValue(const Json::Value &newTrack, Json::Value &tracks);
     void drawTh(Window &editor);
     bool findStartLine();
-    trackPartType setStartingPreviousTrackPart(int row, int col);
     void setWay(trackPartType type);
-
     void drawWayArrow(SDL_Renderer *renderer);
+    trackPartType setStartingPreviousTrackPart(int row, int col);
 };
 
 

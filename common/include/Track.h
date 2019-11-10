@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <jsoncpp/json/json.h>
+#include "Grandstand.h"
 #include "TrackPartData.h"
 #include "../include/TrackList.h"
 
@@ -26,7 +27,13 @@ typedef enum {
     upRight,
     upLeft,
     horizontal,
-    vertical
+    vertical,
+    finishH,
+    finishV,
+    public1Up,
+    public1Down,
+    public1Left,
+    public1Right
 } trackPartType;
 #endif
 
@@ -42,6 +49,7 @@ protected:
     int height = 0;  // blocks
     int partCounter = 0;  // number of track elements
     std::vector<TrackPartData> trackPartData{};
+    std::vector<Grandstand> grandstands;
     std::string name{};
 
 public:
@@ -75,6 +83,10 @@ public:
     static bool isTrackPart(trackPartType type);
     static bool isTrackLinePart(trackPartType type);
     bool isTrackPart(int row, int col);
+
+    void setTrackPartType(int row, int col, trackPartType type);
+
+    void loadGrandstands(const Json::Value &fileTracks, int trackNumber);
 };
 
 

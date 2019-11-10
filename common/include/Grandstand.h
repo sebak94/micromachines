@@ -5,13 +5,16 @@
 #ifndef MICROMACHINES_GRANDSTAND_H
 #define MICROMACHINES_GRANDSTAND_H
 
-#include "../include/Track.h"
+#define LAYOUT_PUB1LEFT "pub1Left"
+#define LAYOUT_PUB1RIGHT "pub1Right"
+#define LAYOUT_PUB1UP "pub1Right"
+#define LAYOUT_PUB1DOWN "pub1Right"
 
 #include "../../editor/include/TrackBlock.h"
 
 class Track;
 
-class Grandstand : public Track {
+class Grandstand {
 private:
     int posX;
     int posY;
@@ -21,7 +24,17 @@ private:
     trackPartType type;
 
 public:
-    Grandstand(trackPartType type, int row, int col);
+    Grandstand(trackPartType type, int row, int col, int blockSize, int height);
+    static bool isPublic(trackPartType t);
+    trackPartType getType();
+    int getRow();
+    int getCol();
+    int getPosX();
+    int getPosY();
+
+    std::string getTypeAsString();
+
+    static trackPartType identifyElem(const std::string &layoutElem);
 };
 
 
