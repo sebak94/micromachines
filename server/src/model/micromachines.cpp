@@ -49,12 +49,18 @@ void Micromachines::cleanPlayers() {
     players.clear();
 }
 
+void Micromachines::changeCarState(char *new_command) {
+    for (size_t i = 0; i < players.size(); i++)
+        for (int j = 0; j < 10; ++j)
+            players[i]->receiveActionPlugin(new_command);
+}
+
 void Micromachines::sendNewStateToPlayers() {
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
         try {
             players[i]->sendAllCarsToPlayer(players);
-        } catch(const SocketError &e) {
+        } catch (const SocketError &e) {
             removePlayerFromVector(players[i]);
         }
     }

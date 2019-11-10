@@ -52,8 +52,11 @@ void GameLoopTh::run() {
 }
 
 void GameLoopTh::executeLibraries() {
-    if ((this->game_loops % 100) == 0) {
-        this->loader.execute();
+    if ((this->game_loops % 1000) == 0) {
+        std::vector<char *> commands;
+        this->loader.execute(commands);
+        for (auto &i : commands)
+            micromachines.changeCarState(i);
         this->game_loops = 1;
     } else {
         this->game_loops++;

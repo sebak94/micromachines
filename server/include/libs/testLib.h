@@ -6,10 +6,11 @@
 #define MICROMACHINES_TESTLIB_H
 
 #include "testVir.h"
+#include <string.h>
 
 class TestLib : TestVir {
 public:
-    void execute();
+    void execute(char *command);
 };
 
 #endif //MICROMACHINES_TESTLIB_H

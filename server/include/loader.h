@@ -10,7 +10,7 @@
 #include <dlfcn.h>
 #include "libs/testVir.h"
 
-typedef TestVir *execute_t();
+typedef TestVir *execute_t(char *);
 
 class Loader {
 private:
@@ -24,7 +24,7 @@ public:
 
     void load_dynamic_libraries();
 
-    void execute();
+    void execute(std::vector<char *> &v);
 };
 
 
