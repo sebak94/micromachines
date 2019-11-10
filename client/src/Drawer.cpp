@@ -7,17 +7,18 @@
 #define WIDTH 900
 #define HEIGHT 600
 #define MICROSECS_WAIT 16000 //seria que en un segundo se dibujen aprox 60 veces
-//500000 es para dibujar ua vez cada medio segundo
+#define MUSICPATH "sounds/beat.wav"
 
 Drawer::Drawer(ModelMonitor &modelMonitor) :
     window(WIDTH, HEIGHT),
     loader(window, pictures, trackPictures),
     camera(window, pictures, trackPictures),
-    modelMonitor(modelMonitor) {}
+    modelMonitor(modelMonitor), music(MUSICPATH) {}
 
 Drawer::~Drawer() {}
 
 void Drawer::run() {
+    music.play();
     running = true;
     while (running) {
         auto start = std::chrono::system_clock::now();
@@ -30,6 +31,7 @@ void Drawer::run() {
         int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
         usleep(MICROSECS_WAIT - microsecsPassed);
     }
+    music.stop();
 }
 
 void Drawer::stop() {

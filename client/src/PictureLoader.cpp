@@ -33,6 +33,9 @@ PictureLoader::PictureLoader(SdlWindow &window, std::map<std::string, SdlSurface
 }
 
 PictureLoader::~PictureLoader() {
+    for (const auto pair : trackPictures) {
+        delete pair.second;
+    }
     for (const auto pair : pictures) {
         delete pair.second;
     }

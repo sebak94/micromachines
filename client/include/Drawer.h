@@ -10,6 +10,7 @@
 #include "Car.h"
 #include "Camera.h"
 #include "../include/ModelMonitor.h"
+#include "sdl/SdlMusic.h"
 
 class Drawer : public Thread {
 private:
@@ -20,6 +21,7 @@ private:
     PictureLoader loader;
     ModelMonitor &modelMonitor;
     Camera camera;
+    SdlMusic music;
 
 public:
     Drawer(ModelMonitor &modelMonitor);

@@ -70,6 +70,8 @@ set(SOURCE_FILES_CLIENT
 	client/src/sdl/SdlTexture.cpp
 	client/include/sdl/SdlWindow.h
 	client/src/sdl/SdlWindow.cpp
+	client/include/sdl/SdlMusic.h
+	client/src/sdl/SdlMusic.cpp
 	client/include/PictureLoader.h
     client/src/PictureLoader.cpp
 	client/include/ThreadSafeQueue.h
@@ -141,6 +143,7 @@ target_link_libraries(micromachines-ed
 
 target_link_libraries(micromachines-cl
 		SDL2
-		SDL2_image)
+		SDL2_image
+		SDL2_mixer)
 
 target_link_libraries(micromachines-sv -ldl)
