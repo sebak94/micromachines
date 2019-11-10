@@ -9,7 +9,7 @@
 Loader::Loader() : parser(LIBS_PATH) {}
 
 void Loader::load_dynamic_libraries() {
-    std::vector<std::string> dir;
+    std::vector <std::string> dir;
     this->parser.read_directory(dir);
 
     for (const auto &i : dir) {
@@ -33,9 +33,12 @@ void Loader::load_dynamic_libraries() {
     }
 }
 
-void Loader::execute() {
-    for (auto &functor : this->functors)
-        functor();
+void Loader::execute(std::vector<char *> &v) {
+    for (auto &functor : this->functors) {
+        char *command = new char[2];
+        functor(command);
+        v.push_back(command);
+    }
 }
 
 Loader::~Loader() = default;

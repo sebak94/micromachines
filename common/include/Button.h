@@ -26,6 +26,7 @@ public:
     void drawRotated(SDL_Renderer *renderer, double angle);
 
     void updatePos(int x, int y);
+    void updateSize(int w, int h);
 };
 
 

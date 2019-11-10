@@ -6,17 +6,18 @@
 #include "../../../common/include/TrackList.h"
 #include <vector>
 #include <mutex>
+#include <cstring>
 
 class Micromachines {
-    private:
+private:
     TrackList tracks;
     Track track;
     std::mutex m;
-    std::vector<ClientTh*> players;
+    std::vector<ClientTh *> players;
 
     void removePlayerFromVector(ClientTh *player);
 
-    public:
+public:
     Micromachines();
     void update();
     void addPlayer(ClientTh *client);
@@ -27,6 +28,7 @@ class Micromachines {
     std::string trackSerialized();
     Point getStartingPoint(int position);
     uint16_t getStartingCarRot(int position);
+    void changeCarState(char *new_command);
 };
 
 #endif

@@ -6,8 +6,9 @@
 #include "vector"
 #include "string"
 
-ClientTh::ClientTh(Socket *peer, Car* car): keep_talking(true), is_running(true),
-    peer(peer), car(car) {
+ClientTh::ClientTh(Socket *peer, Car *car) : keep_talking(true),
+                                             is_running(true),
+                                             peer(peer), car(car) {
     sendWelcomeMsg();
     sendCarData();
 }
@@ -22,7 +23,7 @@ void ClientTh::sendCarData() {
     send(car_msg);
 }
 
-void ClientTh::sendAllCarsToPlayer(std::vector<ClientTh*> players) {
+void ClientTh::sendAllCarsToPlayer(std::vector<ClientTh *> players) {
     for (size_t i = 0; i < players.size(); i++) {
         std::string s = players[i]->car->serialize();
         send(s);
@@ -59,17 +60,22 @@ void ClientTh::updateCar() {
 void ClientTh::receive(char *action) {
     try {
         peer->Receive(action, 1);
-    } catch(const SocketError &e) {
+    } catch (const SocketError &e) {
         keep_talking = false;
         std::cout << e.what() << "\n";
     }
+}
+
+void ClientTh::receiveActionPlugin(char *action) {
+    Lock l(m);
+    this->actions.push(action[0]);
 }
 
 void ClientTh::send(std::string &response) {
     try {
         const char *resp = response.c_str();
         peer->Send(resp, response.length());
-    } catch(const SocketError &e) {
+    } catch (const SocketError &e) {
         keep_talking = false;
         std::cout << e.what() << "\n";
         throw e;

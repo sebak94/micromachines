@@ -25,6 +25,7 @@ class ClientTh: public Thread {
 
     public:
     ClientTh(Socket *peer, Car* car);
+    void receiveActionPlugin(char *action);
     void processNextAction();
     void updateCar();
     void sendCarData();
