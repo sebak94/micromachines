@@ -3,10 +3,18 @@
 
 #include "../model.h"
 #include "../point.h"
+#include "../box2d-entities/tdcar.h"
 #include "color.h"
 #include <cstdint>
 #include <string>
-#include <unordered_map>
+#include <Box2D/Box2D.h>
+
+enum {
+    TDC_LEFT   = 0x1,
+    TDC_RIGHT  = 0x2,
+    TDC_UP     = 0x4,
+    TDC_DOWN   = 0x8
+};
 
 class Car: public Model {
     protected:
@@ -16,30 +24,19 @@ class Car: public Model {
     const uint8_t acceleration;
     const uint8_t grip;
     const uint8_t maneuverability;
-    int current_velocity;
     uint8_t health;
-    int16_t rotation;
-    Point position;
     Color color;
-    std::unordered_map<std::string, bool> states;
+    TDCar td_car;
+    int control_state;
 
     public:
-    Car(uint8_t width, uint8_t height, uint8_t max_velocity,
+    Car(uint8_t width, uint8_t height, uint16_t max_velocity,
         uint8_t acceleration, uint8_t grip, uint8_t maneuverability,
-        Point initial_position, ColorType color);
+        Point initial_position, ColorType color, b2World *world);
     void updateState(char action);
-    void addPositionX(uint16_t x);
-    void addPositionY(uint16_t y);
-    void addRotation(int16_t rotation);
     virtual void update() override;
     virtual std::string serialize() override;
-    void accelerateCar();
-    void leftCar();
-    void rightCar();
-    void breakCar();
-    void updateCarPosition();
     ~Car();
-
 };
 
 #endif

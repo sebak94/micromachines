@@ -5,7 +5,7 @@
 
 class RedCar : public Car {
 public:
-    RedCar();
+    RedCar(b2World *world);
     ~RedCar();
 };
 

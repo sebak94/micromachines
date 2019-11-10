@@ -17,11 +17,11 @@ AcceptorTh::AcceptorTh(const char *service, Micromachines &micromachines):
         std::cout << e.what() << "\n";
     }
     //Agrego todos los autos disponibles en un mapa de autos
-    cars[blue] = new BlueCar();
-    cars[white] = new WhiteCar();
-    cars[black] = new BlackCar();
-    cars[yellow] = new YellowCar();
-    cars[red] = new RedCar();
+    cars[blue] = new BlueCar(micromachines.world);
+    cars[white] = new WhiteCar(micromachines.world);
+    cars[black] = new BlackCar(micromachines.world);
+    cars[yellow] = new YellowCar(micromachines.world);
+    cars[red] = new RedCar(micromachines.world);
 }
 
 void AcceptorTh::deleteDeadClients() {

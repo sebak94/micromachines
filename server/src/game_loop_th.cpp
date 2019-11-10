@@ -31,20 +31,24 @@ void GameLoopTh::run() {
 
         while (GetTickCountMs() > next_game_tick && loops < MAX_FRAMESKIP) {
             micromachines.update();
+            auto end = std::chrono::steady_clock::now();
+            auto duration = std::chrono::duration_cast
+                <std::chrono::milliseconds>(end - begin);
+            micromachines.world->Step(1.0/30.0, 5, 5);
             next_game_tick += SKIP_TICKS;
             loops++;
         }
 
-        micromachines.sendNewStateToPlayers();
-
         auto end = std::chrono::steady_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
-                end - begin);
+        auto duration = std::chrono::duration_cast
+            <std::chrono::milliseconds>(end - begin);
         /*std::this_thread::sleep_for(
                 std::chrono::seconds(1 / TICKS_PER_SECOND) - duration);*/
         //std::this_thread::sleep_for(std::chrono::seconds(1));
         int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(
                 duration).count();
+
+        micromachines.sendNewStateToPlayers();
         usleep(MICROSECS_WAIT - microsecsPassed);
 
         this->executeLibraries();

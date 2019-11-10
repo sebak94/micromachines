@@ -25,7 +25,7 @@ void ModelUpdater::run() {
     while (running) {
         try {
             std::string text = receive();
-            //printf("recibo: %s", text.c_str());
+            printf("recibo: %s", text.c_str());
             modelMonitor.updateCar(text);
         } catch (std::exception &e) {
             running = false;

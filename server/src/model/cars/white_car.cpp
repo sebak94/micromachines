@@ -1,3 +1,4 @@
 #include "../../../include/model/cars/white_car.h"
 
-WhiteCar::WhiteCar(): Car(100, 40, 150, 2, 2, 2, Point(75, 50), white) {}
+WhiteCar::WhiteCar(b2World *world): Car(100, 40, 250, 2, 2, 2, Point(75, 50),
+    white, world) {}
