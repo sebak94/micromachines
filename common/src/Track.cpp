@@ -513,31 +513,25 @@ Point Track::getCarStartingPos(int order) {
 }
 
 uint16_t Track::getCarStartingRotation(int order) {
-    int blocksToStartLine = order/2;
-    Point act = trackSequence.at(partCounter - 1 - blocksToStartLine);
-    Point prev = trackSequence.at(partCounter - 2 - blocksToStartLine);
+    Point act = trackSequence.at(partCounter - 1 - order/2);
+    Point prev = trackSequence.at(partCounter - 2 - order/2);
     trackPartType t = getTrackPart(act.getX(), act.getY()).getType();
-    bool toRight = act.getX() > prev.getX();
-    bool toLeft = act.getX() < prev.getX();
-    bool toUp = act.getY() > prev.getY();
-    bool toDown = act.getY() < prev.getY();
 
-    if (toRight) {
+    if (act.getX() > prev.getX()) {
         if (t == upLeft) return 45;
         else if (t == downLeft) return 135;
         else if (t == horizontal || t == finishH) return 90;
-    } else if (toLeft) {
+    } else if (act.getX() < prev.getX()) {
         if (t == upRight) return -45;
         else if (t == downRight) return -135;
         else if (t == horizontal || t == finishH) return -90;
-    } else if (toUp) {
+    } else if (act.getY() > prev.getY()) {
         if (t == downLeft) return -45;
         else if (t == downRight) return 45;
         else if (t == vertical || t == finishV) return 0;
-    } else if (toDown) {
+    } else if (act.getY() < prev.getY()) {
         if (t == upRight) return 135;
         else if (t == upLeft) return -135;
         else if (t == vertical || t == finishV) return 180;
     }
-
 }
