@@ -19,6 +19,7 @@ public:
     void render();
     SDL_Renderer* getRenderer() const;
     void resize(int width, int height);
+    void changeFullScreen();
 };
 
 #endif

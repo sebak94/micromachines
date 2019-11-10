@@ -111,7 +111,12 @@ set(SOURCE_FILES_CLIENT
     common/src/TrackList.cpp
     common/src/TrackPartData.cpp
 	common/src/Grandstand.cpp
-	common/include/Grandstand.h)
+	common/include/Grandstand.h
+	common/include/Button.h
+	common/src/Button.cpp
+	editor/include/Error.h
+	editor/src/Error.cpp
+)
 
 set(SOURCE_FILES_EDITOR
 	common/src/TrackList.cpp
