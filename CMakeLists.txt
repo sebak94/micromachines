@@ -76,6 +76,8 @@ set(SOURCE_FILES_CLIENT
 	client/src/sdl/SdlTexture.cpp
 	client/include/sdl/SdlWindow.h
 	client/src/sdl/SdlWindow.cpp
+	client/include/sdl/SdlMusic.h
+	client/src/sdl/SdlMusic.cpp
 	client/include/PictureLoader.h
     client/src/PictureLoader.cpp
 	client/include/ThreadSafeQueue.h
@@ -109,7 +111,12 @@ set(SOURCE_FILES_CLIENT
     common/src/TrackList.cpp
     common/src/TrackPartData.cpp
 	common/src/Grandstand.cpp
-	common/include/Grandstand.h)
+	common/include/Grandstand.h
+	common/include/Button.h
+	common/src/Button.cpp
+	editor/include/Error.h
+	editor/src/Error.cpp
+)
 
 set(SOURCE_FILES_EDITOR
 	common/src/TrackList.cpp
@@ -150,6 +157,7 @@ target_link_libraries(micromachines-ed
 
 target_link_libraries(micromachines-cl
 		SDL2
-		SDL2_image)
+		SDL2_image
+		SDL2_mixer)
 
 target_link_libraries(micromachines-sv -ldl)

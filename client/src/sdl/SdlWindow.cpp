@@ -54,3 +54,12 @@ void SdlWindow::resize(int width, int height) {
     this->width = width;
     this->height = height;
 }
+
+void SdlWindow::changeFullScreen() {
+    Uint32 flag = SDL_WINDOW_FULLSCREEN_DESKTOP;
+    bool isFullscreen = SDL_GetWindowFlags(window) & flag;
+    if (!isFullscreen)
+        SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    else
+        SDL_SetWindowFullscreen(this->window, 0);
+}

@@ -21,9 +21,6 @@ Track::Track(int width, int height, const std::string &name) {
 
 // Loads data of 1 track in position <trackNumber> of the json file.
 void Track::loadTrack(const Json::Value &fileTracks, int trackNumber) {
-    std::vector<std::string> fileLayout{}; // loads list of elements as temporal strings
-    for (const auto & j : fileTracks[TRACKS_ID][trackNumber][LAYOUT_ID])
-        fileLayout.emplace_back(j.asString());
     width = fileTracks[TRACKS_ID][trackNumber][WIDTH_ID].asInt();  // track width in blocks
     height = fileTracks[TRACKS_ID][trackNumber][HEIGHT_ID].asInt();  // track width in blocks
     name = fileTracks[TRACKS_ID][trackNumber][NAME_ID].asString();
@@ -31,8 +28,26 @@ void Track::loadTrack(const Json::Value &fileTracks, int trackNumber) {
     startCol = fileTracks[TRACKS_ID][trackNumber][START_ID][1].asInt();  // finish col
     nextToStartRow = fileTracks[TRACKS_ID][trackNumber][NEXT_TO_START_ID][0].asInt();  // To set way
     nextToStartCol = fileTracks[TRACKS_ID][trackNumber][NEXT_TO_START_ID][1].asInt();  // To set way
+    std::vector<std::string> fileLayout{}; // loads list of elements as temporal strings
     initLayout();  // fills all blocks as empty (grass)
+    for (const auto & j : fileTracks[TRACKS_ID][trackNumber][LAYOUT_ID]) {
+        fileLayout.emplace_back(j.asString());
+    }
+    loadGrandstands(fileTracks, trackNumber);
     initTrackParts(fileLayout);  // sets not empty blocks in matrix order
+}
+
+// Loads grandstands in grandstands vector and as trackPartData
+void Track::loadGrandstands(const Json::Value &fileTracks, int trackNumber) {
+    for (const auto & j : fileTracks[TRACKS_ID][trackNumber][GRANDSTANDS_ID]) {
+        trackPartType type =  Grandstand::identifyElem(j[0].asString());
+        grandstands.emplace_back(Grandstand(type,
+                                            j[1].asInt(),
+                                            j[2].asInt(),
+                                            BLOCKSIZE,
+                                            height));
+        setTrackPartType(j[1].asInt(), j[2].asInt(), type);
+    }
 }
 
 // Gets track name
@@ -368,6 +383,10 @@ TrackPartData & Track::getTrackPart(int posX, int posY) {
     int row = posToIndex((height-1)*BLOCKSIZE - findNearestPos(posY));
     int col = posToIndex(findNearestPos(posX));
     return trackPartData[row*width + col];
+}
+
+void Track::setTrackPartType(int row, int col, trackPartType type) {
+    trackPartData[row*width + col].setType(type);
 }
 
 // Finds nearest bottom-left corner in BLOCKSIZE multiples [meters]

@@ -47,6 +47,8 @@ public:
     std::string serialize();
 
     bool validateConnection(trackPartType previous);
+
+    void setType(trackPartType t);
 };
 
 

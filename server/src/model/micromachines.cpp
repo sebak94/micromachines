@@ -67,5 +67,5 @@ void Micromachines::sendNewStateToPlayers() {
 }
 
 std::string Micromachines::trackSerialized() {
-    return tracks.getTrack("test28").serialize();
+    return tracks.getTrack("classic").serialize();
 }
