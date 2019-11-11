@@ -47,7 +47,7 @@ TDCar::TDCar(b2World *world, uint16_t max_velocity, uint8_t acceleration,
     float frontTireMaxLateralImpulse = 7.5;
 
     //back left tire
-    TDTire* tire = new TDTire(world);
+    TDTire* tire = new TDTire(world, initial_position);
     tire->setCharacteristics(maxForwardSpeed, maxBackwardSpeed, backTireMaxDriveForce, backTireMaxLateralImpulse);
     jointDef.bodyB = tire->body;
     jointDef.localAnchorA.Set( -3, 0.75f );
@@ -55,7 +55,7 @@ TDCar::TDCar(b2World *world, uint16_t max_velocity, uint8_t acceleration,
     tires.push_back(tire);
 
     //back right tire
-    tire = new TDTire(world);
+    tire = new TDTire(world, initial_position);
     tire->setCharacteristics(maxForwardSpeed, maxBackwardSpeed, backTireMaxDriveForce, backTireMaxLateralImpulse);
     jointDef.bodyB = tire->body;
     jointDef.localAnchorA.Set( 3, 0.75f );
@@ -63,7 +63,7 @@ TDCar::TDCar(b2World *world, uint16_t max_velocity, uint8_t acceleration,
     tires.push_back(tire);
 
     //front left tire
-    tire = new TDTire(world);
+    tire = new TDTire(world, initial_position);
     tire->setCharacteristics(maxForwardSpeed, maxBackwardSpeed, frontTireMaxDriveForce, frontTireMaxLateralImpulse);
     jointDef.bodyB = tire->body;
     jointDef.localAnchorA.Set( -3, 8.5f );
@@ -71,7 +71,7 @@ TDCar::TDCar(b2World *world, uint16_t max_velocity, uint8_t acceleration,
     tires.push_back(tire);
 
     //front right tire
-    tire = new TDTire(world);
+    tire = new TDTire(world, initial_position);
     tire->setCharacteristics(maxForwardSpeed, maxBackwardSpeed, frontTireMaxDriveForce, frontTireMaxLateralImpulse);
     jointDef.bodyB = tire->body;
     jointDef.localAnchorA.Set( 3, 8.5f );

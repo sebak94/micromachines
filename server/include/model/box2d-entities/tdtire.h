@@ -2,6 +2,7 @@
 #define __TDTIRE_H__
 
 #include <Box2D/Box2D.h>
+#include "../point.h"
 
 class TDTire {
     private:
@@ -20,7 +21,7 @@ class TDTire {
     void updateDrive(int control_state);
     void updateTurn(int control_state);
 
-    TDTire(b2World* world);
+    TDTire(b2World* world, Point initial_position);
     ~TDTire();
 };
 
