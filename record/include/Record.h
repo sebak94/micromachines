@@ -20,7 +20,7 @@ extern "C" {
 class Record {
 private:
     int size{};
-    std::vector<char> lastFrame;
+    std::vector<char> * lastFrame;
     FILE* recordedFile{};
     AVStream* videoStream{};
     AVPacket* packet{};
@@ -58,7 +58,7 @@ public:
 
     SDL_Texture *getSDLRecordTexture(SDL_Renderer *renderer);
 
-    void setLastFrame(std::vector<char> frame);
+    void setLastFrame(std::vector<char> *frame);
 };
 
 

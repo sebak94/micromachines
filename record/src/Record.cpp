@@ -50,8 +50,6 @@ void Record::allocContext(){
 }
 
 void Record::allocBuffer(){
-    size = 3*height*width;
-    this->lastFrame.reserve(3*height*width);
 }
 
 void Record::openFile (const std::string & filePath) {
@@ -128,13 +126,12 @@ void Record::encode(AVCodecContext *context, AVFrame *fr, AVPacket *pckt,
     }
 }
 
-void Record::setLastFrame(std::vector<char> frame) {
+void Record::setLastFrame(std::vector<char> *frame) {
     lastFrame = frame;
 }
 
 void Record::writeFrame() {
-    std::cout << "ReceivedLastFrameSize = " << lastFrame.size() << std::endl;
-    const uint8_t* aux = (const uint8_t*) lastFrame.data();
+    const uint8_t* aux = (const uint8_t*) lastFrame->data();
     int stride = 3 * width; // 3 because of RGB (3 bytes for each color)
     sws_scale(sContext, &aux, &stride, 0, frame->height, frame->data, frame->linesize);
     encode(codecContext, frame, packet, recordedFile);
@@ -157,7 +154,6 @@ void Record::close() {
 
 /* stops/starts recording */
 void Record::changeState() {
-    std::cout << "Record button clicked" << std::endl;
     recording = !recording;
 }
 

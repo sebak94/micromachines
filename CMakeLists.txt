@@ -134,8 +134,6 @@ set(SOURCE_FILES_EDITOR
 	editor/include/TrackEditor.h
 	editor/src/Window.cpp
 	editor/include/Window.h
-	editor/src/Error.cpp
-	editor/include/Error.h
 	common/src/Button.cpp
 	common/include/Button.h
 	common/src/TextTexture.cpp

@@ -30,7 +30,6 @@ Drawer::~Drawer() {}
 void Drawer::run() {
     music.play();
     running = true;
-    int lastMicrosecs = 0;  // aux to count recording + drawing time
     std::thread recorder = std::thread(&Drawer::recorderTh, this);
     while (running) {
         auto start = std::chrono::system_clock::now();
@@ -41,10 +40,6 @@ void Drawer::run() {
         }
         auto end = std::chrono::system_clock::now();
         int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-        if (lastMicrosecs < microsecsPassed) {
-            std::cout << "maxDrawingTime = " << microsecsPassed/1000 << "ms" << std::endl;
-            lastMicrosecs = microsecsPassed;
-        }
         if ( MICROSECS_WAIT > microsecsPassed )
             usleep(MICROSECS_WAIT - microsecsPassed);
     }
@@ -112,43 +107,34 @@ void Drawer::draw() {
 
 void Drawer::saveLastFrame() {
     if (video.isRecording()) {
+        std::lock_guard<std::mutex> lock(recordMutex);
         int res = SDL_RenderReadPixels(window.getRenderer(),
                                        nullptr,
                                        SDL_PIXELFORMAT_RGB24,
                                        lastFrame.data(),
                                        3 * WIDTH);
-        std::lock_guard<std::mutex> lock(recordMutex);
         if (res) {
-            std::cout << "Error reading pixels" << SDL_GetError() << std::endl;
             throw Error("Error Writing %s", SDL_GetError());
         }
     }
 }
 
 void Drawer::recorderTh() {
-    int lastMicrosecs = 0;  // aux to count recording time
     while (running) {
         auto frameStart = std::chrono::system_clock::now();
-        // si estoy grabando, me copio el lastFrame de Draw y proceso el frame
         if (video.isRecording()) {
             std::lock_guard<std::mutex> lock(recordMutex);
             lastRecordState = true;
-            video.setLastFrame(lastFrame);
+            video.setLastFrame(&lastFrame);
             video.writeFrame();
-        // si no, finalizo y escribo el archivo
         } else if (lastRecordState && !video.isRecording()) {
             std::lock_guard<std::mutex> lock(recordMutex);
             lastRecordState = false;
-            std::cout << "no grabo mas" << std::endl;
+            std::cout << "Rec file written." << std::endl;
             video.close();
         }
-        //control para FPS
         auto end = std::chrono::system_clock::now();
         int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(end - frameStart).count();
-        if (lastMicrosecs < microsecsPassed) {
-            std::cout << "maxRecordingTime = " << microsecsPassed/1000 << "ms" << std::endl;
-            lastMicrosecs = microsecsPassed;
-        }
         if ( 1000000 * 1 / VIDEOFPS > microsecsPassed )
             usleep(1000000 * 1 / VIDEOFPS - microsecsPassed);
     }
