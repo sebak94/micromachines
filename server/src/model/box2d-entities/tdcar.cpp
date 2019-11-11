@@ -1,16 +1,19 @@
 #include "../../../include/model/box2d-entities/tdcar.h"
 #include "../../../include/model/box2d-entities/tdtire.h"
 #include "../../../include/model/cars/car.h"
+#include "../../../include/model/point.h"
 #include <Box2D/Box2D.h>
 
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
 
 TDCar::TDCar(b2World *world, uint16_t max_velocity, uint8_t acceleration,
-             uint8_t grip, uint8_t maneuverability, uint16_t rotation) {
+             uint8_t grip, uint8_t maneuverability, uint16_t rotation, Point initial_position) {
     //create car body
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
+    bodyDef.position.Set(initial_position.getX(), initial_position.getY());
+    bodyDef.angle = rotation * -1;
     body = world->CreateBody(&bodyDef);
     body->SetAngularDamping(1);
     body->SetLinearDamping(1);

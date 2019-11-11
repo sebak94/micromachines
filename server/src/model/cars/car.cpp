@@ -17,7 +17,7 @@ Car::Car(uint8_t width, uint8_t height, uint16_t max_velocity,
         acceleration(acceleration), grip(grip),
         maneuverability(maneuverability), health(100), color(color),
         td_car(world, max_velocity, acceleration, grip, maneuverability,
-        rotation), control_state(0) {
+        rotation, initial_position), control_state(0) {
 }
 
 void Car::updateState(char action) {
