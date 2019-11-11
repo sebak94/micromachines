@@ -6,7 +6,8 @@
 #define TP_RECORD_H
 
 #include <vector>
-#include "../../client/include/Drawer.h"
+#include "../../client/include/sdl/SdlWindow.h"
+//#include "../../client/include/Drawer.h"
 extern "C" {
 #include <libavformat/avformat.h>
 #include <libavcodec/avcodec.h>
@@ -19,7 +20,7 @@ extern "C" {
 class Record {
 private:
     int size{};
-    std::vector<char> buffer;
+    std::vector<char> lastFrame;
     FILE* recordedFile{};
     AVStream* videoStream{};
     AVPacket* packet{};
@@ -31,9 +32,11 @@ private:
     SwsContext * sContext{};
     bool recording = false;
     int fps = 30;
+    int width;
+    int height;
 
 public:
-    explicit Record(const std::string &filePath, const int &fps);
+    explicit Record(const std::string &filePath, const int &fps, int width, int height);
     ~Record();
     void codecContextInit(AVCodec *codec);
     void setFrame();
@@ -46,7 +49,7 @@ public:
     void allocContext();
     void encode(AVCodecContext *context, AVFrame *fr, AVPacket *pckt, FILE *filePath);
     static int sendFrame(AVCodecContext *context, AVFrame *fr);
-    void writeFrame(SDL_Renderer *renderer);
+    void writeFrame();
     void close();
     void changeState();
     bool isRecording();
@@ -54,6 +57,8 @@ public:
     void initScaleAndColorContext();
 
     SDL_Texture *getSDLRecordTexture(SDL_Renderer *renderer);
+
+    void setLastFrame(std::vector<char> frame);
 };
 
 

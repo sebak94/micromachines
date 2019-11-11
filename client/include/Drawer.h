@@ -1,8 +1,10 @@
 #ifndef __DRAWER_H__
 #define __DRAWER_H__
 
-#define WIDTH 900
-#define HEIGHT 600
+#define ASPECTRATIO 3/2
+#define BASERESOLUTIONMULTIPLIER 38  // for recording
+#define HEIGHT 16*BASERESOLUTIONMULTIPLIER
+#define WIDTH HEIGHT*ASPECTRATIO
 
 #include <map>
 #include "../../common/include/thread.h"
@@ -29,7 +31,11 @@ private:
     SdlMusic music;
     Button fullScreenButton;
     Button recButton;
-    bool recording = false;
+    std::vector<char> lastFrame;
+    Record video;
+    SDL_Texture * videoTexture;
+    std::mutex recordMutex;
+    bool lastRecordState = false;
 
 public:
     Drawer(ModelMonitor &modelMonitor);
@@ -45,11 +51,12 @@ private:
     void showFullScreenButton();
     void draw();
     void showAnimation(SdlWindow &window);
-
     void createRecButton();
-
-
     void showRecButton();
+
+    void recorderTh();
+
+    void saveLastFrame();
 };
 
 #endif

@@ -74,4 +74,21 @@ target_link_libraries(main
         SDL2_ttf
         swscale)
 ```
+
+### FFMPEG
+* Instalar:
+```
+sudo apt install libavutil libswresample libavformat libavcodec
+```
+
+* Cmake:
+```
+target_link_libraries(main
+        avutil
+        avformat
+        swscale
+        avcodec)
+```
+
+
 ***NOTA: Cualquier modificación de estos pasos hacer el cambio correspondiente en este Readme.***

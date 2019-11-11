@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <utility>
 #include "../include/Record.h"
 #include "../../common/include/Error.h"
 extern "C" {
@@ -11,9 +12,11 @@ extern "C" {
 #include <libavutil/opt.h>
 #include <libswscale/swscale.h>
 }
-Record::Record(const std::string &filePath,
-               const int &fps) {
+
+Record::Record(const std::string &filePath, const int &fps, int width, int height) {
     //3 because of RGB (3 bytes for each color)
+    this->width = width;
+    this->height = height;
     initScaleAndColorContext();
     allocContext();
     allocBuffer();
@@ -28,11 +31,11 @@ Record::Record(const std::string &filePath,
 }
 
 void Record::initScaleAndColorContext() {
-    sContext = sws_getContext(WIDTH,
-                              HEIGHT,
+    sContext = sws_getContext(width,
+                              height,
                               AV_PIX_FMT_RGB24,
-                              WIDTH,
-                              HEIGHT,
+                              width,
+                              height,
                               AV_PIX_FMT_YUV420P,
                               0,
                               0,
@@ -47,8 +50,8 @@ void Record::allocContext(){
 }
 
 void Record::allocBuffer(){
-    size = 3*HEIGHT*WIDTH;
-    buffer.reserve(3*HEIGHT*WIDTH);
+    size = 3*height*width;
+    this->lastFrame.reserve(3*height*width);
 }
 
 void Record::openFile (const std::string & filePath) {
@@ -96,8 +99,8 @@ void Record::setFrame() {
 // Resolution must be multiple of 2
 void Record::codecContextInit(AVCodec *codec) {
     codecContext = avcodec_alloc_context3(codec);
-    codecContext->width = WIDTH;
-    codecContext->height = HEIGHT;
+    codecContext->width = width;
+    codecContext->height = height;
     codecContext->time_base = {1, fps};
     codecContext->framerate = {fps,1};
     codecContext->pix_fmt = AV_PIX_FMT_YUV420P;
@@ -105,7 +108,7 @@ void Record::codecContextInit(AVCodec *codec) {
     codecContext->max_b_frames = 2;
     if (codec->id == AV_CODEC_ID_H264) {
         codecContext->profile = FF_PROFILE_H264_BASELINE;
-        av_opt_set(codecContext->priv_data, "preset", "slow", 0);
+        av_opt_set(codecContext->priv_data, "preset", "fast", 0);
     }
     avcodec_open2(codecContext, codec, nullptr);
 }
@@ -125,14 +128,15 @@ void Record::encode(AVCodecContext *context, AVFrame *fr, AVPacket *pckt,
     }
 }
 
-void Record::writeFrame(SDL_Renderer *renderer) {
-    // 3 because of RGB (3 bytes for each color)
-    int res = SDL_RenderReadPixels(renderer, nullptr, SDL_PIXELFORMAT_RGB24, buffer.data(), 3*WIDTH);
-    if (res)
-        throw Error("Error Writing %s", SDL_GetError());
-    const uint8_t* aux = (const uint8_t*) buffer.data();
-    int width = 3*WIDTH; // 3 because of RGB (3 bytes for each color)
-    sws_scale(sContext, &aux, &width, 0, frame->height, frame->data, frame->linesize);
+void Record::setLastFrame(std::vector<char> frame) {
+    lastFrame = frame;
+}
+
+void Record::writeFrame() {
+    std::cout << "ReceivedLastFrameSize = " << lastFrame.size() << std::endl;
+    const uint8_t* aux = (const uint8_t*) lastFrame.data();
+    int stride = 3 * width; // 3 because of RGB (3 bytes for each color)
+    sws_scale(sContext, &aux, &stride, 0, frame->height, frame->data, frame->linesize);
     encode(codecContext, frame, packet, recordedFile);
     frame->pts = framesQuantity;
     framesQuantity++;
@@ -165,8 +169,8 @@ SDL_Texture * Record::getSDLRecordTexture(SDL_Renderer * renderer) {
     return SDL_CreateTexture(renderer,
                              SDL_PIXELFORMAT_RGB24,
                              SDL_TEXTUREACCESS_TARGET,
-                             WIDTH,
-                             HEIGHT);
+                             width,
+                             height);
 }
 
 Record::~Record() {

@@ -2,20 +2,27 @@
 #include <iostream>
 #include "../include/Drawer.h"
 #include "../include/sdl/SdlAnimation.h"
+#include "../../record/include/Record.h"
+#include "../../common/include/Error.h"
 #include <unistd.h>
 
 #define MICROSECS_WAIT 16000 //seria que en un segundo se dibujen aprox 60 veces
 #define MUSICPATH "../common/sounds/beat.wav"
 #define FULLSCREENBUTTON "../common/images/fullscreen.png"
 #define RECBUTTON "../common/images/buttons/recButton.png"
+#define VIDEOPATH "./recorded.mp4"
+#define VIDEOFPS 30
 
 Drawer::Drawer(ModelMonitor &modelMonitor) :
     window(WIDTH, HEIGHT),
     loader(window, pictures, trackPictures),
     camera(window, pictures, trackPictures),
-    modelMonitor(modelMonitor), music(MUSICPATH) {
+    modelMonitor(modelMonitor), music(MUSICPATH),
+    video(std::string(VIDEOPATH), VIDEOFPS, WIDTH, HEIGHT){
     createFullScreenButton();
     createRecButton();
+    lastFrame.reserve(3*WIDTH*HEIGHT);
+    videoTexture = video.getSDLRecordTexture(window.getRenderer());
 }
 
 Drawer::~Drawer() {}
@@ -23,6 +30,8 @@ Drawer::~Drawer() {}
 void Drawer::run() {
     music.play();
     running = true;
+    int lastMicrosecs = 0;  // aux to count recording + drawing time
+    std::thread recorder = std::thread(&Drawer::recorderTh, this);
     while (running) {
         auto start = std::chrono::system_clock::now();
         try {
@@ -32,8 +41,14 @@ void Drawer::run() {
         }
         auto end = std::chrono::system_clock::now();
         int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-        usleep(MICROSECS_WAIT - microsecsPassed);
+        if (lastMicrosecs < microsecsPassed) {
+            std::cout << "maxDrawingTime = " << microsecsPassed/1000 << "ms" << std::endl;
+            lastMicrosecs = microsecsPassed;
+        }
+        if ( MICROSECS_WAIT > microsecsPassed )
+            usleep(MICROSECS_WAIT - microsecsPassed);
     }
+    recorder.join();
     music.stop();
 }
 
@@ -58,6 +73,7 @@ void Drawer::createRecButton() {
 
 void Drawer::updateFullScreenButton(const SDL_Event *event) {
     fullScreenButton.updateEvent(event);
+
     if (fullScreenButton.isClicked()) {
         window.changeFullScreen();
     }
@@ -65,8 +81,9 @@ void Drawer::updateFullScreenButton(const SDL_Event *event) {
 
 void Drawer::updateRecButton(const SDL_Event *event) {
     recButton.updateEvent(event);
-    if (recButton.isClicked())
-        recording ^= true;
+    if (recButton.isClicked()) {
+        video.changeState();
+    }
 }
 
 void Drawer::showFullScreenButton() {
@@ -90,6 +107,51 @@ void Drawer::draw() {
     showFullScreenButton();
     showRecButton();
     window.render();
+    saveLastFrame();
+}
+
+void Drawer::saveLastFrame() {
+    if (video.isRecording()) {
+        int res = SDL_RenderReadPixels(window.getRenderer(),
+                                       nullptr,
+                                       SDL_PIXELFORMAT_RGB24,
+                                       lastFrame.data(),
+                                       3 * WIDTH);
+        std::lock_guard<std::mutex> lock(recordMutex);
+        if (res) {
+            std::cout << "Error reading pixels" << SDL_GetError() << std::endl;
+            throw Error("Error Writing %s", SDL_GetError());
+        }
+    }
+}
+
+void Drawer::recorderTh() {
+    int lastMicrosecs = 0;  // aux to count recording time
+    while (running) {
+        auto frameStart = std::chrono::system_clock::now();
+        // si estoy grabando, me copio el lastFrame de Draw y proceso el frame
+        if (video.isRecording()) {
+            std::lock_guard<std::mutex> lock(recordMutex);
+            lastRecordState = true;
+            video.setLastFrame(lastFrame);
+            video.writeFrame();
+        // si no, finalizo y escribo el archivo
+        } else if (lastRecordState && !video.isRecording()) {
+            std::lock_guard<std::mutex> lock(recordMutex);
+            lastRecordState = false;
+            std::cout << "no grabo mas" << std::endl;
+            video.close();
+        }
+        //control para FPS
+        auto end = std::chrono::system_clock::now();
+        int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(end - frameStart).count();
+        if (lastMicrosecs < microsecsPassed) {
+            std::cout << "maxRecordingTime = " << microsecsPassed/1000 << "ms" << std::endl;
+            lastMicrosecs = microsecsPassed;
+        }
+        if ( 1000000 * 1 / VIDEOFPS > microsecsPassed )
+            usleep(1000000 * 1 / VIDEOFPS - microsecsPassed);
+    }
 }
 
 void Drawer::showAnimation(SdlWindow &window) {
