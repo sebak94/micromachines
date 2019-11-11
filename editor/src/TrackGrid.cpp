@@ -102,7 +102,7 @@ void TrackGrid::updateSamples(const SDL_Event *event) {
 }
 
 /* Gets finish line position. Returns false if non-existent or duplicated */
-bool TrackGrid::findStartLine(int & startX, int & startY) {
+bool TrackGrid::findStartLine(int & startRow, int & startCol) {
     trackPartType type;
     bool found = false;
     for (int i = 0; i < grid.size(); i++) {
@@ -111,8 +111,8 @@ bool TrackGrid::findStartLine(int & startX, int & startY) {
             return false;  // avoids double finish lines;
         if ((type == finishH || type == finishV)) {
             found = true;
-            startX = i%wBlocks;
-            startY = i/wBlocks;
+            startCol = i % wBlocks;
+            startRow = i / wBlocks;
         }
     }
     if (found)
