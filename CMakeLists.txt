@@ -6,6 +6,9 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(JSONCPP jsoncpp)
 link_libraries(${JSONCPP_LIBRARIES})
 
+find_package(Lua REQUIRED)
+include_directories(${LUA_INCLUDE_DIR})
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
 
 set(SOURCE_FILES_SERVER
@@ -117,7 +120,9 @@ set(SOURCE_FILES_CLIENT
 	editor/include/Error.h
 	editor/src/Error.cpp
     server/src/model/point.cpp
-    server/src/model/point.cpp)
+    server/src/model/point.cpp
+	client/src/lua/ai.cpp
+	client/include/lua/ai.h)
 
 set(SOURCE_FILES_EDITOR
 	common/src/TrackList.cpp
@@ -161,6 +166,7 @@ target_link_libraries(micromachines-ed
 target_link_libraries(micromachines-cl
 		SDL2
 		SDL2_image
-		SDL2_mixer)
+		SDL2_mixer
+		lua5.3)
 
 target_link_libraries(micromachines-sv -ldl)
