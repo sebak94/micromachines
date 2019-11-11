@@ -1,6 +1,9 @@
 #ifndef __DRAWER_H__
 #define __DRAWER_H__
 
+#define WIDTH 900
+#define HEIGHT 600
+
 #include <map>
 #include "../../common/include/thread.h"
 #include "../../common/include/socket.h"
@@ -12,6 +15,7 @@
 #include "../include/ModelMonitor.h"
 #include "sdl/SdlMusic.h"
 #include "../../common/include/Button.h"
+#include "../../record/include/Record.h"
 
 class Drawer : public Thread {
 private:
@@ -24,6 +28,8 @@ private:
     Camera camera;
     SdlMusic music;
     Button fullScreenButton;
+    Button recButton;
+    bool recording = false;
 
 public:
     Drawer(ModelMonitor &modelMonitor);
@@ -32,12 +38,18 @@ public:
     virtual void stop() override;
     void resize(int width, int height);
     void updateFullScreenButton(const SDL_Event * event);
+    void updateRecButton(const SDL_Event *event);
 
 private:
     void createFullScreenButton();
     void showFullScreenButton();
     void draw();
     void showAnimation(SdlWindow &window);
+
+    void createRecButton();
+
+
+    void showRecButton();
 };
 
 #endif

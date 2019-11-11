@@ -114,10 +114,12 @@ set(SOURCE_FILES_CLIENT
 	common/include/Grandstand.h
 	common/include/Button.h
 	common/src/Button.cpp
-	editor/include/Error.h
-	editor/src/Error.cpp
+	server/src/model/point.cpp
     server/src/model/point.cpp
-    server/src/model/point.cpp)
+	record/include/Record.h
+	record/src/Record.cpp
+	common/include/Error.h
+	common/src/Error.cpp)
 
 set(SOURCE_FILES_EDITOR
 	common/src/TrackList.cpp
@@ -130,8 +132,6 @@ set(SOURCE_FILES_EDITOR
 	editor/include/TrackEditor.h
 	editor/src/Window.cpp
 	editor/include/Window.h
-	editor/src/Error.cpp
-	editor/include/Error.h
 	common/src/Button.cpp
 	common/include/Button.h
 	common/src/TextTexture.cpp
@@ -145,7 +145,9 @@ set(SOURCE_FILES_EDITOR
 	common/src/Grandstand.cpp
 	common/include/Grandstand.h
 	server/src/model/point.cpp
-	server/src/model/point.cpp)
+	server/src/model/point.cpp
+	common/src/Error.cpp
+	common/include/Error.h)
 
 add_executable(micromachines-sv ${SOURCE_FILES_SERVER} server/main.cpp)
 add_executable(micromachines-cl ${SOURCE_FILES_CLIENT} client/main.cpp)
@@ -161,6 +163,11 @@ target_link_libraries(micromachines-ed
 target_link_libraries(micromachines-cl
 		SDL2
 		SDL2_image
-		SDL2_mixer)
+		SDL2_mixer
+		SDL2_ttf
+		avutil
+		avformat
+		swscale
+		avcodec)
 
 target_link_libraries(micromachines-sv -ldl)

@@ -4,11 +4,10 @@
 #include "../include/sdl/SdlAnimation.h"
 #include <unistd.h>
 
-#define WIDTH 900
-#define HEIGHT 600
 #define MICROSECS_WAIT 16000 //seria que en un segundo se dibujen aprox 60 veces
 #define MUSICPATH "../common/sounds/beat.wav"
 #define FULLSCREENBUTTON "../common/images/fullscreen.png"
+#define RECBUTTON "../common/images/buttons/recButton.png"
 
 Drawer::Drawer(ModelMonitor &modelMonitor) :
     window(WIDTH, HEIGHT),
@@ -16,6 +15,7 @@ Drawer::Drawer(ModelMonitor &modelMonitor) :
     camera(window, pictures, trackPictures),
     modelMonitor(modelMonitor), music(MUSICPATH) {
     createFullScreenButton();
+    createRecButton();
 }
 
 Drawer::~Drawer() {}
@@ -51,6 +51,11 @@ void Drawer::createFullScreenButton() {
     fullScreenButton = Button(window.getRenderer(), area, FULLSCREENBUTTON);
 }
 
+void Drawer::createRecButton() {
+    SDL_Rect area = {WIDTH - 80, 10, 100, 35};
+    recButton = Button(window.getRenderer(), area, RECBUTTON);
+}
+
 void Drawer::updateFullScreenButton(const SDL_Event *event) {
     fullScreenButton.updateEvent(event);
     if (fullScreenButton.isClicked()) {
@@ -58,10 +63,20 @@ void Drawer::updateFullScreenButton(const SDL_Event *event) {
     }
 }
 
+void Drawer::updateRecButton(const SDL_Event *event) {
+    recButton.updateEvent(event);
+    if (recButton.isClicked())
+        recording ^= true;
+}
+
 void Drawer::showFullScreenButton() {
     int size = (window.getWidth() + window.getHeight()) / 37;
     fullScreenButton.updateSize(size, size);
     fullScreenButton.draw(window.getRenderer());
+}
+
+void Drawer::showRecButton() {
+    recButton.draw(window.getRenderer());
 }
 
 void Drawer::draw() {
@@ -72,8 +87,8 @@ void Drawer::draw() {
     int y = modelMonitor.getCars()[modelMonitor.getMyColor()]->getY();
     camera.showTrack(x, y, modelMonitor.getTrack());
     camera.showCars(x, y, modelMonitor.getCars());
-
     showFullScreenButton();
+    showRecButton();
     window.render();
 }
 

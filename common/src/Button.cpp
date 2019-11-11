@@ -7,7 +7,7 @@
 #include <SDL2/SDL_image.h>
 #include <iostream>
 #include "../include/Button.h"
-#include "../../editor/include/Error.h"
+#include "../../common/include/Error.h"
 
 
 Button::Button() = default;
