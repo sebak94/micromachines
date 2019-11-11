@@ -34,6 +34,18 @@ Ej:
 ```
 
 ## Bibliotecas
+### Lua
+* Instalar:
+```
+sudo apt install lua5.3 liblua5.3-dev
+```
+* Cmake:
+```
+find_package(Lua REQUIRED)
+include_directories(${LUA_INCLUDE_DIR})
+
+```
+
 ### JSONCPP
 * Instalar:
 ```
