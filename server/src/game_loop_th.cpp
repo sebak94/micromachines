@@ -19,10 +19,39 @@ uint64_t GameLoopTh::GetTickCountMs() {
     return (uint64_t)(ts.tv_nsec / 1000000) + ((uint64_t) ts.tv_sec * 1000ull);
 }
 
+void GameLoopTh::waitForPlayers() {
+    while (micromachines.getPlayersNumber() < 2) {
+        auto begin = std::chrono::steady_clock::now();
+        micromachines.updatePlayersState();
+        micromachines.sendNewStateToPlayers();
+        std::cout << "waiting for players" << std::endl;
+
+        auto end = std::chrono::steady_clock::now();
+        int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(
+                end - begin).count();
+        usleep(MICROSECS_WAIT - microsecsPassed);
+    }
+    auto raceStartWaiting = std::chrono::steady_clock::now();
+    int secondsToStart = 5;
+    while (secondsToStart > 0) {
+        auto begin = std::chrono::steady_clock::now();
+        micromachines.updatePlayersState();
+        micromachines.sendNewStateToPlayers();
+        std::cout << "Time to start: " << secondsToStart << " seconds." << std::endl;
+
+        auto end = std::chrono::steady_clock::now();
+        int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(
+                end - begin).count();
+        usleep(1000000 - microsecsPassed);
+        secondsToStart--;
+    }
+}
+
 void GameLoopTh::run() {
     uint64_t next_game_tick = GetTickCountMs();
     uint64_t loops;
 
+    waitForPlayers();
     while (running) {
         auto begin = std::chrono::steady_clock::now();
 
