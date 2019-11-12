@@ -8,7 +8,7 @@
 #include "../../common/include/TrackPartData.h"
 #include "../include/TrackBlock.h"
 #include "../../common/include/Button.h"
-#include "../include/Error.h"
+#include "../../common/include/Error.h"
 
 /* Creates track block of specific area and applies specific texture */
 TrackBlock::TrackBlock(SDL_Renderer *renderer, SDL_Rect &area, const std::string &path) {

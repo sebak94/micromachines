@@ -58,6 +58,7 @@ protected:
 public:
     Track(int width, int height, const std::string &name);
     Track();
+    void setTrackStart(int row, int col, int rowN, int colN);
     explicit Track(const std::string &trackStr);
     void loadTrack(const Json::Value &fileTracks, int trackNumber);
     void print();

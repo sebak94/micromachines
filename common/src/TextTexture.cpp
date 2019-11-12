@@ -5,7 +5,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <string>
 #include "../include/TextTexture.h"
-#include "../../editor/include/Error.h"
+#include "../../common/include/Error.h"
 #include "../../editor/include/Window.h"
 #define BOX_BORDER_THICKNESS 3
 

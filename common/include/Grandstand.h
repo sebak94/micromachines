@@ -7,8 +7,8 @@
 
 #define LAYOUT_PUB1LEFT "pub1Left"
 #define LAYOUT_PUB1RIGHT "pub1Right"
-#define LAYOUT_PUB1UP "pub1Right"
-#define LAYOUT_PUB1DOWN "pub1Right"
+#define LAYOUT_PUB1UP "pub1Up"
+#define LAYOUT_PUB1DOWN "pub1Down"
 
 #include "../../editor/include/TrackBlock.h"
 

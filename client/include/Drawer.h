@@ -1,6 +1,11 @@
 #ifndef __DRAWER_H__
 #define __DRAWER_H__
 
+#define ASPECTRATIO 3/2
+#define BASERESOLUTIONMULTIPLIER 38  // for recording
+#define HEIGHT 16*BASERESOLUTIONMULTIPLIER
+#define WIDTH HEIGHT*ASPECTRATIO
+
 #include <map>
 #include "../../common/include/thread.h"
 #include "../../common/include/socket.h"
@@ -12,6 +17,7 @@
 #include "../include/ModelMonitor.h"
 #include "sdl/SdlMusic.h"
 #include "../../common/include/Button.h"
+#include "../../record/include/Record.h"
 
 class Drawer : public Thread {
 private:
@@ -24,6 +30,12 @@ private:
     Camera camera;
     SdlMusic music;
     Button fullScreenButton;
+    Button recButton;
+    std::vector<char> lastFrame;
+    Record video;
+    SDL_Texture * videoTexture;
+    std::mutex recordMutex;
+    bool lastRecordState = false;
 
 public:
     Drawer(ModelMonitor &modelMonitor);
@@ -32,12 +44,19 @@ public:
     virtual void stop() override;
     void resize(int width, int height);
     void updateFullScreenButton(const SDL_Event * event);
+    void updateRecButton(const SDL_Event *event);
 
 private:
     void createFullScreenButton();
     void showFullScreenButton();
     void draw();
     void showAnimation(SdlWindow &window);
+    void createRecButton();
+    void showRecButton();
+
+    void recorderTh();
+
+    void saveLastFrame();
 };
 
 #endif

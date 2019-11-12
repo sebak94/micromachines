@@ -168,6 +168,7 @@ bool Track::inCurveRange(bool invertedX, bool invertedY, int x, int y) {
 /* Transforms sequential order of the track (json)
  * to a matrix layout */
 void Track::initTrackParts(const std::vector<std::string> & trackLayout) {
+    trackSequence.clear();
     int row = startRow;
     int lastRow = row;
     int col = startCol;
@@ -189,8 +190,8 @@ void Track::initTrackParts(const std::vector<std::string> & trackLayout) {
 
 // saves positions and sequence of Track
 void Track::saveTrackSequence(int row, int col) {
-    uint16_t y = (uint16_t)trackPartData[row*width + col].getPosX();
-    uint16_t x = (uint16_t)trackPartData[row*width + col].getPosY();
+    uint16_t y = (uint16_t)trackPartData[row*width + col].getPosY();
+    uint16_t x = (uint16_t)trackPartData[row*width + col].getPosX();
     trackSequence.emplace(partCounter-1, Point(x,y));
 }
 
@@ -210,11 +211,8 @@ bool Track::validateTrack() {
     int col = startCol;
     int i = 0;
     trackPartType actual;
-    trackPartType previous = getPartType(row, col);
-    if (previous != downRight)
-        return false;
-    col++;  // assumes top-left corner is a down-right curve
-    // +1 to form a closed loop with the track
+    trackPartType previous = setStartingPreviousTrackPart(row, col);
+    row = nextToStartRow, col = nextToStartCol;
     for (int j = 1; j <= partCounter + 1; j++){
         actual = getPartType(row, col);
         if (!validateConnection(previous, actual))
@@ -513,31 +511,33 @@ Point Track::getCarStartingPos(int order) {
 }
 
 uint16_t Track::getCarStartingRotation(int order) {
-    int blocksToStartLine = order/2;
-    Point act = trackSequence.at(partCounter - 1 - blocksToStartLine);
-    Point prev = trackSequence.at(partCounter - 2 - blocksToStartLine);
+    Point act = trackSequence.at(partCounter - 1 - order/2);
+    Point prev = trackSequence.at(partCounter - 2 - order/2);
     trackPartType t = getTrackPart(act.getX(), act.getY()).getType();
-    bool toRight = act.getX() > prev.getX();
-    bool toLeft = act.getX() < prev.getX();
-    bool toUp = act.getY() > prev.getY();
-    bool toDown = act.getY() < prev.getY();
 
-    if (toRight) {
+    if (act.getX() > prev.getX()) {
         if (t == upLeft) return 45;
         else if (t == downLeft) return 135;
         else if (t == horizontal || t == finishH) return 90;
-    } else if (toLeft) {
+    } else if (act.getX() < prev.getX()) {
         if (t == upRight) return -45;
         else if (t == downRight) return -135;
         else if (t == horizontal || t == finishH) return -90;
-    } else if (toUp) {
+    } else if (act.getY() > prev.getY()) {
         if (t == downLeft) return -45;
         else if (t == downRight) return 45;
         else if (t == vertical || t == finishV) return 0;
-    } else if (toDown) {
+    } else if (act.getY() < prev.getY()) {
         if (t == upRight) return 135;
         else if (t == upLeft) return -135;
         else if (t == vertical || t == finishV) return 180;
     }
+}
 
+/* Sets start line and next position to start line */
+void Track::setTrackStart(int row, int col, int rowN, int colN) {
+    startRow = row;
+    startCol = col;
+    nextToStartRow = rowN;
+    nextToStartCol = colN;
 }

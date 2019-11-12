@@ -2,7 +2,7 @@
 // Created by fperezboco on 18/10/19.
 //
 
-#include "Error.h"
+#include "../../common/include/Error.h"
 
 #ifndef TP_WINDOW_H
 #define TP_WINDOW_H

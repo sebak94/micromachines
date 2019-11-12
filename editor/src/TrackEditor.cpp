@@ -12,16 +12,7 @@
 void TrackEditor::run(Window & editor) {
     editor.startGUI(WINDOW_NAME);
     quit = false;
-    //inputTrackCharacteristics(editor);
-    /*testing*/
-    trackName = "test28";
-    trackWidth = 3;
-    trackHeight = 3;
-    TrackList tracklist;
-    tracklist.readTracks();
-    Track test = tracklist.getTrack("test28");
-    test.print();
-    /*endtesting*/
+    inputTrackCharacteristics(editor);
     grid = TrackGrid(editor, trackWidth, trackHeight);
     backgroundGrid = TrackGrid(editor, trackWidth, trackHeight);
     grid.createSamples();
@@ -137,7 +128,7 @@ void TrackEditor::saveTrack() {
 /* Looks for start line. Returns false if not present or duplicated */
 bool TrackEditor::findStartLine() {
     int oldCol = startCol, oldRow = startRow;
-    bool found = grid.findStartLine(startCol, startRow);
+    bool found = grid.findStartLine(startRow, startCol);
     if (found && (oldCol != startCol || oldRow != startRow))
         waySet = false;
     return found;
@@ -237,6 +228,7 @@ bool TrackEditor::trackValid() {
 void TrackEditor::createTrack() {
     parts = 0; grandstands.clear();
     track = Track(trackWidth, trackHeight, trackName);
+    track.setTrackStart(startRow, startCol, nextToStartRow, nextToStartCol);
     int row = 0, col = 0;
     for (int i = 0; i < grid.getSize(); i++) {
         col = i % trackWidth, row = i / trackWidth;

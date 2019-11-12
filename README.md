@@ -34,6 +34,18 @@ Ej:
 ```
 
 ## Bibliotecas
+### Lua
+* Instalar:
+```
+sudo apt install lua5.3 liblua5.3-dev
+```
+* Cmake:
+```
+find_package(Lua REQUIRED)
+include_directories(${LUA_INCLUDE_DIR})
+
+```
+
 ### JSONCPP
 * Instalar:
 ```
@@ -74,4 +86,21 @@ target_link_libraries(main
         SDL2_ttf
         swscale)
 ```
+
+### FFMPEG
+* Instalar:
+```
+sudo apt install libavutil libswresample libavformat libavcodec
+```
+
+* Cmake:
+```
+target_link_libraries(main
+        avutil
+        avformat
+        swscale
+        avcodec)
+```
+
+
 ***NOTA: Cualquier modificación de estos pasos hacer el cambio correspondiente en este Readme.***
