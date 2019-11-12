@@ -14,7 +14,7 @@ TDCar::TDCar(b2World *world, uint16_t max_velocity, uint8_t acceleration,
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(initial_position.getX(), initial_position.getY());
-    bodyDef.angle = rotation * -1;
+    bodyDef.angle = DEGTORAD*(rotation * -1);
     body = world->CreateBody(&bodyDef);
     body->SetAngularDamping(1);
     body->SetLinearDamping(1);

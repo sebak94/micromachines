@@ -35,7 +35,7 @@ void ClientTh::sendTrackData(std::string track_serialized) {
 }
 
 void ClientTh::run() {
-    std::string strState = "mainMenu\n";
+    std::string strState = "G\nmainMenu\n";
     while (is_running){
         switch (state) {
             case mainMenu:

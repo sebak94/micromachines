@@ -34,11 +34,8 @@ class Micromachines {
     Point getStartingPoint(int position);
     uint16_t getStartingCarRot(int position);
     void changeCarState(char *new_command);
-
     int getPlayersNumber();
-
     void setPlayerGameState(ClientTh *player, GameState state);
-
     void setAllPlayersGameStates(GameState state);
 };
 

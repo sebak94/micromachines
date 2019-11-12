@@ -50,25 +50,43 @@ void EventLoopSDL::run() {
     while (running) {
         SDL_Event event;
         SDL_WaitEvent(&event);
-        drawer->updateFullScreenButton(&event);
-        drawer->updateRecButton(&event);
-        switch (event.type) {
-            case SDL_KEYDOWN:
-                enqueueKeyDownEvent((SDL_KeyboardEvent &) event);
+        switch (modelMonitor.getGameState()) {
+            case mainMenu:
                 break;
-            case SDL_KEYUP:
-                enqueueKeyUpEvent((SDL_KeyboardEvent &) event);
+            case selectingTrack:
                 break;
-            case SDL_QUIT:
-                this->queue.push("Q"); //encolo una Q para finalizar
-                this->running = false;
+            case selectingCar:
                 break;
-            case SDL_WINDOWEVENT:
-                switch (event.window.event) {
-                    case SDL_WINDOWEVENT_SIZE_CHANGED:
-                        drawer->resize(event.window.data1, event.window.data2);
+            case waitingPlayers:
+                break;
+            case startCountdown:
+                break;
+            case playing:
+                drawer->updateFullScreenButton(&event);
+                drawer->updateRecButton(&event);
+                switch (event.type) {
+                    case SDL_KEYDOWN:
+                        enqueueKeyDownEvent((SDL_KeyboardEvent &) event);
+                        break;
+                    case SDL_KEYUP:
+                        enqueueKeyUpEvent((SDL_KeyboardEvent &) event);
+                        break;
+                    case SDL_QUIT:
+                        this->queue.push("Q"); //encolo una Q para finalizar
+                        this->running = false;
+                        break;
+                    case SDL_WINDOWEVENT:
+                        switch (event.window.event) {
+                            case SDL_WINDOWEVENT_SIZE_CHANGED:
+                                drawer->resize(event.window.data1, event.window.data2);
+                                break;
+                        }
                         break;
                 }
+                break;
+            case waitingEnd:
+                break;
+            case gameEnded:
                 break;
         }
     }

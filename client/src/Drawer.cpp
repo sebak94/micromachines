@@ -6,7 +6,8 @@
 #include "../../common/include/Error.h"
 #include <unistd.h>
 
-#define MICROSECS_WAIT 16000 //seria que en un segundo se dibujen aprox 60 veces
+#define FPS 80
+#define MICROSECS_WAIT 1/FPS*1000000 //seria que en un segundo se dibujen aprox 60 veces
 #define MUSICPATH "../common/sounds/beat.wav"
 #define FULLSCREENBUTTON "../common/images/fullscreen.png"
 #define RECBUTTON "../common/images/buttons/recButton.png"
@@ -88,6 +89,7 @@ void Drawer::showFullScreenButton() {
 }
 
 void Drawer::showRecButton() {
+    recButton.updatePos(window.getWidth() - 80, 10);
     recButton.draw(window.getRenderer());
 }
 
