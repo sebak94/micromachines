@@ -21,9 +21,6 @@ Track::Track(int width, int height, const std::string &name) {
 
 // Loads data of 1 track in position <trackNumber> of the json file.
 void Track::loadTrack(const Json::Value &fileTracks, int trackNumber) {
-    std::vector<std::string> fileLayout{}; // loads list of elements as temporal strings
-    for (const auto & j : fileTracks[TRACKS_ID][trackNumber][LAYOUT_ID])
-        fileLayout.emplace_back(j.asString());
     width = fileTracks[TRACKS_ID][trackNumber][WIDTH_ID].asInt();  // track width in blocks
     height = fileTracks[TRACKS_ID][trackNumber][HEIGHT_ID].asInt();  // track width in blocks
     name = fileTracks[TRACKS_ID][trackNumber][NAME_ID].asString();
@@ -31,8 +28,26 @@ void Track::loadTrack(const Json::Value &fileTracks, int trackNumber) {
     startCol = fileTracks[TRACKS_ID][trackNumber][START_ID][1].asInt();  // finish col
     nextToStartRow = fileTracks[TRACKS_ID][trackNumber][NEXT_TO_START_ID][0].asInt();  // To set way
     nextToStartCol = fileTracks[TRACKS_ID][trackNumber][NEXT_TO_START_ID][1].asInt();  // To set way
+    std::vector<std::string> fileLayout{}; // loads list of elements as temporal strings
     initLayout();  // fills all blocks as empty (grass)
+    for (const auto & j : fileTracks[TRACKS_ID][trackNumber][LAYOUT_ID]) {
+        fileLayout.emplace_back(j.asString());
+    }
+    loadGrandstands(fileTracks, trackNumber);
     initTrackParts(fileLayout);  // sets not empty blocks in matrix order
+}
+
+// Loads grandstands in grandstands vector and as trackPartData
+void Track::loadGrandstands(const Json::Value &fileTracks, int trackNumber) {
+    for (const auto & j : fileTracks[TRACKS_ID][trackNumber][GRANDSTANDS_ID]) {
+        trackPartType type =  Grandstand::identifyElem(j[0].asString());
+        grandstands.emplace_back(Grandstand(type,
+                                            j[1].asInt(),
+                                            j[2].asInt(),
+                                            BLOCKSIZE,
+                                            height));
+        setTrackPartType(j[1].asInt(), j[2].asInt(), type);
+    }
 }
 
 // Gets track name
@@ -79,7 +94,6 @@ void Track::loadPart(int row, int col, trackPartType elem) {
     part.loadPos(height - row, col);
     part.setID(partCounter);
     trackPartData[row*width + col] = part;
-    //grandstands.emplace_back(Grandstand(elem, row, col));
     if (isTrackPart(elem)) partCounter++;
 }
 
@@ -158,18 +172,26 @@ void Track::initTrackParts(const std::vector<std::string> & trackLayout) {
     int lastRow = row;
     int col = startCol;
     loadPart(row, col, identifyElem(trackLayout[0]));
-    //trackPartType prevElem = getPartType(row, col);
+    saveTrackSequence(row, col);
     trackPartType prevElem = setStartingPreviousTrackPart(row, col);
     trackPartType actualElem;
     row = nextToStartRow, col = nextToStartCol;
-    //col++;  // assumes top-left corner is a down-right curve
     for (int i=1; i < trackLayout.size(); i++){
         actualElem = identifyElem(trackLayout[i]);
         loadPart(row, col, actualElem);
+        saveTrackSequence(row, col);
         lastRow = setNextCoord(row, col, actualElem, prevElem, lastRow);
-        if (isCurve(actualElem))
+        if (isCurve(actualElem)) {
             prevElem = actualElem;
+        }
     }
+}
+
+// saves positions and sequence of Track
+void Track::saveTrackSequence(int row, int col) {
+    uint16_t y = (uint16_t)trackPartData[row*width + col].getPosX();
+    uint16_t x = (uint16_t)trackPartData[row*width + col].getPosY();
+    trackSequence.emplace(partCounter-1, Point(x,y));
 }
 
 /* Auxiliar function to start traversing the track */
@@ -358,6 +380,7 @@ void Track::initLayout() {
     trackPartData.reserve(width * height);
     for (int i = 0; i < width * height; i++) {
         emptyPart.loadPos(height - i/width, i%width);
+        emptyPart.setID(-1);
         trackPartData.emplace_back(emptyPart);
     }
 }
@@ -368,6 +391,10 @@ TrackPartData & Track::getTrackPart(int posX, int posY) {
     int row = posToIndex((height-1)*BLOCKSIZE - findNearestPos(posY));
     int col = posToIndex(findNearestPos(posX));
     return trackPartData[row*width + col];
+}
+
+void Track::setTrackPartType(int row, int col, trackPartType type) {
+    trackPartData[row*width + col].setType(type);
 }
 
 // Finds nearest bottom-left corner in BLOCKSIZE multiples [meters]
@@ -451,4 +478,66 @@ std::string Track::parseTrackParam(const std::string & initString,
 
 std::vector<TrackPartData> Track::getTrackPartData() const {
     return trackPartData;
+}
+
+Point Track::getCarStartingPos(int order) {
+    int blocksToStartLine = order/2;
+    Point blockPoint = trackSequence.at(partCounter - 1 - blocksToStartLine);
+    trackPartType t = getTrackPart(blockPoint.getX(), blockPoint.getY()).getType();
+    if (order % 2 == 0 && (t == finishH || t == horizontal))
+        return Point(blockPoint.getX() + BLOCKSIZE/2, blockPoint.getY() + BLOCKSIZE*7/20);
+    else if (order % 2 == 1 && (t == finishH || t == horizontal))
+        return Point(blockPoint.getX() + BLOCKSIZE/2, blockPoint.getY() + BLOCKSIZE*13/20);
+    else if (order % 2 == 0 && (t == finishV || t == vertical))
+        return Point(blockPoint.getX() + BLOCKSIZE*7/20, blockPoint.getY() + BLOCKSIZE/2);
+    else if (order % 2 == 1 && (t == finishV || t == vertical))
+        return Point(blockPoint.getX() + BLOCKSIZE*13/20, blockPoint.getY() + BLOCKSIZE/2);
+
+    else if (order % 2 == 0 && (t == upLeft))
+        return Point(blockPoint.getX() + BLOCKSIZE*1/4, blockPoint.getY() + BLOCKSIZE*3/4);
+    else if (order % 2 == 0 && (t == downRight))
+        return Point(blockPoint.getX() + BLOCKSIZE*1/2, blockPoint.getY() + BLOCKSIZE*1/2);
+    else if (order % 2 == 1 && (t == upLeft))
+        return Point(blockPoint.getX() + BLOCKSIZE*1/2, blockPoint.getY() + BLOCKSIZE*1/2);
+    else if (order % 2 == 1 && (t == downRight))
+        return Point(blockPoint.getX() + BLOCKSIZE*3/4, blockPoint.getY() + BLOCKSIZE*1/4);
+
+    else if (order % 2 == 0 && (t == downLeft))
+        return Point(blockPoint.getX() + BLOCKSIZE*1/4, blockPoint.getY() + BLOCKSIZE*1/4);
+    else if (order % 2 == 0 && (t == upRight))
+        return Point(blockPoint.getX() + BLOCKSIZE*1/2, blockPoint.getY() + BLOCKSIZE*1/2);
+    else if (order % 2 == 0 && (t == downLeft))
+        return Point(blockPoint.getX() + BLOCKSIZE*1/2, blockPoint.getY() + BLOCKSIZE*1/2);
+    else if (order % 2 == 0 && (t == upRight))
+        return Point(blockPoint.getX() + BLOCKSIZE*3/4, blockPoint.getY() + BLOCKSIZE*3/4);
+}
+
+uint16_t Track::getCarStartingRotation(int order) {
+    int blocksToStartLine = order/2;
+    Point act = trackSequence.at(partCounter - 1 - blocksToStartLine);
+    Point prev = trackSequence.at(partCounter - 2 - blocksToStartLine);
+    trackPartType t = getTrackPart(act.getX(), act.getY()).getType();
+    bool toRight = act.getX() > prev.getX();
+    bool toLeft = act.getX() < prev.getX();
+    bool toUp = act.getY() > prev.getY();
+    bool toDown = act.getY() < prev.getY();
+
+    if (toRight) {
+        if (t == upLeft) return 45;
+        else if (t == downLeft) return 135;
+        else if (t == horizontal || t == finishH) return 90;
+    } else if (toLeft) {
+        if (t == upRight) return -45;
+        else if (t == downRight) return -135;
+        else if (t == horizontal || t == finishH) return -90;
+    } else if (toUp) {
+        if (t == downLeft) return -45;
+        else if (t == downRight) return 45;
+        else if (t == vertical || t == finishV) return 0;
+    } else if (toDown) {
+        if (t == upRight) return 135;
+        else if (t == upLeft) return -135;
+        else if (t == vertical || t == finishV) return 180;
+    }
+
 }

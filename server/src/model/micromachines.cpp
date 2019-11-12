@@ -7,6 +7,7 @@
 
 Micromachines::Micromachines() {
     tracks.readTracks();
+    track = tracks.getTrack("classic");
     world = new b2World(b2Vec2(0, 0));
     world->SetDestructionListener(&destruction_listener);
 }
@@ -54,17 +55,31 @@ void Micromachines::cleanPlayers() {
     players.clear();
 }
 
+void Micromachines::changeCarState(char *new_command) {
+    for (size_t i = 0; i < players.size(); i++)
+        for (int j = 0; j < 10; ++j)
+            players[i]->receiveActionPlugin(new_command);
+}
+
 void Micromachines::sendNewStateToPlayers() {
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
         try {
             players[i]->sendAllCarsToPlayer(players);
-        } catch(const SocketError &e) {
+        } catch (const SocketError &e) {
             removePlayerFromVector(players[i]);
         }
     }
 }
 
 std::string Micromachines::trackSerialized() {
-    return tracks.getTrack("test28").serialize();
+    return tracks.getTrack("classic").serialize();
+}
+
+Point Micromachines::getStartingPoint(int position) {
+    return track.getCarStartingPos(position);
+}
+
+uint16_t Micromachines::getStartingCarRot(int position) {
+    return track.getCarStartingRotation(position);
 }

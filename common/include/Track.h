@@ -9,8 +9,10 @@
 #include <string>
 #include <vector>
 #include <jsoncpp/json/json.h>
+#include "Grandstand.h"
 #include "TrackPartData.h"
 #include "../include/TrackList.h"
+#include "../../server/include/model/point.h"
 
 
 #define BLOCKSIZE 100  // meters
@@ -26,11 +28,18 @@ typedef enum {
     upRight,
     upLeft,
     horizontal,
-    vertical
+    vertical,
+    finishH,
+    finishV,
+    public1Up,
+    public1Down,
+    public1Left,
+    public1Right
 } trackPartType;
 #endif
 
 class TrackPartData;
+class Point;
 
 class Track {
 protected:
@@ -42,6 +51,8 @@ protected:
     int height = 0;  // blocks
     int partCounter = 0;  // number of track elements
     std::vector<TrackPartData> trackPartData{};
+    std::vector<Grandstand> grandstands;
+    std::map<int, Point> trackSequence;
     std::string name{};
 
 public:
@@ -75,6 +86,16 @@ public:
     static bool isTrackPart(trackPartType type);
     static bool isTrackLinePart(trackPartType type);
     bool isTrackPart(int row, int col);
+
+    void setTrackPartType(int row, int col, trackPartType type);
+
+    void loadGrandstands(const Json::Value &fileTracks, int trackNumber);
+
+    Point getCarStartingPos(int order);
+
+    void saveTrackSequence(int row, int col);
+
+    uint16_t getCarStartingRotation(int order);
 };
 
 

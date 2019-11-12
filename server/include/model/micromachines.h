@@ -7,11 +7,13 @@
 #include "../../../common/include/TrackList.h"
 #include <vector>
 #include <mutex>
+#include <cstring>
 #include <Box2D/Box2D.h>
 
 class Micromachines {
     private:
     TrackList tracks;
+    Track track;
     std::mutex m;
     std::vector<ClientTh*> players;
     DestructionListener destruction_listener;
@@ -29,6 +31,9 @@ class Micromachines {
     void cleanPlayers();
     void sendNewStateToPlayers();
     std::string trackSerialized();
+    Point getStartingPoint(int position);
+    uint16_t getStartingCarRot(int position);
+    void changeCarState(char *new_command);
 };
 
 #endif

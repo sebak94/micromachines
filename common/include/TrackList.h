@@ -20,6 +20,7 @@
 #define HEIGHT_ID "height"
 #define START_ID "start"
 #define NEXT_TO_START_ID "next-to-start"
+#define GRANDSTANDS_ID "grandstands"
 
 #define LAYOUT_DR "down-right"
 #define LAYOUT_H "horizontal"

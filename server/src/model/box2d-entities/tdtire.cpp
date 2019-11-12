@@ -2,9 +2,10 @@
 #include "../../../include/model/cars/car.h"
 #include <Box2D/Box2D.h>
 
-TDTire::TDTire(b2World* world) {
+TDTire::TDTire(b2World* world, Point initial_position) {
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
+    bodyDef.position.Set(initial_position.getX(), initial_position.getY());
     body = world->CreateBody(&bodyDef);
 
     b2PolygonShape polygonShape;

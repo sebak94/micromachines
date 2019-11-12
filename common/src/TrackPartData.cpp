@@ -53,3 +53,7 @@ std::string TrackPartData::serialize() {
            "," +
            std::to_string(type);
 }
+
+void TrackPartData::setType(trackPartType t) {
+    type = t;
+}

@@ -31,10 +31,7 @@ void GameLoopTh::run() {
 
         while (GetTickCountMs() > next_game_tick && loops < MAX_FRAMESKIP) {
             micromachines.update();
-            auto end = std::chrono::steady_clock::now();
-            auto duration = std::chrono::duration_cast
-                <std::chrono::milliseconds>(end - begin);
-            micromachines.world->Step(1.0/30.0, 5, 5);
+            micromachines.world->Step(1.0/60.0, 5, 5);
             next_game_tick += SKIP_TICKS;
             loops++;
         }
@@ -51,13 +48,16 @@ void GameLoopTh::run() {
         micromachines.sendNewStateToPlayers();
         usleep(MICROSECS_WAIT - microsecsPassed);
 
-        this->executeLibraries();
+        // this->executeLibraries();
     }
 }
 
 void GameLoopTh::executeLibraries() {
-    if ((this->game_loops % 100) == 0) {
-        this->loader.execute();
+    if ((this->game_loops % 1000) == 0) {
+        std::vector<char *> commands;
+        this->loader.execute(commands);
+        for (auto &i : commands)
+            micromachines.changeCarState(i);
         this->game_loops = 1;
     } else {
         this->game_loops++;

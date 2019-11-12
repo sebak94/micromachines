@@ -32,7 +32,8 @@ class Car: public Model {
     public:
     Car(uint8_t width, uint8_t height, uint16_t max_velocity,
         uint8_t acceleration, uint8_t grip, uint8_t maneuverability,
-        Point initial_position, ColorType color, b2World *world);
+        Point initial_position, ColorType color, uint16_t rotation,
+        b2World *world);
     void updateState(char action);
     virtual void update() override;
     virtual std::string serialize() override;

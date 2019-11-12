@@ -21,6 +21,11 @@ void Button::updatePos(int x, int y) {
     area.x = x, area.y = y;
 }
 
+void Button::updateSize(int w, int h) {
+    area.w = w;
+    area.h = h;
+}
+
 void Button::draw(SDL_Renderer * renderer) {
     uint8_t d = 200;  // darkness factor
     SDL_SetTextureAlphaMod(texture, pressed*d+(1-pressed)*255);

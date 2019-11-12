@@ -48,6 +48,7 @@ void EventLoopSDL::run() {
     while (running) {
         SDL_Event event;
         SDL_WaitEvent(&event);
+        drawer->updateFullScreenButton(&event);
         switch (event.type) {
             case SDL_KEYDOWN:
                 enqueueKeyDownEvent((SDL_KeyboardEvent &) event);
@@ -65,6 +66,7 @@ void EventLoopSDL::run() {
                         drawer->resize(event.window.data1, event.window.data2);
                         break;
                 }
+                break;
         }
     }
 }
