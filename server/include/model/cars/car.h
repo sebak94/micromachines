@@ -38,6 +38,8 @@ class Car: public Model {
     virtual void update() override;
     virtual std::string serialize() override;
     ~Car();
+
+    void updatePos(Point point);
 };
 
 #endif

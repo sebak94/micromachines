@@ -541,3 +541,27 @@ void Track::setTrackStart(int row, int col, int rowN, int colN) {
     nextToStartRow = rowN;
     nextToStartCol = colN;
 }
+
+bool Track::jumpedTrackPart(int xCar, int yCar, int lastTrackPartID) {
+    TrackPartData part = getTrackPart(findNearestPos(xCar), findNearestPos(yCar));
+    uint16_t x = 0, y = 0;
+    if (!isTrackPart(part.getType()))
+        return false;  // is outside of track
+    if (lastTrackPartID == partCounter - 1) {
+        // finish line
+        x = trackSequence.at(0).getX();
+        y = trackSequence.at(0).getY();
+    } else {
+        // any other
+        x = trackSequence.at(lastTrackPartID + 1).getX();
+        y = trackSequence.at(lastTrackPartID + 1).getY();
+    }
+    return !(xCar >= x &&  xCar <= x + BLOCKSIZE && yCar >= y && yCar <= y + BLOCKSIZE);
+
+
+    /*int actualID = getTrackPart(posX, posY).getID();
+    int actualID = getTrackPart(posX, posY).getID();
+    if (lastTrackPartID == partCounter - 1)
+        return (actualID >= JUMPEDBLOCKS + lastTrackPartID - partCounter + 1);
+    else return (actualID >= JUMPEDBLOCKS + lastTrackPartID);*/
+}

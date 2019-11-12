@@ -53,9 +53,7 @@ private:
     void showAnimation(SdlWindow &window);
     void createRecButton();
     void showRecButton();
-
     void recorderTh();
-
     void saveLastFrame();
 };
 

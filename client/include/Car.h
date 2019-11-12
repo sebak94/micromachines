@@ -9,6 +9,8 @@ private:
     int y;
     int degrees;
     int health;
+    int laps = 0;
+    int lastTrackPart = 0;
     std::string color;
 
 public:

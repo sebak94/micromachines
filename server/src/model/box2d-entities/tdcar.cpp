@@ -108,3 +108,7 @@ void TDCar::update(int control_state) {
     flJoint->SetLimits( newAngle, newAngle );
     frJoint->SetLimits( newAngle, newAngle );
 }
+
+void TDCar::updatePoisition(Point point) {
+    body->SetTransform(b2Vec2(point.getX(),point.getY()),body->GetAngle());
+}

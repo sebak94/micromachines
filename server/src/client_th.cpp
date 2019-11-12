@@ -106,6 +106,11 @@ void ClientTh::processNextAction() {
     }
 }
 
+int ClientTh::getCarPosX() {
+    Lock l(m);
+    return car->getPosX();
+}
+
 void ClientTh::setState(GameState s) {
     this->state = s;
 }

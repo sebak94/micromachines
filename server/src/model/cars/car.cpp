@@ -38,6 +38,14 @@ void Car::update() {
     td_car.update(control_state);
 }
 
+void Car::updatePos(Point point) {
+    td_car.updatePoisition(point);
+}
+
+int Car::getPosX() {
+    return b2Position;
+}
+
 std::string Car::serialize() {
     // La serializacion es:
     // current_velocity,health,rotation,x,y,color\n
