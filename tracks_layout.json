@@ -286,6 +286,31 @@
          "next-to-start" : [ 10, 10 ],
          "start" : [ 10, 9 ],
          "width" : 16
+      },
+      {
+         "grandstands" : [
+            [ "pub1Down", 6, 4 ],
+            [ "pub1Down", 6, 5 ]
+         ],
+         "height" : 12,
+         "layout" : [
+            "finishH",
+            "up-left",
+            "vertical",
+            "vertical",
+            "down-left",
+            "horizontal",
+            "horizontal",
+            "down-right",
+            "vertical",
+            "vertical",
+            "up-right",
+            "horizontal"
+         ],
+         "name" : "sdadas",
+         "next-to-start" : [ 8, 6 ],
+         "start" : [ 8, 5 ],
+         "width" : 12
       }
    ]
 }
