@@ -90,7 +90,7 @@ target_link_libraries(main
 ### FFMPEG
 * Instalar:
 ```
-sudo apt install libavutil libswresample libavformat libavcodec
+sudo apt install libavutil-dev libswresample-dev libavformat-dev libavcodec-dev
 ```
 
 * Cmake:
