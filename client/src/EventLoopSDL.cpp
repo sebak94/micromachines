@@ -2,7 +2,8 @@
 
 #define FAKE_KEYDOWN 1
 
-EventLoopSDL::EventLoopSDL(ThreadSafeQueue &queue, Drawer* drawerThread) : queue(queue), drawer(drawerThread) {}
+EventLoopSDL::EventLoopSDL(ThreadSafeQueue &queue, Drawer *drawerThread, ModelMonitor &modelMonitor)
+        : queue(queue), drawer(drawerThread), modelMonitor(modelMonitor) {}
 
 EventLoopSDL::~EventLoopSDL() {}
 
@@ -44,6 +45,7 @@ void EventLoopSDL::enqueueKeyUpEvent(SDL_KeyboardEvent &keyEvent) {
 }
 
 void EventLoopSDL::run() {
+
     this->running = true;
     while (running) {
         SDL_Event event;

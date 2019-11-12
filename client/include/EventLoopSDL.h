@@ -11,9 +11,10 @@ private:
     bool running;
     ThreadSafeQueue &queue;
     Drawer* drawer;
+    ModelMonitor &modelMonitor;
 
 public:
-    EventLoopSDL(ThreadSafeQueue &queue, Drawer* drawerThread);
+    EventLoopSDL(ThreadSafeQueue &queue, Drawer *drawerThread, ModelMonitor &modelMonitor);
     ~EventLoopSDL();
     virtual void run() override;
     virtual void stop() override;

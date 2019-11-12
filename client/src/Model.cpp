@@ -24,6 +24,21 @@ void Model::setMyColor(std::string str) {
     myColor = color;
 }
 
+void Model::setGameState(std::string str) {
+    if (str == "mainMenu\n") gameState = mainMenu;
+    else if (str == "selectingTrack\n") gameState = selectingTrack;
+    else if (str == "selectingCar\n") gameState = selectingCar;
+    else if (str == "waitingPlayers\n") gameState = waitingPlayers;
+    else if (str == "startCountdown\n") gameState = startCountdown;
+    else if (str == "playing\n") gameState = playing;
+    else if (str == "waitingEnd\n") gameState = waitingEnd;
+    else if (str == "gameEnded\n") gameState = gameEnded;
+}
+
+GameState Model::getGameState() {
+    return gameState;
+}
+
 std::string Model::getMyColor() const {
     return myColor;
 }

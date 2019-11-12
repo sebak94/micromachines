@@ -10,6 +10,17 @@
 #include <queue>
 #include <mutex>
 
+typedef enum {
+    mainMenu,
+    selectingTrack,
+    selectingCar,
+    waitingPlayers,
+    startCountdown,
+    playing,
+    waitingEnd,
+    gameEnded
+} GameState;
+
 class ClientTh: public Thread {
     private:
     std::atomic<bool> keep_talking;
@@ -18,6 +29,7 @@ class ClientTh: public Thread {
     Car *car;
     std::queue<char> actions;
     std::mutex m;
+    GameState state = mainMenu;
 
     void sendWelcomeMsg();
     void receive(char *action);
@@ -35,6 +47,8 @@ class ClientTh: public Thread {
     virtual void stop() override;
     bool isDead();
     ~ClientTh();
+
+    void setState(GameState s);
 };
 
 #endif

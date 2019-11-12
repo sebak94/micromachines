@@ -19,6 +19,16 @@ void ModelMonitor::setMyColor(std::string str) {
     model.setMyColor(str);
 }
 
+void ModelMonitor::setGameState(std::string str) {
+    std::lock_guard<std::mutex> lock(m);
+    model.setGameState(str);
+}
+
+GameState ModelMonitor::getGameState() {
+    std::lock_guard<std::mutex> lock(m);
+    return model.getGameState();
+}
+
 std::string ModelMonitor::getMyColor() const {
     //es constante, no usa mutex
     return model.getMyColor();

@@ -10,17 +10,6 @@
 #include <cstring>
 #include <Box2D/Box2D.h>
 
-typedef enum {
-    mainMenu,
-    selectingTrack,
-    selectingCar,
-    waitingPlayers,
-    startCountdown,
-    playing,
-    waitingEnd,
-    gameEnded
-} GameState;
-
 class Micromachines {
     private:
     TrackList tracks;
@@ -47,6 +36,10 @@ class Micromachines {
     void changeCarState(char *new_command);
 
     int getPlayersNumber();
+
+    void setPlayerGameState(ClientTh *player, GameState state);
+
+    void setAllPlayersGameStates(GameState state);
 };
 
 #endif

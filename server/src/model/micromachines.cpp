@@ -47,6 +47,18 @@ int Micromachines::getPlayersNumber() {
     return players.size();
 }
 
+void Micromachines::setPlayerGameState(ClientTh *player, GameState state) {
+    Lock l(m);
+    player->setState(state);
+}
+
+void Micromachines::setAllPlayersGameStates(GameState state) {
+    Lock l(m);
+    for (size_t i = 0; i < players.size(); i++) {
+        players[i]->setState(state);
+    }
+}
+
 void Micromachines::updatePlayersState() {
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {

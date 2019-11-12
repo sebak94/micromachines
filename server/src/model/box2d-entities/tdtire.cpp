@@ -42,7 +42,7 @@ void TDTire::updateFriction() {
     body->ApplyLinearImpulse(impulse, body->GetWorldCenter(), true);
 
     //angular velocity
-    body->ApplyAngularImpulse(0.1f * body->GetInertia() * -body->GetAngularVelocity(), true);
+    body->ApplyAngularImpulse(0.01f * body->GetInertia() * -body->GetAngularVelocity(), true);
     
     //forward linear velocity
     b2Vec2 currentForwardNormal = getForwardVelocity();

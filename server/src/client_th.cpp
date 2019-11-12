@@ -35,11 +35,64 @@ void ClientTh::sendTrackData(std::string track_serialized) {
 }
 
 void ClientTh::run() {
-    while (keep_talking) {
-        char action;
-        receive(&action);
-        Lock l(m);
-        actions.push(action);
+    std::string strState = "mainMenu\n";
+    while (is_running){
+        switch (state) {
+            case mainMenu:
+                break;
+            case selectingTrack:
+                strState = "G\nselectingTrack\n";
+                send(strState);
+                while (state == selectingTrack) {
+
+                }
+                break;
+            case selectingCar:
+                strState = "G\nselectingCar\n";
+                send(strState);
+                while (state == selectingCar) {
+
+                }
+                break;
+            case waitingPlayers:
+                strState = "G\nwaitingPlayers\n";
+                send(strState);
+                while (state == waitingPlayers) {
+
+                }
+                break;
+            case startCountdown:
+                strState = "G\nstartCountdown\n";
+                send(strState);
+                while (state == startCountdown) {
+
+                }
+                break;
+            case playing:
+                strState = "G\nplaying\n";
+                send(strState);
+                while (keep_talking) {
+                    char action;
+                    receive(&action);
+                    Lock l(m);
+                    actions.push(action);
+                }
+                break;
+            case waitingEnd:
+                strState = "G\nwaitingEnd\n";
+                send(strState);
+                while (state == waitingEnd) {
+
+                }
+                break;
+            case gameEnded:
+                strState = "G\ngameEnded\n";
+                send(strState);
+                while (state == gameEnded) {
+
+                }
+                break;
+        }
     }
     is_running = false;
 }
@@ -51,6 +104,10 @@ void ClientTh::processNextAction() {
         actions.pop();
         car->updateState(a);
     }
+}
+
+void ClientTh::setState(GameState s) {
+    this->state = s;
 }
 
 void ClientTh::updateCar() {
