@@ -38,6 +38,10 @@ void Micromachines::removePlayerFromVector(ClientTh *player) {
     }
 }
 
+int Micromachines::getPlayersNumber() {
+    return players.size();
+}
+
 void Micromachines::updatePlayersState() {
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {

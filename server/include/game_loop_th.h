@@ -21,6 +21,8 @@ class GameLoopTh: public Thread {
     virtual void run() override;
     virtual void stop() override;
     ~GameLoopTh();
+
+    void waitForPlayers();
 };
 
 #endif
