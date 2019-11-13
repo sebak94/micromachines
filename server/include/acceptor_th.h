@@ -24,7 +24,6 @@ class ClientList {
 
 class LookForDeadClientsTh: public Thread {
     private:
-    Socket skt;
     bool keep_looking;
     ClientList &clients;
     Micromachines &micromachines;
@@ -33,7 +32,7 @@ class LookForDeadClientsTh: public Thread {
     LookForDeadClientsTh(ClientList &clients, Micromachines &micromachines);
     virtual void run() override;
     virtual void stop() override;
-    ~LookForDeadClientsTh();
+    ~LookForDeadClientsTh() = default;
 };
 
 class AcceptorTh: public Thread {

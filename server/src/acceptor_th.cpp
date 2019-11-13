@@ -56,13 +56,13 @@ void AcceptorTh::run() {
             keep_accepting = false;
         }
     }
-    looking_th->stop();
     deleteResources();    
 }
 
 void AcceptorTh::stop() {
     keep_accepting = false;
     looking_th->stop();
+    looking_th->join();
     skt.Release();
     micromachines.cleanPlayers();
 }
@@ -87,8 +87,6 @@ void LookForDeadClientsTh::run() {
 void LookForDeadClientsTh::stop() {
     keep_looking = false;
 }
-
-LookForDeadClientsTh::~LookForDeadClientsTh() {}
 
 ClientList::ClientList(Micromachines &micromachines):
     micromachines(micromachines) {}
