@@ -44,6 +44,7 @@ void Micromachines::removePlayerFromVector(ClientTh *player) {
 }
 
 int Micromachines::getPlayersNumber() {
+    Lock l(m);
     return players.size();
 }
 
@@ -72,6 +73,7 @@ void Micromachines::cleanPlayers() {
 }
 
 void Micromachines::changeCarState(char *new_command) {
+    Lock l(m);
     for (size_t i = 0; i < players.size(); i++)
         for (int j = 0; j < 10; ++j)
             players[i]->receiveActionPlugin(new_command);
@@ -80,11 +82,7 @@ void Micromachines::changeCarState(char *new_command) {
 void Micromachines::sendNewStateToPlayers() {
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
-        try {
-            players[i]->sendAllCarsToPlayer(players);
-        } catch (const SocketError &e) {
-            removePlayerFromVector(players[i]);
-        }
+        players[i]->sendAllCarsToPlayer(players);
     }
 }
 

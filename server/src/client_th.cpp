@@ -94,7 +94,6 @@ void ClientTh::run() {
                 break;
         }
     }
-    is_running = false;
 }
 
 void ClientTh::processNextAction() {
@@ -119,6 +118,7 @@ void ClientTh::receive(char *action) {
         peer->Receive(action, 1);
     } catch (const SocketError &e) {
         keep_talking = false;
+        is_running = false;
         std::cout << e.what() << "\n";
     }
 }
@@ -134,8 +134,8 @@ void ClientTh::send(std::string &response) {
         peer->Send(resp, response.length());
     } catch (const SocketError &e) {
         keep_talking = false;
+        is_running = false;
         std::cout << e.what() << "\n";
-        throw e;
     }
 }
 

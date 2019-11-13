@@ -40,7 +40,7 @@ void GameLoopTh::waitForPlayers() {
 void GameLoopTh::countdownWait() {
     uint64_t next_game_tick = GetTickCountMs();
     uint64_t loops;
-    double countdownTime = SECSTOSTART * SECTOMICROSEC;  // us
+    countdownTime = SECSTOSTART * SECTOMICROSEC;  // us
     while (countdownTime > 0) {
         auto begin = std::chrono::steady_clock::now();
         loops = 0;
@@ -56,7 +56,7 @@ void GameLoopTh::countdownWait() {
 void GameLoopTh::play() {
     uint64_t next_game_tick = GetTickCountMs();
     uint64_t loops;
-    double countdownTime = MAXRACETIME * SECTOMICROSEC;  // us
+    countdownTime = MAXRACETIME * SECTOMICROSEC;  // us
     while (countdownTime > 0) {
         auto begin = std::chrono::steady_clock::now();
         loops = 0;
@@ -127,6 +127,7 @@ void GameLoopTh::executeLibraries() {
 
 void GameLoopTh::stop() {
     running = false;
+    countdownTime = 0;
 }
 
 GameLoopTh::~GameLoopTh() {}
