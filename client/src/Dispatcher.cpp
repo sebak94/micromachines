@@ -14,7 +14,7 @@ void Dispatcher::run() {
         }
         try {
             socket.Send(text.c_str(), text.size());
-            printf("envio: %s\n", text.c_str());
+            //printf("envio: %s\n", text.c_str());
         } catch (std::exception &e) {
             running = false;
         }

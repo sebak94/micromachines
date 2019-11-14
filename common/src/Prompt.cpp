@@ -314,7 +314,7 @@ void Prompt::initTextPrompt(SDL_Renderer *renderer, const std::string &promptStr
     SDL_StartTextInput();
     setTextPosition();
     SDL_Color fieldColor = {200, 200, 200, 0};
-    textField.createFieldBox(getTextFieldPosX(), getTextFieldPosY(), fieldColor);
+    textField.createFieldBox(getTextFieldPosX(), getTextFieldPosY(), fieldColor, (WINDOW_W - 2*getTextFieldPosX()));
 }
 
 /* Configs text position */

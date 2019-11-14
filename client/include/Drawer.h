@@ -18,6 +18,7 @@
 #include "sdl/SdlMusic.h"
 #include "../../common/include/Button.h"
 #include "../../record/include/Record.h"
+#include "MatchWindow.h"
 
 class Drawer : public Thread {
 private:
@@ -36,6 +37,7 @@ private:
     SDL_Texture * videoTexture;
     std::mutex recordMutex;
     bool lastRecordState = false;
+    MatchWindow matchWindow;
 
 public:
     Drawer(ModelMonitor &modelMonitor);
@@ -45,6 +47,7 @@ public:
     void resize(int width, int height);
     void updateFullScreenButton(const SDL_Event * event);
     void updateRecButton(const SDL_Event *event);
+    MatchWindow& getMatchWindow();
 
 private:
     void createFullScreenButton();

@@ -5,8 +5,9 @@
 #ifndef TP_BUTTON_H
 #define TP_BUTTON_H
 
-
+#include <string>
 #include <cstdint>
+#include <SDL2/SDL_events.h>
 
 class Button {
 private:
