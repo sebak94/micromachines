@@ -31,6 +31,8 @@ public:
     int getCol();
     int getPosX();
     int getPosY();
+    int getMetreWidth();
+    int getMetreHeight();
 
     std::string getTypeAsString();
 

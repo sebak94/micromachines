@@ -3,6 +3,7 @@
 //
 
 #include "../include/Grandstand.h"
+#include "../include/Track.h"
 
 Grandstand::Grandstand(trackPartType type,
                        int row,
@@ -48,6 +49,14 @@ int Grandstand::getPosX() {
 
 int Grandstand::getPosY() {
     return posY;
+}
+
+int Grandstand::getMetreWidth() {
+    return BLOCKSIZE;
+}
+
+int Grandstand::getMetreHeight() {
+    return BLOCKSIZE;
 }
 
 // Transforms json strings to elements of track

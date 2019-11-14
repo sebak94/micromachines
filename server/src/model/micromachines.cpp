@@ -1,4 +1,5 @@
 #include "../../include/model/micromachines.h"
+#include "../../include/model/box2d-entities/tdgrandstand.h"
 #include "../../../common/include/lock.h"
 #include "../../../common/include/socket_error.h"
 #include <Box2D/Box2D.h>
@@ -8,7 +9,11 @@
 Micromachines::Micromachines() {
     tracks.readTracks();
     track = tracks.getTrack("classic");
+    auto grandstands = track.getGrandstands();
     world = new b2World(b2Vec2(0, 0));
+    for (auto gs : grandstands) {
+        this->grandstands.push_back(new TDGrandstand(world, gs));
+    }
     world->SetDestructionListener(&destruction_listener);
 }
 
@@ -96,4 +101,10 @@ Point Micromachines::getStartingPoint(int position) {
 
 uint16_t Micromachines::getStartingCarRot(int position) {
     return track.getCarStartingRotation(position);
+}
+
+Micromachines::~Micromachines() {
+    for (auto gs : grandstands) {
+        delete gs;
+    }
 }

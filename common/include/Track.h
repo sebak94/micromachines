@@ -87,16 +87,12 @@ public:
     static bool isTrackPart(trackPartType type);
     static bool isTrackLinePart(trackPartType type);
     bool isTrackPart(int row, int col);
-
     void setTrackPartType(int row, int col, trackPartType type);
-
     void loadGrandstands(const Json::Value &fileTracks, int trackNumber);
-
     Point getCarStartingPos(int order);
-
     void saveTrackSequence(int row, int col);
-
     uint16_t getCarStartingRotation(int order);
+    std::vector<Grandstand> getGrandstands();
 };
 
 

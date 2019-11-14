@@ -22,7 +22,7 @@ Track::Track(int width, int height, const std::string &name) {
 // Loads data of 1 track in position <trackNumber> of the json file.
 void Track::loadTrack(const Json::Value &fileTracks, int trackNumber) {
     width = fileTracks[TRACKS_ID][trackNumber][WIDTH_ID].asInt();  // track width in blocks
-    height = fileTracks[TRACKS_ID][trackNumber][HEIGHT_ID].asInt();  // track width in blocks
+    height = fileTracks[TRACKS_ID][trackNumber][HEIGHT_ID].asInt();  // track height in blocks
     name = fileTracks[TRACKS_ID][trackNumber][NAME_ID].asString();
     startRow = fileTracks[TRACKS_ID][trackNumber][START_ID][0].asInt();  // finish row
     startCol = fileTracks[TRACKS_ID][trackNumber][START_ID][1].asInt();  // finish col
@@ -540,4 +540,8 @@ void Track::setTrackStart(int row, int col, int rowN, int colN) {
     startCol = col;
     nextToStartRow = rowN;
     nextToStartCol = colN;
+}
+
+std::vector<Grandstand> Track::getGrandstands() {
+    return grandstands;
 }

@@ -2,6 +2,7 @@
 #define __MICROMACHINES_H__
 
 #include "cars/car.h"
+#include "box2d-entities/tdgrandstand.h"
 #include "box2d-entities/destruction_listener.h"
 #include "../client_th.h"
 #include "../../../common/include/TrackList.h"
@@ -16,6 +17,7 @@ class Micromachines {
     Track track;
     std::mutex m;
     std::vector<ClientTh*> players;
+    std::vector<TDGrandstand*> grandstands;
     DestructionListener destruction_listener;
 
     void removePlayerFromVector(ClientTh *player);
@@ -37,6 +39,7 @@ class Micromachines {
     int getPlayersNumber();
     void setPlayerGameState(ClientTh *player, GameState state);
     void setAllPlayersGameStates(GameState state);
+    ~Micromachines();
 };
 
 #endif
