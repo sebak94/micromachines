@@ -16,6 +16,7 @@ class GameLoopTh: public Thread {
     Micromachines &micromachines;
     Loader loader;
     uint8_t game_loops = 1;
+    double countdownTime;
 
     uint64_t GetTickCountMs();
     void executeLibraries();
