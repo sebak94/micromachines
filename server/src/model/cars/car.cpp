@@ -9,15 +9,14 @@
 #define PI 3.14159265
 #define RADTODEG 57.295779513082320876f
 
-Car::Car(uint8_t width, uint8_t height, uint16_t max_velocity,
-         uint8_t acceleration, uint8_t grip, uint8_t maneuverability,
-         Point initial_position, ColorType color, uint16_t rotation,
-         b2World *world) :
+Car::Car(uint8_t width, uint8_t height, uint16_t max_velocity, uint8_t acceleration, uint8_t grip,
+         uint8_t maneuverability, Point initial_position, ColorType color, uint16_t rotation, b2World *world,
+         int startID) :
         width(width), height(height), max_velocity(max_velocity),
         acceleration(acceleration), grip(grip),
         maneuverability(maneuverability), health(100), color(color),
         td_car(world, max_velocity, acceleration, grip, maneuverability,
-        rotation, initial_position), control_state(0) {
+        rotation, initial_position), control_state(0), lastTrackID(startID) {
 }
 
 void Car::updateState(char action) {
@@ -43,7 +42,19 @@ void Car::updatePos(Point point) {
 }
 
 int Car::getPosX() {
-    return b2Position;
+    return (int)td_car.body->GetPosition().x;
+}
+
+int Car::getPosY() {
+    return (int)td_car.body->GetPosition().y;
+}
+
+void Car::setTrackID(int ID) {
+    lastTrackID = ID;
+}
+
+int Car::getTrackID() {
+    return lastTrackID;
 }
 
 std::string Car::serialize() {

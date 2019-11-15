@@ -49,6 +49,16 @@ class ClientTh: public Thread {
     ~ClientTh();
 
     void setState(GameState s);
+
+    int getCarPosX();
+
+    int getCarPosY();
+
+    int getCarLastTrackID();
+
+    void updateCarPos(Point point);
+
+    void updateLastTrackID(int ID);
 };
 
 #endif

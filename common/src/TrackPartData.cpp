@@ -45,6 +45,10 @@ void TrackPartData::setID(int ID) {
     trackElemID = ID;
 }
 
+int TrackPartData::getID() {
+    return trackElemID;
+}
+
 /* Converts part to string for serialization */
 std::string TrackPartData::serialize() {
     return std::to_string(posX) +

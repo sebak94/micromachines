@@ -17,7 +17,8 @@
 
 #define BLOCKSIZE 100  // meters
 #define MAXTRACKSIZE 150000 // meters (per axis)
-#define JUMPEDBLOCKS 1
+#define JUMPEDBLOCKS 2
+#define STARTCARSPERBLOCK 2
 
 #ifndef MAP_TRACKTYPE
 
@@ -100,6 +101,14 @@ public:
     uint16_t getCarStartingRotation(int order);
 
     bool jumpedTrackPart(int posX, int posY, int lastTrackPartID);
+
+    Point getTrackPartPoint(int trackID);
+
+    int getStartingID(int order);
+
+    int getCurrentID(int posX, int posY);
+
+    int getPartsNumber();
 };
 
 

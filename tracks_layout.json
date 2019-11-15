@@ -311,6 +311,32 @@
          "next-to-start" : [ 8, 6 ],
          "start" : [ 8, 5 ],
          "width" : 12
+      },
+      {
+         "grandstands" : [
+            [ "pub1Down", 8, 4 ],
+            [ "pub1Down", 8, 5 ],
+            [ "pub1Down", 8, 6 ]
+         ],
+         "height" : 12,
+         "layout" : [
+            "finishV",
+            "up-left",
+            "horizontal",
+            "horizontal",
+            "horizontal",
+            "up-right",
+            "vertical",
+            "down-right",
+            "horizontal",
+            "horizontal",
+            "horizontal",
+            "down-left"
+         ],
+         "name" : "asdsad",
+         "next-to-start" : [ 9, 7 ],
+         "start" : [ 8, 7 ],
+         "width" : 12
       }
    ]
 }

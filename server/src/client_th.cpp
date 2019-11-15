@@ -111,12 +111,30 @@ int ClientTh::getCarPosX() {
     return car->getPosX();
 }
 
+int ClientTh::getCarPosY() {
+    Lock l(m);
+    return car->getPosY();
+}
+
+int ClientTh::getCarLastTrackID() {
+    Lock l(m);
+    return car->getTrackID();
+}
+
 void ClientTh::setState(GameState s) {
     this->state = s;
 }
 
 void ClientTh::updateCar() {
     car->update();
+}
+
+void ClientTh::updateCarPos(Point point) {
+    car->updatePos(point);
+}
+
+void ClientTh::updateLastTrackID(int ID) {
+    car->setTrackID(ID);
 }
 
 void ClientTh::receive(char *action) {

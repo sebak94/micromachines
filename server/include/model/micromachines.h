@@ -37,6 +37,10 @@ class Micromachines {
     int getPlayersNumber();
     void setPlayerGameState(ClientTh *player, GameState state);
     void setAllPlayersGameStates(GameState state);
+
+    void resetJumpingCars();
+
+    int getStartID(int order);
 };
 
 #endif

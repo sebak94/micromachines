@@ -66,6 +66,33 @@ void Micromachines::updatePlayersState() {
     }
 }
 
+// Checks if cars jump track parts
+void Micromachines::resetJumpingCars() {
+    int x, y, lastID, currentID, nextID;
+    Lock l(m);
+    for (size_t i = 0; i < players.size(); i++) {
+        x = players[i]->getCarPosX();
+        y = players[i]->getCarPosY();
+        lastID = players[i]->getCarLastTrackID();
+        currentID = track.getTrackPart(x, y).getID();
+        std::cout << "Auto " << i << "("<<x<<","<<y<<"). " << ". LastID:" << lastID << ". Current ID: " << track.getCurrentID(x, y) << "   " << std::endl;
+        if (currentID == lastID || !track.isOnTrack(x,y)) {
+            // sigue en el mismo o está fuera de pista
+        } else if (track.jumpedTrackPart(x, y, lastID)) {
+            // está en pista y salteó pedazos
+            players[i]->updateCarPos(track.getTrackPartPoint(lastID));
+            players[i]->updateLastTrackID(lastID);
+        } else {
+            // avanzó al siguiente
+            players[i]->updateLastTrackID(currentID);
+        }
+    }
+    for (size_t i = 0; i < players.size(); i++) {
+        printf("\r                            \033[F");
+    }
+
+}
+
 void Micromachines::cleanPlayers() {
     Lock l(m);
     players.clear();
@@ -94,6 +121,10 @@ std::string Micromachines::trackSerialized() {
 
 Point Micromachines::getStartingPoint(int position) {
     return track.getCarStartingPos(position);
+}
+
+int Micromachines::getStartID(int order) {
+    return track.getStartingID(order);
 }
 
 uint16_t Micromachines::getStartingCarRot(int position) {

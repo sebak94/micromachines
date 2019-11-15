@@ -372,7 +372,6 @@ int Track::setNextCoord(int &row,
 // fills whole track as empty (grass)
 void Track::initLayout() {
     TrackPartData emptyPart;
-    int row = 0, col = 0;
     partCounter = 0;
     trackPartData.clear();
     trackPartData.reserve(width * height);
@@ -395,13 +394,10 @@ void Track::setTrackPartType(int row, int col, trackPartType type) {
     trackPartData[row*width + col].setType(type);
 }
 
-// Finds nearest bottom-left corner in BLOCKSIZE multiples [meters]
+/* Finds nearest bottom-left corner in BLOCKSIZE multiples [meters]
+ * for example: pos==234 => returns: 200*/
 int Track::findNearestPos(int pos) {
-    for(int nearest = 0; nearest < MAXTRACKSIZE; nearest+=BLOCKSIZE ) {
-        if(pos >= nearest && pos < nearest + BLOCKSIZE)
-            return nearest;
-    }
-    return -1;  // not found
+    return (pos/BLOCKSIZE)*BLOCKSIZE;
 }
 
 // Transforms from meters to matrix display indexes
@@ -479,7 +475,7 @@ std::vector<TrackPartData> Track::getTrackPartData() const {
 }
 
 Point Track::getCarStartingPos(int order) {
-    int blocksToStartLine = order/2;
+    int blocksToStartLine = order/STARTCARSPERBLOCK;
     Point blockPoint = trackSequence.at(partCounter - 1 - blocksToStartLine);
     trackPartType t = getTrackPart(blockPoint.getX(), blockPoint.getY()).getType();
     if (order % 2 == 0 && (t == finishH || t == horizontal))
@@ -511,8 +507,8 @@ Point Track::getCarStartingPos(int order) {
 }
 
 uint16_t Track::getCarStartingRotation(int order) {
-    Point act = trackSequence.at(partCounter - 1 - order/2);
-    Point prev = trackSequence.at(partCounter - 2 - order/2);
+    Point act = trackSequence.at(partCounter - 1 - order/STARTCARSPERBLOCK);
+    Point prev = trackSequence.at(partCounter - 2 - order/STARTCARSPERBLOCK);
     trackPartType t = getTrackPart(act.getX(), act.getY()).getType();
 
     if (act.getX() > prev.getX()) {
@@ -545,9 +541,15 @@ void Track::setTrackStart(int row, int col, int rowN, int colN) {
 bool Track::jumpedTrackPart(int xCar, int yCar, int lastTrackPartID) {
     TrackPartData part = getTrackPart(findNearestPos(xCar), findNearestPos(yCar));
     uint16_t x = 0, y = 0;
+    int currentID = part.getID();
     if (!isTrackPart(part.getType()))
         return false;  // is outside of track
-    if (lastTrackPartID == partCounter - 1) {
+    else if (currentID == lastTrackPartID)
+        return false;  // is on same block
+    else if (lastTrackPartID == partCounter - 1 && (currentID == 0 || currentID == 1))
+        return false;
+    else return currentID > lastTrackPartID + JUMPEDBLOCKS;
+        /*if (lastTrackPartID == partCounter - 1) {
         // finish line
         x = trackSequence.at(0).getX();
         y = trackSequence.at(0).getY();
@@ -556,12 +558,28 @@ bool Track::jumpedTrackPart(int xCar, int yCar, int lastTrackPartID) {
         x = trackSequence.at(lastTrackPartID + 1).getX();
         y = trackSequence.at(lastTrackPartID + 1).getY();
     }
-    return !(xCar >= x &&  xCar <= x + BLOCKSIZE && yCar >= y && yCar <= y + BLOCKSIZE);
+    return !(xCar >= x && xCar <= x + BLOCKSIZE && yCar >= y && yCar <= y + BLOCKSIZE);*/
+}
 
+Point Track::getTrackPartPoint(int trackID) {
+    return trackSequence.at(trackID);
+}
 
-    /*int actualID = getTrackPart(posX, posY).getID();
-    int actualID = getTrackPart(posX, posY).getID();
-    if (lastTrackPartID == partCounter - 1)
-        return (actualID >= JUMPEDBLOCKS + lastTrackPartID - partCounter + 1);
-    else return (actualID >= JUMPEDBLOCKS + lastTrackPartID);*/
+// Gets car ID based on starting position
+int Track::getStartingID(int order) {
+    return partCounter - 1 - order/STARTCARSPERBLOCK;
+}
+
+int Track::getCurrentID(int posX, int posY) {
+    int x = findNearestPos(posX);
+    int y = findNearestPos(posY);
+    std::cout << x << "," << y << " ";
+    for(auto & it : trackSequence) {
+        if (it.second.getX() == x && it.second.getY() == y)
+            return it.first;
+    }
+}
+
+int Track::getPartsNumber() {
+    return partCounter;
 }
