@@ -4,6 +4,7 @@
 #include <map>
 #include "Model.h"
 #include "sdl/SdlSurface.h"
+#include "../../common/include/TextTexture.h"
 
 class Camera {
 private:
@@ -20,6 +21,8 @@ public:
     void showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> &track);
     void showCars(int xMyCar, int yMyCar, std::map<std::string, Car*> &cars);
     void updateBlockSize();
+
+    void showLaps(int i);
 };
 
 #endif

@@ -129,8 +129,12 @@ void ClientTh::updateCar() {
     car->update();
 }
 
-void ClientTh::updateCarPos(Point point) {
-    car->updatePos(point);
+void ClientTh::newCarPosition(Point point) {
+    car->newPos(point);
+}
+
+void ClientTh::updateLaps() {
+    car->updateLaps();
 }
 
 void ClientTh::updateLastTrackID(int ID) {

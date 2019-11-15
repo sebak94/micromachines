@@ -88,3 +88,9 @@ void TDTire::updateTurn(int control_state) {
 TDTire::~TDTire() {
     body->GetWorld()->DestroyBody(body);
 }
+
+void TDTire::newPosition(float32 x, float32 y) {
+    body->SetTransform(b2Vec2(x,y),body->GetAngle());
+    body->SetLinearVelocity(b2Vec2(0,0));  // avoids weird effects of teleporting
+    body->SetAngularVelocity(0);  // avoids weird effects of teleporting
+}

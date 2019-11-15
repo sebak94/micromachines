@@ -67,7 +67,7 @@ void Micromachines::updatePlayersState() {
 }
 
 // Checks if cars jump track parts
-void Micromachines::resetJumpingCars() {
+void Micromachines::monitorTrack() {
     int x, y, lastID, currentID, nextID;
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
@@ -80,11 +80,13 @@ void Micromachines::resetJumpingCars() {
             // sigue en el mismo o está fuera de pista
         } else if (track.jumpedTrackPart(x, y, lastID)) {
             // está en pista y salteó pedazos
-            players[i]->updateCarPos(track.getTrackPartPoint(lastID));
+            players[i]->newCarPosition(track.getTrackPartPoint(lastID) + Point(BLOCKSIZE/2,BLOCKSIZE*(1.1)));
             players[i]->updateLastTrackID(lastID);
         } else {
             // avanzó al siguiente
             players[i]->updateLastTrackID(currentID);
+            if (currentID == 0)
+                players[i]->updateLaps();
         }
     }
     for (size_t i = 0; i < players.size(); i++) {

@@ -99,6 +99,7 @@ void Drawer::draw() {
     int y = modelMonitor.getCars()[modelMonitor.getMyColor()]->getY();
     camera.showTrack(x, y, modelMonitor.getTrack());
     camera.showCars(x, y, modelMonitor.getCars());
+    camera.showLaps(modelMonitor.getCars()[modelMonitor.getMyColor()]->getMyLap());
     showFullScreenButton();
     showRecButton();
     window.render();

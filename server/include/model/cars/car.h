@@ -29,6 +29,7 @@ class Car: public Model {
     TDCar td_car;
     int control_state;
     int lastTrackID = -1;
+    int laps = 0;
 
     public:
     Car(uint8_t width, uint8_t height, uint16_t max_velocity, uint8_t acceleration, uint8_t grip,
@@ -37,13 +38,14 @@ class Car: public Model {
     void updateState(char action);
     virtual void update() override;
     virtual std::string serialize() override;
-    void updatePos(Point point);
+    void newPos(Point point);
     int getPosX();
     int getPosY();
     void setTrackID(int ID);
     int getTrackID();
     ~Car();
 
+    void updateLaps();
 };
 
 #endif

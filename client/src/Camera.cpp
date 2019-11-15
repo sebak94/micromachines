@@ -1,4 +1,6 @@
+#include <SDL2/SDL_ttf.h>
 #include "../include/Camera.h"
+#include "../../common/include/TextTexture.h"
 
 Camera::Camera(SdlWindow &window, std::map<std::string, SdlSurface*> &pictures,
         std::map<trackPartType, SdlSurface*> &trackPictures) :
@@ -45,11 +47,11 @@ void Camera::showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> &track
 void Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car*> &cars) {
     double widthCar = blockWidth / 6;
     double heightCar = blockHeight / 3;
-    double xBegin = - xMyCar * (blockWidth / 100) + (window.getWidth() / 2);
-    double yBegin = - yMyCar * (blockHeight / 100) - (window.getHeight() / 2);
+    double xBegin = - xMyCar * (blockWidth / 100) + (window.getWidth() / 2.0);
+    double yBegin = - yMyCar * (blockHeight / 100) - (window.getHeight() / 2.0);
 
-    for (std::map<std::string, Car*>::iterator it = cars.begin(); it != cars.end(); ++it) {
-        Car* car = it->second;
+    for (auto & it : cars) {
+        Car* car = it.second;
         double x = car->getX() * (blockWidth / 100) - (widthCar / 2);
         double y = car->getY() * (blockHeight / 100) + (heightCar / 2);
         SDL_Rect sdlDestCar = {(int)(x + xBegin), (int)(- y - yBegin), (int)widthCar, (int)heightCar};
@@ -59,6 +61,16 @@ void Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car*> &cars)
 
 void Camera::updateBlockSize() {
     //Las imagenes son cuadradas, asi que le pongo el mismo ancho que largo
-    blockWidth = (window.getWidth() + window.getHeight()) / 4;
-    blockHeight = (window.getWidth() + window.getHeight()) / 4;
+    blockWidth = (window.getWidth() + window.getHeight()) / 4.0;
+    blockHeight = (window.getWidth() + window.getHeight()) / 4.0;
+}
+
+void Camera::showLaps(int lap) {
+    TextTexture lapTexture;
+    TTF_Init();
+    SDL_Color color = {255, 255, 255, 0};
+    lapTexture.textToTexture(window.getRenderer(), "Lap", color, "../common/fonts/OpenSans-Italic.ttf", 30);
+    lapTexture.render(window.getRenderer(),window.getWidth()-100,window.getHeight()-100);
+    lapTexture.textToTexture(window.getRenderer(), std::to_string(lap), color, "../common/fonts/OpenSans-Italic.ttf", 50);
+    lapTexture.render(window.getRenderer(),window.getWidth()-100,window.getHeight()-75);
 }

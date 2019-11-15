@@ -38,7 +38,7 @@ class Micromachines {
     void setPlayerGameState(ClientTh *player, GameState state);
     void setAllPlayersGameStates(GameState state);
 
-    void resetJumpingCars();
+    void monitorTrack();
 
     int getStartID(int order);
 };

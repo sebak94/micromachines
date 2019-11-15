@@ -109,6 +109,10 @@ void TDCar::update(int control_state) {
     frJoint->SetLimits( newAngle, newAngle );
 }
 
-void TDCar::updatePoisition(Point point) {
+void TDCar::newPosition(Point point) {
     body->SetTransform(b2Vec2(point.getX(),point.getY()),body->GetAngle());
+    for (int i = 0; i < tires.size(); i++)
+        tires[i]->newPosition(point.getX(), point.getY());
+    body->SetLinearVelocity(b2Vec2(0,0));  // avoids weird effects of teleporting
+    body->SetAngularVelocity(0);  // avoids weird effects of teleporting
 }

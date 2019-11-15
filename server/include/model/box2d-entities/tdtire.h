@@ -21,8 +21,11 @@ class TDTire {
     void updateDrive(int control_state);
     void updateTurn(int control_state);
 
+
     TDTire(b2World* world, Point initial_position);
     ~TDTire();
+
+    void newPosition(float32 x, float32 y);
 };
 
 #endif

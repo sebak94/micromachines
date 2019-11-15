@@ -61,7 +61,7 @@ void GameLoopTh::play() {
         auto begin = std::chrono::steady_clock::now();
         loops = 0;
         micromachines.updatePlayersState();
-        micromachines.resetJumpingCars();
+        micromachines.monitorTrack();
         updateWorld(next_game_tick, SKIP_TICKS, loops, 1.0 / 60, 5, 5);
         micromachines.sendNewStateToPlayers();
         timeWait(MICROSECS_WAIT, begin);

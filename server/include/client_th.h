@@ -56,9 +56,11 @@ class ClientTh: public Thread {
 
     int getCarLastTrackID();
 
-    void updateCarPos(Point point);
+    void newCarPosition(Point point);
 
     void updateLastTrackID(int ID);
+
+    void updateLaps();
 };
 
 #endif

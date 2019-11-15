@@ -18,7 +18,7 @@ class TDCar {
     void update(int control_state);
     ~TDCar();
 
-    void updatePoisition(Point point);
+    void newPosition(Point point);
 };
 
 #endif
