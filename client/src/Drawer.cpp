@@ -6,7 +6,7 @@
 #include "../../common/include/Error.h"
 #include <unistd.h>
 
-#define FPS 80
+#define FPS 25
 #define MICROSECS_WAIT 1/FPS*1000000 //seria que en un segundo se dibujen aprox 60 veces
 #define MUSICPATH "../common/sounds/beat.wav"
 #define FULLSCREENBUTTON "../common/images/fullscreen.png"
