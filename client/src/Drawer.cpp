@@ -6,7 +6,7 @@
 #include "../../common/include/Error.h"
 #include <unistd.h>
 
-#define FPS 25
+#define FPS 45
 #define MICROSECS_WAIT 1/FPS*1000000 //seria que en un segundo se dibujen aprox 60 veces
 #define MUSICPATH "../common/sounds/beat.wav"
 #define FULLSCREENBUTTON "../common/images/fullscreen.png"
@@ -23,13 +23,12 @@ Drawer::Drawer(ModelMonitor &modelMonitor) :
     createFullScreenButton();
     createRecButton();
     lastFrame.reserve(3*WIDTH*HEIGHT);
-    videoTexture = video.getSDLRecordTexture(window.getRenderer());
 }
 
 Drawer::~Drawer() {}
 
 void Drawer::run() {
-    music.play();
+    //music.play();
     running = true;
     std::thread recorder = std::thread(&Drawer::recorderTh, this);
     while (running) {
@@ -45,7 +44,7 @@ void Drawer::run() {
             usleep(MICROSECS_WAIT - microsecsPassed);
     }
     recorder.join();
-    music.stop();
+    //music.stop();
 }
 
 void Drawer::stop() {
@@ -69,7 +68,6 @@ void Drawer::createRecButton() {
 
 void Drawer::updateFullScreenButton(const SDL_Event *event) {
     fullScreenButton.updateEvent(event);
-
     if (fullScreenButton.isClicked()) {
         window.changeFullScreen();
     }
@@ -96,7 +94,7 @@ void Drawer::showRecButton() {
 void Drawer::draw() {
     window.fill();
     camera.updateBlockSize();
-    camera.showBackground();
+    //camera.showBackground();
     int x = modelMonitor.getCars()[modelMonitor.getMyColor()]->getX();
     int y = modelMonitor.getCars()[modelMonitor.getMyColor()]->getY();
     camera.showTrack(x, y, modelMonitor.getTrack());

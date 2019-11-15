@@ -21,7 +21,7 @@ void Camera::showBackground() {
         y += height;
     }
 }
-
+// 39.5% -> 31%
 void Camera::showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> &track) {
     //Transformo las coordenadas para que mi auto quede en el medio de la pantalla
     //y se muestre la parte de la pista correspondiente
@@ -32,8 +32,13 @@ void Camera::showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> &track
         double x = track[i].getPosX() * (blockWidth / 100);
         double y = track[i].getPosY() * (blockHeight / 100);
         SDL_Rect sdlDestRoad = {(int) (x + xBegin), (int) (-y - yBegin), (int) blockWidth, (int) blockHeight};
-        trackPictures[empty]->render(sdlDestRoad);
-        trackPictures[track[i].getType()]->render(sdlDestRoad);
+        if (sdlDestRoad.x + sdlDestRoad.w > 0 &&
+            sdlDestRoad.x  < window.getWidth() &&
+            sdlDestRoad.y + sdlDestRoad.h > 0 &&
+            sdlDestRoad.y < window.getHeight()) {
+                trackPictures[empty]->render(sdlDestRoad);
+                trackPictures[track[i].getType()]->render(sdlDestRoad);
+        }
     }
 }
 
