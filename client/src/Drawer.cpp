@@ -6,7 +6,7 @@
 #include "../../common/include/Error.h"
 #include <unistd.h>
 
-#define FPS 45
+#define FPS 25
 #define MICROSECS_WAIT 1/FPS*1000000 //seria que en un segundo se dibujen aprox 60 veces
 #define MUSICPATH "../common/sounds/beat.wav"
 #define FULLSCREENBUTTON "../common/images/fullscreen.png"
@@ -57,12 +57,12 @@ void Drawer::resize(int width, int height) {
 
 void Drawer::createFullScreenButton() {
     int size = (window.getWidth() + window.getHeight()) / 37;
-    SDL_Rect area = {0, 0, size, size};
+    SDL_Rect area = {10, 10, size, size};
     fullScreenButton = Button(window.getRenderer(), area, FULLSCREENBUTTON);
 }
 
 void Drawer::createRecButton() {
-    SDL_Rect area = {WIDTH - 80, 10, 100, 35};
+    SDL_Rect area = {WIDTH - 80, 10, 100, 30};
     recButton = Button(window.getRenderer(), area, RECBUTTON);
 }
 
@@ -94,7 +94,6 @@ void Drawer::showRecButton() {
 void Drawer::draw() {
     window.fill();
     camera.updateBlockSize();
-    //camera.showBackground();
     int x = modelMonitor.getCars()[modelMonitor.getMyColor()]->getX();
     int y = modelMonitor.getCars()[modelMonitor.getMyColor()]->getY();
     camera.showTrack(x, y, modelMonitor.getTrack());

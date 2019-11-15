@@ -1,10 +1,14 @@
 #include <SDL2/SDL_ttf.h>
 #include "../include/Camera.h"
 #include "../../common/include/TextTexture.h"
+#include "../include/sdl/SdlTexture.h"
 
 Camera::Camera(SdlWindow &window, std::map<std::string, SdlSurface*> &pictures,
         std::map<trackPartType, SdlSurface*> &trackPictures) :
-        window(window), pictures(pictures), trackPictures(trackPictures) {}
+        window(window), pictures(pictures), trackPictures(trackPictures),
+        lapBox(SdlSurface(LAPBOXPATH, window)) {
+    TTF_Init();
+}
 
 Camera::~Camera() {}
 
@@ -66,11 +70,13 @@ void Camera::updateBlockSize() {
 }
 
 void Camera::showLaps(int lap) {
-    TextTexture lapTexture;
-    TTF_Init();
     SDL_Color color = {255, 255, 255, 0};
-    lapTexture.textToTexture(window.getRenderer(), "Lap", color, "../common/fonts/OpenSans-Italic.ttf", 30);
-    lapTexture.render(window.getRenderer(),window.getWidth()-100,window.getHeight()-100);
-    lapTexture.textToTexture(window.getRenderer(), std::to_string(lap), color, "../common/fonts/OpenSans-Italic.ttf", 50);
-    lapTexture.render(window.getRenderer(),window.getWidth()-100,window.getHeight()-75);
+    SDL_Renderer * r = window.getRenderer();
+    int w = window.getWidth(); int h = window.getHeight();
+    SDL_Rect rect = {w-130, h-110, 200, 110};
+    lapBox.render(rect);
+    lapNumber.textToTexture(r, std::to_string(lap), color, LAPFONT, 50);
+    lapNumber.render(r, w - 100, h - 75);
+    lapNumber.textToTexture(r, "/" + std::to_string(8), color, LAPFONT, 25);
+    lapNumber.render(r, w - 45, h - 50);
 }
