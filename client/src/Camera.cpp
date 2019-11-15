@@ -69,14 +69,15 @@ void Camera::updateBlockSize() {
     blockHeight = (window.getWidth() + window.getHeight()) / 4.0;
 }
 
-void Camera::showLaps(int lap) {
-    SDL_Color color = {255, 255, 255, 0};
+void Camera::showLaps(int lap, int totalLaps) {
+    SDL_Color textColor = {255, 255, 255, 0};
     SDL_Renderer * r = window.getRenderer();
     int w = window.getWidth(); int h = window.getHeight();
-    SDL_Rect rect = {w-130, h-110, 200, 110};
+    SDL_Rect rect = {w - 130, h - 110, 200, 110};
     lapBox.render(rect);
-    lapNumber.textToTexture(r, std::to_string(lap), color, LAPFONT, 50);
+    lapNumber.textToTexture(r, std::to_string(lap), textColor, LAPFONT, 50);
     lapNumber.render(r, w - 100, h - 75);
-    lapNumber.textToTexture(r, "/" + std::to_string(8), color, LAPFONT, 25);
+    std::string totStr = "/" + std::to_string(totalLaps);
+    lapNumber.textToTexture(r, totStr, textColor, LAPFONT, 25);
     lapNumber.render(r, w - 45, h - 50);
 }

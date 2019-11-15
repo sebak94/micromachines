@@ -60,6 +60,7 @@ void AcceptorTh::run() {
             micromachines.addPlayer(client_th);
             clients.addClient(client_th);
             client_th->sendTrackData(micromachines.trackSerialized());
+            client_th->sendLapsData(micromachines.lapsSerialized());
             client_th->start();
         } catch(const SocketError &e) {
             std::cout << e.what() << "\n";

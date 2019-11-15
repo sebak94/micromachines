@@ -24,6 +24,10 @@ void Micromachines::addPlayer(ClientTh *client) {
     players.push_back(client);
 }
 
+std::string Micromachines::lapsSerialized() {
+    return std::to_string(laps) += "\n";
+}
+
 void Micromachines::removePlayer(ClientTh *client) {
     Lock l(m);
     removePlayerFromVector(client);
@@ -69,7 +73,7 @@ void Micromachines::updatePlayersState() {
 
 // Checks if cars jump track parts
 void Micromachines::monitorTrack() {
-    int x, y, lastID, currentID, nextID;
+    int x, y, lastID, currentID;
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
         x = players[i]->getCarPosX();

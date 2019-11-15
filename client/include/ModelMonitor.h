@@ -22,6 +22,10 @@ public:
     void setGameState(std::string str);
 
     GameState getGameState();
+
+    void setTotalLaps(std::string str);
+
+    int getTotalLaps();
 };
 
 #endif

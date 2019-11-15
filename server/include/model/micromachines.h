@@ -16,6 +16,7 @@ class Micromachines {
     Track track;
     std::mutex m;
     std::vector<ClientTh*> players;
+    int laps = 10;
     DestructionListener destruction_listener;
 
     void removePlayerFromVector(ClientTh *player);
@@ -37,7 +38,7 @@ class Micromachines {
     int getPlayersNumber();
     void setPlayerGameState(ClientTh *player, GameState state);
     void setAllPlayersGameStates(GameState state);
-
+    std::string lapsSerialized();
     void monitorTrack();
 
     int getStartID(int order);

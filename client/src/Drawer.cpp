@@ -96,9 +96,11 @@ void Drawer::draw() {
     camera.updateBlockSize();
     int x = modelMonitor.getCars()[modelMonitor.getMyColor()]->getX();
     int y = modelMonitor.getCars()[modelMonitor.getMyColor()]->getY();
+    int laps = modelMonitor.getCars()[modelMonitor.getMyColor()]->getMyLap();
+    int totalLaps = modelMonitor.getTotalLaps();
     camera.showTrack(x, y, modelMonitor.getTrack());
     camera.showCars(x, y, modelMonitor.getCars());
-    camera.showLaps(modelMonitor.getCars()[modelMonitor.getMyColor()]->getMyLap());
+    camera.showLaps(laps, totalLaps);
     showFullScreenButton();
     showRecButton();
     window.render();
