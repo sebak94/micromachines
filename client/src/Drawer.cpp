@@ -6,7 +6,7 @@
 #include "../../common/include/Error.h"
 #include <unistd.h>
 
-#define FPS 25
+#define FPS 80
 #define MICROSECS_WAIT 1/FPS*1000000 //seria que en un segundo se dibujen aprox 60 veces
 #define MUSICPATH "../common/sounds/beat.wav"
 #define FULLSCREENBUTTON "../common/images/fullscreen.png"
@@ -19,7 +19,8 @@ Drawer::Drawer(ModelMonitor &modelMonitor) :
     loader(window, pictures, trackPictures),
     camera(window, pictures, trackPictures),
     modelMonitor(modelMonitor), music(MUSICPATH),
-    video(std::string(VIDEOPATH), VIDEOFPS, WIDTH, HEIGHT){
+    video(std::string(VIDEOPATH), VIDEOFPS, WIDTH, HEIGHT),
+    matchWindow(window) {
     createFullScreenButton();
     createRecButton();
     lastFrame.reserve(3*WIDTH*HEIGHT);
@@ -40,7 +41,7 @@ void Drawer::run() {
         }
         auto end = std::chrono::system_clock::now();
         int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-        if ( MICROSECS_WAIT > microsecsPassed )
+        if (MICROSECS_WAIT > microsecsPassed)
             usleep(MICROSECS_WAIT - microsecsPassed);
     }
     recorder.join();
@@ -93,14 +94,19 @@ void Drawer::showRecButton() {
 
 void Drawer::draw() {
     window.fill();
-    camera.updateBlockSize();
-    int x = modelMonitor.getCars()[modelMonitor.getMyColor()]->getX();
-    int y = modelMonitor.getCars()[modelMonitor.getMyColor()]->getY();
-    int laps = modelMonitor.getCars()[modelMonitor.getMyColor()]->getMyLap();
-    int totalLaps = modelMonitor.getTotalLaps();
-    camera.showTrack(x, y, modelMonitor.getTrack());
-    camera.showCars(x, y, modelMonitor.getCars());
-    camera.showLaps(laps, totalLaps);
+    if (modelMonitor.getGameState() == mainMenu) {
+        matchWindow.render();
+    } else {
+        camera.updateBlockSize();
+        camera.showBackground();
+        int x = modelMonitor.getCars()[modelMonitor.getMyColor()]->getX();
+        int y = modelMonitor.getCars()[modelMonitor.getMyColor()]->getY();
+        int laps = modelMonitor.getCars()[modelMonitor.getMyColor()]->getMyLap();
+        int totalLaps = modelMonitor.getTotalLaps();
+        camera.showTrack(x, y, modelMonitor.getTrack());
+        camera.showCars(x, y, modelMonitor.getCars());
+        camera.showLaps(laps, totalLaps);
+    }
     showFullScreenButton();
     showRecButton();
     window.render();
@@ -155,4 +161,8 @@ void Drawer::showAnimation(SdlWindow &window) {
     SdlAnimation anim(texture, framesInX, framesInY, widthFrame, heightFrame);
     SDL_Rect sdlDest = {(window.getWidth() - widthFrame) / 2, (window.getHeight() - heightFrame) / 2, widthFrame, heightFrame};
     anim.render(sdlDest, window);
+}
+
+MatchWindow& Drawer::getMatchWindow() {
+    return this->matchWindow;
 }

@@ -128,8 +128,11 @@ set(SOURCE_FILES_CLIENT
 	record/src/Record.cpp
 	common/include/Error.h
 	common/src/Error.cpp
+	client/src/MatchWindow.cpp
+	client/include/MatchWindow.h
 	common/src/TextTexture.cpp
-	common/include/TextTexture.h)
+	common/include/TextTexture.h
+	)
 
 set(SOURCE_FILES_EDITOR
 	common/src/TrackList.cpp
