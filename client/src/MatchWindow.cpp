@@ -1,5 +1,6 @@
 #include <SDL2/SDL_ttf.h>
 #include <vector>
+#include <sstream>
 #include "../include/MatchWindow.h"
 
 #define LOGOPATH "../common/images/micromachines.png"
@@ -16,21 +17,25 @@ MatchWindow::MatchWindow(SdlWindow &sdlWindow) : window(sdlWindow),
     TTF_Init();
     createMatchButtons();
 
-    //Hardcodeo los nombres de las pistas y las partidas por ahora
-    trackNames.push_back("track");
-    trackNames.push_back("super track");
-    itTrackNames = trackNames.begin();
-    matchNames.push_back("partida 1");
-    matchNames.push_back("partida 2");
-    itMatchNames = matchNames.begin();
+    //Defino que el juego sea entre 2 y 5 jugadores
     players.push_back("2");
     players.push_back("3");
     players.push_back("4");
     players.push_back("5");
     itPlayers = players.begin();
+
+    //Hardcodeo los nombres de las partidas por ahora
+    matchNames.push_back("partida 1");
+    matchNames.push_back("partida 2");
+    itMatchNames = matchNames.begin();
 }
 
 MatchWindow::~MatchWindow() {}
+
+void MatchWindow::setTrackNames(std::vector<std::string> tracks) {
+    trackNames = tracks;
+    itTrackNames = trackNames.begin();
+}
 
 void MatchWindow::createMatchButtons() {
     //Los creo con areas vacias y despues cuando los dibujo los actualizo acorde al tamaño de la ventana
@@ -79,11 +84,31 @@ void MatchWindow::updateNonSelectingButtons(const SDL_Event *event) {
         }
     }
     if (playButton.isClicked()) {
-        printf("play clicked\n");
+        ready = true;
     }
     if (returnButton.isClicked()) {
         state = selecting;
     }
+}
+
+std::string MatchWindow::serializeData() {
+    std::string response;
+    if (state == creating) {
+        response += "C,";
+        response += textTrack.getText() + ",";
+        response += textPlayers.getText();
+        response += "\n";
+    } else if (state == joining) {
+        response += "J,";
+        response += textMatch.getText() + ",";
+        response += "0";
+        response += "\n";
+    }
+    return response;
+}
+
+bool MatchWindow::isReady() {
+    return ready;
 }
 
 void MatchWindow::updateMatchButtons(const SDL_Event *event) {
@@ -132,14 +157,14 @@ void MatchWindow::selectingScreen() {
 
 void MatchWindow::creationScreen() {
     showBackground();
-    showSelectText("Elegir escenario: ", *itTrackNames, window.getWidth() / 9, window.getHeight() / 2, arrowButton, textTrack);
-    showSelectText("Cantidad de jugadores: ", *itPlayers, window.getWidth() / 9, window.getHeight() / 1.5, arrowButton2, textPlayers);
+    showSelectText("Choose track: ", *itTrackNames, window.getWidth() / 9, window.getHeight() / 2, arrowButton, textTrack);
+    showSelectText("Number of players: ", *itPlayers, window.getWidth() / 9, window.getHeight() / 1.5, arrowButton2, textPlayers);
     showPlayAndReturn();
 }
 
 void MatchWindow::joiningScreen() {
     showBackground();
-    showSelectText("Partidas disponibles: ", *itMatchNames, window.getWidth() / 9, window.getHeight() / 2, arrowButton, textMatch);
+    showSelectText("Available matchs: ", *itMatchNames, window.getWidth() / 9, window.getHeight() / 2, arrowButton, textMatch);
     showPlayAndReturn();
 }
 
@@ -173,4 +198,8 @@ void MatchWindow::showPlayAndReturn() {
     returnButton.updatePos(window.getWidth() / 9, window.getHeight() / 1.2);
     returnButton.updateSize(w, h);
     returnButton.draw(window.getRenderer());
+}
+
+StateWindow MatchWindow::getState() const {
+    return this->state;
 }

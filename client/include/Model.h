@@ -23,6 +23,7 @@ private:
     std::vector<TrackPartData> track;
     std::string myColor;
     GameState gameState = mainMenu;
+    std::vector<std::string> vector;
 
 public:
     Model();
@@ -34,8 +35,9 @@ public:
     std::map<std::string, Car*>& getCars();
     void updateCar(std::string str);
     void setGameState(std::string str);
-
     GameState getGameState();
+    void setTrackNames(std::string tracks);
+    std::vector<std::string> getTrackNames();
 
 private:
 

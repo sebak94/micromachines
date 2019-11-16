@@ -43,3 +43,13 @@ void ModelMonitor::updateCar(std::string str) {
     std::lock_guard<std::mutex> lock(m);
     model.updateCar(str);
 }
+
+void ModelMonitor::setTrackNames(std::string tracks) {
+    std::lock_guard<std::mutex> lock(m);
+    model.setTrackNames(tracks);
+}
+
+std::vector<std::string> ModelMonitor::getTrackNames() {
+    std::lock_guard<std::mutex> lock(m);
+    return model.getTrackNames();
+}

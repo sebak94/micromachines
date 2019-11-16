@@ -31,12 +31,15 @@ class Micromachines {
     void cleanPlayers();
     void sendNewStateToPlayers();
     std::string trackSerialized();
+    std::string allTrackNames();
     Point getStartingPoint(int position);
     uint16_t getStartingCarRot(int position);
     void changeCarState(char *new_command);
     int getPlayersNumber();
     void setPlayerGameState(ClientTh *player, GameState state);
     void setAllPlayersGameStates(GameState state);
+    TrackList& getTracks();
+    bool somePlayersInMainMenu();
 };
 
 #endif
