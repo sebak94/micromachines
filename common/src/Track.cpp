@@ -583,3 +583,11 @@ int Track::getCurrentID(int posX, int posY) {
 int Track::getPartsNumber() {
     return partCounter;
 }
+
+int Track::getTrackW() {
+    return width;
+}
+
+int Track::getTrackH() {
+    return height;
+}

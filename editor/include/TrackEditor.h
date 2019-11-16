@@ -38,6 +38,7 @@ protected:
     Button wayArrow;
     Button exitButton;
     Track track;
+    Track loadedTrack;
     std::vector<std::string> fileLayout;
     std::vector<Grandstand> grandstands;
     int firstCornerIndex = 0;
@@ -50,7 +51,7 @@ protected:
 
 public:
     void run(Window &editor);
-    virtual void inputTrackCharacteristics(Window &game);
+    virtual bool inputTrackCharacteristics(Window &game);
     void updateGridEvents();
     void processButtonClicks();
     void createButtons(Window &game);
@@ -69,6 +70,8 @@ public:
     void setWay(trackPartType type);
     void drawWayArrow(SDL_Renderer *renderer);
     trackPartType setStartingPreviousTrackPart(int row, int col);
+
+    void loadTrack();
 };
 
 

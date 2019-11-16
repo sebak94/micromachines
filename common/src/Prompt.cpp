@@ -8,13 +8,38 @@
 #include <SDL2/SDL_ttf.h>
 
 /* Creates dialog for user to config new track to edit */
-void Prompt::inputTrackCharacteristics(Window & game){
-    createButtons(game);
+bool Prompt::inputTrackCharacteristics(Window & game){
     createTitle(game);
-    inputTrackName(game);
-    inputTrackWidth(game);
-    inputTrackHeight(game);
-    SDL_StopTextInput();
+    editOrNewTrack(game);
+    if (createNewTrack) {
+        createButtons(game);
+        inputTrackName(game);
+        inputTrackWidth(game);
+        inputTrackHeight(game);
+        SDL_StopTextInput();
+        return true;
+    } else {
+        createButtons(game);
+        inputFileTrack(game);
+        return false;
+    }
+}
+
+void Prompt::updateTrackSelection(Window &window, const std::string &textToShow) {
+    TTF_Init();
+    promptTextColor = {255, 255, 255, 0};
+    fieldTextColor = {0, 0, 0, 0};
+    promptText.textToTexture(window.renderer, "Track", promptTextColor, PROMPT_FONT, FONT_SIZE);
+    textField.textToTexture(window.renderer, textToShow.c_str(), fieldTextColor, FIELD_FONT, FONT_SIZE);
+    setTextPosition();
+    SDL_Color fieldColor = {200, 200, 200, 0};
+    textField.createFieldBox(getTextFieldPosX(), getTextFieldPosY(), fieldColor, (WINDOW_W - 7*getTextFieldPosX()));
+}
+
+void Prompt::renderTrackSelection(Window &window) {
+    promptText.render(window.renderer, textPosXPrompt, textPosYPrompt);
+    textField.renderFieldBox(window.renderer);
+    textField.render(window.renderer, textPosXField, textPosYField);
 }
 
 /* Creates title texture */
@@ -48,24 +73,44 @@ void Prompt::drawAll(Window & game) {
     SDL_RenderPresent(game.renderer);
 }
 
+/* Draws everything once */
+void Prompt::drawMainMenu(Window & game) {
+    game.clearScreen();
+    game.fillBackground(0, 0, 0, 0);
+    editButton.draw(game.renderer);
+    newButton.draw(game.renderer);
+    title.draw(game.renderer);
+    SDL_RenderPresent(game.renderer);
+}
+
+/* Draws everything once */
+void Prompt::drawTrackSelection(Window & game) {
+    game.clearScreen();
+    game.fillBackground(0, 0, 0, 0);
+    editButton.draw(game.renderer);
+    nextButton.draw(game.renderer);
+    title.draw(game.renderer);
+    renderTrackSelection(game);
+    SDL_RenderPresent(game.renderer);
+}
+
 void Prompt::editOrNewTrack(Window & game) {
-    int w = EDITOR_BUTTONS_WIDTH;
-    int h = EDITOR_BUTTONS_HEIGHT;
-    int x1 = WINDOW_W/4 - w/2;
-    int x2 = WINDOW_W*3/4 - w/2;
-    int y = WINDOW_H*0.8;
-    SDL_Rect saveButtonPos = {x1, y, w, h};
-    SDL_Rect editButtonPos = {x2, y, w, h};
-    saveButton = Button(game.renderer, saveButtonPos, SAVE_BUTTON_PATH);
+    int buttonSize = 250;
+    int sep = 200;
+    int x1 = WINDOW_W/2 - buttonSize/2 - sep;
+    int x2 = WINDOW_W/2 - buttonSize/2 + sep;
+    int y = WINDOW_H*0.45;
+    SDL_Rect saveButtonPos = {x1, y, buttonSize, buttonSize};
+    SDL_Rect editButtonPos = {x2, y, buttonSize, buttonSize};
+    newButton = Button(game.renderer, saveButtonPos, NEW_BUTTON_PATH);
     editButton = Button(game.renderer, editButtonPos, EDIT_BUTTON_PATH);
     TrackList trackList;
     std::vector<std::string> trackNames = trackList.getTrackNames();
     while (!quit && !modeAccepted) {
         getModeEvent();
         processModeEvent();
-        drawAll(game);
+        drawMainMenu(game);
     }
-
 }
 
 /* Creates dialog for user to config NAME of track to edit */
@@ -77,6 +122,24 @@ void Prompt::inputTrackName(Window & game) {
         getNameEvent();
         processNameEvent(trackNames);
         drawAll(game);
+    }
+}
+
+void Prompt::inputFileTrack(Window & game) {
+    TrackList trackList;
+    trackNames = trackList.getTrackNames();
+    int editButtonSize = 150;
+    updateTrackSelection(game, " ");
+    SDL_Rect nextButtonPos = {WINDOW_W - 6*getTextFieldPosX(), getTextFieldPosY() - 6, 160, 70};
+    SDL_Rect editButtonPos = {WINDOW_W/2 - editButtonSize/2, WINDOW_H*11/16 , editButtonSize, editButtonSize};
+    nextButton = Button(game.renderer, nextButtonPos, NEXT_BUTTON_PATH);
+    editButton = Button(game.renderer, editButtonPos, EDIT_BUTTON_PATH);
+    auto track = trackNames.begin();
+    while (!quit && !nameAccepted) {
+        updateTrackSelection(game, *track);
+        getTrackSelectionEvent();
+        processTrackSelectionEvent(track);
+        drawTrackSelection(game);
     }
 }
 
@@ -148,23 +211,25 @@ void Prompt::processNameEvent(std::vector<std::string> & trackNames) {
     }
 }
 
-void Prompt::processModeEvent() {
-    if (savePressed){
+void Prompt::processTrackSelectionEvent(
+        std::vector<std::string>::iterator &track) {
+    if (editPressed) {
         nameAccepted = true;
-        std::cout << "NAME ACCEPTED: ";
-        trackName = inputText.substr(1,std::string::npos);
-        std::cout << trackName << std::endl;
-        renderText = true;
-        inputText = " ";
-    } else if ((returnPressed || savePressed)){
-        renderWrongMessage = true;
-        nameAccepted = false;
-        std::cout << "WRONG NAME" << std::endl;
-        if (validNameSize())
-            nameError = MSG_NAME_ALREADY_EXISTS;
-        else
-            nameError = MSG_TOO_SHORT_NAME;
-        renderText = true;
+        trackName = *track;
+    } else if (nextTrackPressed) {
+        track++;
+        if (track == trackNames.end())
+            track = trackNames.begin();
+    }
+}
+
+void Prompt::processModeEvent() {
+    if (newPressed){
+        modeAccepted = true;
+        createNewTrack = true;
+    } else if (editPressed){
+        modeAccepted = true;
+        createNewTrack = false;
     }
 }
 
@@ -202,15 +267,33 @@ void Prompt::getModeEvent() {
     textInput = false;
     backspacePressed = false;
     savePressed = false;
+    newPressed = false;
+    editPressed = false;
     while ( SDL_PollEvent( &event ) ) {
         if ( event.type == SDL_QUIT )
             quit = true;
-        saveButton.updateEvent(&event);
+        newButton.updateEvent(&event);
         editButton.updateEvent(&event);
-        if (saveButton.isClicked())
-            savePressed = true;
+        if (newButton.isClicked())
+            newPressed = true;
         if (editButton.isClicked())
             editPressed = true;
+    }
+}
+
+void Prompt::getTrackSelectionEvent() {
+    newPressed = false;
+    nextTrackPressed = false;
+    editPressed = false;
+    while ( SDL_PollEvent( &event ) ) {
+        if ( event.type == SDL_QUIT )
+            quit = true;
+        editButton.updateEvent(&event);
+        nextButton.updateEvent(&event);
+        if (editButton.isClicked())
+            editPressed = true;
+        if (nextButton.isClicked())
+            nextTrackPressed = true;
     }
 }
 

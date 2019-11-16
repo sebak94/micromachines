@@ -12,13 +12,25 @@
 void TrackEditor::run(Window & editor) {
     editor.startGUI(WINDOW_NAME);
     quit = false;
-    inputTrackCharacteristics(editor);
-    grid = TrackGrid(editor, trackWidth, trackHeight);
+    if (inputTrackCharacteristics(editor)) {
+        grid = TrackGrid(editor, trackWidth, trackHeight);
+    } else {
+        loadTrack();
+        grid = TrackGrid(editor, loadedTrack);
+    }
     backgroundGrid = TrackGrid(editor, trackWidth, trackHeight);
     grid.createSamples();
     createButtons(editor);
     createWayArrow(editor);
     editTrack(editor);
+}
+
+void TrackEditor::loadTrack() {
+    TrackList list;
+    list.readTracks();
+    loadedTrack = list.getTrack(trackName);
+    trackWidth = loadedTrack.getTrackW();
+    trackHeight = loadedTrack.getTrackH();
 }
 
 /* Creates screen with grid and samples for track edition */
@@ -257,12 +269,14 @@ void TrackEditor::updateGridEvents() {
 }
 
 /* Creates an interface with the user to config name, width and height */
-void TrackEditor::inputTrackCharacteristics(Window & game) {
+bool TrackEditor::inputTrackCharacteristics(Window & game) {
     Prompt config;  // for input name, width, height
-    config.inputTrackCharacteristics(game);
+    bool isNewTrack;
+    isNewTrack = config.inputTrackCharacteristics(game);
     trackName = config.getTrackName();
     trackWidth = config.getWidth();
     trackHeight = config.getHeight();
+    return isNewTrack;
 }
 
 /* Creates save button to save track */

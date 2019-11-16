@@ -23,7 +23,9 @@
 #define MSG_DIM_WIDTH "Track width invalid."
 #define MSG_DIM_HEIGHT "Track height invalid."
 #define SAVE_BUTTON_PATH "../common/images/buttons/saveButton.png"
+#define NEXT_BUTTON_PATH "../common/images/buttons/nextButton.png"
 #define EDIT_BUTTON_PATH "../common/images/buttons/editButton.png"
+#define NEW_BUTTON_PATH "../common/images/buttons/newButton.png"
 #define EXIT_BUTTON_PATH "../common/images/buttons/exitButton.png"
 #define WAY_BUTTON_PATH "../common/images/buttons/wayButton.png"
 #define TITLE_PATH "../editor/images/title.png"
@@ -40,6 +42,8 @@ class Prompt : TrackEditor{
 private:
     Button saveButton;
     Button editButton;
+    Button nextButton;
+    Button newButton;
     Button title;
     std::string inputText = " ";
     std::string nameError = " ";
@@ -63,12 +67,17 @@ private:
     bool backspacePressed = false;
     bool savePressed = false;
     bool editPressed = false;
+    bool nextTrackPressed = false;
+    bool newPressed = false;
+
     bool renderWrongMessage = false;
     bool lengthReached = false;
+    bool createNewTrack = false;
+    std::vector<std::string> trackNames;
 
 public:
     Prompt();
-    void inputTrackCharacteristics(Window &game) override;
+    bool inputTrackCharacteristics(Window &game) override;
     static bool trackExists(std::vector<std::string> &trackNames, const std::string &trackName);
     void processNameEvent(std::vector<std::string> &trackNames);
     void getNameEvent();
@@ -102,6 +111,21 @@ public:
     void getModeEvent();
 
     void processModeEvent();
+
+    void drawMainMenu(Window &game);
+
+    void
+    updateTrackSelection(Window &window, const std::string &textToShow);
+
+    void inputFileTrack(Window &game);
+
+    void drawTrackSelection(Window &game);
+
+    void processTrackSelectionEvent(std::vector<std::string>::iterator &track);
+
+    void getTrackSelectionEvent();
+
+    void renderTrackSelection(Window &window);
 };
 
 #endif //MAP_PROMPT_H

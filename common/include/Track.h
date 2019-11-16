@@ -109,6 +109,10 @@ public:
     int getCurrentID(int posX, int posY);
 
     int getPartsNumber();
+
+    int getTrackW();
+
+    int getTrackH();
 };
 
 
