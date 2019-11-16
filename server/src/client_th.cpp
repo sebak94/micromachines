@@ -38,6 +38,10 @@ void ClientTh::sendLapsData(std::string laps_serialized) {
     send(laps_serialized);
 }
 
+void ClientTh::sendTrackNames(std::string track_names) {
+    send(track_names);
+}
+
 void ClientTh::run() {
     std::string strState = "G\nmainMenu\n";
     while (is_running){

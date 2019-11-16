@@ -4,17 +4,12 @@
 ModelUpdater::ModelUpdater(Socket &socket, ModelMonitor &modelMonitor, Drawer* drawerThread) :
         socket(socket), modelMonitor(modelMonitor), drawer(drawerThread) {
     std::string welcome =  receive(); // Recibe mensaje de bienvenida
-    std::cout << welcome;
+    //std::cout << welcome;
     std::string carStr = receive(); // Recibo mi auto
-    std::cout << carStr;
-    std::string trackStr = receive(); // Recibe pista
-    std::cout << trackStr;
-    std::string lapsStr = receive(); // Recibe cantidad de vueltas
-    std::cout << lapsStr;
-
-    Track track = Track(trackStr);
-    modelMonitor.setTrack(track.getTrackPartData());
-    modelMonitor.setTotalLaps(lapsStr);
+    //std::cout << carStr;
+    std::string trackNames = receive(); // Recibe nombres de pistas
+    //std::cout << trackNames;
+    modelMonitor.setTrackList(trackNames);
     modelMonitor.setMyColor(carStr);
     modelMonitor.updateCar(carStr);
 }
@@ -28,13 +23,24 @@ void ModelUpdater::run() {
     while (running) {
         std::cout << "mainMenu" << std::endl;
         while (running && modelMonitor.getGameState() == mainMenu) {
-            std::string text = receive();
+            /*std::string text = receive();
             if (text[0] == 'G') {
                 std::string text = receive();
-                modelMonitor.setGameState(text);
-            } else {
+                modelMonitor.setGameState(text);*/
+            /*} else*/ if (modelMonitor.trackIsSet()) {
+                std::string name = modelMonitor.getTrackName();
+                std::string trackStr = receive(); // Recibe pista
+                //std::cout << trackStr;
+                std::string lapsStr = receive(); // Recibe cantidad de vueltas
+                //std::cout << lapsStr;
+                Track track = Track(trackStr);
+                modelMonitor.setTrack(track.getTrackPartData());
+                modelMonitor.setTotalLaps(lapsStr);
+                modelMonitor.setGameState("waitingPlayers\n");
+                //socket.Send(name.c_str(), name.size());
+            } /*else {
                 modelMonitor.updateCar(text);
-            }
+            }*/
         }
         std::cout << "waitingplayers" << std::endl;
         while (running && modelMonitor.getGameState() == waitingPlayers) {

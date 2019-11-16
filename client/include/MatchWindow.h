@@ -5,6 +5,7 @@
 #include "../../common/include/Button.h"
 #include "sdl/SdlSurface.h"
 #include "../../common/include/TextTexture.h"
+#include "ModelMonitor.h"
 
 typedef enum {
     selecting,
@@ -33,9 +34,10 @@ private:
     std::vector<std::string>::iterator itMatchNames;
     std::vector<std::string> players;
     std::vector<std::string>::iterator itPlayers;
+    ModelMonitor& modelMonitor;
 
 public:
-    MatchWindow(SdlWindow &sdlWindow);
+    MatchWindow(SdlWindow &sdlWindow, ModelMonitor &modelMonitor);
     ~MatchWindow();
     void createMatchButtons();
     void updateMatchButtons(const SDL_Event *event);
@@ -47,6 +49,7 @@ public:
     void selectingScreen();
     void creationScreen();
     void joiningScreen();
+    void setTrackNames(std::vector<std::string> names);
 
     //Crea un selector a partir de la posicion x, y.
     //Tiene un titulo (title), un texto (textToShow), y un boton flecha para cambiar el texto (buttonToChangeText).

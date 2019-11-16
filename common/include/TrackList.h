@@ -45,7 +45,14 @@ public:
     void printTrack(const std::string &name);
     Track& getTrack(const std::string &name);
 
-    std::vector<std::string> getTrackNames();
+    static std::vector<std::string> getTrackNames();
+
+    std::string serialize();
+
+    static bool parse(const std::string &str, size_t &pos, const char delim,
+               std::string &substr);
+
+    static std::vector<std::string> getTrackNames(const std::string &str);
 };
 
 #endif //MAP_TRACKLIST_H

@@ -1,4 +1,5 @@
 #include <SDL2/SDL_ttf.h>
+#include <utility>
 #include <vector>
 #include "../include/MatchWindow.h"
 
@@ -11,15 +12,14 @@
 #define FONTNAME "../common/fonts/OpenSans-Bold.ttf"
 #define BACK "../common/images/back.png"
 
-MatchWindow::MatchWindow(SdlWindow &sdlWindow) : window(sdlWindow),
-    logo(LOGOPATH, window), background(BACK, window) {
+MatchWindow::MatchWindow(SdlWindow &sdlWindow, ModelMonitor &monitor)
+        : window(sdlWindow),
+          logo(LOGOPATH, window), background(BACK, window),
+          modelMonitor(monitor){
     TTF_Init();
     createMatchButtons();
 
-    //Hardcodeo los nombres de las pistas y las partidas por ahora
-    trackNames.push_back("track");
-    trackNames.push_back("super track");
-    itTrackNames = trackNames.begin();
+    //Hardcodeo los nombres de las partidas por ahora
     matchNames.push_back("partida 1");
     matchNames.push_back("partida 2");
     itMatchNames = matchNames.begin();
@@ -31,6 +31,11 @@ MatchWindow::MatchWindow(SdlWindow &sdlWindow) : window(sdlWindow),
 }
 
 MatchWindow::~MatchWindow() {}
+
+void MatchWindow::setTrackNames(std::vector<std::string> names) {
+    trackNames = names;
+    itTrackNames = trackNames.begin();
+}
 
 void MatchWindow::createMatchButtons() {
     //Los creo con areas vacias y despues cuando los dibujo los actualizo acorde al tamaño de la ventana
@@ -79,6 +84,7 @@ void MatchWindow::updateNonSelectingButtons(const SDL_Event *event) {
         }
     }
     if (playButton.isClicked()) {
+        modelMonitor.setTrackName(*itTrackNames);
         printf("play clicked\n");
     }
     if (returnButton.isClicked()) {

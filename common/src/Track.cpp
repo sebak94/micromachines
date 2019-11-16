@@ -549,16 +549,6 @@ bool Track::jumpedTrackPart(int xCar, int yCar, int lastTrackPartID) {
     else if (lastTrackPartID == partCounter - 1 && (currentID == 0 || currentID == 1))
         return false;
     else return currentID > lastTrackPartID + JUMPEDBLOCKS;
-        /*if (lastTrackPartID == partCounter - 1) {
-        // finish line
-        x = trackSequence.at(0).getX();
-        y = trackSequence.at(0).getY();
-    } else {
-        // any other
-        x = trackSequence.at(lastTrackPartID + 1).getX();
-        y = trackSequence.at(lastTrackPartID + 1).getY();
-    }
-    return !(xCar >= x && xCar <= x + BLOCKSIZE && yCar >= y && yCar <= y + BLOCKSIZE);*/
 }
 
 Point Track::getTrackPartPoint(int trackID) {

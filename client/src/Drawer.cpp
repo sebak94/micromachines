@@ -20,7 +20,7 @@ Drawer::Drawer(ModelMonitor &modelMonitor) :
     camera(window, pictures, trackPictures),
     modelMonitor(modelMonitor), music(MUSICPATH),
     video(std::string(VIDEOPATH), VIDEOFPS, WIDTH, HEIGHT),
-    matchWindow(window) {
+    matchWindow(window, modelMonitor) {
     createFullScreenButton();
     createRecButton();
     lastFrame.reserve(3*WIDTH*HEIGHT);
@@ -32,6 +32,7 @@ void Drawer::run() {
     //music.play();
     running = true;
     std::thread recorder = std::thread(&Drawer::recorderTh, this);
+    matchWindow.setTrackNames(modelMonitor.getTrackList());
     while (running) {
         auto start = std::chrono::system_clock::now();
         try {

@@ -49,4 +49,38 @@ std::vector<std::string> TrackList::getTrackNames() {
     return nameList;
 }
 
+std::string TrackList::serialize() {
+    std::string trackNames{};
+    for (auto & track : tracks)
+        trackNames += track.first + ",";
+    trackNames.back() = '\n';
+    return trackNames;
+}
+
+std::vector<std::string> TrackList::getTrackNames(const std::string &str) {
+    size_t pos = 0;
+    std::string substr{};
+    std::vector<std::string> list{};
+    while( parse(str, pos, ',', substr) ) {
+        std::cout << substr << std::endl;
+        list.emplace_back(substr);
+    }
+    parse(str,pos,'\n',substr);
+    std::cout << substr << std::endl;
+    list.emplace_back(substr);
+    return list;
+}
+
+bool TrackList::parse(const std::string &str, size_t &pos, const char delim,
+                      std::string &substr) {
+    substr.clear();
+    size_t nextPos = str.find(delim, pos);
+    if (nextPos == std::string::npos)
+        return false;
+    size_t len = nextPos - pos;
+    substr = str.substr(pos, len);
+    pos = nextPos + 1;
+    return true;
+}
+
 Track::Track() = default;

@@ -123,6 +123,10 @@ std::string Micromachines::trackSerialized() {
     return tracks.getTrack("classic").serialize();
 }
 
+std::string Micromachines::trackNamesSerialized() {
+    return tracks.serialize();
+}
+
 Point Micromachines::getStartingPoint(int position) {
     return track.getCarStartingPos(position);
 }

@@ -19,6 +19,30 @@ void ModelMonitor::setMyColor(std::string str) {
     model.setMyColor(str);
 }
 
+void ModelMonitor::setTrackName(const std::string& str) {
+    std::lock_guard<std::mutex> lock(m);
+    model.setTrackName(str);
+}
+
+std::string ModelMonitor::getTrackName() {
+    std::lock_guard<std::mutex> lock(m);
+    return model.getTrackName();
+}
+
+bool ModelMonitor::trackIsSet() {
+    return model.isTrackSet();
+}
+
+void ModelMonitor::setTrackList(const std::string& str) {
+    std::lock_guard<std::mutex> lock(m);
+    model.setTrackList(str);
+}
+
+std::vector<std::string> ModelMonitor::getTrackList() {
+    std::lock_guard<std::mutex> lock(m);
+    return model.getTrackList();
+}
+
 void ModelMonitor::setGameState(std::string str) {
     std::lock_guard<std::mutex> lock(m);
     model.setGameState(str);

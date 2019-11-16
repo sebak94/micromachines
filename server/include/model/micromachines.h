@@ -42,6 +42,8 @@ class Micromachines {
     void monitorTrack();
 
     int getStartID(int order);
+
+    std::string trackNamesSerialized();
 };
 
 #endif

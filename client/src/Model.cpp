@@ -1,4 +1,5 @@
 #include "../include/Model.h"
+#include "../../common/include/TrackList.h"
 
 Model::Model() {
 
@@ -81,4 +82,26 @@ std::string Model::parse(const std::string &str, size_t &pos, const char delim) 
     substr = str.substr(pos, len);
     pos = nextPos + 1;
     return substr;
+}
+
+void Model::setTrackName(std::string str) {
+    trackName = str;
+    trackIsSet = true;
+}
+
+std::string Model::getTrackName() {
+    trackIsSet = false;
+    return trackName;
+}
+
+void Model::setTrackList(const std::string& str) {
+    trackList = TrackList::getTrackNames(str);
+}
+
+std::vector<std::string> Model::getTrackList() {
+    return trackList;
+}
+
+bool Model::isTrackSet() {
+    return trackIsSet;
 }

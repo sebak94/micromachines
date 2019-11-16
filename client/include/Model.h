@@ -24,6 +24,9 @@ private:
     std::string myColor;
     int totalLaps = 10;
     GameState gameState = mainMenu;
+    std::vector<std::string> trackList{};
+    std::string trackName{};
+    bool trackIsSet = false;
 
 public:
     Model();
@@ -38,6 +41,14 @@ public:
     void setTotalLaps(const std::string& str);
     int getTotalLaps();
     GameState getGameState();
+    void setTrackName(std::string str);
+    void setTrackList(const std::string& str);
+
+    std::vector<std::string> getTrackList();
+
+    bool isTrackSet();
+
+    std::string getTrackName();
 
 private:
 

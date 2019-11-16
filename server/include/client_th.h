@@ -63,6 +63,8 @@ class ClientTh: public Thread {
     void updateLaps();
 
     void sendLapsData(std::string laps_serialized);
+
+    void sendTrackNames(std::string track_names);
 };
 
 #endif
