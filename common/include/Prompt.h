@@ -23,6 +23,7 @@
 #define MSG_DIM_WIDTH "Track width invalid."
 #define MSG_DIM_HEIGHT "Track height invalid."
 #define SAVE_BUTTON_PATH "../common/images/buttons/saveButton.png"
+#define EDIT_BUTTON_PATH "../common/images/buttons/editButton.png"
 #define EXIT_BUTTON_PATH "../common/images/buttons/exitButton.png"
 #define WAY_BUTTON_PATH "../common/images/buttons/wayButton.png"
 #define TITLE_PATH "../editor/images/title.png"
@@ -38,6 +39,7 @@
 class Prompt : TrackEditor{
 private:
     Button saveButton;
+    Button editButton;
     Button title;
     std::string inputText = " ";
     std::string nameError = " ";
@@ -51,6 +53,7 @@ private:
     SDL_Color promptTextColor;
     SDL_Color fieldTextColor;
     SDL_Color wrongTextColor;
+    bool modeAccepted = false;
     bool nameAccepted = false;
     bool widthAccepted = false;
     bool heightAccepted = false;
@@ -59,6 +62,7 @@ private:
     bool textInput = false;
     bool backspacePressed = false;
     bool savePressed = false;
+    bool editPressed = false;
     bool renderWrongMessage = false;
     bool lengthReached = false;
 
@@ -92,6 +96,12 @@ public:
     std::string getTrackName();
     int getWidth();
     int getHeight();
+
+    void editOrNewTrack(Window &game);
+
+    void getModeEvent();
+
+    void processModeEvent();
 };
 
 #endif //MAP_PROMPT_H

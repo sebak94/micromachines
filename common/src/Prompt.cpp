@@ -48,6 +48,26 @@ void Prompt::drawAll(Window & game) {
     SDL_RenderPresent(game.renderer);
 }
 
+void Prompt::editOrNewTrack(Window & game) {
+    int w = EDITOR_BUTTONS_WIDTH;
+    int h = EDITOR_BUTTONS_HEIGHT;
+    int x1 = WINDOW_W/4 - w/2;
+    int x2 = WINDOW_W*3/4 - w/2;
+    int y = WINDOW_H*0.8;
+    SDL_Rect saveButtonPos = {x1, y, w, h};
+    SDL_Rect editButtonPos = {x2, y, w, h};
+    saveButton = Button(game.renderer, saveButtonPos, SAVE_BUTTON_PATH);
+    editButton = Button(game.renderer, editButtonPos, EDIT_BUTTON_PATH);
+    TrackList trackList;
+    std::vector<std::string> trackNames = trackList.getTrackNames();
+    while (!quit && !modeAccepted) {
+        getModeEvent();
+        processModeEvent();
+        drawAll(game);
+    }
+
+}
+
 /* Creates dialog for user to config NAME of track to edit */
 void Prompt::inputTrackName(Window & game) {
     TrackList trackList;
@@ -128,6 +148,26 @@ void Prompt::processNameEvent(std::vector<std::string> & trackNames) {
     }
 }
 
+void Prompt::processModeEvent() {
+    if (savePressed){
+        nameAccepted = true;
+        std::cout << "NAME ACCEPTED: ";
+        trackName = inputText.substr(1,std::string::npos);
+        std::cout << trackName << std::endl;
+        renderText = true;
+        inputText = " ";
+    } else if ((returnPressed || savePressed)){
+        renderWrongMessage = true;
+        nameAccepted = false;
+        std::cout << "WRONG NAME" << std::endl;
+        if (validNameSize())
+            nameError = MSG_NAME_ALREADY_EXISTS;
+        else
+            nameError = MSG_TOO_SHORT_NAME;
+        renderText = true;
+    }
+}
+
 /* Checks if track name has proper size */
 bool Prompt::validNameSize() {
     return  inputText.length() <= MAX_LENGTH_TRACK_NAME &&
@@ -153,6 +193,24 @@ void Prompt::getNameEvent() {
         saveButton.updateEvent(&event);
         if (saveButton.isClicked())
             savePressed = true;
+    }
+}
+
+void Prompt::getModeEvent() {
+    renderText = false;
+    returnPressed = false;
+    textInput = false;
+    backspacePressed = false;
+    savePressed = false;
+    while ( SDL_PollEvent( &event ) ) {
+        if ( event.type == SDL_QUIT )
+            quit = true;
+        saveButton.updateEvent(&event);
+        editButton.updateEvent(&event);
+        if (saveButton.isClicked())
+            savePressed = true;
+        if (editButton.isClicked())
+            editPressed = true;
     }
 }
 
