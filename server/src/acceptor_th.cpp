@@ -59,9 +59,7 @@ void AcceptorTh::run() {
             ClientTh *client_th = new ClientTh(peer, (it++)->second, micromachines.getTracks());
             micromachines.addPlayer(client_th);
             clients.addClient(client_th);
-            //clients.push_back(client_th);
             client_th->sendAllTrackNames(micromachines.allTrackNames());
-            //client_th->sendTrackData(micromachines.trackSerialized());
             client_th->sendLapsData(micromachines.lapsSerialized());
             client_th->start();
         } catch(const SocketError &e) {

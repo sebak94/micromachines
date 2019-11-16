@@ -7,7 +7,7 @@
 
 Micromachines::Micromachines() {
     tracks.readTracks();
-    track = tracks.getTrack("classic");
+    track = tracks.getTrack("classic"); //aca hay que poner la track que eligio el cliente
     world = new b2World(b2Vec2(0, 0));
     world->SetDestructionListener(&destruction_listener);
 }
@@ -119,19 +119,8 @@ void Micromachines::sendNewStateToPlayers() {
     }
 }
 
-std::string Micromachines::trackSerialized() {
-    return tracks.getTrack("classic").serialize();
-}
-
 std::string Micromachines::allTrackNames() {
-    std::vector<std::string> names = tracks.getTrackNames();
-    std::string namesConcatenated;
-    for (int i = 0; i < names.size(); i++) {
-        namesConcatenated += names[i] + ',';
-    }
-    namesConcatenated.erase(namesConcatenated.length()-1); //borro la ultima coma
-    namesConcatenated.append("\n");
-    return namesConcatenated;
+    return tracks.serialize();
 }
 
 Point Micromachines::getStartingPoint(int position) {

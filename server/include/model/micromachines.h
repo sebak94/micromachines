@@ -31,7 +31,6 @@ class Micromachines {
     void removePlayer(ClientTh *client);
     void cleanPlayers();
     void sendNewStateToPlayers();
-    std::string trackSerialized();
     std::string allTrackNames();
     Point getStartingPoint(int position);
     uint16_t getStartingCarRot(int position);
