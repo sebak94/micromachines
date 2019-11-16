@@ -2,10 +2,11 @@
 #include <iostream>
 #include "../include/Drawer.h"
 #include "../include/sdl/SdlAnimation.h"
+#include "../../record/include/Record.h"
 #include "../../common/include/Error.h"
 #include <unistd.h>
 
-#define FPS 80
+#define FPS 25
 #define MICROSECS_WAIT 1/FPS*1000000 //seria que en un segundo se dibujen aprox 60 veces
 #define MUSICPATH "../common/sounds/beat.wav"
 #define FULLSCREENBUTTON "../common/images/fullscreen.png"
@@ -23,14 +24,13 @@ Drawer::Drawer(ModelMonitor &modelMonitor) :
     createFullScreenButton();
     createRecButton();
     lastFrame.reserve(3*WIDTH*HEIGHT);
-    videoTexture = video.getSDLRecordTexture(window.getRenderer());
 }
 
 Drawer::~Drawer() {}
 
 void Drawer::run() {
     matchWindow.setTrackNames(modelMonitor.getTrackNames());
-    music.play();
+    //music.play();
     running = true;
     std::thread recorder = std::thread(&Drawer::recorderTh, this);
     while (running) {
@@ -46,7 +46,7 @@ void Drawer::run() {
             usleep(MICROSECS_WAIT - microsecsPassed);
     }
     recorder.join();
-    music.stop();
+    //music.stop();
 }
 
 void Drawer::stop() {
@@ -59,18 +59,17 @@ void Drawer::resize(int width, int height) {
 
 void Drawer::createFullScreenButton() {
     int size = (window.getWidth() + window.getHeight()) / 37;
-    SDL_Rect area = {0, 0, size, size};
+    SDL_Rect area = {10, 10, size, size};
     fullScreenButton = Button(window.getRenderer(), area, FULLSCREENBUTTON);
 }
 
 void Drawer::createRecButton() {
-    SDL_Rect area = {WIDTH - 80, 10, 100, 35};
+    SDL_Rect area = {WIDTH - 80, 10, 100, 30};
     recButton = Button(window.getRenderer(), area, RECBUTTON);
 }
 
 void Drawer::updateFullScreenButton(const SDL_Event *event) {
     fullScreenButton.updateEvent(event);
-
     if (fullScreenButton.isClicked()) {
         window.changeFullScreen();
     }
@@ -103,8 +102,11 @@ void Drawer::draw() {
         camera.showBackground();
         int x = modelMonitor.getCars()[modelMonitor.getMyColor()]->getX();
         int y = modelMonitor.getCars()[modelMonitor.getMyColor()]->getY();
+        int laps = modelMonitor.getCars()[modelMonitor.getMyColor()]->getMyLap();
+        int totalLaps = modelMonitor.getTotalLaps();
         camera.showTrack(x, y, modelMonitor.getTrack());
         camera.showCars(x, y, modelMonitor.getCars());
+        camera.showLaps(laps, totalLaps);
     }
     showFullScreenButton();
     showRecButton();

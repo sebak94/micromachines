@@ -9,6 +9,8 @@ private:
     int y;
     int degrees;
     int health;
+    int laps = 0;
+    int lastTrackPart = 0;
     std::string color;
 
 public:
@@ -19,7 +21,9 @@ public:
     int getDegrees() const;
     int getHealth() const;
     std::string getMyColor() const;
-    void update(int x, int y, int degrees, int health);
+    void update(int x, int y, int degrees, int health, int laps);
+
+    int getMyLap() const;
 };
 
 #endif

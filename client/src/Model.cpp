@@ -14,6 +14,16 @@ void Model::setTrack(std::vector<TrackPartData> track) {
     this->track = track;
 }
 
+void Model::setTotalLaps(const std::string& str) {
+    size_t pos = str.find_last_of(',') + 1;
+    int laps = stoi(parse(str, pos, '\n'));
+    this->totalLaps = laps;
+}
+
+int Model::getTotalLaps() {
+    return totalLaps;
+}
+
 std::vector<TrackPartData>& Model::getTrack() {
     return this->track;
 }
@@ -55,12 +65,13 @@ void Model::updateCar(std::string str) {
     int rotation = std::stoi(parse(str, pos, ','));
     int x = std::stoi(parse(str, pos, ','));
     int y = std::stoi(parse(str, pos, ','));
+    int laps = std::stoi(parse(str, pos, ','));
     std::string color = parse(str, pos, '\n');
 
     if (cars[color] == nullptr) {
         cars[color] = new Car(color);
     }
-    cars[color]->update(x, y, rotation, health);
+    cars[color]->update(x, y, rotation, health, laps);
 }
 
 std::string Model::parse(const std::string &str, size_t &pos, const char delim) {

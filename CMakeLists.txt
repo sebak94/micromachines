@@ -127,8 +127,8 @@ set(SOURCE_FILES_CLIENT
 	record/include/Record.h
 	record/src/Record.cpp
 	common/include/Error.h
-	common/src/Error.cpp 
-	client/src/MatchWindow.cpp 
+	common/src/Error.cpp
+	client/src/MatchWindow.cpp
 	client/include/MatchWindow.h
 	common/src/TextTexture.cpp
 	common/include/TextTexture.h

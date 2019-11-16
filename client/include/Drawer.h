@@ -34,7 +34,6 @@ private:
     Button recButton;
     std::vector<char> lastFrame;
     Record video;
-    SDL_Texture * videoTexture;
     std::mutex recordMutex;
     bool lastRecordState = false;
     MatchWindow matchWindow;
@@ -56,9 +55,7 @@ private:
     void showAnimation(SdlWindow &window);
     void createRecButton();
     void showRecButton();
-
     void recorderTh();
-
     void saveLastFrame();
 };
 

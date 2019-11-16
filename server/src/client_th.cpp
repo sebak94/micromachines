@@ -63,6 +63,10 @@ void ClientTh::setMatch() {
     sendTrackData(tracks.getTrack(track).serialize());
 }
 
+void ClientTh::sendLapsData(std::string laps_serialized) {
+    send(laps_serialized);
+}
+
 void ClientTh::run() {
     std::string strState = "G\nmainMenu\n";
     while (is_running){
@@ -125,7 +129,6 @@ void ClientTh::run() {
                 break;
         }
     }
-    is_running = false;
 }
 
 void ClientTh::processNextAction() {
@@ -137,6 +140,21 @@ void ClientTh::processNextAction() {
     }
 }
 
+int ClientTh::getCarPosX() {
+    Lock l(m);
+    return car->getPosX();
+}
+
+int ClientTh::getCarPosY() {
+    Lock l(m);
+    return car->getPosY();
+}
+
+int ClientTh::getCarLastTrackID() {
+    Lock l(m);
+    return car->getTrackID();
+}
+
 void ClientTh::setState(GameState s) {
     this->state = s;
 }
@@ -145,11 +163,24 @@ void ClientTh::updateCar() {
     car->update();
 }
 
+void ClientTh::newCarPosition(Point point) {
+    car->newPos(point);
+}
+
+void ClientTh::updateLaps() {
+    car->updateLaps();
+}
+
+void ClientTh::updateLastTrackID(int ID) {
+    car->setTrackID(ID);
+}
+
 void ClientTh::receive(char *action) {
     try {
         peer->Receive(action, 1);
     } catch (const SocketError &e) {
         keep_talking = false;
+        is_running = false;
         std::cout << e.what() << "\n";
     }
 }
@@ -165,8 +196,8 @@ void ClientTh::send(std::string &response) {
         peer->Send(resp, response.length());
     } catch (const SocketError &e) {
         keep_talking = false;
+        is_running = false;
         std::cout << e.what() << "\n";
-        throw e;
     }
 }
 

@@ -22,6 +22,7 @@ private:
     std::map<std::string, Car*> cars;
     std::vector<TrackPartData> track;
     std::string myColor;
+    int totalLaps = 10;
     GameState gameState = mainMenu;
     std::vector<std::string> vector;
 
@@ -35,6 +36,8 @@ public:
     std::map<std::string, Car*>& getCars();
     void updateCar(std::string str);
     void setGameState(std::string str);
+    void setTotalLaps(const std::string& str);
+    int getTotalLaps();
     GameState getGameState();
     void setTrackNames(std::string tracks);
     std::vector<std::string> getTrackNames();
@@ -42,6 +45,7 @@ public:
 private:
 
     std::string parse(const std::string &str, size_t &pos, const char delim);
+
 
 };
 

@@ -17,6 +17,8 @@ class TDCar {
         uint8_t grip, uint8_t maneuverability, uint16_t rotation, Point initial_position);
     void update(int control_state);
     ~TDCar();
+
+    void newPosition(Point point);
 };
 
 #endif

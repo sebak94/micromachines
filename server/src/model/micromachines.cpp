@@ -24,6 +24,10 @@ void Micromachines::addPlayer(ClientTh *client) {
     players.push_back(client);
 }
 
+std::string Micromachines::lapsSerialized() {
+    return std::to_string(laps) += "\n";
+}
+
 void Micromachines::removePlayer(ClientTh *client) {
     Lock l(m);
     removePlayerFromVector(client);
@@ -44,6 +48,7 @@ void Micromachines::removePlayerFromVector(ClientTh *player) {
 }
 
 int Micromachines::getPlayersNumber() {
+    Lock l(m);
     return players.size();
 }
 
@@ -66,12 +71,42 @@ void Micromachines::updatePlayersState() {
     }
 }
 
+// Checks if cars jump track parts
+void Micromachines::monitorTrack() {
+    int x, y, lastID, currentID;
+    Lock l(m);
+    for (size_t i = 0; i < players.size(); i++) {
+        x = players[i]->getCarPosX();
+        y = players[i]->getCarPosY();
+        lastID = players[i]->getCarLastTrackID();
+        currentID = track.getTrackPart(x, y).getID();
+        std::cout << "Auto " << i << "("<<x<<","<<y<<"). " << ". LastID:" << lastID << ". Current ID: " << track.getCurrentID(x, y) << "   " << std::endl;
+        if (currentID == lastID || !track.isOnTrack(x,y)) {
+            // sigue en el mismo o está fuera de pista
+        } else if (track.jumpedTrackPart(x, y, lastID)) {
+            // está en pista y salteó pedazos
+            players[i]->newCarPosition(track.getTrackPartPoint(lastID) + Point(BLOCKSIZE/2,BLOCKSIZE*(1.1)));
+            players[i]->updateLastTrackID(lastID);
+        } else {
+            // avanzó al siguiente
+            players[i]->updateLastTrackID(currentID);
+            if (currentID == 0)
+                players[i]->updateLaps();
+        }
+    }
+    for (size_t i = 0; i < players.size(); i++) {
+        printf("\r                            \033[F");
+    }
+
+}
+
 void Micromachines::cleanPlayers() {
     Lock l(m);
     players.clear();
 }
 
 void Micromachines::changeCarState(char *new_command) {
+    Lock l(m);
     for (size_t i = 0; i < players.size(); i++)
         for (int j = 0; j < 10; ++j)
             players[i]->receiveActionPlugin(new_command);
@@ -80,11 +115,7 @@ void Micromachines::changeCarState(char *new_command) {
 void Micromachines::sendNewStateToPlayers() {
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
-        try {
-            players[i]->sendAllCarsToPlayer(players);
-        } catch (const SocketError &e) {
-            removePlayerFromVector(players[i]);
-        }
+        players[i]->sendAllCarsToPlayer(players);
     }
 }
 
@@ -105,6 +136,10 @@ std::string Micromachines::allTrackNames() {
 
 Point Micromachines::getStartingPoint(int position) {
     return track.getCarStartingPos(position);
+}
+
+int Micromachines::getStartID(int order) {
+    return track.getStartingID(order);
 }
 
 uint16_t Micromachines::getStartingCarRot(int position) {

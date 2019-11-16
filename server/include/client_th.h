@@ -54,6 +54,21 @@ class ClientTh: public Thread {
     ~ClientTh();
 
     void setState(GameState s);
+
+    int getCarPosX();
+
+    int getCarPosY();
+
+    int getCarLastTrackID();
+
+    void newCarPosition(Point point);
+
+    void updateLastTrackID(int ID);
+
+    void updateLaps();
+
+    void sendLapsData(std::string laps_serialized);
+
     GameState getState();
 };
 

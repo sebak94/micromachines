@@ -24,13 +24,18 @@ int Car::getHealth() const {
     return this->health;
 }
 
+int Car::getMyLap() const {
+    return this->laps;
+}
+
 std::string Car::getMyColor() const {
     return this->color;
 }
 
-void Car::update(int x, int y, int degrees, int health) {
+void Car::update(int x, int y, int degrees, int health, int laps) {
     this->x = x;
     this->y = y;
     this->degrees = degrees;
     this->health = health;
+    this->laps = laps;
 }

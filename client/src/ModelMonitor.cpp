@@ -24,6 +24,11 @@ void ModelMonitor::setGameState(std::string str) {
     model.setGameState(str);
 }
 
+void ModelMonitor::updateCar(std::string str) {
+    std::lock_guard<std::mutex> lock(m);
+    model.updateCar(str);
+}
+
 GameState ModelMonitor::getGameState() {
     std::lock_guard<std::mutex> lock(m);
     return model.getGameState();
@@ -39,9 +44,14 @@ std::map<std::string, Car*>& ModelMonitor::getCars() {
     return model.getCars();
 }
 
-void ModelMonitor::updateCar(std::string str) {
+void ModelMonitor::setTotalLaps(std::string str) {
+    //es constante, no usa mutex
+    model.setTotalLaps(str);
+}
+
+int ModelMonitor::getTotalLaps() {
     std::lock_guard<std::mutex> lock(m);
-    model.updateCar(str);
+    return model.getTotalLaps();
 }
 
 void ModelMonitor::setTrackNames(std::string tracks) {

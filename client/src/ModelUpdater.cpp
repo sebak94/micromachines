@@ -9,8 +9,11 @@ ModelUpdater::ModelUpdater(Socket &socket, ModelMonitor &modelMonitor, Drawer* d
     std::cout << "Auto: " << carStr;
     std::string trackNames = receive(); //Recibo todos los nombres de las pistas
     std::cout << "Pistas: " << trackNames;
+    std::string lapsStr = receive(); // Recibe cantidad de vueltas
+    std::cout << lapsStr;
 
     modelMonitor.setTrackNames(trackNames);
+    modelMonitor.setTotalLaps(lapsStr);
     modelMonitor.setMyColor(carStr);
     modelMonitor.updateCar(carStr);
 }

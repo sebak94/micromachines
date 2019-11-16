@@ -5,19 +5,19 @@
 #include <cstdint>
 #include <math.h>
 #include <Box2D/Box2D.h>
+#include <iostream>
 
 #define PI 3.14159265
 #define RADTODEG 57.295779513082320876f
 
-Car::Car(uint8_t width, uint8_t height, uint16_t max_velocity,
-         uint8_t acceleration, uint8_t grip, uint8_t maneuverability,
-         Point initial_position, ColorType color, uint16_t rotation,
-         b2World *world) :
+Car::Car(uint8_t width, uint8_t height, uint16_t max_velocity, uint8_t acceleration, uint8_t grip,
+         uint8_t maneuverability, Point initial_position, ColorType color, uint16_t rotation, b2World *world,
+         int startID) :
         width(width), height(height), max_velocity(max_velocity),
         acceleration(acceleration), grip(grip),
         maneuverability(maneuverability), health(100), color(color),
         td_car(world, max_velocity, acceleration, grip, maneuverability,
-        rotation, initial_position), control_state(0) {
+        rotation, initial_position), control_state(0), lastTrackID(startID) {
 }
 
 void Car::updateState(char action) {
@@ -38,14 +38,40 @@ void Car::update() {
     td_car.update(control_state);
 }
 
+void Car::newPos(Point point) {
+    td_car.newPosition(point);
+}
+
+int Car::getPosX() {
+    return (int)td_car.body->GetPosition().x;
+}
+
+int Car::getPosY() {
+    return (int)td_car.body->GetPosition().y;
+}
+
+void Car::setTrackID(int ID) {
+    lastTrackID = ID;
+}
+
+int Car::getTrackID() {
+    return lastTrackID;
+}
+
+void Car::updateLaps() {
+    laps++;
+    std::cout << std::endl << std::endl << laps << std::endl;
+}
+
 std::string Car::serialize() {
     // La serializacion es:
-    // current_velocity,health,rotation,x,y,color\n
+    // current_velocity,health,rotation,x,y,laps,color\n
     return std::to_string(0) + ","
            + std::to_string(health) + ","
            + std::to_string((int)(td_car.body->GetAngle()*RADTODEG*-1)) + ","
            + std::to_string((int)td_car.body->GetPosition().x) + ","
            + std::to_string((int)td_car.body->GetPosition().y) + ","
+           + std::to_string(laps) + ","
            + color.name() + "\n";
 }
 

@@ -28,16 +28,24 @@ class Car: public Model {
     Color color;
     TDCar td_car;
     int control_state;
+    int lastTrackID = -1;
+    int laps = 0;
 
     public:
-    Car(uint8_t width, uint8_t height, uint16_t max_velocity,
-        uint8_t acceleration, uint8_t grip, uint8_t maneuverability,
-        Point initial_position, ColorType color, uint16_t rotation,
-        b2World *world);
+    Car(uint8_t width, uint8_t height, uint16_t max_velocity, uint8_t acceleration, uint8_t grip,
+        uint8_t maneuverability, Point initial_position, ColorType color, uint16_t rotation, b2World *world,
+        int startID);
     void updateState(char action);
     virtual void update() override;
     virtual std::string serialize() override;
+    void newPos(Point point);
+    int getPosX();
+    int getPosY();
+    void setTrackID(int ID);
+    int getTrackID();
     ~Car();
+
+    void updateLaps();
 };
 
 #endif

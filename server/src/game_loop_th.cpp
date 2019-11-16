@@ -28,50 +28,59 @@ void GameLoopTh::waitForPlayers() {
     uint64_t loops;
     //el 2 cambiarlo por el numerito que recibo del cliente cuando crea la partida
     while (micromachines.getPlayersNumber() < 2 || micromachines.somePlayersInMainMenu()) {
-        auto begin = std::chrono::steady_clock::now();
-        loops = 0;
-        micromachines.updatePlayersState();
-        updateWorld(next_game_tick, 0, loops, 1.0, 0, 5);
-        //micromachines.sendNewStateToPlayers();
-        //Mientras espero jugadores no quiero recibir el estado
-        timeWait(MICROSECS_WAIT, begin);
+        if (running) {
+            auto begin = std::chrono::steady_clock::now();
+            loops = 0;
+            micromachines.updatePlayersState();
+            updateWorld(next_game_tick, 0, loops, 1.0, 0, 5);
+            //micromachines.sendNewStateToPlayers();
+            //Mientras espero jugadores no quiero recibir el estado
+            timeWait(MICROSECS_WAIT, begin);
+        } else {
+            break;
+        }
     }
     micromachines.setAllPlayersGameStates(startCountdown);
 }
 
 void GameLoopTh::countdownWait() {
-    uint64_t next_game_tick = GetTickCountMs();
-    uint64_t loops;
-    double countdownTime = SECSTOSTART * SECTOMICROSEC;  // us
-    while (countdownTime > 0) {
-        auto begin = std::chrono::steady_clock::now();
-        loops = 0;
-        micromachines.updatePlayersState();
-        updateWorld(next_game_tick, SKIP_TICKS, loops, 1.0 / 60, 5, 5);
-        micromachines.sendNewStateToPlayers();
-        timeWait(MICROSECS_WAIT, begin);
-        countdownTime -= MICROSECS_WAIT;
+    if (running) {
+        uint64_t next_game_tick = GetTickCountMs();
+        uint64_t loops;
+        countdownTime = SECSTOSTART * SECTOMICROSEC;  // us
+        while (countdownTime > 0) {
+            auto begin = std::chrono::steady_clock::now();
+            loops = 0;
+            micromachines.updatePlayersState();
+            updateWorld(next_game_tick, SKIP_TICKS, loops, 1.0 / 60, 5, 5);
+            micromachines.sendNewStateToPlayers();
+            timeWait(MICROSECS_WAIT, begin);
+            countdownTime -= MICROSECS_WAIT;
+        }
+        micromachines.setAllPlayersGameStates(playing);
     }
-    micromachines.setAllPlayersGameStates(playing);
 }
 
 void GameLoopTh::play() {
-    uint64_t next_game_tick = GetTickCountMs();
-    uint64_t loops;
-    double countdownTime = MAXRACETIME * SECTOMICROSEC;  // us
-    while (countdownTime > 0) {
-        auto begin = std::chrono::steady_clock::now();
-        loops = 0;
-        micromachines.updatePlayersState();
-        updateWorld(next_game_tick, SKIP_TICKS, loops, 1.0 / 60, 5, 5);
-        micromachines.sendNewStateToPlayers();
-        timeWait(MICROSECS_WAIT/100, begin);
+    if (running) {
+        uint64_t next_game_tick = GetTickCountMs();
+        uint64_t loops;
+        countdownTime = MAXRACETIME * SECTOMICROSEC;  // us
+        while (countdownTime > 0) {
+            auto begin = std::chrono::steady_clock::now();
+            loops = 0;
+            micromachines.updatePlayersState();
+            micromachines.monitorTrack();
+            updateWorld(next_game_tick, SKIP_TICKS, loops, 1.0 / 60, 5, 5);
+            micromachines.sendNewStateToPlayers();
+            timeWait(MICROSECS_WAIT, begin);
 
-        // this->executeLibraries();
-        countdownTime -= MICROSECS_WAIT;
+            // this->executeLibraries();
+            countdownTime -= MICROSECS_WAIT;
+        }
+        micromachines.setAllPlayersGameStates(gameEnded);
+        micromachines.setAllPlayersGameStates(mainMenu);
     }
-    micromachines.setAllPlayersGameStates(gameEnded);
-    micromachines.setAllPlayersGameStates(mainMenu);
 }
 
 void GameLoopTh::updateWorld(uint64_t &next_game_tick,
@@ -129,6 +138,7 @@ void GameLoopTh::executeLibraries() {
 
 void GameLoopTh::stop() {
     running = false;
+    countdownTime = 0;
 }
 
 GameLoopTh::~GameLoopTh() {}
