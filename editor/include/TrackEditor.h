@@ -20,9 +20,19 @@
 #define BUTTONS 3
 #define FPS 60
 #define ARROW_SIZE 50
+#define SAVEDTICKDRAWINGTIME 3000  // ms
 
 class Prompt;
 class Point;
+
+typedef std::chrono::time_point<std::chrono::steady_clock> saveTickChrono;
+typedef std::chrono::milliseconds ms;
+
+typedef enum {
+    home,
+    newTrack,
+    edit
+} menuState;
 
 class TrackEditor {
 protected:
@@ -37,6 +47,8 @@ protected:
     Button wayButton;
     Button wayArrow;
     Button exitButton;
+    Button savedTick;
+    Button homeButton;
     Track track;
     Track loadedTrack;
     std::vector<std::string> fileLayout;
@@ -48,10 +60,15 @@ protected:
     int nextToStartCol = 0;
     int nextToStartRow = 0;
     bool waySet = false;
+    bool saved = false;
+    bool drawingTick = false;
+    bool homePressed = false;
+    menuState nextMenu;
+    saveTickChrono start;
 
 public:
     void run(Window &editor);
-    virtual bool inputTrackCharacteristics(Window &game);
+    virtual menuState inputTrackCharacteristics(Window &game);
     void updateGridEvents();
     void processButtonClicks();
     void createButtons(Window &game);
@@ -72,6 +89,10 @@ public:
     trackPartType setStartingPreviousTrackPart(int row, int col);
 
     void loadTrack();
+
+    void drawSavedTick(SDL_Renderer *renderer);
+
+    void createHomeButton(Window &window);
 };
 
 

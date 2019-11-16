@@ -27,7 +27,9 @@
 #define EDIT_BUTTON_PATH "../common/images/buttons/editButton.png"
 #define NEW_BUTTON_PATH "../common/images/buttons/newButton.png"
 #define EXIT_BUTTON_PATH "../common/images/buttons/exitButton.png"
+#define HOME_BUTTON_PATH "../common/images/buttons/homeButton.png"
 #define WAY_BUTTON_PATH "../common/images/buttons/wayButton.png"
+#define SAVED_TICK_PATH "../common/images/buttons/savedTick.png"
 #define TITLE_PATH "../editor/images/title.png"
 
 #define MAX_LENGTH_TRACK_NAME 30
@@ -44,6 +46,7 @@ private:
     Button editButton;
     Button nextButton;
     Button newButton;
+    Button homeButton;
     Button title;
     std::string inputText = " ";
     std::string nameError = " ";
@@ -69,15 +72,15 @@ private:
     bool editPressed = false;
     bool nextTrackPressed = false;
     bool newPressed = false;
-
     bool renderWrongMessage = false;
     bool lengthReached = false;
     bool createNewTrack = false;
+    menuState nextMenu;
     std::vector<std::string> trackNames;
 
 public:
     Prompt();
-    bool inputTrackCharacteristics(Window &game) override;
+    menuState inputTrackCharacteristics(Window &game) override;
     static bool trackExists(std::vector<std::string> &trackNames, const std::string &trackName);
     void processNameEvent(std::vector<std::string> &trackNames);
     void getNameEvent();
@@ -126,6 +129,7 @@ public:
     void getTrackSelectionEvent();
 
     void renderTrackSelection(Window &window);
+    void createHomeButton(Window & window);
 };
 
 #endif //MAP_PROMPT_H

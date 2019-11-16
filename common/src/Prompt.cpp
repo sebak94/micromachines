@@ -8,8 +8,9 @@
 #include <SDL2/SDL_ttf.h>
 
 /* Creates dialog for user to config new track to edit */
-bool Prompt::inputTrackCharacteristics(Window & game){
+menuState Prompt::inputTrackCharacteristics(Window &game) {
     createTitle(game);
+    createHomeButton(game);
     editOrNewTrack(game);
     if (createNewTrack) {
         createButtons(game);
@@ -17,14 +18,23 @@ bool Prompt::inputTrackCharacteristics(Window & game){
         inputTrackWidth(game);
         inputTrackHeight(game);
         SDL_StopTextInput();
-        return true;
+        nextMenu = newTrack;
     } else {
         createButtons(game);
         inputFileTrack(game);
-        return false;
+        nextMenu = edit;
     }
+    if (homePressed) return home;
+    return nextMenu;
 }
 
+/* Creates button to return to main menu */
+void Prompt::createHomeButton(Window & window) {
+    SDL_Rect homeButtonPos = {WINDOW_W-30, WINDOW_H-30, 25, 25};
+    homeButton = Button(window.renderer, homeButtonPos, HOME_BUTTON_PATH);
+}
+
+/* Configures text and text prompt to draw while selecting track to edit */
 void Prompt::updateTrackSelection(Window &window, const std::string &textToShow) {
     TTF_Init();
     promptTextColor = {255, 255, 255, 0};
@@ -36,6 +46,7 @@ void Prompt::updateTrackSelection(Window &window, const std::string &textToShow)
     textField.createFieldBox(getTextFieldPosX(), getTextFieldPosY(), fieldColor, (WINDOW_W - 7*getTextFieldPosX()));
 }
 
+/* Draws text and text prompt to draw while selecting track to edit */
 void Prompt::renderTrackSelection(Window &window) {
     promptText.render(window.renderer, textPosXPrompt, textPosYPrompt);
     textField.renderFieldBox(window.renderer);
@@ -68,6 +79,7 @@ void Prompt::drawAll(Window & game) {
     game.clearScreen();
     game.fillBackground(0, 0, 0, 0);
     saveButton.draw(game.renderer);
+    homeButton.draw(game.renderer);
     title.draw(game.renderer);
     renderTextPrompt(game.renderer);
     SDL_RenderPresent(game.renderer);
@@ -89,11 +101,13 @@ void Prompt::drawTrackSelection(Window & game) {
     game.fillBackground(0, 0, 0, 0);
     editButton.draw(game.renderer);
     nextButton.draw(game.renderer);
+    homeButton.draw(game.renderer);
     title.draw(game.renderer);
     renderTrackSelection(game);
     SDL_RenderPresent(game.renderer);
 }
 
+/* Main menu to choose to edit file's track or create a new one */
 void Prompt::editOrNewTrack(Window & game) {
     int buttonSize = 250;
     int sep = 200;
@@ -117,7 +131,7 @@ void Prompt::editOrNewTrack(Window & game) {
 void Prompt::inputTrackName(Window & game) {
     TrackList trackList;
     std::vector<std::string> trackNames = trackList.getTrackNames();
-    while (!quit && !nameAccepted) {
+    while (!quit && !nameAccepted && !homePressed) {
         initTextPrompt(game.renderer, std::string(MSG_TRACK_NAME));
         getNameEvent();
         processNameEvent(trackNames);
@@ -125,6 +139,7 @@ void Prompt::inputTrackName(Window & game) {
     }
 }
 
+/* Implements the logic to choose a track */
 void Prompt::inputFileTrack(Window & game) {
     TrackList trackList;
     trackNames = trackList.getTrackNames();
@@ -135,7 +150,7 @@ void Prompt::inputFileTrack(Window & game) {
     nextButton = Button(game.renderer, nextButtonPos, NEXT_BUTTON_PATH);
     editButton = Button(game.renderer, editButtonPos, EDIT_BUTTON_PATH);
     auto track = trackNames.begin();
-    while (!quit && !nameAccepted) {
+    while (!quit && !nameAccepted && !homePressed) {
         updateTrackSelection(game, *track);
         getTrackSelectionEvent();
         processTrackSelectionEvent(track);
@@ -145,7 +160,7 @@ void Prompt::inputFileTrack(Window & game) {
 
 /* Creates dialog for user to config WIDTH of track to edit */
 void Prompt::inputTrackWidth(Window & game) {
-    while (!quit && !widthAccepted) {
+    while (!quit && !widthAccepted && !homePressed) {
         initTextPrompt(game.renderer, std::string(MSG_TRACK_WIDTH));
         getNumberEvent();
         processEventWidth();
@@ -156,7 +171,7 @@ void Prompt::inputTrackWidth(Window & game) {
 
 /* Creates dialog for user to config HEIGHT of track to edit */
 void Prompt::inputTrackHeight(Window & game) {
-    while (!quit && !heightAccepted) {
+    while (!quit && !heightAccepted && !homePressed) {
         initTextPrompt(game.renderer, std::string(MSG_TRACK_HEIGHT));
         getNumberEvent();
         processEventHeight();
@@ -211,6 +226,7 @@ void Prompt::processNameEvent(std::vector<std::string> & trackNames) {
     }
 }
 
+/* Process button events while selecting track*/
 void Prompt::processTrackSelectionEvent(
         std::vector<std::string>::iterator &track) {
     if (editPressed) {
@@ -223,6 +239,7 @@ void Prompt::processTrackSelectionEvent(
     }
 }
 
+/* Process button events while selection to edit or create new track*/
 void Prompt::processModeEvent() {
     if (newPressed){
         modeAccepted = true;
@@ -256,11 +273,16 @@ void Prompt::getNameEvent() {
             checkBackspaceAndReturn();
         }
         saveButton.updateEvent(&event);
+        homeButton.updateEvent(&event);
         if (saveButton.isClicked())
             savePressed = true;
+        if (homeButton.isClicked())
+            homePressed = true;
     }
 }
 
+/* Gets keyboard and mouse relevant events while
+ * choosing to edit or create a track*/
 void Prompt::getModeEvent() {
     renderText = false;
     returnPressed = false;
@@ -274,6 +296,7 @@ void Prompt::getModeEvent() {
             quit = true;
         newButton.updateEvent(&event);
         editButton.updateEvent(&event);
+        homeButton.updateEvent(&event);
         if (newButton.isClicked())
             newPressed = true;
         if (editButton.isClicked())
@@ -281,6 +304,7 @@ void Prompt::getModeEvent() {
     }
 }
 
+/* Gets relevant keyboard and mouse events while choosing track */
 void Prompt::getTrackSelectionEvent() {
     newPressed = false;
     nextTrackPressed = false;
@@ -290,10 +314,13 @@ void Prompt::getTrackSelectionEvent() {
             quit = true;
         editButton.updateEvent(&event);
         nextButton.updateEvent(&event);
+        homeButton.updateEvent(&event);
         if (editButton.isClicked())
             editPressed = true;
         if (nextButton.isClicked())
             nextTrackPressed = true;
+        if (homeButton.isClicked())
+            homePressed = true;
     }
 }
 
@@ -321,6 +348,8 @@ void Prompt::getNumberEvent() {
         saveButton.updateEvent(&event);
         if (saveButton.isClicked())
             savePressed = true;
+        if (homeButton.isClicked())
+            homePressed = true;
     }
 }
 
