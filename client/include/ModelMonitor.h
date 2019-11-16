@@ -18,14 +18,12 @@ public:
     std::string getMyColor() const;
     std::map<std::string, Car*>& getCars();
     void updateCar(std::string str);
-
     void setGameState(std::string str);
-
     GameState getGameState();
-
     void setTotalLaps(std::string str);
-
     int getTotalLaps();
+    void setTrackNames(std::string tracks);
+    std::vector<std::string> getTrackNames();
 };
 
 #endif

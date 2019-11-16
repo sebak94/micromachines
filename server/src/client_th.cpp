@@ -6,9 +6,8 @@
 #include "vector"
 #include "string"
 
-ClientTh::ClientTh(Socket *peer, Car *car) : keep_talking(true),
-                                             is_running(true),
-                                             peer(peer), car(car) {
+ClientTh::ClientTh(Socket *peer, Car *car, TrackList& tracks) : keep_talking(true),
+                            is_running(true), peer(peer), car(car), tracks(tracks) {
     sendWelcomeMsg();
     sendCarData();
 }
@@ -34,6 +33,36 @@ void ClientTh::sendTrackData(std::string track_serialized) {
     send(track_serialized);
 }
 
+void ClientTh::sendAllTrackNames(std::string tracks) {
+    send(tracks);
+}
+
+std::string ClientTh::parse(const std::string &str, size_t &pos, const char delim) {
+    std::string substr;
+    size_t nextPos = str.find(delim, pos);
+    size_t len = nextPos - pos;
+    substr = str.substr(pos, len);
+    pos = nextPos + 1;
+    return substr;
+}
+
+void ClientTh::setMatch() {
+    std::string matchSelection;
+    char action;
+    while (action != '\n') {
+        receive(&action);
+        matchSelection += action;
+    }
+    //printf("recibo: %s\n", matchSelection.c_str());
+
+    size_t pos = 0;
+    std::string word = parse(matchSelection, pos, ','); //C o J (create o join match)
+    std::string track = parse(matchSelection, pos, ','); //nombre de la pista o partida
+    //cantidad de jugadores, en el caso de unirse a una partida mando un 0
+    std::string numberPlayers = parse(matchSelection, pos, '\n');
+    sendTrackData(tracks.getTrack(track).serialize());
+}
+
 void ClientTh::sendLapsData(std::string laps_serialized) {
     send(laps_serialized);
 }
@@ -43,6 +72,8 @@ void ClientTh::run() {
     while (is_running){
         switch (state) {
             case mainMenu:
+                setMatch();
+                setState(waitingPlayers);
                 break;
             case selectingTrack:
                 strState = "G\nselectingTrack\n";
@@ -177,6 +208,10 @@ void ClientTh::stop() {
 
 bool ClientTh::isDead() {
     return !is_running;
+}
+
+GameState ClientTh::getState() {
+    return state;
 }
 
 ClientTh::~ClientTh() {

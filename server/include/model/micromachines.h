@@ -32,6 +32,7 @@ class Micromachines {
     void cleanPlayers();
     void sendNewStateToPlayers();
     std::string trackSerialized();
+    std::string allTrackNames();
     Point getStartingPoint(int position);
     uint16_t getStartingCarRot(int position);
     void changeCarState(char *new_command);
@@ -40,8 +41,9 @@ class Micromachines {
     void setAllPlayersGameStates(GameState state);
     std::string lapsSerialized();
     void monitorTrack();
-
     int getStartID(int order);
+    TrackList& getTracks();
+    bool somePlayersInMainMenu();
 };
 
 #endif

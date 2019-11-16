@@ -55,6 +55,9 @@ void EventLoopSDL::run() {
                 drawer->getMatchWindow().updateMatchButtons(&event);
                 drawer->updateFullScreenButton(&event);
                 drawer->updateRecButton(&event);
+                if (drawer->getMatchWindow().isReady()) {
+                    this->queue.push(drawer->getMatchWindow().serializeData());
+                }
                 switch (event.type) {
                     case SDL_QUIT:
                         this->queue.push("Q"); //encolo una Q para finalizar

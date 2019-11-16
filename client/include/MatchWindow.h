@@ -33,6 +33,7 @@ private:
     std::vector<std::string>::iterator itMatchNames;
     std::vector<std::string> players;
     std::vector<std::string>::iterator itPlayers;
+    bool ready = false;
 
 public:
     MatchWindow(SdlWindow &sdlWindow);
@@ -55,6 +56,10 @@ public:
     void showSelectText(std::string title, std::string textToShow, int x, int y, Button &buttonToChangeText, TextTexture &text);
 
     void showPlayAndReturn();
+    StateWindow getState() const;
+    void setTrackNames(std::vector<std::string> tracks);
+    std::string serializeData();
+    bool isReady();
 };
 
 #endif

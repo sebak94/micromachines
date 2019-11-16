@@ -123,6 +123,17 @@ std::string Micromachines::trackSerialized() {
     return tracks.getTrack("classic").serialize();
 }
 
+std::string Micromachines::allTrackNames() {
+    std::vector<std::string> names = tracks.getTrackNames();
+    std::string namesConcatenated;
+    for (int i = 0; i < names.size(); i++) {
+        namesConcatenated += names[i] + ',';
+    }
+    namesConcatenated.erase(namesConcatenated.length()-1); //borro la ultima coma
+    namesConcatenated.append("\n");
+    return namesConcatenated;
+}
+
 Point Micromachines::getStartingPoint(int position) {
     return track.getCarStartingPos(position);
 }
@@ -133,4 +144,17 @@ int Micromachines::getStartID(int order) {
 
 uint16_t Micromachines::getStartingCarRot(int position) {
     return track.getCarStartingRotation(position);
+}
+
+TrackList& Micromachines::getTracks() {
+    return tracks;
+}
+
+bool Micromachines::somePlayersInMainMenu() {
+    for (int i = 0; i < players.size(); i++) {
+        if (players[i]->getState() == mainMenu) {
+            return true;
+        }
+    }
+    return false;
 }

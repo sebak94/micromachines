@@ -82,3 +82,18 @@ std::string Model::parse(const std::string &str, size_t &pos, const char delim) 
     pos = nextPos + 1;
     return substr;
 }
+
+void Model::setTrackNames(std::string tracks) {
+    tracks.erase(tracks.length()-1); //borro el \n
+    size_t pos = 0;
+    while (pos < tracks.size()) {
+        std::string substr = parse(tracks, pos, ',');
+        vector.push_back(substr);
+        if (pos == 0)
+            break; //volvio a empezar asi que termino
+    }
+}
+
+std::vector<std::string> Model::getTrackNames() {
+    return vector;
+}
