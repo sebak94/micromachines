@@ -24,7 +24,7 @@ private:
     std::string myColor;
     int totalLaps = 10;
     GameState gameState = mainMenu;
-    std::vector<std::string> vector;
+    std::vector<std::string> trackNames;
 
 public:
     Model();

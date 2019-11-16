@@ -38,12 +38,18 @@ private:
 public:
     MatchWindow(SdlWindow &sdlWindow);
     ~MatchWindow();
-    void createMatchButtons();
     void updateMatchButtons(const SDL_Event *event);
+    void render();
+    void setTrackNames(std::vector<std::string> tracks);
+    StateWindow getState() const;
+    std::string serializeData();
+    bool isReady();
+
+private:
+    void createMatchButtons();
     void updateSelectingButtons(const SDL_Event *event);
     void updateNonSelectingButtons(const SDL_Event *event);
     void updateCreatingButtons(const SDL_Event *event);
-    void render();
     void showBackground();
     void selectingScreen();
     void creationScreen();
@@ -56,10 +62,6 @@ public:
     void showSelectText(std::string title, std::string textToShow, int x, int y, Button &buttonToChangeText, TextTexture &text);
 
     void showPlayAndReturn();
-    StateWindow getState() const;
-    void setTrackNames(std::vector<std::string> tracks);
-    std::string serializeData();
-    bool isReady();
 };
 
 #endif
