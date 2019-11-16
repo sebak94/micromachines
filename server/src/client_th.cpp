@@ -56,11 +56,19 @@ void ClientTh::setMatch() {
     //printf("recibo: %s\n", matchSelection.c_str());
 
     size_t pos = 0;
+    //Ejemplo de protocolo para crear: C,nameTrack,2\n
+    //Ejemplo de protocolo para unirse: J,nameMatch,0\n
+    //Cuando me estoy uniendo a una partida mando 0 como cantidad de jugadores
     std::string word = parse(matchSelection, pos, ','); //C o J (create o join match)
-    std::string track = parse(matchSelection, pos, ','); //nombre de la pista o partida
-    //cantidad de jugadores, en el caso de unirse a una partida mando un 0
-    std::string numberPlayers = parse(matchSelection, pos, '\n');
-    sendTrackData(tracks.getTrack(track).serialize());
+    if (word == "C") {
+        std::string track = parse(matchSelection, pos, ','); //nombre de la pista
+        std::string numberPlayers = parse(matchSelection, pos, '\n'); //cantidad de jugadores
+        sendTrackData(tracks.getTrack(track).serialize());
+    } else if (word == "J") {
+        std::string match = parse(matchSelection, pos, ','); //nombre de la partida
+        sendTrackData(tracks.getTrack("").serialize());
+        //aca en realidad hay que poner el nombre de la pista de la partida a la que quiere unirse
+    }
 }
 
 void ClientTh::sendLapsData(std::string laps_serialized) {
