@@ -7,6 +7,7 @@
 #define CAR_ORANGE "orange"
 #define CAR_WHITE "white"
 #define CAR_YELLOW "yellow"
+#define HEART "heart"
 
 PictureLoader::PictureLoader(SdlWindow &window, std::map<std::string, SdlSurface*> &pictures,
         std::map<trackPartType, SdlSurface*> &trackPictures) :
@@ -34,6 +35,7 @@ PictureLoader::PictureLoader(SdlWindow &window, std::map<std::string, SdlSurface
     pictures[CAR_ORANGE] = new SdlSurface("../common/images/car_orange.png", window);
     pictures[CAR_WHITE] = new SdlSurface("../common/images/car_white.png", window);
     pictures[CAR_YELLOW] = new SdlSurface("../common/images/car_yellow.png", window);
+    pictures[HEART] = new SdlSurface("../common/images/heart.png", window);
 
     //Agregar todas las imagenes faltantes
 }
