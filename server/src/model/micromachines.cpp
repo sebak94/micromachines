@@ -94,9 +94,10 @@ void Micromachines::monitorTrack() {
             players[i]->updateLastTrackID(lastID);
         } else {
             // avanzó al siguiente
-            players[i]->updateLastTrackID(currentID);
-            if (currentID == 0)
+            if (currentID == 0 && lastID == track.getPartsNumber() - 1) {
                 players[i]->updateLaps();
+            }
+            players[i]->updateLastTrackID(currentID);
         }
     }
     /*for (size_t i = 0; i < players.size(); i++) {
