@@ -11,7 +11,7 @@
 #define LAPBOXPATH "../common/images/lapCounter.png"
 #define LAPFONT "../common/fonts/OpenSans-Italic.ttf"
 #define SECSTOSTART 5
-#define SECOND 600
+#define SECOND 900
 
 typedef std::chrono::time_point<std::chrono::steady_clock> saveTickChrono;
 
@@ -26,6 +26,8 @@ private:
     TextTexture lapNumber;
     double countDown = SECOND;
     double countDownNumber = SECSTOSTART;
+    bool countDownStarted = false;
+    saveTickChrono start;
 
 public:
     Camera(SdlWindow &window, std::map<std::string, SdlSurface*> &pictures, std::map<trackPartType, SdlSurface*> &trackPictures);
@@ -34,7 +36,7 @@ public:
     void showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> &track);
     void showCars(int xMyCar, int yMyCar, std::map<std::string, Car *> &cars,
                   const std::string& string);
-    void showCountdown(std::chrono::time_point<std::chrono::steady_clock> &start);
+    void showCountdown();
     void updateBlockSize();
     void showLaps(int lap, int totalLaps);
 };

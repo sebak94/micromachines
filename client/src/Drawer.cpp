@@ -98,10 +98,9 @@ void Drawer::draw() {
     if (modelMonitor.getGameState() == mainMenu) {
         matchWindow.render();
     } else if (modelMonitor.getGameState() == startCountdown) {
-        saveTickChrono start = std::chrono::steady_clock::now();
         drawWorld();
         drawHUD();
-        camera.showCountdown(start);
+        camera.showCountdown();
     } else {
         drawWorld();
         drawHUD();
@@ -117,7 +116,6 @@ void Drawer::drawWorld() {
     camera.showBackground();
     int x = modelMonitor.getCars()[modelMonitor.getMyColor()]->getX();
     int y = modelMonitor.getCars()[modelMonitor.getMyColor()]->getY();
-
     camera.showTrack(x, y, modelMonitor.getTrack());
     camera.showCars(x, y, modelMonitor.getCars(), modelMonitor.getMyColor());
 }

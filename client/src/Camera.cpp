@@ -82,20 +82,24 @@ Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car *> &cars,
     }
 }
 
-void Camera::showCountdown(std::chrono::time_point<std::chrono::steady_clock> &start) {
+void Camera::showCountdown() {
     SDL_Color color = {255, 255, 255, 0};
     TextTexture text;
     int fontsize = 100;
     int s = fontsize*96/128;  //offset from center of number
-    auto end = std::chrono::steady_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    countDown -= duration.count();
-    if (countDown <= 0 && countDown >= 0) {
+    if (countDownStarted) {
+        auto end = std::chrono::steady_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        countDown -= duration.count();
+    }
+    start = std::chrono::steady_clock::now();
+    if (countDown <= 0) {
         countDown = SECOND;
         countDownNumber--;
     }
     text.textToTexture(window.getRenderer(), std::to_string((int)countDownNumber), color, FONTNAME, 100);
     text.render(window.getRenderer(), window.getWidth()/2, window.getHeight()/2 - s);
+    countDownStarted = true;
 }
 
 void Camera::updateBlockSize() {
