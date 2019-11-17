@@ -9,6 +9,8 @@
 #include "vector"
 #include <mutex>
 
+#define DEADCLIENTSTIMEPERIOD 1000000
+
 class ClientList {
     private:
     std::mutex m;

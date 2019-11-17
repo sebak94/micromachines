@@ -57,6 +57,10 @@ private:
     void showRecButton();
     void recorderTh();
     void saveLastFrame();
+
+    void drawWorld();
+
+    void drawHUD();
 };
 
 #endif

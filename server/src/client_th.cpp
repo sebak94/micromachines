@@ -2,6 +2,7 @@
 #include "../include/model/cars/blue_car.h"
 #include "../../common/include/socket_error.h"
 #include "../../common/include/lock.h"
+#include <unistd.h>
 #include "iostream"
 #include "vector"
 #include "string"
@@ -75,45 +76,74 @@ void ClientTh::sendLapsData(std::string laps_serialized) {
     send(laps_serialized);
 }
 
+void ClientTh::updateGameState(GameState & previousSt, GameState & st) {
+    if (previousSt != st) {
+        previousSt = st;
+        switch (st) {
+            case mainMenu:
+                break;
+            case selectingTrack:
+                send(std::string(MSG_ST_SELECTINGTRACK));
+                break;
+            case selectingCar:
+                send(std::string(MSG_ST_SELECTINGCAR));
+                break;
+            case waitingPlayers:
+                send(std::string(MSG_ST_WAITINGPLAYERS));
+                break;
+            case startCountdown:
+                send(std::string(MSG_ST_COUNTDOWN));
+                break;
+            case playing:
+                send(std::string(MSG_ST_PLAYING));
+                break;
+            case waitingEnd:
+                send(std::string(MSG_ST_WAITINGEND));
+                break;
+            case gameEnded:
+                send(std::string(MSG_ST_GAMEENDED));
+                break;
+        }
+    }
+}
+
 void ClientTh::run() {
-    std::string strState = "G\nmainMenu\n";
+    std::string strState = MSG_ST_MAINMENU;
+    GameState lastState = mainMenu;
     while (is_running){
         switch (state) {
             case mainMenu:
+                //updateGameState(lastState, state);
                 setMatch();
                 setState(waitingPlayers);
                 break;
             case selectingTrack:
-                strState = "G\nselectingTrack\n";
-                send(strState);
+                updateGameState(lastState, state);
                 while (state == selectingTrack) {
 
                 }
                 break;
             case selectingCar:
-                strState = "G\nselectingCar\n";
-                send(strState);
+                updateGameState(lastState, state);
                 while (state == selectingCar) {
 
                 }
                 break;
             case waitingPlayers:
-                strState = "G\nwaitingPlayers\n";
-                send(strState);
+                updateGameState(lastState, state);
                 while (state == waitingPlayers) {
 
                 }
                 break;
             case startCountdown:
-                strState = "G\nstartCountdown\n";
-                send(strState);
+                updateGameState(lastState, state);
                 while (state == startCountdown) {
 
                 }
                 break;
             case playing:
-                strState = "G\nplaying\n";
-                send(strState);
+                updateGameState(lastState, state);
+                usleep(500000);
                 while (keep_talking) {
                     char action;
                     receive(&action);
@@ -122,15 +152,13 @@ void ClientTh::run() {
                 }
                 break;
             case waitingEnd:
-                strState = "G\nwaitingEnd\n";
-                send(strState);
+                updateGameState(lastState, state);
                 while (state == waitingEnd) {
 
                 }
                 break;
             case gameEnded:
-                strState = "G\ngameEnded\n";
-                send(strState);
+                updateGameState(lastState, state);
                 while (state == gameEnded) {
 
                 }
@@ -156,6 +184,11 @@ int ClientTh::getCarPosX() {
 int ClientTh::getCarPosY() {
     Lock l(m);
     return car->getPosY();
+}
+
+void ClientTh::reduceSpeed(float32 factor){
+    Lock l(m);
+    car->reduceSpeed(factor);
 }
 
 int ClientTh::getCarLastTrackID() {
@@ -198,7 +231,7 @@ void ClientTh::receiveActionPlugin(char *action) {
     this->actions.push(action[0]);
 }
 
-void ClientTh::send(std::string &response) {
+void ClientTh::send(std::basic_string<char> response) {
     try {
         const char *resp = response.c_str();
         peer->Send(resp, response.length());

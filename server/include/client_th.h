@@ -11,6 +11,15 @@
 #include <queue>
 #include <mutex>
 
+#define MSG_ST_MAINMENU "G\nmainMenu\n"
+#define MSG_ST_SELECTINGTRACK "G\nselectingTrack\n"
+#define MSG_ST_SELECTINGCAR "G\nselectingCar\n"
+#define MSG_ST_WAITINGPLAYERS "G\nwaitingPlayers\n"
+#define MSG_ST_COUNTDOWN "G\nstartCountdown\n"
+#define MSG_ST_PLAYING "G\nplaying\n"
+#define MSG_ST_WAITINGEND "G\nwaitingEnd\n"
+#define MSG_ST_GAMEENDED "G\ngameEnded\n"
+
 typedef enum {
     mainMenu,
     selectingTrack,
@@ -35,7 +44,7 @@ class ClientTh: public Thread {
 
     void sendWelcomeMsg();
     void receive(char *action);
-    void send(std::string &response);
+    void send(std::basic_string<char> response);
     std::string parse(const std::string &str, size_t &pos, const char delim);
     void setMatch();
 
@@ -59,6 +68,8 @@ class ClientTh: public Thread {
 
     int getCarPosY();
 
+    void reduceSpeed(float32 factor);
+
     int getCarLastTrackID();
 
     void newCarPosition(Point point);
@@ -70,6 +81,8 @@ class ClientTh: public Thread {
     void sendLapsData(std::string laps_serialized);
 
     GameState getState();
+
+    void updateGameState(GameState &previousSt, GameState &st);
 };
 
 #endif

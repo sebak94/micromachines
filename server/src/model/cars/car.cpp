@@ -50,6 +50,10 @@ int Car::getPosY() {
     return (int)td_car.body->GetPosition().y;
 }
 
+void Car::reduceSpeed(float32 factor){
+    td_car.reduceVelocity(factor);
+}
+
 void Car::setTrackID(int ID) {
     lastTrackID = ID;
 }

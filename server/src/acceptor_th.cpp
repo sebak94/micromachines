@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include "../include/acceptor_th.h"
 #include "../include/model/micromachines.h"
 #include "../../common/include/socket_error.h"
@@ -92,6 +93,7 @@ LookForDeadClientsTh::LookForDeadClientsTh(ClientList &clients,
 void LookForDeadClientsTh::run() {
     while (keep_looking) {
         clients.deleteDeadClients();
+        usleep(DEADCLIENTSTIMEPERIOD);
     }
 }
 

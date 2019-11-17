@@ -6,7 +6,7 @@
 #include "../../common/include/Error.h"
 #include <unistd.h>
 
-#define FPS 25
+#define FPS 60
 #define MICROSECS_WAIT 1/FPS*1000000 //seria que en un segundo se dibujen aprox 60 veces
 #define MUSICPATH "../common/sounds/beat.wav"
 #define FULLSCREENBUTTON "../common/images/fullscreen.png"
@@ -97,21 +97,35 @@ void Drawer::draw() {
     window.fill();
     if (modelMonitor.getGameState() == mainMenu) {
         matchWindow.render();
+    } else if (modelMonitor.getGameState() == startCountdown) {
+        saveTickChrono start = std::chrono::steady_clock::now();
+        drawWorld();
+        drawHUD();
+        camera.showCountdown(start);
     } else {
-        camera.updateBlockSize();
-        camera.showBackground();
-        int x = modelMonitor.getCars()[modelMonitor.getMyColor()]->getX();
-        int y = modelMonitor.getCars()[modelMonitor.getMyColor()]->getY();
-        int laps = modelMonitor.getCars()[modelMonitor.getMyColor()]->getMyLap();
-        int totalLaps = modelMonitor.getTotalLaps();
-        camera.showTrack(x, y, modelMonitor.getTrack());
-        camera.showCars(x, y, modelMonitor.getCars());
-        camera.showLaps(laps, totalLaps);
+        drawWorld();
+        drawHUD();
     }
     showFullScreenButton();
     showRecButton();
     window.render();
     saveLastFrame();
+}
+
+void Drawer::drawWorld() {
+    camera.updateBlockSize();
+    camera.showBackground();
+    int x = modelMonitor.getCars()[modelMonitor.getMyColor()]->getX();
+    int y = modelMonitor.getCars()[modelMonitor.getMyColor()]->getY();
+
+    camera.showTrack(x, y, modelMonitor.getTrack());
+    camera.showCars(x, y, modelMonitor.getCars(), modelMonitor.getMyColor());
+}
+
+void Drawer::drawHUD() {
+    int laps = modelMonitor.getCars()[modelMonitor.getMyColor()]->getMyLap();
+    int totalLaps = modelMonitor.getTotalLaps();
+    camera.showLaps(laps, totalLaps);
 }
 
 void Drawer::saveLastFrame() {

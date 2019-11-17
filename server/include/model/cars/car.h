@@ -46,6 +46,8 @@ class Car: public Model {
     ~Car();
 
     void updateLaps();
+
+    void reduceSpeed(float32 factor);
 };
 
 #endif

@@ -4,6 +4,7 @@
 #include <Box2D/Box2D.h>
 
 #define DEGTORAD 0.0174532925199432957f
+#define SPEEDREDUCTIONFACTOR 0.9
 
 Micromachines::Micromachines() {
     tracks.readTracks();
@@ -68,6 +69,8 @@ void Micromachines::updatePlayersState() {
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
         players[i]->processNextAction();
+        if (!track.isOnTrack(players[i]->getCarPosX(),players[i]->getCarPosY()))
+            players[i]->reduceSpeed(SPEEDREDUCTIONFACTOR);
     }
 }
 
@@ -80,7 +83,9 @@ void Micromachines::monitorTrack() {
         y = players[i]->getCarPosY();
         lastID = players[i]->getCarLastTrackID();
         currentID = track.getTrackPart(x, y).getID();
-        std::cout << "Auto " << i << "("<<x<<","<<y<<"). " << ". LastID:" << lastID << ". Current ID: " << track.getCurrentID(x, y) << "   " << std::endl;
+        //std::cout << "Auto " << i << "("<<x<<","<<y<<"). " << ". LastID:" << lastID << ". Current ID: " << track.getCurrentID(x, y) << "   " << std::endl;
+        if (i==0)
+            std::cout << x << "," << y << std::endl;
         if (currentID == lastID || !track.isOnTrack(x,y)) {
             // sigue en el mismo o está fuera de pista
         } else if (track.jumpedTrackPart(x, y, lastID)) {
@@ -94,9 +99,9 @@ void Micromachines::monitorTrack() {
                 players[i]->updateLaps();
         }
     }
-    for (size_t i = 0; i < players.size(); i++) {
+    /*for (size_t i = 0; i < players.size(); i++) {
         printf("\r                            \033[F");
-    }
+    }*/
 
 }
 

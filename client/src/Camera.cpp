@@ -1,4 +1,5 @@
 #include <SDL2/SDL_ttf.h>
+#include <iostream>
 #include "../include/Camera.h"
 #include "../../common/include/TextTexture.h"
 #include "../include/sdl/SdlTexture.h"
@@ -30,7 +31,7 @@ void Camera::showBackground() {
         y += height;
     }
 }
-// 39.5% -> 31%
+
 void Camera::showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> &track) {
     //Transformo las coordenadas para que mi auto quede en el medio de la pantalla
     //y se muestre la parte de la pista correspondiente
@@ -51,20 +52,26 @@ void Camera::showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> &track
     }
 }
 
-void Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car*> &cars) {
-    double widthCar = blockWidth / 6;
-    double heightCar = blockHeight / 3;
-    double xBegin = - xMyCar * (blockWidth / 100) + (window.getWidth() / 2.0);
-    double yBegin = - yMyCar * (blockHeight / 100) - (window.getHeight() / 2.0);
+void
+Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car *> &cars,
+                 const std::string& string) {
+    double widthCar = blockWidth / 6.0;
+    double heightCar = blockHeight / 3.0;
+    double xBegin = - xMyCar * (blockWidth / 100.0) + (window.getWidth() / 2.0);
+    double yBegin = - yMyCar * (blockHeight / 100.0) - (window.getHeight() / 2.0);
     SDL_Color color = {0, 0, 0, 0};
     TextTexture text;
 
     for (auto & it : cars) {
         Car* car = it.second;
-        double x = car->getX() * (blockWidth / 100) - (widthCar / 2);
-        double y = car->getY() * (blockHeight / 100) + (heightCar / 2);
+        double x = car->getX() * (blockWidth / 100.0) - (widthCar / 2.0);
+        double y = car->getY() * (blockHeight / 100.0) + (heightCar / 2.0);
         int realX = x + xBegin;
         int realY = - y - yBegin;
+        if (it.first == string) {
+            realX = window.getWidth()/2 - (widthCar / 2);
+            realY = window.getHeight()/2 - (heightCar / 2);
+        }
         SDL_Rect sdlDestCar = {realX, realY, (int)widthCar, (int)heightCar};
         pictures[car->getMyColor()]->renderRotate(sdlDestCar, car->getDegrees(), SDL_FLIP_NONE);
 
@@ -73,6 +80,22 @@ void Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car*> &cars)
         text.textToTexture(window.getRenderer(), std::to_string(car->getHealth()) + "%", color, FONTNAME, blockWidth / 26);
         text.render(window.getRenderer(), (int)(realX+sdlDestHeart.w), (int)(realY+heightCar));
     }
+}
+
+void Camera::showCountdown(std::chrono::time_point<std::chrono::steady_clock> &start) {
+    SDL_Color color = {255, 255, 255, 0};
+    TextTexture text;
+    int fontsize = 100;
+    int s = fontsize*96/128;  //offset from center of number
+    auto end = std::chrono::steady_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    countDown -= duration.count();
+    if (countDown <= 0 && countDown >= 0) {
+        countDown = SECOND;
+        countDownNumber--;
+    }
+    text.textToTexture(window.getRenderer(), std::to_string((int)countDownNumber), color, FONTNAME, 100);
+    text.render(window.getRenderer(), window.getWidth()/2, window.getHeight()/2 - s);
 }
 
 void Camera::updateBlockSize() {

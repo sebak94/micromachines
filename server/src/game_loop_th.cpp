@@ -32,10 +32,10 @@ void GameLoopTh::waitForPlayers() {
             auto begin = std::chrono::steady_clock::now();
             loops = 0;
             micromachines.updatePlayersState();
-            updateWorld(next_game_tick, 0, loops, 1.0, 0, 5);
+            updateWorld(next_game_tick, 0, loops, 1.0, 1.0 / 60, 5);
             //micromachines.sendNewStateToPlayers();
             //Mientras espero jugadores no quiero recibir el estado
-            timeWait(MICROSECS_WAIT, begin);
+            timeWait(MICROSECS_WAIT*2, begin);
         } else {
             break;
         }
