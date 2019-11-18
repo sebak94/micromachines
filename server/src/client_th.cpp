@@ -7,6 +7,8 @@
 #include "vector"
 #include "string"
 
+#define SPEEDREDUCTIONFACTOR 0.9
+
 ClientTh::ClientTh(Socket *peer, Car *car, TrackList& tracks) : keep_talking(true),
                             is_running(true), peer(peer), car(car), tracks(tracks) {
     sendWelcomeMsg();
@@ -25,8 +27,11 @@ void ClientTh::sendCarData() {
 
 void ClientTh::sendAllCarsToPlayer(std::vector<ClientTh *> players) {
     for (size_t i = 0; i < players.size(); i++) {
-        std::string s = players[i]->car->serialize();
-        send(s);
+        //No mando los autos que ya terminaron, mando solo los otros autos
+        if (players[i]->getState() != waitingEnd) {
+            std::string s = players[i]->car->serialize();
+            send(s);
+        }
     }
 }
 
@@ -144,7 +149,7 @@ void ClientTh::run() {
             case playing:
                 updateGameState(lastState, state);
                 usleep(500000);
-                while (keep_talking) {
+                while (keep_talking && state == playing) {
                     char action;
                     receive(&action);
                     Lock l(m);
@@ -201,7 +206,9 @@ void ClientTh::setState(GameState s) {
 }
 
 void ClientTh::updateCar() {
-    car->update();
+    if (state != waitingEnd) {
+        car->update();
+    }
 }
 
 void ClientTh::newCarPosition(Point point) {
@@ -253,6 +260,28 @@ bool ClientTh::isDead() {
 
 GameState ClientTh::getState() {
     return state;
+}
+
+int ClientTh::getLaps() {
+    return car->getLaps();
+}
+
+std::string ClientTh::carColor() {
+    return car->getColor();
+}
+
+void ClientTh::setWinners(std::vector<std::string> w) {
+    winners = w;
+}
+
+void ClientTh::sendWinners() {
+    std::string winStr = "W,";
+    for (int i = 0; i < winners.size(); i++) {
+        winStr += winners[i] + ',';
+    }
+    winStr.erase(winStr.length()-1); //borro la ultima coma
+    winStr.append("\n");
+    send(winStr);
 }
 
 ClientTh::~ClientTh() {

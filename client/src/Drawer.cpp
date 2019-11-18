@@ -101,6 +101,10 @@ void Drawer::draw() {
         drawWorld();
         drawHUD();
         camera.showCountdown();
+    } else if (modelMonitor.getGameState() == waitingEnd) {
+        drawWorld();
+        drawHUD();
+        camera.drawPodium(modelMonitor.getMatchResults());
     } else {
         drawWorld();
         drawHUD();

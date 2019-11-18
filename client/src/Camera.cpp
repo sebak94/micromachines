@@ -120,3 +120,19 @@ void Camera::showLaps(int lap, int totalLaps) {
     lapNumber.textToTexture(r, totStr, textColor, LAPFONT, 25);
     lapNumber.render(r, w - 45, h - 50);
 }
+
+void Camera::drawPodium(std::vector<std::string> matchResults) {
+    int x = window.getWidth()/9;
+    int y = window.getHeight()/12;
+    int w = window.getWidth()/1.8;
+    int h = window.getHeight()/6;
+    for (int i = 0; i < matchResults.size(); i++) {
+        SDL_Rect area = {x, y, w, h};
+        SDL_Rect numberArea = {window.getWidth()/5, y+(h/3), w/15, h/2};
+        SDL_Rect carArea = {(int)(window.getWidth()/2.5), y, w/10, h};
+        pictures["podium"]->render(area);
+        pictures[std::to_string(i+1)]->render(numberArea);
+        pictures[matchResults[i]]->renderRotate(carArea, 90, SDL_FLIP_NONE);
+        y += window.getHeight()/6;
+    }
+}

@@ -24,6 +24,8 @@ public:
     int getTotalLaps();
     void setTrackNames(std::string tracks);
     std::vector<std::string> getTrackNames();
+    std::vector<std::string> &getMatchResults();
+    void updateMatchResults(std::string results);
 };
 
 #endif

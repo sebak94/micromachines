@@ -44,45 +44,51 @@ void EventLoopSDL::enqueueKeyUpEvent(SDL_KeyboardEvent &keyEvent) {
     }
 }
 
-void EventLoopSDL::run() {
+void EventLoopSDL::quitAndResize(SDL_Event &event) {
+    drawer->updateFullScreenButton(&event);
+    drawer->updateRecButton(&event);
+    switch (event.type) {
+        case SDL_QUIT:
+            this->queue.push("Q"); //encolo una Q para finalizar
+            this->running = false;
+            break;
+        case SDL_WINDOWEVENT:
+            switch (event.window.event) {
+                case SDL_WINDOWEVENT_SIZE_CHANGED:
+                    drawer->resize(event.window.data1, event.window.data2);
+                    break;
+            }
+            break;
+    }
+}
 
+void EventLoopSDL::run() {
     this->running = true;
     while (running) {
         SDL_Event event;
         SDL_WaitEvent(&event);
         switch (modelMonitor.getGameState()) {
             case mainMenu:
+                quitAndResize(event);
                 drawer->getMatchWindow().updateMatchButtons(&event);
-                drawer->updateFullScreenButton(&event);
-                drawer->updateRecButton(&event);
                 if (drawer->getMatchWindow().isReady()) {
                     this->queue.push(drawer->getMatchWindow().serializeData());
                 }
-                switch (event.type) {
-                    case SDL_QUIT:
-                        this->queue.push("Q"); //encolo una Q para finalizar
-                        this->running = false;
-                        break;
-                    case SDL_WINDOWEVENT:
-                        switch (event.window.event) {
-                            case SDL_WINDOWEVENT_SIZE_CHANGED:
-                                drawer->resize(event.window.data1, event.window.data2);
-                                break;
-                        }
-                        break;
-                }
                 break;
             case selectingTrack:
+                quitAndResize(event);
                 break;
             case selectingCar:
+                quitAndResize(event);
                 break;
             case waitingPlayers:
+                quitAndResize(event);
                 break;
             case startCountdown:
+                quitAndResize(event);
                 break;
             case playing:
-                drawer->updateFullScreenButton(&event);
-                drawer->updateRecButton(&event);
+                quitAndResize(event);
                 switch (event.type) {
                     case SDL_KEYDOWN:
                         enqueueKeyDownEvent((SDL_KeyboardEvent &) event);
@@ -90,22 +96,13 @@ void EventLoopSDL::run() {
                     case SDL_KEYUP:
                         enqueueKeyUpEvent((SDL_KeyboardEvent &) event);
                         break;
-                    case SDL_QUIT:
-                        this->queue.push("Q"); //encolo una Q para finalizar
-                        this->running = false;
-                        break;
-                    case SDL_WINDOWEVENT:
-                        switch (event.window.event) {
-                            case SDL_WINDOWEVENT_SIZE_CHANGED:
-                                drawer->resize(event.window.data1, event.window.data2);
-                                break;
-                        }
-                        break;
                 }
                 break;
             case waitingEnd:
+                quitAndResize(event);
                 break;
             case gameEnded:
+                quitAndResize(event);
                 break;
         }
     }

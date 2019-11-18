@@ -22,6 +22,7 @@ public:
 private:
     void enqueueKeyDownEvent(SDL_KeyboardEvent& keyEvent);
     void enqueueKeyUpEvent(SDL_KeyboardEvent& keyEvent);
+    void quitAndResize(SDL_Event &event);
 };
 
 #endif

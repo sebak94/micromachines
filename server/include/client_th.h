@@ -41,6 +41,7 @@ class ClientTh: public Thread {
     std::mutex m;
     GameState state = mainMenu;
     TrackList& tracks;
+    std::vector<std::string> winners;
 
     void sendWelcomeMsg();
     void receive(char *action);
@@ -83,6 +84,13 @@ class ClientTh: public Thread {
     GameState getState();
 
     void updateGameState(GameState &previousSt, GameState &st);
+
+    int getLaps();
+
+    std::string carColor();
+
+    void setWinners(std::vector<std::string> w);
+    void sendWinners();
 };
 
 #endif

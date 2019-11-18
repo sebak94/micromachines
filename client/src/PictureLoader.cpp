@@ -8,6 +8,12 @@
 #define CAR_WHITE "white"
 #define CAR_YELLOW "yellow"
 #define HEART "heart"
+#define PODIUM "podium"
+#define NUMBER_ONE "1"
+#define NUMBER_TWO "2"
+#define NUMBER_THREE "3"
+#define NUMBER_FOUR "4"
+#define NUMBER_FIVE "5"
 
 PictureLoader::PictureLoader(SdlWindow &window, std::map<std::string, SdlSurface*> &pictures,
         std::map<trackPartType, SdlSurface*> &trackPictures) :
@@ -36,8 +42,13 @@ PictureLoader::PictureLoader(SdlWindow &window, std::map<std::string, SdlSurface
     pictures[CAR_WHITE] = new SdlSurface("../common/images/car_white.png", window);
     pictures[CAR_YELLOW] = new SdlSurface("../common/images/car_yellow.png", window);
     pictures[HEART] = new SdlSurface("../common/images/heart.png", window);
+    pictures[PODIUM] = new SdlSurface("../common/images/podium.png", window);
+    pictures[NUMBER_ONE] = new SdlSurface("../common/images/1.png", window);
+    pictures[NUMBER_TWO] = new SdlSurface("../common/images/2.png", window);
+    pictures[NUMBER_THREE] = new SdlSurface("../common/images/3.png", window);
+    pictures[NUMBER_FOUR] = new SdlSurface("../common/images/4.png", window);
+    pictures[NUMBER_FIVE] = new SdlSurface("../common/images/5.png", window);
 
-    //Agregar todas las imagenes faltantes
 }
 
 PictureLoader::~PictureLoader() {

@@ -25,55 +25,35 @@ ModelUpdater::~ModelUpdater() {
 void ModelUpdater::run() {
     running = true;
     while (running) {
-        if (running && modelMonitor.getGameState() == mainMenu) {
-            std::string text = receive(); //Recibo cambio de estado o la pista serializada
+        try {
+            std::string text = receive(); //Recibo cambio de estado u otra cosa
             if (text[0] == 'G') {
+                //Si recibi cambio de estado lo actualizo
                 std::string text = receive();
-                printf("text1: %s\n", text.c_str());
+                printf("text: %s\n", text.c_str());
                 modelMonitor.setGameState(text);
             } else {
-                Track track = Track(text); //Creo la pista
-                modelMonitor.setTrack(track.getTrackPartData());
-            }
-        }
-        while (running && modelMonitor.getGameState() == waitingPlayers) {
-            std::string text = receive();
-            if (text[0] == 'G') {
-                std::string text = receive();
-                printf("text2: %s\n", text.c_str());
-                modelMonitor.setGameState(text);
-            } else {
-                modelMonitor.updateCar(text);
-            }
-        }
-        while (running && modelMonitor.getGameState() == startCountdown) {
-            std::string text = receive();
-            if (text[0] == 'G') {
-                std::string text = receive();
-                printf("text3: %s\n", text.c_str());
-                modelMonitor.setGameState(text);
-            } else {
-                //printf("recibo: %s", text.c_str());
-                modelMonitor.updateCar(text);
-            }
-        }
-        while (running && modelMonitor.getGameState() == playing) {
-            try {
-                std::string text = receive();
-                //printf("text4: %s\n", text.c_str());
-                if (text[0] == 'G') {
-                    std::string text = receive();
-                    modelMonitor.setGameState(text);
+                //Si recibi otra cosa, depende del estado actual lo que voy a hacer
+                if (modelMonitor.getGameState() == mainMenu) {
+                    Track track = Track(text);
+                    modelMonitor.setTrack(track.getTrackPartData());
+                } else if (modelMonitor.getGameState() == waitingPlayers
+                        || modelMonitor.getGameState() == startCountdown) {
+                    modelMonitor.updateCar(text);
+                } else if (modelMonitor.getGameState() == playing
+                        ||modelMonitor.getGameState() == waitingEnd) {
+                    if (text[0] == 'W') {
+                        modelMonitor.updateMatchResults(text.substr(2, text.length()));
+                    } else {
+                        modelMonitor.updateCar(text);
+                    }
                 }
-                //printf("recibo: %s", text.c_str());
-                modelMonitor.updateCar(text);
-            } catch (std::exception &e) {
-                running = false;
-                drawer->stop();
             }
+        } catch (std::exception &e) {
+            running = false;
+            drawer->stop();
         }
     }
-
 }
 
 void ModelUpdater::stop() {

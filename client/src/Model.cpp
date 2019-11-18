@@ -1,9 +1,8 @@
 #include "../include/Model.h"
 #include "../../common/include/TrackList.h"
+#include <algorithm>
 
-Model::Model() {
-
-}
+Model::Model() {}
 
 Model::~Model() {
     for (const auto pair : cars) {
@@ -90,4 +89,21 @@ void Model::setTrackNames(std::string tracks) {
 
 std::vector<std::string> Model::getTrackNames() {
     return trackNames;
+}
+
+std::vector<std::string>& Model::getMatchResults() {
+    return matchResults;
+}
+
+void Model::updateMatchResults(std::string results) {
+    results.erase(results.length() -1); //borro el \n
+    size_t pos = 0;
+    while (pos < results.size()) {
+        std::string substr = parse(results, pos, ',');
+        if (std::find(matchResults.begin(), matchResults.end(), substr) == matchResults.end()) {
+            matchResults.push_back(substr);
+        }
+        if (pos == 0)
+            break;
+    }
 }

@@ -73,6 +73,8 @@ void GameLoopTh::play() {
             micromachines.monitorTrack();
             updateWorld(next_game_tick, SKIP_TICKS, loops, 1.0 / 60, 5, 5);
             micromachines.sendNewStateToPlayers();
+            micromachines.updateWinners();
+            micromachines.sendWinners();
             timeWait(MICROSECS_WAIT, begin);
 
             // this->executeLibraries();

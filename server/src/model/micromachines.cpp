@@ -84,8 +84,8 @@ void Micromachines::monitorTrack() {
         lastID = players[i]->getCarLastTrackID();
         currentID = track.getTrackPart(x, y).getID();
         //std::cout << "Auto " << i << "("<<x<<","<<y<<"). " << ". LastID:" << lastID << ". Current ID: " << track.getCurrentID(x, y) << "   " << std::endl;
-        if (i==0)
-            std::cout << x << "," << y << std::endl;
+        //if (i==0)
+            //std::cout << x << "," << y << std::endl;
         if (currentID == lastID || !track.isOnTrack(x,y)) {
             // sigue en el mismo o está fuera de pista
         } else if (track.jumpedTrackPart(x, y, lastID)) {
@@ -104,6 +104,34 @@ void Micromachines::monitorTrack() {
         printf("\r                            \033[F");
     }*/
 
+}
+
+void Micromachines::updateWinners() {
+    for (int i = 0; i < players.size(); i++) {
+        //Si alcanzó la cantidad de vueltas y no contiene el elemento, le cambio el estado y agrego a los ganadores
+        std::string color = players[i]->carColor();
+        if (players[i]->getLaps() == laps &&
+        (std::find(winners.begin(), winners.end(), color) == winners.end())) {
+            players[i]->setState(waitingEnd);
+            winners.push_back(color);
+        }
+        players[i]->setWinners(winners);
+    }
+}
+
+void Micromachines::sendWinners() {
+    //Mando los ganadores cuando todos hayan llegado a la meta
+    bool allWaiting = true;
+    for (int i = 0; i < players.size(); i++) {
+        if (players[i]->getState() != waitingEnd) {
+            allWaiting = false;
+        }
+    }
+    if (allWaiting) {
+        for (int i = 0; i < players.size(); i++) {
+            players[i]->sendWinners();
+        }
+    }
 }
 
 void Micromachines::cleanPlayers() {

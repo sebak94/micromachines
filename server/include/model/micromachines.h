@@ -16,8 +16,9 @@ class Micromachines {
     Track track;
     std::mutex m;
     std::vector<ClientTh*> players;
-    int laps = 10;
+    int laps = 2;
     DestructionListener destruction_listener;
+    std::vector<std::string> winners;
 
     void removePlayerFromVector(ClientTh *player);
 
@@ -43,6 +44,8 @@ class Micromachines {
     int getStartID(int order);
     TrackList& getTracks();
     bool somePlayersInMainMenu();
+    void updateWinners();
+    void sendWinners();
 };
 
 #endif

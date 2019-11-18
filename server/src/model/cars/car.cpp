@@ -79,4 +79,12 @@ std::string Car::serialize() {
            + color.name() + "\n";
 }
 
+int Car::getLaps() {
+    return laps;
+}
+
+std::string Car::getColor() {
+    return color.name();
+}
+
 Car::~Car() {}

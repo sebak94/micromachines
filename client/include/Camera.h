@@ -39,6 +39,7 @@ public:
     void showCountdown();
     void updateBlockSize();
     void showLaps(int lap, int totalLaps);
+    void drawPodium(std::vector<std::string> matchResults);
 };
 
 #endif
