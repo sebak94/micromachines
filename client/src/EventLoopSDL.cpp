@@ -72,6 +72,11 @@ void EventLoopSDL::run() {
                 quitAndResize(event);
                 drawer->getMatchWindow().updateMatchButtons(&event);
                 if (drawer->getMatchWindow().isReady()) {
+                    if (drawer->getMatchWindow().isLuaSelected()) {
+                        printf("AI Playing\n");
+                        luaPlaying = true;
+                        //acá lanzar el nuevo hilo de los eventos de lua (pero dejar este hilo corriendo)
+                    }
                     this->queue.push(drawer->getMatchWindow().serializeData());
                 }
                 break;
@@ -89,13 +94,15 @@ void EventLoopSDL::run() {
                 break;
             case playing:
                 quitAndResize(event);
-                switch (event.type) {
-                    case SDL_KEYDOWN:
-                        enqueueKeyDownEvent((SDL_KeyboardEvent &) event);
-                        break;
-                    case SDL_KEYUP:
-                        enqueueKeyUpEvent((SDL_KeyboardEvent &) event);
-                        break;
+                if (!luaPlaying) {
+                    switch (event.type) {
+                        case SDL_KEYDOWN:
+                            enqueueKeyDownEvent((SDL_KeyboardEvent &) event);
+                            break;
+                        case SDL_KEYUP:
+                            enqueueKeyUpEvent((SDL_KeyboardEvent &) event);
+                            break;
+                    }
                 }
                 break;
             case waitingEnd:
