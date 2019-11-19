@@ -25,11 +25,10 @@ ModelUpdater::~ModelUpdater() {
 bool ModelUpdater::updateState(std::string &received) {
     std::cout << received << std::endl;
     if (received[0] == 'G') {
-        received = receive();
-        std::cout << received << std::endl;
+        //received = receive();
+
         modelMonitor.setGameState(received);
         received = receive();
-        std::cout << received << std::endl;
         return true;
     } else {
         return false;
@@ -52,8 +51,19 @@ void ModelUpdater::run() {
         }
         if (running && modelMonitor.getGameState() == creating) {
             //std::string received = receive(); //Recibo cambio de estado o la pista serializada
-            updateState(received);
+            //updateState(received);
             modelMonitor.setTrackNames(received);
+            Track track = Track(receive());
+            modelMonitor.setTrack(track.getTrackPartData());
+            received = receive();
+            modelMonitor.setMyColor(received);
+            modelMonitor.updateCar(received);
+            modelMonitor.setGameState(waitingPlayers);
+        }
+        if (running && modelMonitor.getGameState() == joining) {
+            //std::string received = receive(); //Recibo cambio de estado o la pista serializada
+            //updateState(received);
+            receive(); // modificar acorde para recibir partidas disponibles
             Track track = Track(receive());
             modelMonitor.setTrack(track.getTrackPartData());
             received = receive();
@@ -64,7 +74,7 @@ void ModelUpdater::run() {
         while (running && modelMonitor.getGameState() == waitingPlayers) {
             std::string received = receive();
             updateState(received);
-            modelMonitor.updateCar(received);
+            //modelMonitor.updateCar(received);
         }
         while (running && modelMonitor.getGameState() == startCountdown) {
             std::string received = receive();
@@ -98,5 +108,6 @@ std::string ModelUpdater::receive() {
         this->socket.Receive(&c, 1);
     }
     std::string str_resp(response.begin(), response.end());
+    std::cout << str_resp << std::endl;
     return str_resp + "\n";
 }

@@ -99,6 +99,9 @@ void Drawer::draw() {
     } else if (modelMonitor.getGameState() == creating) {
         matchWindow.setTrackNames(modelMonitor.getTrackNames());
         matchWindow.render();
+    } else if (modelMonitor.getGameState() == joining) {
+        //matchWindow.setTrackNames(modelMonitor.getTrackNames());
+        matchWindow.render();
     } else if (modelMonitor.getGameState() == startCountdown) {
         drawWorld();
         drawHUD();

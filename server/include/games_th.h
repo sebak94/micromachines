@@ -22,7 +22,7 @@ private:
 public:
     void run() override;
     void stop() override;
-    void addPlayer(ClientTh *player, int gameIndex);
+    void addPlayer(ClientTh *player);
     void removePlayer(ClientTh *player, int gameIndex);
     void cleanPlayers(int gameIndex);
     int createGame(ClientTh *player);

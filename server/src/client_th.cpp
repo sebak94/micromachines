@@ -57,6 +57,8 @@ void ClientTh::setMatch() {
         receive(&action);
         matchSelection += action;
     }
+    std::cout << "match" << matchSelection << std::endl;
+    tracks.readTracks();
     size_t pos = 0;
     //Ejemplo de protocolo para crear: nameTrack,2\n
     //Ejemplo de protocolo para unirse: nameMatch,0\n
@@ -137,18 +139,18 @@ void ClientTh::run() {
                 break;
             case creating:
                 sendGameState(lastState, state);
-                tracks.readTracks();
-                sendAllTrackNames(tracks.serialize());
-                setMatch();
-                sendCarData();
-                setState(waitingPlayers);
+                //tracks.readTracks();
+                //sendAllTrackNames(tracks.serialize());
+                //setMatch();
+                //sendCarData();
+                //setState(waitingPlayers);
                 break;
             case joining:
                 sendGameState(lastState, state);
-                sendAvailableGames();
-                setMatch();
-                sendCarData();
-                setState(waitingPlayers);
+                //sendAvailableGames();
+                //setMatch();
+                //sendCarData();
+                //setState(waitingPlayers);
                 break;
             case waitingPlayers:
                 sendGameState(lastState, state);

@@ -19,7 +19,7 @@ MatchWindow::MatchWindow(SdlWindow &sdlWindow) : window(sdlWindow),
 
     //Track vacío mientras carga
     trackNames.clear();
-    trackNames.push_back(" ");
+    //trackNames.push_back(" ");
 
     //Defino que el juego sea entre 2 y 5 jugadores
     players.push_back("2");
@@ -162,8 +162,10 @@ void MatchWindow::selectingScreen() {
 
 void MatchWindow::creationScreen() {
     showBackground();
-    showSelectText("Choose track: ", *itTrackNames, window.getWidth() / 9, window.getHeight() / 2, arrowButton, textTrack);
-    showSelectText("Number of players: ", *itPlayers, window.getWidth() / 9, window.getHeight() / 1.5, arrowButton2, textPlayers);
+    if (!trackNames.empty()) {
+        showSelectText("Choose track: ", *itTrackNames, window.getWidth() / 9, window.getHeight() / 2, arrowButton, textTrack);
+        showSelectText("Number of players: ", *itPlayers, window.getWidth() / 9, window.getHeight() / 1.5, arrowButton2, textPlayers);
+    }
     showPlayAndReturn();
 }
 

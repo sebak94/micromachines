@@ -10,14 +10,14 @@ void GamesTh::run() {
     while (running) {
         for (auto player : players) {
 
-            if (player.first->getState() == mainMenu) {
-            } else if (player.first->getState() == creating) {
-                createGame(player.first);
-            } else if (player.first->getState() == joining) {
-                player.first->setAvailableGames(serializeGames());
-                addPlayer(player.first, player.first->getGameNumber());
+            if (player.second == -1) {
+                if (player.first->getState() == mainMenu) {
+                } else if (player.first->getState() == creating) {
+                    createGame(player.first);
+                } else if (player.first->getState() == joining) {
+                    addPlayer(player.first);
+                }
             }
-
          }
     }
 }
@@ -27,17 +27,37 @@ void GamesTh::stop() {
 }
 
 int GamesTh::createGame(ClientTh *player) {
-    MicroMachinesTh game;
-    GameLoopTh gameLoop(game);
-    games.emplace(gamesNumber, &game);
-    gameLoops.emplace(gamesNumber, &gameLoop);
-    player->setCar(game.getNextCar());
-    game.addPlayer(player);
+    auto * game = new MicroMachinesTh();
+    auto * gameLoop = new GameLoopTh(*game);
+    games.emplace(gamesNumber, game);
+    gameLoops.emplace(gamesNumber, gameLoop);
+    TrackList tracks;
+    tracks.readTracks();
+    player->sendAllTrackNames(tracks.serialize());
+    player->setMatch();
+    player->setCar(game->getNextCar());
+    player->sendCarData();
+    game->addPlayer(player);
     players[player] = gamesNumber;
+    player->setState(waitingPlayers);
 
-    game.run();
-    gameLoop.run();
+    games[gamesNumber]->start();
+    gameLoops[gamesNumber]->start();
     return gamesNumber++;
+}
+
+void GamesTh::addPlayer(ClientTh *player) {
+    int gameIndex = -1;
+    player->setAvailableGames(serializeGames());
+    player->sendAvailableGames();
+    player->setMatch();
+    gameIndex = player->getGameNumber();
+    player->setCar(games[gameIndex]->getNextCar());
+    games[gameIndex]->addPlayer(player);
+    players[player] = gameIndex;
+    player->sendTrackData(games[gameIndex]->trackSerialized());
+    player->sendCarData();
+    player->setState(waitingPlayers);
 }
 
 std::string GamesTh::serializeGames() {
@@ -50,12 +70,6 @@ std::string GamesTh::serializeGames() {
 
 void GamesTh::setPlayerOnMainMenu(ClientTh * player) {
     players.emplace(player, -1);
-}
-
-void GamesTh::addPlayer(ClientTh *player, int gameIndex) {
-    player->setCar(games[gameIndex]->getNextCar());
-    games[gameIndex]->addPlayer(player);
-    players[player] = gameIndex;
 }
 
 void GamesTh::removePlayer(ClientTh *player, int gameIndex) {

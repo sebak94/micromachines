@@ -9,6 +9,7 @@ void Dispatcher::run() {
     this->running = true;
     while (running) {
         std::string text = this->queue.pop();
+        std::cout << "envio: " << text << std::endl;
         if (text == "Q") {
             running = false;
         }

@@ -11,14 +11,14 @@
 #include <queue>
 #include <mutex>
 
-#define MSG_ST_MAINMENU "G\nmainMenu\n"
-#define MSG_ST_CREATING "G\ncreating\n"
-#define MSG_ST_JOINING "G\njoining\n"
-#define MSG_ST_WAITINGPLAYERS "G\nwaitingPlayers\n"
-#define MSG_ST_COUNTDOWN "G\nstartCountdown\n"
-#define MSG_ST_PLAYING "G\nplaying\n"
-#define MSG_ST_WAITINGEND "G\nwaitingEnd\n"
-#define MSG_ST_GAMEENDED "G\ngameEnded\n"
+#define MSG_ST_MAINMENU "G,mainMenu\n"
+#define MSG_ST_CREATING "G,creating\n"
+#define MSG_ST_JOINING "G,joining\n"
+#define MSG_ST_WAITINGPLAYERS "G,waitingPlayers\n"
+#define MSG_ST_COUNTDOWN "G,startCountdown\n"
+#define MSG_ST_PLAYING "G,playing\n"
+#define MSG_ST_WAITINGEND "G,waitingEnd\n"
+#define MSG_ST_GAMEENDED "G,gameEnded\n"
 
 typedef enum {
     mainMenu,
@@ -48,9 +48,9 @@ class ClientTh: public Thread {
     void receive(char *action);
     void send(std::basic_string<char> response);
     std::string parse(const std::string &str, size_t &pos, const char delim);
-    void setMatch();
 
     public:
+    void setMatch();
     ClientTh(Socket *peer, TrackList &tracks);
     void receiveActionPlugin(char *action);
     void processNextAction();
@@ -95,6 +95,7 @@ class ClientTh: public Thread {
     int getGameNumber();
 
     void setPlayerMode();
+
 };
 
 #endif
