@@ -24,10 +24,9 @@ MatchWindow::MatchWindow(SdlWindow &sdlWindow) : window(sdlWindow),
     players.push_back("5");
     itPlayers = players.begin();
 
-    //Scripts de Lua
+    //Para que el cliente decida si usa IA o no
     scripts.push_back("No");
-    scripts.push_back("script1");
-    scripts.push_back("script2");
+    scripts.push_back("Yes");
     itScripts = scripts.begin();
 
     //Hardcodeo los nombres de las partidas por ahora
@@ -228,8 +227,4 @@ void MatchWindow::reload() {
 
 bool MatchWindow::isLuaSelected() {
     return (textLua.getText() != "No");
-}
-
-std::string MatchWindow::getNameScript() {
-    return textLua.getText();
 }

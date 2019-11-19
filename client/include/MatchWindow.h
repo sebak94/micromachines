@@ -50,7 +50,6 @@ public:
     bool isReady();
     void reload();
     bool isLuaSelected();
-    std::string getNameScript();
 
 private:
     void createMatchButtons();
