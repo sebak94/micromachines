@@ -120,15 +120,9 @@ void Micromachines::updateWinners() {
 }
 
 void Micromachines::sendWinners() {
-    //Mando los ganadores cuando todos hayan llegado a la meta
-    bool allWaiting = true;
+    //Mando los ganadores cuando termine la carrera
     for (int i = 0; i < players.size(); i++) {
-        if (players[i]->getState() != waitingEnd) {
-            allWaiting = false;
-        }
-    }
-    if (allWaiting) {
-        for (int i = 0; i < players.size(); i++) {
+        if (players[i]->getState() == waitingEnd || players[i]->getState() == gameEnded) {
             players[i]->sendWinners();
         }
     }
@@ -180,4 +174,13 @@ bool Micromachines::somePlayersInMainMenu() {
         }
     }
     return false;
+}
+
+bool Micromachines::allPlayersGameEnded() {
+    for (int i = 0; i < players.size(); i++) {
+        if (players[i]->getState() != gameEnded) {
+            return false;
+        }
+    }
+    return true;
 }

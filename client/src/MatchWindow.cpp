@@ -203,3 +203,10 @@ void MatchWindow::showPlayAndReturn() {
 StateWindow MatchWindow::getState() const {
     return this->state;
 }
+
+void MatchWindow::reload() {
+    state = selecting;
+    ready = false;
+    createMatchButtons();
+    //tambien habria que recargar las partidas
+}

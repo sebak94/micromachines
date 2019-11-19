@@ -44,6 +44,7 @@ public:
     StateWindow getState() const;
     std::string serializeData();
     bool isReady();
+    void reload();
 
 private:
     void createMatchButtons();
