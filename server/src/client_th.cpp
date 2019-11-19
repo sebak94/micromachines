@@ -28,10 +28,10 @@ void ClientTh::sendCarData() {
 void ClientTh::sendAllCarsToPlayer(std::vector<ClientTh *> players) {
     for (size_t i = 0; i < players.size(); i++) {
         //No mando los autos que ya terminaron, mando solo los otros autos
-        if (players[i]->getState() != waitingEnd) {
+        //if (players[i]->getState() != waitingEnd) {
             std::string s = players[i]->car->serialize();
             send(s);
-        }
+        //}
     }
 }
 
