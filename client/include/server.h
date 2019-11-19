@@ -4,18 +4,21 @@
 #include "../../common/include/socket.h"
 #include "string"
 #include "EventLoopSDL.h"
+#include "EventLoopIA.h"
 #include "Drawer.h"
 #include "Dispatcher.h"
 
 class Server {
-    private:
+private:
     Socket skt;
     ThreadSafeQueue queue;
-    std::vector<Thread*> threads;
+    std::vector<Thread *> threads;
 
-    public:
+public:
     Server(const char *hostname, const char *service);
+
     ~Server();
+
     void runThreads();
 };
 

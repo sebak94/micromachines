@@ -10,21 +10,36 @@ private:
     Model &model;
 
 public:
-    ModelMonitor(Model& model);
+    ModelMonitor(Model &model);
+
     ~ModelMonitor();
-    void setTrack(std::vector<TrackPartData> track);
-    std::vector<TrackPartData>& getTrack();
+
+    void setTrack(std::vector <TrackPartData> track);
+
+    std::vector <TrackPartData> &getTrack();
+
     void setMyColor(std::string str);
+
     std::string getMyColor() const;
-    std::map<std::string, Car*>& getCars();
+
+    std::map<std::string, Car *> &getCars();
+
     void updateCar(std::string str);
+
     void setGameState(std::string str);
+
     GameState getGameState();
+
     void setTotalLaps(std::string str);
+
     int getTotalLaps();
+
     void setTrackNames(std::string tracks);
-    std::vector<std::string> getTrackNames();
-    std::vector<std::string> &getMatchResults();
+
+    std::vector <std::string> getTrackNames();
+
+    std::vector <std::string> &getMatchResults();
+
     void updateMatchResults(std::string results);
 };
 

@@ -91,8 +91,12 @@ set(SOURCE_FILES_CLIENT
     client/src/PictureLoader.cpp
 	client/include/ThreadSafeQueue.h
 	client/src/ThreadSafeQueue.cpp
+	client/include/lua/ai.h
+	client/src/lua/ai.cpp
 	client/include/EventLoopSDL.h
 	client/src/EventLoopSDL.cpp
+	client/include/EventLoopIA.h
+	client/src/EventLoopIA.cpp
 	client/include/Dispatcher.h
 	client/src/Dispatcher.cpp
 	client/include/Drawer.h

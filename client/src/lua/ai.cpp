@@ -5,14 +5,11 @@
 #include "../../include/lua/ai.h"
 
 
-Ai::Ai() {
-    this->L = initialize();
-}
-
-int Ai::ai_open_files(){
-    open_files(this->L);
+Ai::Ai(std::vector <TrackPartData> &track) {
+    this->L = lua_initialize();
+    lua_open_files(this->L);
 }
 
 Ai::~Ai() {
-    closeLua(L);
+    lua_close_file(L);
 }

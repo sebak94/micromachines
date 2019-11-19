@@ -20,17 +20,17 @@
 #define AI_PATH "../client/src/lua/movements.lua"
 #define MOV_PATH "../client/src/lua/ai.lua"
 
-lua_State *initialize() {
+lua_State *lua_initialize() {
     lua_State *L = luaL_newstate();
     luaL_openlibs(L);
     return L;
 }
 
-void closeLua(lua_State *L) {
+void lua_close_file(lua_State *L) {
     lua_close(L);
 }
 
-int open_files(lua_State *L) {
+int lua_open_files(lua_State *L) {
     int result;
     result = luaL_dofile(L, MOV_PATH);
     result = luaL_dofile(L, AI_PATH);
@@ -43,7 +43,24 @@ int open_files(lua_State *L) {
     return result;
 }
 
-int getNextMovement(lua_State *L, int positionX, int positionY) {
+void lua_load_map(lua_State *L) {
+    lua_getglobal(L, "init_load_map");
+
+    lua_newtable(L);
+    int top = lua_gettop(L);
+
+    const char *key = "clave";
+    const char *value = "value";
+    lua_pushlstring(L, key, 6);
+    lua_pushlstring(L, value, 6);
+    lua_settable(L, top);
+
+    printf("calling...\n");
+    lua_call(L, 1, 0);
+    printf("PASOO\n");
+}
+
+int lua_get_next_movement(lua_State *L, int positionX, int positionY) {
     lua_getglobal(L, "getNextMove");
     lua_pushnumber(L, positionX);
     lua_pushnumber(L, positionY);
@@ -58,10 +75,10 @@ int getNextMovement(lua_State *L, int positionX, int positionY) {
     return 0;
 }
 
-void play(lua_State *L) {
+void lua_play(lua_State *L) {
     for (int i = 1; i <= 2; ++i) {
         for (int j = 1; j <= 2; ++j) {
-            getNextMovement(L, i, j);
+            lua_get_next_movement(L, i, j);
         }
     }
 }
