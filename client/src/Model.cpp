@@ -37,13 +37,17 @@ void Model::setMyColor(std::string str) {
 
 void Model::setGameState(std::string str) {
     if (str == "mainMenu\n") gameState = mainMenu;
-    else if (str == "selectingTrack\n") gameState = selectingTrack;
-    else if (str == "selectingCar\n") gameState = selectingCar;
+    else if (str == "creating\n") gameState = creating;
+    else if (str == "joining\n") gameState = joining;
     else if (str == "waitingPlayers\n") gameState = waitingPlayers;
     else if (str == "startCountdown\n") gameState = startCountdown;
     else if (str == "playing\n") gameState = playing;
     else if (str == "waitingEnd\n") gameState = waitingEnd;
     else if (str == "gameEnded\n") gameState = gameEnded;
+}
+
+void Model::setGameState(GameState state) {
+    gameState = state;
 }
 
 GameState Model::getGameState() {

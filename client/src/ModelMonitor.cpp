@@ -24,6 +24,11 @@ void ModelMonitor::setGameState(std::string str) {
     model.setGameState(str);
 }
 
+void ModelMonitor::setGameState(GameState state) {
+    std::lock_guard<std::mutex> lock(m);
+    model.setGameState(state);
+}
+
 void ModelMonitor::updateCar(std::string str) {
     std::lock_guard<std::mutex> lock(m);
     model.updateCar(str);

@@ -55,8 +55,12 @@ void EventLoopSDL::run() {
                 drawer->getMatchWindow().updateMatchButtons(&event);
                 drawer->updateFullScreenButton(&event);
                 drawer->updateRecButton(&event);
-                if (drawer->getMatchWindow().isReady()) {
+                /*if (drawer->getMatchWindow().isReady()) {
                     this->queue.push(drawer->getMatchWindow().serializeData());
+                }*/
+                if (drawer->getMatchWindow().isModeSelected()) {
+                    std::string selection = drawer->getMatchWindow().getSelection();
+                    this->queue.push(drawer->getMatchWindow().getSelection());
                 }
                 switch (event.type) {
                     case SDL_QUIT:
@@ -72,9 +76,31 @@ void EventLoopSDL::run() {
                         break;
                 }
                 break;
-            case selectingTrack:
+            case creating:
+                drawer->getMatchWindow().updateMatchButtons(&event);
+                drawer->updateFullScreenButton(&event);
+                drawer->updateRecButton(&event);
+                switch (event.type) {
+                    case SDL_QUIT:
+                        this->queue.push("Q"); //encolo una Q para finalizar
+                        this->running = false;
+                        break;
+                    case SDL_WINDOWEVENT:
+                        switch (event.window.event) {
+                            case SDL_WINDOWEVENT_SIZE_CHANGED:
+                                drawer->resize(event.window.data1, event.window.data2);
+                                break;
+                        }
+                        break;
+                }
+                if (drawer->getMatchWindow().isReady()) {
+                    this->queue.push(drawer->getMatchWindow().serializeData());
+                }
                 break;
-            case selectingCar:
+            case joining:
+                if (drawer->getMatchWindow().isReady()) {
+                    this->queue.push(drawer->getMatchWindow().serializeData());
+                }
                 break;
             case waitingPlayers:
                 break;

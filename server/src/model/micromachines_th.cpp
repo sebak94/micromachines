@@ -1,40 +1,88 @@
-#include "../../include/model/micromachines.h"
+#include "../../include/model/micromachines_th.h"
 #include "../../../common/include/lock.h"
 #include "../../../common/include/socket_error.h"
+#include "../../include/model/cars/red_car.h"
+#include "../../include/model/cars/black_car.h"
+#include "../../include/model/cars/white_car.h"
+#include "../../include/model/cars/blue_car.h"
+#include "../../include/model/cars/yellow_car.h"
 #include <Box2D/Box2D.h>
 
 #define DEGTORAD 0.0174532925199432957f
 #define SPEEDREDUCTIONFACTOR 0.9
 
-Micromachines::Micromachines() {
+MicroMachinesTh::MicroMachinesTh() {
     tracks.readTracks();
     track = tracks.getTrack("classic"); //aca hay que poner la track que eligio el cliente
     world = new b2World(b2Vec2(0, 0));
     world->SetDestructionListener(&destruction_listener);
+
+    //Agrego todos los autos disponibles en un mapa de autos
+    cars[blue] = new BlueCar(world,
+                             getStartingPoint(0),
+                             getStartingCarRot(0),
+                             getStartID(0));
+    cars[white] = new WhiteCar(world,
+                               getStartingPoint(1),
+                               getStartingCarRot(1),
+                               getStartID(1));
+    cars[black] = new BlackCar(world,
+                               getStartingPoint(2),
+                               getStartingCarRot(2),
+                               getStartID(2));
+    cars[yellow] = new YellowCar(world,
+                                 getStartingPoint(3),
+                                 getStartingCarRot(3),
+                                 getStartID(3));
+    cars[red] = new RedCar(world,
+                           getStartingPoint(4),
+                           getStartingCarRot(4),
+                           getStartID(4));
+    itCar = cars.begin();
 }
 
-void Micromachines::update() {
+void MicroMachinesTh::run() {
+    while(running) {
+
+    }
+}
+
+void MicroMachinesTh::stop() {
+    running = false;
+}
+
+void MicroMachinesTh::update() {
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
         players[i]->updateCar();
     }
 }
 
-void Micromachines::addPlayer(ClientTh *client) {
+Car * MicroMachinesTh::getNextCar() {
+    Car * car = itCar->second;
+    itCar++;
+    return car;
+}
+
+void MicroMachinesTh::addPlayer(ClientTh *client) {
     Lock l(m);
     players.push_back(client);
 }
 
-std::string Micromachines::lapsSerialized() {
+std::string MicroMachinesTh::lapsSerialized() {
     return std::to_string(laps) += "\n";
 }
 
-void Micromachines::removePlayer(ClientTh *client) {
+std::string MicroMachinesTh::trackSerialized() {
+    return track.serialize();
+}
+
+void MicroMachinesTh::removePlayer(ClientTh *client) {
     Lock l(m);
     removePlayerFromVector(client);
 }
 
-void Micromachines::removePlayerFromVector(ClientTh *player) {
+void MicroMachinesTh::removePlayerFromVector(ClientTh *player) {
     size_t index_to_remove = -1;
 
     for (size_t i = 0; i < players.size(); i++) {
@@ -48,24 +96,24 @@ void Micromachines::removePlayerFromVector(ClientTh *player) {
     }
 }
 
-int Micromachines::getPlayersNumber() {
+int MicroMachinesTh::getPlayersNumber() {
     Lock l(m);
     return players.size();
 }
 
-void Micromachines::setPlayerGameState(ClientTh *player, GameState state) {
+void MicroMachinesTh::setPlayerGameState(ClientTh *player, GameState state) {
     Lock l(m);
     player->setState(state);
 }
 
-void Micromachines::setAllPlayersGameStates(GameState state) {
+void MicroMachinesTh::setAllPlayersGameStates(GameState state) {
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
         players[i]->setState(state);
     }
 }
 
-void Micromachines::updatePlayersState() {
+void MicroMachinesTh::updatePlayersState() {
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
         players[i]->processNextAction();
@@ -75,7 +123,7 @@ void Micromachines::updatePlayersState() {
 }
 
 // Checks if cars jump track parts
-void Micromachines::monitorTrack() {
+void MicroMachinesTh::monitorTrack() {
     int x, y, lastID, currentID;
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
@@ -106,46 +154,46 @@ void Micromachines::monitorTrack() {
 
 }
 
-void Micromachines::cleanPlayers() {
+void MicroMachinesTh::cleanPlayers() {
     Lock l(m);
     players.clear();
 }
 
-void Micromachines::changeCarState(char *new_command) {
+void MicroMachinesTh::changeCarState(char *new_command) {
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++)
         for (int j = 0; j < 10; ++j)
             players[i]->receiveActionPlugin(new_command);
 }
 
-void Micromachines::sendNewStateToPlayers() {
+void MicroMachinesTh::sendNewStateToPlayers() {
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
         players[i]->sendAllCarsToPlayer(players);
     }
 }
 
-std::string Micromachines::allTrackNames() {
+std::string MicroMachinesTh::allTrackNames() {
     return tracks.serialize();
 }
 
-Point Micromachines::getStartingPoint(int position) {
+Point MicroMachinesTh::getStartingPoint(int position) {
     return track.getCarStartingPos(position);
 }
 
-int Micromachines::getStartID(int order) {
+int MicroMachinesTh::getStartID(int order) {
     return track.getStartingID(order);
 }
 
-uint16_t Micromachines::getStartingCarRot(int position) {
+uint16_t MicroMachinesTh::getStartingCarRot(int position) {
     return track.getCarStartingRotation(position);
 }
 
-TrackList& Micromachines::getTracks() {
+TrackList& MicroMachinesTh::getTracks() {
     return tracks;
 }
 
-bool Micromachines::somePlayersInMainMenu() {
+bool MicroMachinesTh::somePlayersInMainMenu() {
     for (int i = 0; i < players.size(); i++) {
         if (players[i]->getState() == mainMenu) {
             return true;

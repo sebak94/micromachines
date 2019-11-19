@@ -10,21 +10,24 @@
 #include <cstring>
 #include <Box2D/Box2D.h>
 
-class Micromachines {
+class MicroMachinesTh : public Thread {
     private:
     TrackList tracks;
     Track track;
     std::mutex m;
     std::vector<ClientTh*> players;
+    std::map<ColorType, Car*> cars;
     int laps = 10;
     DestructionListener destruction_listener;
+    bool running;
+    std::map<ColorType, Car*>::iterator itCar;
 
     void removePlayerFromVector(ClientTh *player);
 
     public:
     b2World *world;
 
-    Micromachines();
+    MicroMachinesTh();
     void update();
     void addPlayer(ClientTh *client);
     void updatePlayersState();
@@ -43,6 +46,12 @@ class Micromachines {
     int getStartID(int order);
     TrackList& getTracks();
     bool somePlayersInMainMenu();
+    void run() override;
+    void stop() override;
+
+    std::string trackSerialized();
+
+    Car *getNextCar();
 };
 
 #endif

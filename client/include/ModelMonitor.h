@@ -24,6 +24,8 @@ public:
     int getTotalLaps();
     void setTrackNames(std::string tracks);
     std::vector<std::string> getTrackNames();
+
+    void setGameState(GameState state);
 };
 
 #endif

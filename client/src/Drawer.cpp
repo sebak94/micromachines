@@ -29,7 +29,6 @@ Drawer::Drawer(ModelMonitor &modelMonitor) :
 Drawer::~Drawer() {}
 
 void Drawer::run() {
-    matchWindow.setTrackNames(modelMonitor.getTrackNames());
     //music.play();
     running = true;
     std::thread recorder = std::thread(&Drawer::recorderTh, this);
@@ -96,6 +95,9 @@ void Drawer::showRecButton() {
 void Drawer::draw() {
     window.fill();
     if (modelMonitor.getGameState() == mainMenu) {
+        matchWindow.render();
+    } else if (modelMonitor.getGameState() == creating) {
+        matchWindow.setTrackNames(modelMonitor.getTrackNames());
         matchWindow.render();
     } else if (modelMonitor.getGameState() == startCountdown) {
         drawWorld();

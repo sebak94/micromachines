@@ -7,10 +7,13 @@
 #include "vector"
 #include "string"
 
-ClientTh::ClientTh(Socket *peer, Car *car, TrackList& tracks) : keep_talking(true),
-                            is_running(true), peer(peer), car(car), tracks(tracks) {
+ClientTh::ClientTh(Socket *peer, TrackList &tracks)
+        : keep_talking(true),
+          is_running(true),
+          peer(peer),
+          tracks(tracks) {
     sendWelcomeMsg();
-    sendCarData();
+    //sendCarData();
 }
 
 void ClientTh::sendWelcomeMsg() {
@@ -54,39 +57,55 @@ void ClientTh::setMatch() {
         receive(&action);
         matchSelection += action;
     }
-    //printf("recibo: %s\n", matchSelection.c_str());
-
     size_t pos = 0;
-    //Ejemplo de protocolo para crear: C,nameTrack,2\n
-    //Ejemplo de protocolo para unirse: J,nameMatch,0\n
+    //Ejemplo de protocolo para crear: nameTrack,2\n
+    //Ejemplo de protocolo para unirse: nameMatch,0\n
     //Cuando me estoy uniendo a una partida mando 0 como cantidad de jugadores
-    std::string word = parse(matchSelection, pos, ','); //C o J (create o join match)
-    if (word == "C") {
+    if (state == creating) {
         std::string track = parse(matchSelection, pos, ','); //nombre de la pista
         std::string numberPlayers = parse(matchSelection, pos, '\n'); //cantidad de jugadores
         sendTrackData(tracks.getTrack(track).serialize());
-    } else if (word == "J") {
-        std::string match = parse(matchSelection, pos, ','); //nombre de la partida
+    } else if (state == joining) {
+        std::string match = parse(matchSelection, pos, ','); //numero de la partida
+        gameNumber = stoi(match);
         sendTrackData(tracks.getTrack("").serialize());
         //aca en realidad hay que poner el nombre de la pista de la partida a la que quiere unirse
     }
+}
+
+void ClientTh::setPlayerMode() {
+    std::string modeSelection;
+    char action;
+    while (action != '\n') {
+        receive(&action);
+        modeSelection += action;
+    }
+    if (modeSelection[0] == 'C')
+        state = creating;
+    else if (modeSelection[0] == 'J')
+        state = joining;
+
+}
+
+void ClientTh::setCar(Car * matchCar) {
+    car = matchCar;
 }
 
 void ClientTh::sendLapsData(std::string laps_serialized) {
     send(laps_serialized);
 }
 
-void ClientTh::updateGameState(GameState & previousSt, GameState & st) {
+void ClientTh::sendGameState(GameState & previousSt, GameState & st) {
     if (previousSt != st) {
         previousSt = st;
         switch (st) {
             case mainMenu:
                 break;
-            case selectingTrack:
-                send(std::string(MSG_ST_SELECTINGTRACK));
+            case creating:
+                send(std::string(MSG_ST_CREATING));
                 break;
-            case selectingCar:
-                send(std::string(MSG_ST_SELECTINGCAR));
+            case joining:
+                send(std::string(MSG_ST_JOINING));
                 break;
             case waitingPlayers:
                 send(std::string(MSG_ST_WAITINGPLAYERS));
@@ -113,36 +132,32 @@ void ClientTh::run() {
     while (is_running){
         switch (state) {
             case mainMenu:
-                //updateGameState(lastState, state);
+                sendGameState(lastState, state);
+                setPlayerMode(); //setea join o create
+                break;
+            case creating:
+                sendGameState(lastState, state);
+                tracks.readTracks();
+                sendAllTrackNames(tracks.serialize());
                 setMatch();
+                sendCarData();
                 setState(waitingPlayers);
                 break;
-            case selectingTrack:
-                updateGameState(lastState, state);
-                while (state == selectingTrack) {
-
-                }
-                break;
-            case selectingCar:
-                updateGameState(lastState, state);
-                while (state == selectingCar) {
-
-                }
+            case joining:
+                sendGameState(lastState, state);
+                sendAvailableGames();
+                setMatch();
+                sendCarData();
+                setState(waitingPlayers);
                 break;
             case waitingPlayers:
-                updateGameState(lastState, state);
-                while (state == waitingPlayers) {
-
-                }
+                sendGameState(lastState, state);
                 break;
             case startCountdown:
-                updateGameState(lastState, state);
-                while (state == startCountdown) {
-
-                }
+                sendGameState(lastState, state);
                 break;
             case playing:
-                updateGameState(lastState, state);
+                sendGameState(lastState, state);
                 usleep(500000);
                 while (keep_talking) {
                     char action;
@@ -152,16 +167,10 @@ void ClientTh::run() {
                 }
                 break;
             case waitingEnd:
-                updateGameState(lastState, state);
-                while (state == waitingEnd) {
-
-                }
+                sendGameState(lastState, state);
                 break;
             case gameEnded:
-                updateGameState(lastState, state);
-                while (state == gameEnded) {
-
-                }
+                sendGameState(lastState, state);
                 break;
         }
     }
@@ -242,6 +251,17 @@ void ClientTh::send(std::basic_string<char> response) {
     }
 }
 
+void ClientTh::setAvailableGames(std::string g) {
+    Lock l(m);
+    if (g != availableGames)
+        availableGames = g;
+}
+
+void ClientTh::sendAvailableGames() {
+    Lock l(m);
+    send(availableGames);
+}
+
 void ClientTh::stop() {
     keep_talking = false;
     peer->Release();
@@ -252,7 +272,13 @@ bool ClientTh::isDead() {
 }
 
 GameState ClientTh::getState() {
+    Lock l(m);
     return state;
+}
+
+int ClientTh::getGameNumber() {
+    Lock l(m);
+    return gameNumber;
 }
 
 ClientTh::~ClientTh() {

@@ -1,5 +1,5 @@
 #include "../include/game_loop_th.h"
-#include "../include/model/micromachines.h"
+#include "../include/model/micromachines_th.h"
 #include <cstdint>
 #include <unistd.h>
 
@@ -8,7 +8,7 @@
 #define MAX_FRAMESKIP 10
 #define MICROSECS_WAIT 16000 //seria que en un segundo se dibujen aprox 60 veces
 
-GameLoopTh::GameLoopTh(Micromachines &micromachines) :
+GameLoopTh::GameLoopTh(MicroMachinesTh &micromachines) :
         running(true), micromachines(micromachines) {
     this->loader.load_dynamic_libraries();
 }

@@ -2,7 +2,7 @@
 #define __GAME_LOOP_TH_H__
 
 #include "../../common/include/thread.h"
-#include "model/micromachines.h"
+#include "model/micromachines_th.h"
 #include "loader.h"
 #include <cstdint>
 
@@ -13,7 +13,7 @@
 class GameLoopTh: public Thread {
     private:
     bool running;
-    Micromachines &micromachines;
+    MicroMachinesTh &micromachines;
     Loader loader;
     uint8_t game_loops = 1;
     double countdownTime;
@@ -22,7 +22,7 @@ class GameLoopTh: public Thread {
     void executeLibraries();
 
     public:
-    GameLoopTh(Micromachines &micromachines);
+    GameLoopTh(MicroMachinesTh &micromachines);
     virtual void run() override;
     virtual void stop() override;
     ~GameLoopTh();

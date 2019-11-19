@@ -16,7 +16,7 @@ set(SOURCE_FILES_SERVER
     server/include/acceptor_th.h
     server/include/client_th.h
     server/include/game_loop_th.h
-    server/include/model/micromachines.h
+        server/include/model/micromachines_th.h
     server/include/model/model.h
     server/include/model/point.h
     server/include/model/cars/color.h
@@ -34,7 +34,7 @@ set(SOURCE_FILES_SERVER
     server/src/acceptor_th.cpp
     server/src/client_th.cpp
     server/src/game_loop_th.cpp
-    server/src/model/micromachines.cpp
+        server/src/model/micromachines_th.cpp
     server/src/model/point.cpp
     server/src/model/point.cpp
     server/src/model/cars/color.cpp
@@ -70,7 +70,7 @@ set(SOURCE_FILES_SERVER
     common/src/directory_parser.cpp
     server/include/loader.h
     server/src/loader.cpp
-)
+        server/src/games_th.cpp server/include/games_th.h)
 
 set(SOURCE_FILES_CLIENT
     client/include/server.h

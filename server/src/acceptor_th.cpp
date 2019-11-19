@@ -1,6 +1,6 @@
 #include <unistd.h>
 #include "../include/acceptor_th.h"
-#include "../include/model/micromachines.h"
+#include "../include/model/micromachines_th.h"
 #include "../../common/include/socket_error.h"
 #include "../../common/include/lock.h"
 #include "iostream"
@@ -11,36 +11,36 @@
 #include "../include/model/cars/black_car.h"
 #include "../include/model/cars/white_car.h"
 
-AcceptorTh::AcceptorTh(const char *service, Micromachines &micromachines):
-    keep_accepting(true), micromachines(micromachines), clients(micromachines) {
+AcceptorTh::AcceptorTh(const char *service, GamesTh &games):
+        keep_accepting(true), games(games), clients(games) {
     try {
-        looking_th = new LookForDeadClientsTh(clients, micromachines);
+        looking_th = new LookForDeadClientsTh(clients, games);
         skt.BindAndListen(service);
     } catch(const SocketError &e) {
         std::cout << e.what() << "\n";
     }
 
     //Agrego todos los autos disponibles en un mapa de autos
-    cars[blue] = new BlueCar(micromachines.world,
-                             micromachines.getStartingPoint(0),
-                             micromachines.getStartingCarRot(0),
-                             micromachines.getStartID(0));
-    cars[white] = new WhiteCar(micromachines.world,
-                               micromachines.getStartingPoint(1),
-                               micromachines.getStartingCarRot(1),
-                               micromachines.getStartID(1));
-    cars[black] = new BlackCar(micromachines.world,
-                               micromachines.getStartingPoint(2),
-                               micromachines.getStartingCarRot(2),
-                               micromachines.getStartID(2));
-    cars[yellow] = new YellowCar(micromachines.world,
-                                 micromachines.getStartingPoint(3),
-                                 micromachines.getStartingCarRot(3),
-                                 micromachines.getStartID(3));
-    cars[red] = new RedCar(micromachines.world,
-                           micromachines.getStartingPoint(4),
-                           micromachines.getStartingCarRot(4),
-                           micromachines.getStartID(4));
+    /*cars[blue] = new BlueCar(games.world,
+                             games.getStartingPoint(0),
+                             games.getStartingCarRot(0),
+                             games.getStartID(0));
+    cars[white] = new WhiteCar(games.world,
+                               games.getStartingPoint(1),
+                               games.getStartingCarRot(1),
+                               games.getStartID(1));
+    cars[black] = new BlackCar(games.world,
+                               games.getStartingPoint(2),
+                               games.getStartingCarRot(2),
+                               games.getStartID(2));
+    cars[yellow] = new YellowCar(games.world,
+                                 games.getStartingPoint(3),
+                                 games.getStartingCarRot(3),
+                                 games.getStartID(3));
+    cars[red] = new RedCar(games.world,
+                           games.getStartingPoint(4),
+                           games.getStartingCarRot(4),
+                           games.getStartID(4));*/
 }
 
 void AcceptorTh::deleteResources() {
@@ -50,19 +50,34 @@ void AcceptorTh::deleteResources() {
 }
 
 void AcceptorTh::run() {
-    auto it = cars.begin();
+    //auto it = cars.begin();
     looking_th->start();
+    TrackList trackList;
+    int gameNumber;
     while (keep_accepting) {
         try {
             Socket *peer = new Socket();
             sockets.push_back(peer);
             skt.Accept(peer);
-            ClientTh *client_th = new ClientTh(peer, (it++)->second, micromachines.getTracks());
-            micromachines.addPlayer(client_th);
+
+            ClientTh *client_th = new ClientTh(peer, trackList);
             clients.addClient(client_th);
-            client_th->sendAllTrackNames(micromachines.allTrackNames());
-            client_th->sendLapsData(micromachines.lapsSerialized());
+            games.setPlayerOnMainMenu(client_th);
+
+            //si creo partida
+            /*gameNumber = games.createGame(client_th);
+            client_th->sendAllTrackNames(games.allTrackNames(gameNumber));
+            client_th->sendLapsData(games.lapsSerialized(gameNumber));*/
             client_th->start();
+
+            // si me uno
+            /*games.addPlayer(client_th,0);
+            client_th->sendTrackData(games.trackSerialized(0));
+            client_th->sendLapsData(games.lapsSerialized(0));
+            client_th->start();*/
+
+
+
         } catch(const SocketError &e) {
             std::cout << e.what() << "\n";
             keep_accepting = false;
@@ -76,19 +91,20 @@ void AcceptorTh::stop() {
     looking_th->stop();
     looking_th->join();
     skt.Release();
-    micromachines.cleanPlayers();
+    for (int i=0; i<games.getGamesNumber(); i++)
+        games.cleanPlayers(i);
 }
 
 AcceptorTh::~AcceptorTh() {
     delete looking_th;
-    for (const auto pair : cars) {
+    /*for (const auto pair : cars) {
         delete pair.second;
-    }
+    }*/
 }
 
 LookForDeadClientsTh::LookForDeadClientsTh(ClientList &clients,
-    Micromachines &micromachines): keep_looking(true), clients(clients),
-    micromachines(micromachines) {}
+                                          GamesTh &games): keep_looking(true), clients(clients),
+                                                                            games(games) {}
 
 void LookForDeadClientsTh::run() {
     while (keep_looking) {
@@ -101,8 +117,8 @@ void LookForDeadClientsTh::stop() {
     keep_looking = false;
 }
 
-ClientList::ClientList(Micromachines &micromachines):
-    micromachines(micromachines) {}
+ClientList::ClientList(GamesTh &games):
+    games(games) {}
 
 void ClientList::addClient(ClientTh* client) {
     Lock l(m);
@@ -111,12 +127,12 @@ void ClientList::addClient(ClientTh* client) {
 
 void ClientList::deleteDeadClients() {
     Lock l(m);
-    std::vector<ClientTh*>::iterator it = clients.begin();
+    auto it = clients.begin();
     while (it != clients.end()) {
         if ((*it)->isDead()) {
-            micromachines.removePlayer((*it));
+            games.removePlayer(*it, games.getPlayerGameID(*it));
             (*it)->join();
-            delete (*it);
+            delete *it;
             clients.erase(it);
         } else {
             it++;

@@ -8,8 +8,8 @@
 
 typedef enum {
     mainMenu,
-    selectingTrack,
-    selectingCar,
+    creating,
+    joining,
     waitingPlayers,
     startCountdown,
     playing,
@@ -41,6 +41,8 @@ public:
     GameState getGameState();
     void setTrackNames(std::string tracks);
     std::vector<std::string> getTrackNames();
+
+    void setGameState(GameState state);
 
 private:
 

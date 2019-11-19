@@ -4,9 +4,10 @@
 #include "../../common/include/thread.h"
 #include "../../common/include/socket.h"
 #include "../../common/include/lock.h"
-#include "model/micromachines.h"
+#include "model/micromachines_th.h"
 #include "../include/client_th.h"
 #include "vector"
+#include "games_th.h"
 #include <mutex>
 
 #define DEADCLIENTSTIMEPERIOD 1000000
@@ -15,10 +16,10 @@ class ClientList {
     private:
     std::mutex m;
     std::vector<ClientTh*> clients;
-    Micromachines &micromachines;
+    GamesTh &games;
 
     public:
-    ClientList(Micromachines &micromachines);
+    ClientList(GamesTh &games);
     void addClient(ClientTh *client);
     void deleteDeadClients();
     ~ClientList();
@@ -28,12 +29,12 @@ class LookForDeadClientsTh: public Thread {
     private:
     bool keep_looking;
     ClientList &clients;
-    Micromachines &micromachines;
+    GamesTh &games;
 
     public:
-    LookForDeadClientsTh(ClientList &clients, Micromachines &micromachines);
-    virtual void run() override;
-    virtual void stop() override;
+    LookForDeadClientsTh(ClientList &clients, GamesTh &games);
+    void run() override;
+    void stop() override;
     ~LookForDeadClientsTh() = default;
 };
 
@@ -41,16 +42,15 @@ class AcceptorTh: public Thread {
     private:
     Socket skt;
     bool keep_accepting;
-    Micromachines &micromachines;
+    GamesTh &games;
     ClientList clients;
     std::vector<Socket*> sockets;
-    std::map<ColorType, Car*> cars;
     LookForDeadClientsTh *looking_th;
 
     void deleteResources();
 
     public:
-    AcceptorTh(const char *service, Micromachines &micromachines);
+    AcceptorTh(const char *service, GamesTh &games);
     virtual void run() override;
     virtual void stop() override;
     ~AcceptorTh();

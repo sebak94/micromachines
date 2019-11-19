@@ -12,8 +12,8 @@
 #include <mutex>
 
 #define MSG_ST_MAINMENU "G\nmainMenu\n"
-#define MSG_ST_SELECTINGTRACK "G\nselectingTrack\n"
-#define MSG_ST_SELECTINGCAR "G\nselectingCar\n"
+#define MSG_ST_CREATING "G\ncreating\n"
+#define MSG_ST_JOINING "G\njoining\n"
 #define MSG_ST_WAITINGPLAYERS "G\nwaitingPlayers\n"
 #define MSG_ST_COUNTDOWN "G\nstartCountdown\n"
 #define MSG_ST_PLAYING "G\nplaying\n"
@@ -22,8 +22,8 @@
 
 typedef enum {
     mainMenu,
-    selectingTrack,
-    selectingCar,
+    creating,
+    joining,
     waitingPlayers,
     startCountdown,
     playing,
@@ -41,6 +41,8 @@ class ClientTh: public Thread {
     std::mutex m;
     GameState state = mainMenu;
     TrackList& tracks;
+    std::string availableGames{};
+    int gameNumber = -1;
 
     void sendWelcomeMsg();
     void receive(char *action);
@@ -49,7 +51,7 @@ class ClientTh: public Thread {
     void setMatch();
 
     public:
-    ClientTh(Socket *peer, Car* car, TrackList& tracks);
+    ClientTh(Socket *peer, TrackList &tracks);
     void receiveActionPlugin(char *action);
     void processNextAction();
     void updateCar();
@@ -82,7 +84,17 @@ class ClientTh: public Thread {
 
     GameState getState();
 
-    void updateGameState(GameState &previousSt, GameState &st);
+    void sendGameState(GameState &previousSt, GameState &st);
+
+    void setCar(Car *matchCar);
+
+    void setAvailableGames(std::string g);
+
+    void sendAvailableGames();
+
+    int getGameNumber();
+
+    void setPlayerMode();
 };
 
 #endif
