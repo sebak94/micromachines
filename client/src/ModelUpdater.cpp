@@ -25,7 +25,7 @@ bool ModelUpdater::updateState(std::string &received) {
 void ModelUpdater::run() {
     running = true;
     while (running) {
-        try {
+        /*try {*/
             std::string text = receive(); //Recibo cambio de estado u otra cosa
             //printf("text1: %s\n", text.c_str());
             if (text[0] == 'G') {
@@ -72,11 +72,11 @@ void ModelUpdater::run() {
                     }
                 }
             }
-        } catch (std::exception &e) {
+        /*} catch (std::exception &e) {
             printf("ModelUpdater::run() exception catched: %s\n", e.what());
             running = false;
             drawer->stop();
-        }
+        }*/
     }
 }
 

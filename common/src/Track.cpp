@@ -429,7 +429,7 @@ std::string Track::serialize() {
 // Constructor: Creates track based on serialized string
 Track::Track(const std::string & trackStr) {
     size_t pos = 0;
-
+    parseTrackParam(trackStr, pos, ',');
     startCol = std::stoi(parseTrackParam(trackStr, pos, ','));
     startRow = std::stoi(parseTrackParam(trackStr, pos, ','));
     width = std::stoi(parseTrackParam(trackStr, pos, ','));
