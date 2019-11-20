@@ -77,6 +77,7 @@ void MatchWindow::updateNonSelectingButtons(const SDL_Event *event) {
     arrowButton.updateEvent(event);
     playButton.updateEvent(event);
     returnButton.updateEvent(event);
+    ready = false;
     if (arrowButton.isClicked()) {
         if (state == creatingMatch) {
             itTrackNames++;

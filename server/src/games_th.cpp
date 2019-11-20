@@ -18,7 +18,7 @@ void GamesTh::run() {
                     addPlayer(player.first);
                 }
             }
-         }
+        }
     }
 }
 
@@ -27,12 +27,12 @@ void GamesTh::stop() {
 }
 
 int GamesTh::createGame(ClientTh *player) {
+    TrackList tracks;
+    tracks.readTracks();
     auto * game = new MicroMachinesTh();
     auto * gameLoop = new GameLoopTh(*game);
     games.emplace(gamesNumber, game);
     gameLoops.emplace(gamesNumber, gameLoop);
-    TrackList tracks;
-    tracks.readTracks();
     player->sendAllTrackNames(tracks.serialize());
     player->setMatch();
     player->setCar(game->getNextCar());

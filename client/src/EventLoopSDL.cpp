@@ -45,7 +45,7 @@ void EventLoopSDL::enqueueKeyUpEvent(SDL_KeyboardEvent &keyEvent) {
 }
 
 void EventLoopSDL::run() {
-
+    bool selectionSent = false;
     this->running = true;
     while (running) {
         SDL_Event event;
@@ -55,8 +55,9 @@ void EventLoopSDL::run() {
                 drawer->getMatchWindow().updateMatchButtons(&event);
                 drawer->updateFullScreenButton(&event);
                 drawer->updateRecButton(&event);
-                if (drawer->getMatchWindow().isModeSelected()) {
+                if (drawer->getMatchWindow().isModeSelected() && !selectionSent) {
                     this->queue.push(drawer->getMatchWindow().getSelection());
+                    selectionSent = true;
                 }
                 switch (event.type) {
                     case SDL_QUIT:
@@ -115,6 +116,7 @@ void EventLoopSDL::run() {
                 }
                 break;
             case waitingPlayers:
+                selectionSent = false;
                 break;
             case startCountdown:
                 break;

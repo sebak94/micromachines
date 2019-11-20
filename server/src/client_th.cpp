@@ -139,18 +139,11 @@ void ClientTh::run() {
                 break;
             case creating:
                 sendGameState(lastState, state);
-                //tracks.readTracks();
-                //sendAllTrackNames(tracks.serialize());
-                //setMatch();
-                //sendCarData();
-                //setState(waitingPlayers);
+
                 break;
             case joining:
                 sendGameState(lastState, state);
-                //sendAvailableGames();
-                //setMatch();
-                //sendCarData();
-                //setState(waitingPlayers);
+
                 break;
             case waitingPlayers:
                 sendGameState(lastState, state);
