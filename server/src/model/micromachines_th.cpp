@@ -150,7 +150,7 @@ void MicroMachinesTh::monitorTrack() {
     }
 }
 
-void MicromachinesTh::updateWinners() {
+void MicroMachinesTh::updateWinners() {
     for (int i = 0; i < players.size(); i++) {
         //Si alcanzó la cantidad de vueltas y no contiene el elemento, le cambio el estado y agrego a los ganadores
         std::string color = players[i]->carColor();
@@ -163,7 +163,7 @@ void MicromachinesTh::updateWinners() {
     }
 }
 
-void MicromachinesTh::sendWinners() {
+void MicroMachinesTh::sendWinners() {
     //Mando los ganadores cuando termine la carrera
     for (int i = 0; i < players.size(); i++) {
         if (players[i]->getState() == waitingEnd || players[i]->getState() == gameEnded) {
@@ -220,7 +220,7 @@ bool MicroMachinesTh::somePlayersInMainMenu() {
     return false;
 }
 
-bool MicromachinesTh::allPlayersGameEnded() {
+bool MicroMachinesTh::allPlayersGameEnded() {
     for (int i = 0; i < players.size(); i++) {
         if (players[i]->getState() != gameEnded) {
             return false;

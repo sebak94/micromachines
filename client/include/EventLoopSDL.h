@@ -13,6 +13,7 @@ private:
     Drawer* drawer;
     ModelMonitor &modelMonitor;
     bool luaPlaying = false;
+    bool selectionSent = false;
 
 public:
     EventLoopSDL(ThreadSafeQueue &queue, Drawer *drawerThread, ModelMonitor &modelMonitor);

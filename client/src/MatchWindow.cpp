@@ -242,7 +242,7 @@ std::string MatchWindow::getSelection() {
 }
 
 void MatchWindow::reload() {
-    state = selecting;
+    state = selectingMode;
     ready = false;
     createMatchButtons();
     //tambien habria que recargar las partidas

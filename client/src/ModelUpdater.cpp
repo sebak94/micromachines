@@ -50,13 +50,13 @@ void ModelUpdater::run() {
                     modelMonitor.setGameState(waitingPlayers);
                     text = receive();
                 } else if (modelMonitor.getGameState() == joining) {
-                    modelMonitor.setMatchNames(received);
+                    modelMonitor.setMatchNames(text);
                     receive();
                     Track track = Track(receive());
                     modelMonitor.setTrack(track.getTrackPartData());
-                    received = receive();
-                    modelMonitor.setMyColor(received);
-                    modelMonitor.updateCar(received);
+                    text = receive();
+                    modelMonitor.setMyColor(text);
+                    modelMonitor.updateCar(text);
                     text = receive();
                     modelMonitor.setGameState(waitingPlayers);
                 } else if (modelMonitor.getGameState() == waitingPlayers
@@ -78,8 +78,6 @@ void ModelUpdater::run() {
             drawer->stop();
         }
     }
-}
-
 }
 
 void ModelUpdater::stop() {
