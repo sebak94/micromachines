@@ -150,6 +150,28 @@ void MicroMachinesTh::monitorTrack() {
     }
 }
 
+void MicromachinesTh::updateWinners() {
+    for (int i = 0; i < players.size(); i++) {
+        //Si alcanzó la cantidad de vueltas y no contiene el elemento, le cambio el estado y agrego a los ganadores
+        std::string color = players[i]->carColor();
+        if (players[i]->getLaps() == laps &&
+        (std::find(winners.begin(), winners.end(), color) == winners.end())) {
+            players[i]->setState(waitingEnd);
+            winners.push_back(color);
+        }
+        players[i]->setWinners(winners);
+    }
+}
+
+void MicromachinesTh::sendWinners() {
+    //Mando los ganadores cuando termine la carrera
+    for (int i = 0; i < players.size(); i++) {
+        if (players[i]->getState() == waitingEnd || players[i]->getState() == gameEnded) {
+            players[i]->sendWinners();
+        }
+    }
+}
+
 void MicroMachinesTh::cleanPlayers() {
     Lock l(m);
     players.clear();
@@ -196,4 +218,13 @@ bool MicroMachinesTh::somePlayersInMainMenu() {
         }
     }
     return false;
+}
+
+bool MicromachinesTh::allPlayersGameEnded() {
+    for (int i = 0; i < players.size(); i++) {
+        if (players[i]->getState() != gameEnded) {
+            return false;
+        }
+    }
+    return true;
 }

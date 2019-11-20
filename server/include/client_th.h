@@ -43,6 +43,7 @@ class ClientTh: public Thread {
     TrackList& tracks;
     std::string availableGames{};
     int gameNumber = -1;
+    std::vector<std::string> winners;
 
     void sendWelcomeMsg();
     void receive(char *action);
@@ -95,6 +96,13 @@ class ClientTh: public Thread {
     int getGameNumber();
 
     void setPlayerMode();
+
+    int getLaps();
+
+    std::string carColor();
+
+    void setWinners(std::vector<std::string> w);
+    void sendWinners();
 
 };
 

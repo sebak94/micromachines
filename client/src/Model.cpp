@@ -1,8 +1,14 @@
 #include "../include/Model.h"
 #include "../../common/include/TrackList.h"
+#include <algorithm>
 
 Model::Model() {
-
+    //Invento modificadores de prueba
+    createModifier("900,500,healthBox\n");
+    createModifier("900,575,boost\n");
+    createModifier("900,537,stones\n");
+    createModifier("800,500,oil\n");
+    createModifier("800,537,mud\n");
 }
 
 Model::~Model() {
@@ -79,6 +85,16 @@ void Model::updateCar(std::string str) {
     cars[color]->update(x, y, rotation, health, laps);
 }
 
+void Model::createModifier(std::string str) {
+    //asumo que mandan algo como "x,y,tipo\n"
+    Modifier modifier(str);
+    modifiers.push_back(modifier);
+}
+
+std::vector<Modifier>& Model::getModifiers() {
+    return this->modifiers;
+}
+
 std::string Model::parse(const std::string &str, size_t &pos, const char delim) {
     std::string substr;
     size_t nextPos = str.find(delim, pos);
@@ -102,4 +118,21 @@ std::vector<std::string> Model::getTrackNames() {
 
 std::vector<std::string> Model::getMatchNames() {
     return matchNames;
+}
+
+std::vector<std::string>& Model::getMatchResults() {
+    return matchResults;
+}
+
+void Model::updateMatchResults(std::string results) {
+    results.erase(results.length() -1); //borro el \n
+    size_t pos = 0;
+    while (pos < results.size()) {
+        std::string substr = parse(results, pos, ',');
+        if (std::find(matchResults.begin(), matchResults.end(), substr) == matchResults.end()) {
+            matchResults.push_back(substr);
+        }
+        if (pos == 0)
+            break;
+    }
 }

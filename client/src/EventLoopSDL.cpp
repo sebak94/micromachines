@@ -44,108 +44,88 @@ void EventLoopSDL::enqueueKeyUpEvent(SDL_KeyboardEvent &keyEvent) {
     }
 }
 
+void EventLoopSDL::quitAndResize(SDL_Event &event) {
+    drawer->updateFullScreenButton(&event);
+    drawer->updateRecButton(&event);
+    switch (event.type) {
+        case SDL_QUIT:
+            this->queue.push("Q"); //encolo una Q para finalizar
+            this->running = false;
+            break;
+        case SDL_WINDOWEVENT:
+            switch (event.window.event) {
+                case SDL_WINDOWEVENT_SIZE_CHANGED:
+                    drawer->resize(event.window.data1, event.window.data2);
+                    break;
+            }
+            break;
+    }
+}
+
 void EventLoopSDL::run() {
-    bool selectionSent = false;
     this->running = true;
     while (running) {
         SDL_Event event;
         SDL_WaitEvent(&event);
         switch (modelMonitor.getGameState()) {
             case mainMenu:
+                quitAndResize(event);
                 drawer->getMatchWindow().updateMatchButtons(&event);
-                drawer->updateFullScreenButton(&event);
-                drawer->updateRecButton(&event);
+                    //EUNI.this->queue.push(drawer->getMatchWindow().serializeData());
                 if (drawer->getMatchWindow().isModeSelected() && !selectionSent) {
                     this->queue.push(drawer->getMatchWindow().getSelection());
                     selectionSent = true;
                 }
-                switch (event.type) {
-                    case SDL_QUIT:
-                        this->queue.push("Q"); //encolo una Q para finalizar
-                        this->running = false;
-                        break;
-                    case SDL_WINDOWEVENT:
-                        switch (event.window.event) {
-                            case SDL_WINDOWEVENT_SIZE_CHANGED:
-                                drawer->resize(event.window.data1, event.window.data2);
-                                break;
-                        }
-                        break;
-                }
                 break;
             case creating:
                 drawer->getMatchWindow().updateMatchButtons(&event);
-                drawer->updateFullScreenButton(&event);
-                drawer->updateRecButton(&event);
-                switch (event.type) {
-                    case SDL_QUIT:
-                        this->queue.push("Q"); //encolo una Q para finalizar
-                        this->running = false;
-                        break;
-                    case SDL_WINDOWEVENT:
-                        switch (event.window.event) {
-                            case SDL_WINDOWEVENT_SIZE_CHANGED:
-                                drawer->resize(event.window.data1, event.window.data2);
-                                break;
-                        }
-                        break;
-                }
+                quitAndResize(event);
                 if (drawer->getMatchWindow().isReady()) {
+                    if (drawer->getMatchWindow().isLuaSelected()) {
+                        printf("AI Playing\n");
+                        luaPlaying = true;
+                        //acá lanzar el nuevo hilo de los eventos de lua (pero dejar este hilo corriendo)
+                    }
                     this->queue.push(drawer->getMatchWindow().serializeData());
                 }
                 break;
             case joining:
                 drawer->getMatchWindow().updateMatchButtons(&event);
-                drawer->updateFullScreenButton(&event);
-                drawer->updateRecButton(&event);
-                switch (event.type) {
-                    case SDL_QUIT:
-                        this->queue.push("Q"); //encolo una Q para finalizar
-                        this->running = false;
-                        break;
-                    case SDL_WINDOWEVENT:
-                        switch (event.window.event) {
-                            case SDL_WINDOWEVENT_SIZE_CHANGED:
-                                drawer->resize(event.window.data1, event.window.data2);
-                                break;
-                        }
-                        break;
-                }
+                quitAndResize(event);
                 if (drawer->getMatchWindow().isReady()) {
+                    if (drawer->getMatchWindow().isLuaSelected()) {
+                        printf("AI Playing\n");
+                        luaPlaying = true;
+                        //acá lanzar el nuevo hilo de los eventos de lua (pero dejar este hilo corriendo)
+                    }
                     this->queue.push(drawer->getMatchWindow().serializeData());
                 }
                 break;
             case waitingPlayers:
+                quitAndResize(event);
                 selectionSent = false;
                 break;
             case startCountdown:
+                quitAndResize(event);
                 break;
             case playing:
-                drawer->updateFullScreenButton(&event);
-                drawer->updateRecButton(&event);
-                switch (event.type) {
-                    case SDL_KEYDOWN:
-                        enqueueKeyDownEvent((SDL_KeyboardEvent &) event);
-                        break;
-                    case SDL_KEYUP:
-                        enqueueKeyUpEvent((SDL_KeyboardEvent &) event);
-                        break;
-                    case SDL_QUIT:
-                        this->queue.push("Q"); //encolo una Q para finalizar
-                        this->running = false;
-                        break;
-                    case SDL_WINDOWEVENT:
-                        switch (event.window.event) {
-                            case SDL_WINDOWEVENT_SIZE_CHANGED:
-                                drawer->resize(event.window.data1, event.window.data2);
-                                break;
-                        }
-                        break;
+                quitAndResize(event);
+                if (!luaPlaying) {
+                    switch (event.type) {
+                        case SDL_KEYDOWN:
+                            enqueueKeyDownEvent((SDL_KeyboardEvent &) event);
+                            break;
+                        case SDL_KEYUP:
+                            enqueueKeyUpEvent((SDL_KeyboardEvent &) event);
+                            break;
+                    }
                 }
                 break;
             case waitingEnd:
+                quitAndResize(event);
                 break;
             case gameEnded:
+                quitAndResize(event);
                 break;
         }
     }

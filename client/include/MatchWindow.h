@@ -24,15 +24,19 @@ private:
     Button returnButton;
     Button arrowButton;
     Button arrowButton2;
+    Button arrowButton3;
     TextTexture textTrack;
     TextTexture textPlayers;
     TextTexture textMatch;
+    TextTexture textLua;
     std::vector<std::string> trackNames;
     std::vector<std::string>::iterator itTrackNames;
     std::vector<std::string> matchNames;
     std::vector<std::string>::iterator itMatchNames;
     std::vector<std::string> players;
     std::vector<std::string>::iterator itPlayers;
+    std::vector<std::string> scripts;
+    std::vector<std::string>::iterator itScripts;
     bool ready = false;
 
 public:
@@ -44,6 +48,8 @@ public:
     StateWindow getState() const;
     std::string serializeData();
     bool isReady();
+    void reload();
+    bool isLuaSelected();
 
     bool isModeSelected();
 

@@ -25,50 +25,60 @@ bool ModelUpdater::updateState(std::string &received) {
 void ModelUpdater::run() {
     running = true;
     while (running) {
-        std::string received{};
-        if (running && modelMonitor.getGameState() == mainMenu) {
-            received = receive(); // cambio de estado o la pista serializada
-            updateState(received);
-        }
-        if (running && modelMonitor.getGameState() == creating) {
-            modelMonitor.setTrackNames(received);
-            Track track = Track(receive());
-            modelMonitor.setTrack(track.getTrackPartData());
-            received = receive();
-            modelMonitor.setMyColor(received);
-            modelMonitor.updateCar(received);
-            modelMonitor.setGameState(waitingPlayers);
-        }
-        if (running && modelMonitor.getGameState() == joining) {
-            modelMonitor.setMatchNames(received);
-            receive();
-            Track track = Track(receive());
-            modelMonitor.setTrack(track.getTrackPartData());
-            received = receive();
-            modelMonitor.setMyColor(received);
-            modelMonitor.updateCar(received);
-            modelMonitor.setGameState(waitingPlayers);
-        }
-        while (running && modelMonitor.getGameState() == waitingPlayers) {
-            std::string received = receive();
-            updateState(received);
-        }
-        while (running && modelMonitor.getGameState() == startCountdown) {
-            std::string received = receive();
-            updateState(received);
-            modelMonitor.updateCar(received);
-        }
-        while (running && modelMonitor.getGameState() == playing) {
-            try {
-                std::string received = receive();
-                updateState(received);
-                modelMonitor.updateCar(received);
-            } catch (std::exception &e) {
-                running = false;
-                drawer->stop();
+        try {
+            std::string text = receive(); //Recibo cambio de estado u otra cosa
+            //printf("text1: %s\n", text.c_str());
+            if (text[0] == 'G') {
+                //Si recibi cambio de estado lo actualizo
+                std::string text = receive();
+                printf("text: %s\n", text.c_str());
+                modelMonitor.setGameState(text);
+            } else {
+                //Si recibi otra cosa, depende del estado actual lo que voy a hacer
+                if (modelMonitor.getGameState() == mainMenu) {
+                    if (text[0] == 'T') {
+                        Track track = Track(text.substr(2, text.length()));
+                        modelMonitor.setTrack(track.getTrackPartData());
+                    }
+                } else if (modelMonitor.getGameState() == creating) {
+                    modelMonitor.setTrackNames(text);
+                    Track track = Track(receive());
+                    modelMonitor.setTrack(track.getTrackPartData());
+                    text = receive();
+                    modelMonitor.setMyColor(text);
+                    modelMonitor.updateCar(text);
+                    modelMonitor.setGameState(waitingPlayers);
+                    text = receive();
+                } else if (modelMonitor.getGameState() == joining) {
+                    modelMonitor.setMatchNames(received);
+                    receive();
+                    Track track = Track(receive());
+                    modelMonitor.setTrack(track.getTrackPartData());
+                    received = receive();
+                    modelMonitor.setMyColor(received);
+                    modelMonitor.updateCar(received);
+                    text = receive();
+                    modelMonitor.setGameState(waitingPlayers);
+                } else if (modelMonitor.getGameState() == waitingPlayers
+                        || modelMonitor.getGameState() == startCountdown) {
+                    modelMonitor.updateCar(text);
+                } else if (modelMonitor.getGameState() == playing
+                        ||modelMonitor.getGameState() == waitingEnd
+                          || modelMonitor.getGameState() == gameEnded) {
+                    if (text[0] == 'W') {
+                        modelMonitor.updateMatchResults(text.substr(2, text.length()));
+                    } else {
+                        modelMonitor.updateCar(text);
+                    }
+                }
             }
+        } catch (std::exception &e) {
+            printf("ModelUpdater::run() exception catched: %s\n", e.what());
+            running = false;
+            drawer->stop();
         }
     }
+}
 
 }
 

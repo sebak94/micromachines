@@ -132,6 +132,8 @@ set(SOURCE_FILES_CLIENT
 	client/include/MatchWindow.h
 	common/src/TextTexture.cpp
 	common/include/TextTexture.h
+	client/src/Modifier.cpp
+	client/include/Modifier.h
 	)
 
 set(SOURCE_FILES_EDITOR

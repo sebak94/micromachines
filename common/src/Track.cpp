@@ -408,7 +408,7 @@ int Track::posToIndex(int pos) {
 // Transforms data structure of whole track into a string
 std::string Track::serialize() {
     std::string msg;
-    msg = std::to_string(startCol) +
+    msg = "T," + std::to_string(startCol) +
           "," +
           std::to_string(startRow) +
           "," +

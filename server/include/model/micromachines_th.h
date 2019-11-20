@@ -17,8 +17,9 @@ class MicroMachinesTh : public Thread {
     std::mutex m;
     std::vector<ClientTh*> players;
     std::map<ColorType, Car*> cars;
-    int laps = 10;
+    int laps = 2;
     DestructionListener destruction_listener;
+    std::vector<std::string> winners;
     bool running = true;
     std::map<ColorType, Car*>::iterator itCar;
 
@@ -46,11 +47,12 @@ class MicroMachinesTh : public Thread {
     int getStartID(int order);
     TrackList& getTracks();
     bool somePlayersInMainMenu();
+    void updateWinners();
+    void sendWinners();
+    bool allPlayersGameEnded();
     void run() override;
     void stop() override;
-
     std::string trackSerialized();
-
     Car *getNextCar();
 };
 

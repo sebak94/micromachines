@@ -5,6 +5,7 @@
 #include <map>
 #include "Car.h"
 #include "../../common/include/TrackPartData.h"
+#include "Modifier.h"
 
 typedef enum {
     mainMenu,
@@ -26,6 +27,8 @@ private:
     GameState gameState = mainMenu;
     std::vector<std::string> trackNames;
     std::vector<std::string> matchNames;
+    std::vector<std::string> matchResults;
+    std::vector<Modifier> modifiers;
 
 public:
     Model();
@@ -42,11 +45,12 @@ public:
     GameState getGameState();
     void setTrackNames(std::string tracks);
     std::vector<std::string> getTrackNames();
-
+    std::vector<std::string>& getMatchResults();
+    void updateMatchResults(std::string results);
+    std::vector<Modifier>& getModifiers();
+    void createModifier(std::string str);
     void setGameState(GameState state);
-
     void setMatchNames(std::string matches);
-
     std::vector<std::string> getMatchNames();
 
 private:

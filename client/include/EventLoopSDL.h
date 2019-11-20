@@ -12,6 +12,7 @@ private:
     ThreadSafeQueue &queue;
     Drawer* drawer;
     ModelMonitor &modelMonitor;
+    bool luaPlaying = false;
 
 public:
     EventLoopSDL(ThreadSafeQueue &queue, Drawer *drawerThread, ModelMonitor &modelMonitor);
@@ -22,6 +23,7 @@ public:
 private:
     void enqueueKeyDownEvent(SDL_KeyboardEvent& keyEvent);
     void enqueueKeyUpEvent(SDL_KeyboardEvent& keyEvent);
+    void quitAndResize(SDL_Event &event);
 };
 
 #endif

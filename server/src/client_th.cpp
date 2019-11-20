@@ -7,6 +7,8 @@
 #include "vector"
 #include "string"
 
+#define SPEEDREDUCTIONFACTOR 0.9
+
 ClientTh::ClientTh(Socket *peer, TrackList &tracks)
         : keep_talking(true),
           is_running(true),
@@ -28,8 +30,11 @@ void ClientTh::sendCarData() {
 
 void ClientTh::sendAllCarsToPlayer(std::vector<ClientTh *> players) {
     for (size_t i = 0; i < players.size(); i++) {
-        std::string s = players[i]->car->serialize();
-        send(s);
+        //No mando los autos que ya terminaron, mando solo los otros autos
+        //if (players[i]->getState() != waitingEnd) {
+            std::string s = players[i]->car->serialize();
+            send(s);
+        //}
     }
 }
 
@@ -102,6 +107,7 @@ void ClientTh::sendGameState(GameState & previousSt, GameState & st) {
         previousSt = st;
         switch (st) {
             case mainMenu:
+                send(std::string(MSG_ST_MAINMENU));
                 break;
             case creating:
                 send(std::string(MSG_ST_CREATING));
@@ -130,10 +136,11 @@ void ClientTh::sendGameState(GameState & previousSt, GameState & st) {
 
 void ClientTh::run() {
     std::string strState = MSG_ST_MAINMENU;
-    GameState lastState = mainMenu;
+    GameState lastState = gameEnded;
     while (is_running){
         switch (state) {
             case mainMenu:
+                //EUNI.updateGameState(lastState, state);
                 sendGameState(lastState, state);
                 break;
             case creating:
@@ -150,7 +157,7 @@ void ClientTh::run() {
                 break;
             case playing:
                 sendGameState(lastState, state);
-                while (keep_talking) {
+                while (keep_talking && state == playing) {
                     char action;
                     receive(&action);
                     Lock l(m);
@@ -202,7 +209,9 @@ void ClientTh::setState(GameState s) {
 }
 
 void ClientTh::updateCar() {
-    car->update();
+    if (state == playing) {
+        car->update();
+    }
 }
 
 void ClientTh::newCarPosition(Point point) {
@@ -271,6 +280,28 @@ GameState ClientTh::getState() {
 int ClientTh::getGameNumber() {
     Lock l(m);
     return gameNumber;
+}
+
+int ClientTh::getLaps() {
+    return car->getLaps();
+}
+
+std::string ClientTh::carColor() {
+    return car->getColor();
+}
+
+void ClientTh::setWinners(std::vector<std::string> w) {
+    winners = w;
+}
+
+void ClientTh::sendWinners() {
+    std::string winStr = "W,";
+    for (int i = 0; i < winners.size(); i++) {
+        winStr += winners[i] + ',';
+    }
+    winStr.erase(winStr.length()-1); //borro la ultima coma
+    winStr.append("\n");
+    send(winStr);
 }
 
 ClientTh::~ClientTh() {

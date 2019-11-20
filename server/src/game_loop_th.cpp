@@ -73,13 +73,21 @@ void GameLoopTh::play() {
             micromachines.monitorTrack();
             updateWorld(next_game_tick, SKIP_TICKS, loops, 1.0 / 60, 5, 5);
             micromachines.sendNewStateToPlayers();
+            micromachines.updateWinners();
+            micromachines.sendWinners();
             timeWait(MICROSECS_WAIT, begin);
 
             // this->executeLibraries();
             countdownTime -= MICROSECS_WAIT;
+
+            if (micromachines.allPlayersGameEnded()) {
+                usleep(5000000); //Duermo para visualizar el podio 5 segundos
+                break;
+            }
         }
-        micromachines.setAllPlayersGameStates(gameEnded);
         micromachines.setAllPlayersGameStates(mainMenu);
+        usleep(500000); //Duermo para dar tiempo a que le llegue al cliente la info de mainMenu
+        //micromachines.cleanPlayers(); //Limpio los jugadores, deberia iniciar una nueva partida
     }
 }
 
