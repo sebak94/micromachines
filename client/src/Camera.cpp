@@ -52,8 +52,24 @@ void Camera::showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> &track
     }
 }
 
-void
-Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car *> &cars,
+void Camera::showModifiers(int xMyCar, int yMyCar, std::vector<Modifier> &modifiers) {
+    //asumo que del lado del server cada modificador mide 25 x 25 (como los bloques miden 100 x 100)
+    double width = blockWidth / 4.0;
+    double height = blockHeight / 4.0;
+    double xBegin = - xMyCar * (blockWidth / 100.0) + (window.getWidth() / 2.0);
+    double yBegin = - yMyCar * (blockHeight / 100.0) - (window.getHeight() / 2.0);
+
+    for (int i = 0; i < modifiers.size(); i++) {
+        double x = modifiers[i].getX() * (blockWidth / 100);
+        double y = modifiers[i].getY() * (blockHeight / 100) + height;
+        int realX = x + xBegin;
+        int realY = - y - yBegin;
+        SDL_Rect area = {realX, realY, (int)width, (int)height};
+        pictures[modifiers[i].getType()]->render(area);
+    }
+}
+
+void Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car *> &cars,
                  const std::string& string) {
     double widthCar = blockWidth / 6.0;
     double heightCar = blockHeight / 3.0;
@@ -121,7 +137,7 @@ void Camera::showLaps(int lap, int totalLaps) {
     lapNumber.render(r, w - 45, h - 50);
 }
 
-void Camera::drawPodium(std::vector<std::string> matchResults) {
+void Camera::drawPodium(std::vector<std::string> &matchResults) {
     int x = window.getWidth()/9;
     int y = window.getHeight()/12;
     int w = window.getWidth()/1.8;

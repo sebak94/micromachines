@@ -123,6 +123,7 @@ void Drawer::drawWorld() {
     int x = modelMonitor.getCars()[modelMonitor.getMyColor()]->getX();
     int y = modelMonitor.getCars()[modelMonitor.getMyColor()]->getY();
     camera.showTrack(x, y, modelMonitor.getTrack());
+    camera.showModifiers(x, y, modelMonitor.getModifiers());
     camera.showCars(x, y, modelMonitor.getCars(), modelMonitor.getMyColor());
 }
 
