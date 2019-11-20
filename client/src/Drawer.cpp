@@ -156,14 +156,16 @@ void Drawer::recorderTh() {
         } else if (lastRecordState && !video.isRecording()) {
             std::lock_guard<std::mutex> lock(recordMutex);
             lastRecordState = false;
-            std::cout << "Rec file written." << std::endl;
             video.close();
+        } else {
+            sleep (2);
         }
         auto end = std::chrono::system_clock::now();
         int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(end - frameStart).count();
         if ( 1000000 * 1 / VIDEOFPS > microsecsPassed )
             usleep(1000000 * 1 / VIDEOFPS - microsecsPassed);
     }
+    video.close();
 }
 
 void Drawer::showAnimation(SdlWindow &window) {

@@ -35,7 +35,7 @@ void GameLoopTh::waitForPlayers() {
             updateWorld(next_game_tick, 0, loops, 1.0, 1.0 / 60, 5);
             //micromachines.sendNewStateToPlayers();
             //Mientras espero jugadores no quiero recibir el estado
-            timeWait(MICROSECS_WAIT*2, begin);
+            timeWait(MICROSECS_WAIT, begin);
         } else {
             break;
         }

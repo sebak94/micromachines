@@ -7,9 +7,11 @@
 #include "../../include/model/cars/blue_car.h"
 #include "../../include/model/cars/yellow_car.h"
 #include <Box2D/Box2D.h>
+#include <unistd.h>
 
 #define DEGTORAD 0.0174532925199432957f
 #define SPEEDREDUCTIONFACTOR 0.9
+#define REFRESHTIME 5000000  // us
 
 MicroMachinesTh::MicroMachinesTh() {
     tracks.readTracks();
@@ -43,7 +45,7 @@ MicroMachinesTh::MicroMachinesTh() {
 
 void MicroMachinesTh::run() {
     while(running) {
-
+        usleep(REFRESHTIME);
     }
 }
 
@@ -122,7 +124,7 @@ void MicroMachinesTh::updatePlayersState() {
     }
 }
 
-// Checks if cars jump track parts
+// Checks if cars jump track parts and updates laps
 void MicroMachinesTh::monitorTrack() {
     int x, y, lastID, currentID;
     Lock l(m);
@@ -131,14 +133,12 @@ void MicroMachinesTh::monitorTrack() {
         y = players[i]->getCarPosY();
         lastID = players[i]->getCarLastTrackID();
         currentID = track.getTrackPart(x, y).getID();
-        //std::cout << "Auto " << i << "("<<x<<","<<y<<"). " << ". LastID:" << lastID << ". Current ID: " << track.getCurrentID(x, y) << "   " << std::endl;
-        if (i==0)
-            std::cout << x << "," << y << std::endl;
         if (currentID == lastID || !track.isOnTrack(x,y)) {
             // sigue en el mismo o está fuera de pista
         } else if (track.jumpedTrackPart(x, y, lastID)) {
             // está en pista y salteó pedazos
-            players[i]->newCarPosition(track.getTrackPartPoint(lastID) + Point(BLOCKSIZE/2,BLOCKSIZE*(1.1)));
+            players[i]->newCarPosition(track.getTrackPartPoint(lastID) +
+                        Point(BLOCKSIZE/2,BLOCKSIZE*(1.1)));
             players[i]->updateLastTrackID(lastID);
         } else {
             // avanzó al siguiente
@@ -148,10 +148,6 @@ void MicroMachinesTh::monitorTrack() {
             players[i]->updateLastTrackID(currentID);
         }
     }
-    /*for (size_t i = 0; i < players.size(); i++) {
-        printf("\r                            \033[F");
-    }*/
-
 }
 
 void MicroMachinesTh::cleanPlayers() {

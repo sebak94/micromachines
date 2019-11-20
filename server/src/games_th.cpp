@@ -5,14 +5,17 @@
 #include "../include/games_th.h"
 #include "../include/model/micromachines_th.h"
 #include "../include/game_loop_th.h"
+#include <unistd.h>
 
 #define PLAYERTOASSIGN -1
 #define PLAYERBEINGASSIGNED -2
+#define REFRESHPLAYERSTIME 500000  // us
 
 void GamesTh::run() {
     while (running) {
         mapNewClients();
         deleteMapperThreads();
+        usleep(REFRESHPLAYERSTIME);
     }
 }
 
@@ -55,7 +58,10 @@ void GamesTh::stop() {
 
 // decides if creates or joins
 void GamesTh::processPlayer(ClientTh * player, bool & finished) {
-    while (player->getState() == mainMenu) {}
+    while (player->getState() == mainMenu) {
+        player->setPlayerMode(); //setea join o create
+        usleep(REFRESHPLAYERSTIME);
+    }
     if (player->getState() == creating) {
         createGame(player);
         finished = true;

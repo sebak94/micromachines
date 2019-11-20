@@ -19,7 +19,7 @@ class MicroMachinesTh : public Thread {
     std::map<ColorType, Car*> cars;
     int laps = 10;
     DestructionListener destruction_listener;
-    bool running;
+    bool running = true;
     std::map<ColorType, Car*>::iterator itCar;
 
     void removePlayerFromVector(ClientTh *player);

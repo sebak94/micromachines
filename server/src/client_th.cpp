@@ -135,15 +135,12 @@ void ClientTh::run() {
         switch (state) {
             case mainMenu:
                 sendGameState(lastState, state);
-                setPlayerMode(); //setea join o create
                 break;
             case creating:
                 sendGameState(lastState, state);
-
                 break;
             case joining:
                 sendGameState(lastState, state);
-
                 break;
             case waitingPlayers:
                 sendGameState(lastState, state);
@@ -153,7 +150,6 @@ void ClientTh::run() {
                 break;
             case playing:
                 sendGameState(lastState, state);
-                usleep(500000);
                 while (keep_talking) {
                     char action;
                     receive(&action);
@@ -168,6 +164,7 @@ void ClientTh::run() {
                 sendGameState(lastState, state);
                 break;
         }
+        usleep(500000);
     }
 }
 
