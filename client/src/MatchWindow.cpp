@@ -17,29 +17,33 @@ MatchWindow::MatchWindow(SdlWindow &sdlWindow) : window(sdlWindow),
     TTF_Init();
     createMatchButtons();
 
-    //Track vacío mientras carga
+    // Vacío mientras carga
     trackNames.clear();
+    matchNames.clear();
 
-    //Defino que el juego sea entre 2 y 5 jugadores
+    // Defino que el juego sea entre 2 y 5 jugadores
     players.push_back("2");
     players.push_back("3");
     players.push_back("4");
     players.push_back("5");
     itPlayers = players.begin();
-
-    //Hardcodeo los nombres de las partidas por ahora
-    matchNames.push_back("0");
-    matchNames.push_back("1");
-    itMatchNames = matchNames.begin();
 }
 
 MatchWindow::~MatchWindow() {}
 
-void MatchWindow::setTrackNames(std::vector<std::string> tracks) {
+void MatchWindow::setTrackNames(const std::vector<std::string>& tracks) {
     if (tracks != trackNames) {
         trackNames.clear();
         trackNames = tracks;
         itTrackNames = trackNames.begin();
+    }
+}
+
+void MatchWindow::setMatchNames(const std::vector<std::string>& matches) {
+    if (matches != matchNames) {
+        matchNames.clear();
+        matchNames = matches;
+        itMatchNames = matchNames.begin();
     }
 }
 
@@ -101,12 +105,10 @@ void MatchWindow::updateNonSelectingButtons(const SDL_Event *event) {
 std::string MatchWindow::serializeData() {
     std::string response{};
     if (state == creatingMatch) {
-        //response += "C,";
         response += textTrack.getText() + ",";
         response += textPlayers.getText();
         response += "\n";
     } else if (state == joiningMatch) {
-        //response += "J,";
         response += textMatch.getText() + ",";
         response += "0";
         response += "\n";
@@ -165,15 +167,21 @@ void MatchWindow::selectingScreen() {
 void MatchWindow::creationScreen() {
     showBackground();
     if (!trackNames.empty()) {
-        showSelectText("Choose track: ", *itTrackNames, window.getWidth() / 9, window.getHeight() / 2, arrowButton, textTrack);
-        showSelectText("Number of players: ", *itPlayers, window.getWidth() / 9, window.getHeight() / 1.5, arrowButton2, textPlayers);
+        showSelectText("Choose track: ", *itTrackNames, window.getWidth() / 9,
+                       window.getHeight() / 2, arrowButton, textTrack);
+        showSelectText("Number of players: ", *itPlayers, window.getWidth() / 9,
+                       window.getHeight() / 1.5, arrowButton2, textPlayers);
     }
     showPlayAndReturn();
 }
 
 void MatchWindow::joiningScreen() {
     showBackground();
-    showSelectText("Available matchs: ", *itMatchNames, window.getWidth() / 9, window.getHeight() / 2, arrowButton, textMatch);
+    if (!matchNames.empty()) {
+        showSelectText("Available matchs: ", *itMatchNames,
+                       window.getWidth() / 9, window.getHeight() / 2,
+                       arrowButton, textMatch);
+    }
     showPlayAndReturn();
 }
 

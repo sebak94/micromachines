@@ -100,7 +100,7 @@ void Drawer::draw() {
         matchWindow.setTrackNames(modelMonitor.getTrackNames());
         matchWindow.render();
     } else if (modelMonitor.getGameState() == joining) {
-        //matchWindow.setTrackNames(modelMonitor.getTrackNames());
+        matchWindow.setMatchNames(modelMonitor.getMatchNames());
         matchWindow.render();
     } else if (modelMonitor.getGameState() == startCountdown) {
         drawWorld();

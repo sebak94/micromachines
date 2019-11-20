@@ -92,6 +92,14 @@ void Model::setTrackNames(std::string tracks) {
     trackNames = TrackList::getTrackNames(tracks);
 }
 
+void Model::setMatchNames(std::string matches) {
+    matchNames = TrackList::getTrackNames(matches);
+}
+
 std::vector<std::string> Model::getTrackNames() {
     return trackNames;
+}
+
+std::vector<std::string> Model::getMatchNames() {
+    return matchNames;
 }

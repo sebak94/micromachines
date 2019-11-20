@@ -5,17 +5,6 @@ ModelUpdater::ModelUpdater(Socket &socket, ModelMonitor &modelMonitor, Drawer* d
         socket(socket), modelMonitor(modelMonitor), drawer(drawerThread) {
     std::string welcome =  receive(); // Recibe mensaje de bienvenida
     std::cout << welcome;
-    /*std::string carStr = receive(); // Recibo mi auto
-    std::cout << "Auto: " << carStr;
-    std::string trackNames = receive(); //Recibo todos los nombres de las pistas
-    std::cout << "Pistas: " << trackNames;
-    std::string lapsStr = receive(); // Recibe cantidad de vueltas
-    std::cout << lapsStr;*/
-
-    /*modelMonitor.setTrackNames(trackNames);
-    modelMonitor.setTotalLaps(lapsStr);
-    modelMonitor.setMyColor(carStr);
-    modelMonitor.updateCar(carStr);*/
 }
 
 ModelUpdater::~ModelUpdater() {
@@ -25,8 +14,6 @@ ModelUpdater::~ModelUpdater() {
 bool ModelUpdater::updateState(std::string &received) {
     std::cout << received << std::endl;
     if (received[0] == 'G') {
-        //received = receive();
-
         modelMonitor.setGameState(received);
         received = receive();
         return true;
@@ -37,21 +24,13 @@ bool ModelUpdater::updateState(std::string &received) {
 
 void ModelUpdater::run() {
     running = true;
-    /*modelMonitor.setTrackNames(trackNames);
-    modelMonitor.setTotalLaps(lapsStr);
-    modelMonitor.setMyColor(carStr);
-    modelMonitor.updateCar(carStr);*/
     while (running) {
         std::string received{};
         if (running && modelMonitor.getGameState() == mainMenu) {
-            received = receive(); //Recibo cambio de estado o la pista serializada
+            received = receive(); // cambio de estado o la pista serializada
             updateState(received);
-            //Track track = Track(received); //Creo la pista
-            //modelMonitor.setTrack(track.getTrackPartData());
         }
         if (running && modelMonitor.getGameState() == creating) {
-            //std::string received = receive(); //Recibo cambio de estado o la pista serializada
-            //updateState(received);
             modelMonitor.setTrackNames(received);
             Track track = Track(receive());
             modelMonitor.setTrack(track.getTrackPartData());
@@ -61,9 +40,8 @@ void ModelUpdater::run() {
             modelMonitor.setGameState(waitingPlayers);
         }
         if (running && modelMonitor.getGameState() == joining) {
-            //std::string received = receive(); //Recibo cambio de estado o la pista serializada
-            //updateState(received);
-            receive(); // modificar acorde para recibir partidas disponibles
+            modelMonitor.setMatchNames(received);
+            receive();
             Track track = Track(receive());
             modelMonitor.setTrack(track.getTrackPartData());
             received = receive();
@@ -74,7 +52,6 @@ void ModelUpdater::run() {
         while (running && modelMonitor.getGameState() == waitingPlayers) {
             std::string received = receive();
             updateState(received);
-            //modelMonitor.updateCar(received);
         }
         while (running && modelMonitor.getGameState() == startCountdown) {
             std::string received = receive();

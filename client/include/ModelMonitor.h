@@ -26,6 +26,10 @@ public:
     std::vector<std::string> getTrackNames();
 
     void setGameState(GameState state);
+
+    void setMatchNames(std::string matches);
+
+    std::vector<std::string> getMatchNames();
 };
 
 #endif

@@ -25,6 +25,7 @@ private:
     int totalLaps = 10;
     GameState gameState = mainMenu;
     std::vector<std::string> trackNames;
+    std::vector<std::string> matchNames;
 
 public:
     Model();
@@ -43,6 +44,10 @@ public:
     std::vector<std::string> getTrackNames();
 
     void setGameState(GameState state);
+
+    void setMatchNames(std::string matches);
+
+    std::vector<std::string> getMatchNames();
 
 private:
 

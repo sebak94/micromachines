@@ -40,7 +40,7 @@ public:
     ~MatchWindow();
     void updateMatchButtons(const SDL_Event *event);
     void render();
-    void setTrackNames(std::vector<std::string> tracks);
+    void setTrackNames(const std::vector<std::string>& tracks);
     StateWindow getState() const;
     std::string serializeData();
     bool isReady();
@@ -48,6 +48,8 @@ public:
     bool isModeSelected();
 
     std::string getSelection();
+
+    void setMatchNames(const std::vector<std::string>& matches);
 
 private:
     void createMatchButtons();

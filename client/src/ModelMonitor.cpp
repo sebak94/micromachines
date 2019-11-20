@@ -64,7 +64,17 @@ void ModelMonitor::setTrackNames(std::string tracks) {
     model.setTrackNames(tracks);
 }
 
+void ModelMonitor::setMatchNames(std::string matches) {
+    std::lock_guard<std::mutex> lock(m);
+    model.setMatchNames(matches);
+}
+
 std::vector<std::string> ModelMonitor::getTrackNames() {
     std::lock_guard<std::mutex> lock(m);
     return model.getTrackNames();
+}
+
+std::vector<std::string> ModelMonitor::getMatchNames() {
+    std::lock_guard<std::mutex> lock(m);
+    return model.getMatchNames();
 }
