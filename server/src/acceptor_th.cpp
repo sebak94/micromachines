@@ -5,11 +5,6 @@
 #include "../../common/include/lock.h"
 #include "iostream"
 #include "vector"
-#include "../include/model/cars/blue_car.h"
-#include "../include/model/cars/red_car.h"
-#include "../include/model/cars/yellow_car.h"
-#include "../include/model/cars/black_car.h"
-#include "../include/model/cars/white_car.h"
 
 AcceptorTh::AcceptorTh(const char *service, GamesTh &games):
         keep_accepting(true), games(games), clients(games) {
@@ -19,28 +14,6 @@ AcceptorTh::AcceptorTh(const char *service, GamesTh &games):
     } catch(const SocketError &e) {
         std::cout << e.what() << "\n";
     }
-
-    //Agrego todos los autos disponibles en un mapa de autos
-    /*cars[blue] = new BlueCar(games.world,
-                             games.getStartingPoint(0),
-                             games.getStartingCarRot(0),
-                             games.getStartID(0));
-    cars[white] = new WhiteCar(games.world,
-                               games.getStartingPoint(1),
-                               games.getStartingCarRot(1),
-                               games.getStartID(1));
-    cars[black] = new BlackCar(games.world,
-                               games.getStartingPoint(2),
-                               games.getStartingCarRot(2),
-                               games.getStartID(2));
-    cars[yellow] = new YellowCar(games.world,
-                                 games.getStartingPoint(3),
-                                 games.getStartingCarRot(3),
-                                 games.getStartID(3));
-    cars[red] = new RedCar(games.world,
-                           games.getStartingPoint(4),
-                           games.getStartingCarRot(4),
-                           games.getStartID(4));*/
 }
 
 void AcceptorTh::deleteResources() {
@@ -50,10 +23,8 @@ void AcceptorTh::deleteResources() {
 }
 
 void AcceptorTh::run() {
-    //auto it = cars.begin();
     looking_th->start();
     TrackList trackList;
-    int gameNumber;
     while (keep_accepting) {
         try {
             Socket *peer = new Socket();
@@ -62,22 +33,8 @@ void AcceptorTh::run() {
 
             ClientTh *client_th = new ClientTh(peer, trackList);
             clients.addClient(client_th);
-            games.setPlayerOnMainMenu(client_th);
-
-            //si creo partida
-            /*gameNumber = games.createGame(client_th);
-            client_th->sendAllTrackNames(games.allTrackNames(gameNumber));
-            client_th->sendLapsData(games.lapsSerialized(gameNumber));*/
+            games.setPlayerToAssign(client_th);
             client_th->start();
-
-            // si me uno
-            /*games.addPlayer(client_th,0);
-            client_th->sendTrackData(games.trackSerialized(0));
-            client_th->sendLapsData(games.lapsSerialized(0));
-            client_th->start();*/
-
-
-
         } catch(const SocketError &e) {
             std::cout << e.what() << "\n";
             keep_accepting = false;
@@ -97,9 +54,6 @@ void AcceptorTh::stop() {
 
 AcceptorTh::~AcceptorTh() {
     delete looking_th;
-    /*for (const auto pair : cars) {
-        delete pair.second;
-    }*/
 }
 
 LookForDeadClientsTh::LookForDeadClientsTh(ClientList &clients,

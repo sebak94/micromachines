@@ -16,6 +16,8 @@ private:
     std::map<int, MicroMachinesTh*> games;
     std::map<int, GameLoopTh*> gameLoops;
     std::map<ClientTh*, int> players;  // saves game where is playing
+    std::map<int, std::thread*> mapperThreads;
+    std::map<int, bool> mapperThreadList;  // true if thread finished
     bool running = true;
     int gamesNumber = 0;
 
@@ -25,15 +27,14 @@ public:
     void addPlayer(ClientTh *player);
     void removePlayer(ClientTh *player, int gameIndex);
     void cleanPlayers(int gameIndex);
-    int createGame(ClientTh *player);
-    int getGamesNumber();
-    std::string trackSerialized(int gameIndex);
-    std::string lapsSerialized(int gameIndex);
-    std::string allTrackNames(int gameIndex);
-    int getPlayerGameID(ClientTh* player);
-    void setPlayerOnMainMenu(ClientTh *player);
-
+    void createGame(ClientTh *player);
+    void setPlayerToAssign(ClientTh *player);
+    void processPlayer(ClientTh *player, bool &finished);
+    void deleteMapperThreads();
+    void mapNewClients();
     std::string serializeGames();
+    int getPlayerGameID(ClientTh* player);
+    int getGamesNumber();
 };
 
 

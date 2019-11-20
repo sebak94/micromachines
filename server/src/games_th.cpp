@@ -6,18 +6,45 @@
 #include "../include/model/micromachines_th.h"
 #include "../include/game_loop_th.h"
 
+#define PLAYERTOASSIGN -1
+#define PLAYERBEINGASSIGNED -2
+
 void GamesTh::run() {
     while (running) {
-        for (auto player : players) {
+        mapNewClients();
+        deleteMapperThreads();
+    }
+}
 
-            if (player.second == -1) {
-                if (player.first->getState() == mainMenu) {
-                } else if (player.first->getState() == creating) {
-                    createGame(player.first);
-                } else if (player.first->getState() == joining) {
-                    addPlayer(player.first);
-                }
-            }
+// process new player create/join in new thread
+void GamesTh::mapNewClients() {
+    int i = 0;
+    for (auto & newPlayer : players) {
+        if (newPlayer.second == PLAYERTOASSIGN) {
+            newPlayer.second = PLAYERBEINGASSIGNED;
+            std::thread * th;
+            mapperThreadList.emplace(i, false);
+            th = new std::thread(&GamesTh::processPlayer,
+                                 this,
+                                 newPlayer.first,
+                                 std::ref(mapperThreadList.at(i)));
+            mapperThreads.emplace(i, th);
+            i++;
+        }
+    }
+}
+
+// joins mapper thread if finished
+void GamesTh::deleteMapperThreads() {
+    auto it2 = mapperThreads.begin();
+    for (auto it1 = mapperThreadList.begin(); it1 != mapperThreadList.end();) {
+        if (it1->second){
+            (it2->second)->join();
+            free(it2->second);
+            mapperThreads.erase(it2++);
+            mapperThreadList.erase(it1++);
+        } else {
+            ++it1, ++it2;
         }
     }
 }
@@ -26,13 +53,24 @@ void GamesTh::stop() {
     running = false;
 }
 
-int GamesTh::createGame(ClientTh *player) {
+// decides if creates or joins
+void GamesTh::processPlayer(ClientTh * player, bool & finished) {
+    while (player->getState() == mainMenu) {}
+    if (player->getState() == creating) {
+        createGame(player);
+        finished = true;
+    } else if (player->getState() == joining) {
+        addPlayer(player);
+        finished = true;
+    }
+}
+
+// Creates new game and adds player to it
+void GamesTh::createGame(ClientTh * player) {
     TrackList tracks;
     tracks.readTracks();
     auto * game = new MicroMachinesTh();
     auto * gameLoop = new GameLoopTh(*game);
-    games.emplace(gamesNumber, game);
-    gameLoops.emplace(gamesNumber, gameLoop);
     player->sendAllTrackNames(tracks.serialize());
     player->setMatch();
     player->setCar(game->getNextCar());
@@ -41,11 +79,14 @@ int GamesTh::createGame(ClientTh *player) {
     players[player] = gamesNumber;
     player->setState(waitingPlayers);
 
+    games.emplace(gamesNumber, game);
+    gameLoops.emplace(gamesNumber, gameLoop);
     games[gamesNumber]->start();
     gameLoops[gamesNumber]->start();
-    return gamesNumber++;
+    gamesNumber++;
 }
 
+// Adds player to existent match. Receives match sent by user in setMatch()
 void GamesTh::addPlayer(ClientTh *player) {
     int gameIndex = -1;
     player->setAvailableGames(serializeGames());
@@ -60,6 +101,7 @@ void GamesTh::addPlayer(ClientTh *player) {
     player->setState(waitingPlayers);
 }
 
+// Sends available games
 std::string GamesTh::serializeGames() {
     std::string gamesStr{};
     for (auto game : games)
@@ -68,34 +110,26 @@ std::string GamesTh::serializeGames() {
     return gamesStr;
 }
 
-void GamesTh::setPlayerOnMainMenu(ClientTh * player) {
-    players.emplace(player, -1);
+// Adds player sent by acceptorThread to a list for processing it.
+void GamesTh::setPlayerToAssign(ClientTh * player) {
+    players.emplace(player, PLAYERTOASSIGN);
 }
 
 void GamesTh::removePlayer(ClientTh *player, int gameIndex) {
     games[gameIndex]->removePlayer(player);
 }
 
+// Tells where a player is playing
 int GamesTh::getPlayerGameID(ClientTh* player) {
     return players[player];
 }
 
+// Removes all players from game
 void GamesTh::cleanPlayers(int gameIndex) {
     games[gameIndex]->cleanPlayers();
 }
 
+// Tells how many games started
 int GamesTh::getGamesNumber() {
     return gamesNumber;
-}
-
-std::string GamesTh::trackSerialized(int gameIndex) {
-    return games[gameIndex]->trackSerialized();
-}
-
-std::string GamesTh::lapsSerialized(int gameIndex) {
-    return games[gameIndex]->lapsSerialized();
-}
-
-std::string GamesTh::allTrackNames(int gameIndex) {
-    return games[gameIndex]->allTrackNames();
 }

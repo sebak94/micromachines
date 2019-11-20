@@ -19,7 +19,6 @@ MatchWindow::MatchWindow(SdlWindow &sdlWindow) : window(sdlWindow),
 
     //Track vacío mientras carga
     trackNames.clear();
-    //trackNames.push_back(" ");
 
     //Defino que el juego sea entre 2 y 5 jugadores
     players.push_back("2");
@@ -37,9 +36,11 @@ MatchWindow::MatchWindow(SdlWindow &sdlWindow) : window(sdlWindow),
 MatchWindow::~MatchWindow() {}
 
 void MatchWindow::setTrackNames(std::vector<std::string> tracks) {
-    trackNames.clear();
-    trackNames = tracks;
-    itTrackNames = trackNames.begin();
+    if (tracks != trackNames) {
+        trackNames.clear();
+        trackNames = tracks;
+        itTrackNames = trackNames.begin();
+    }
 }
 
 void MatchWindow::createMatchButtons() {
