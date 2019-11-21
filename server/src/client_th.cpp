@@ -1,5 +1,4 @@
 #include "../include/client_th.h"
-#include "../include/model/cars/blue_car.h"
 #include "../../common/include/socket_error.h"
 #include "../../common/include/lock.h"
 #include <unistd.h>

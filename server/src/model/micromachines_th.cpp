@@ -1,11 +1,7 @@
 #include "../../include/model/micromachines_th.h"
 #include "../../../common/include/lock.h"
 #include "../../../common/include/socket_error.h"
-#include "../../include/model/cars/red_car.h"
-#include "../../include/model/cars/black_car.h"
-#include "../../include/model/cars/white_car.h"
-#include "../../include/model/cars/blue_car.h"
-#include "../../include/model/cars/yellow_car.h"
+#include "../../include/model/cars/car.h"
 #include <Box2D/Box2D.h>
 #include <unistd.h>
 
@@ -20,26 +16,26 @@ MicroMachinesTh::MicroMachinesTh() {
     world->SetDestructionListener(&destruction_listener);
 
     //Agrego todos los autos disponibles en un mapa de autos
-    cars[blue] = new BlueCar(world,
-                             getStartingPoint(0),
-                             getStartingCarRot(0),
-                             getStartID(0));
-    cars[white] = new WhiteCar(world,
-                               getStartingPoint(1),
-                               getStartingCarRot(1),
-                               getStartID(1));
-    cars[black] = new BlackCar(world,
-                               getStartingPoint(2),
-                               getStartingCarRot(2),
-                               getStartID(2));
-    cars[yellow] = new YellowCar(world,
-                                 getStartingPoint(3),
-                                 getStartingCarRot(3),
-                                 getStartID(3));
-    cars[red] = new RedCar(world,
-                           getStartingPoint(4),
-                           getStartingCarRot(4),
-                           getStartID(4));
+    cars[blue] = Car::createBlueCar(world,
+                    getStartingPoint(0),
+                    getStartingCarRot(0),
+                    getStartID(0));
+    cars[white] = Car::createWhiteCar(world,
+                    getStartingPoint(1),
+                    getStartingCarRot(1),
+                    getStartID(1));
+    cars[black] = Car::createBlackCar(world,
+                    getStartingPoint(2),
+                    getStartingCarRot(2),
+                    getStartID(2));
+    cars[yellow] = Car::createYellowCar(world,
+                    getStartingPoint(3),
+                    getStartingCarRot(3),
+                    getStartID(3));
+    cars[red] = Car::createRedCar(world,
+                    getStartingPoint(4),
+                    getStartingCarRot(4),
+                    getStartID(4));
     itCar = cars.begin();
 }
 

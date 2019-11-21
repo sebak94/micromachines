@@ -56,9 +56,9 @@ AcceptorTh::~AcceptorTh() {
     delete looking_th;
 }
 
-LookForDeadClientsTh::LookForDeadClientsTh(ClientList &clients,
-                                          GamesTh &games): keep_looking(true), clients(clients),
-                                                                            games(games) {}
+LookForDeadClientsTh::LookForDeadClientsTh(ClientList &clients, GamesTh &games)
+                                        : keep_looking(true), clients(clients),
+                                        games(games) {}
 
 void LookForDeadClientsTh::run() {
     while (keep_looking) {
