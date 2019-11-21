@@ -13,9 +13,9 @@
 
 #define WINDOW_NAME "Track Editor"
 
-#define ASPECTRATIO 4/3  // width:height ratio
+#define ASPECTRATIO (4/3)  // width:height ratio
 #define WINDOW_H 720  // height
-#define WINDOW_W WINDOW_H*ASPECTRATIO  // width
+#define WINDOW_W (WINDOW_H*ASPECTRATIO)  // width
 
 class Window {
 public:

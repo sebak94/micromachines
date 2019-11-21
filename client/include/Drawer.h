@@ -1,10 +1,10 @@
 #ifndef __DRAWER_H__
 #define __DRAWER_H__
 
-#define ASPECTRATIO 3/2
+#define ASPECTRATIO (3/2)
 #define BASERESOLUTIONMULTIPLIER 38  // for recording
-#define HEIGHT 16*BASERESOLUTIONMULTIPLIER
-#define WIDTH HEIGHT*ASPECTRATIO
+#define HEIGHT (16*BASERESOLUTIONMULTIPLIER)
+#define WIDTH (HEIGHT*ASPECTRATIO)
 
 #include <map>
 #include "../../common/include/thread.h"

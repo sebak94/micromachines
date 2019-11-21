@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 #define TICKS_PER_SECOND 60
-#define SKIP_TICKS 1000 / TICKS_PER_SECOND
+#define SKIP_TICKS (1000/TICKS_PER_SECOND)
 #define MAX_FRAMESKIP 10
 #define MICROSECS_WAIT 16000 //seria que en un segundo se dibujen aprox 60 veces
 
