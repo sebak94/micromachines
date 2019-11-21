@@ -12,7 +12,7 @@ ModelUpdater::~ModelUpdater() {
 }
 
 bool ModelUpdater::updateState(std::string &received) {
-    std::cout << received << std::endl;
+    //std::cout << received << std::endl;
     if (received[0] == 'G') {
         modelMonitor.setGameState(received);
         received = receive();
@@ -26,6 +26,7 @@ void ModelUpdater::run() {
     running = true;
     while (running) {
         /*try {*/
+        //printf("state: %d\n", modelMonitor.getGameState());
             std::string text = receive(); //Recibo cambio de estado u otra cosa
             //printf("text1: %s\n", text.c_str());
             if (text[0] == 'G') {
@@ -93,6 +94,6 @@ std::string ModelUpdater::receive() {
         this->socket.Receive(&c, 1);
     }
     std::string str_resp(response.begin(), response.end());
-    std::cout << str_resp << std::endl;
+    //std::cout << str_resp << std::endl;
     return str_resp + "\n";
 }
