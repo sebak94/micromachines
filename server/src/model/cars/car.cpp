@@ -50,11 +50,6 @@ Car* Car::createYellowCar(b2World *world, const Point &startingPoint,
                             rot, world, startID));
 }
 
-static Car createBlueCar();
-static Car createRedCar();
-static Car createWhiteCar();
-static Car createYellowCar();
-
 void Car::updateState(char action) {
     switch (action) {
         case 'L' : control_state |= TDC_LEFT;  break;
