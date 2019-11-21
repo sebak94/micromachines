@@ -41,6 +41,8 @@ public:
     std::vector <std::string> &getMatchResults();
 
     void updateMatchResults(std::string results);
+    std::vector<Modifier>& getModifiers();
+    void createModifier(std::string str);
 };
 
 #endif

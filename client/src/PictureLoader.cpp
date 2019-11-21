@@ -14,6 +14,11 @@
 #define NUMBER_THREE "3"
 #define NUMBER_FOUR "4"
 #define NUMBER_FIVE "5"
+#define MUD "mud"
+#define OIL "oil"
+#define STONES "stones"
+#define HEALTHBOX "healthBox"
+#define BOOST "boost"
 
 PictureLoader::PictureLoader(SdlWindow &window, std::map<std::string, SdlSurface*> &pictures,
         std::map<trackPartType, SdlSurface*> &trackPictures) :
@@ -48,6 +53,12 @@ PictureLoader::PictureLoader(SdlWindow &window, std::map<std::string, SdlSurface
     pictures[NUMBER_THREE] = new SdlSurface("../common/images/3.png", window);
     pictures[NUMBER_FOUR] = new SdlSurface("../common/images/4.png", window);
     pictures[NUMBER_FIVE] = new SdlSurface("../common/images/5.png", window);
+
+    pictures[MUD] = new SdlSurface("../common/images/mud.png", window);
+    pictures[OIL] = new SdlSurface("../common/images/oil.png", window);
+    pictures[STONES] = new SdlSurface("../common/images/stones.png", window);
+    pictures[HEALTHBOX] = new SdlSurface("../common/images/healthBox.png", window);
+    pictures[BOOST] = new SdlSurface("../common/images/boost.png", window);
 
 }
 
