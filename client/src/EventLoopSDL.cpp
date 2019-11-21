@@ -72,11 +72,6 @@ void EventLoopSDL::run() {
                 quitAndResize(event);
                 drawer->getMatchWindow().updateMatchButtons(&event);
                 if (drawer->getMatchWindow().isReady()) {
-                    if (drawer->getMatchWindow().isLuaSelected()) {
-                        printf("AI Playing\n");
-                        luaPlaying = true;
-                        //acá lanzar el nuevo hilo de los eventos de lua (pero dejar este hilo corriendo)
-                    }
                     this->queue.push(drawer->getMatchWindow().serializeData());
                 }
                 break;
@@ -91,6 +86,12 @@ void EventLoopSDL::run() {
                 break;
             case startCountdown:
                 quitAndResize(event);
+                if (!luaPlaying && drawer->getMatchWindow().isReady() && drawer->getMatchWindow().isLuaSelected()) {
+                    luaPlaying = true;
+                    printf("AI Playing\n");
+                    printf("Track size: %ld\n", modelMonitor.getTrack().size());
+                    //acá lanzar el nuevo hilo de los eventos de lua (pero dejar este hilo corriendo)
+                }
                 break;
             case playing:
                 quitAndResize(event);
