@@ -19,6 +19,7 @@
 
 class Window {
 public:
+    Window() = default;
     SDL_Window* gameWindow = nullptr;
     SDL_Surface* gameSurface = nullptr;
     SDL_Renderer* renderer = nullptr;

@@ -22,7 +22,7 @@ class GameLoopTh: public Thread {
     void executeLibraries();
 
     public:
-    GameLoopTh(MicroMachinesTh &micromachines);
+    explicit GameLoopTh(MicroMachinesTh &micromachines);
     virtual void run() override;
     virtual void stop() override;
     ~GameLoopTh();

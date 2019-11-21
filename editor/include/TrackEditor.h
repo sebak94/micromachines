@@ -67,6 +67,7 @@ protected:
     saveTickChrono start;
 
 public:
+    TrackEditor() = default;
     void run(Window &editor);
     virtual menuState inputTrackCharacteristics(Window &game);
     void updateGridEvents();

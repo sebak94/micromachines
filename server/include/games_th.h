@@ -22,6 +22,7 @@ private:
     int gamesNumber = 0;
 
 public:
+    GamesTh() = default;
     void run() override;
     void stop() override;
     void addPlayer(ClientTh *player);

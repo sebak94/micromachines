@@ -36,7 +36,7 @@ private:
     int height;
 
 public:
-    explicit Record(const std::string &filePath, const int &fps, int width, int height);
+    Record(const std::string &filePath, const int &fps, int width, int height);
     ~Record();
     void codecContextInit(AVCodec *codec);
     void setFrame();

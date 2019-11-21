@@ -19,7 +19,7 @@ class ClientList {
     GamesTh &games;
 
     public:
-    ClientList(GamesTh &games);
+    explicit ClientList(GamesTh &games);
     void addClient(ClientTh *client);
     void deleteDeadClients();
     ~ClientList();

@@ -10,7 +10,7 @@ private:
     Model &model;
 
 public:
-    ModelMonitor(Model& model);
+    explicit ModelMonitor(Model& model);
     ~ModelMonitor();
     void setTrack(std::vector<TrackPartData> track);
     std::vector<TrackPartData>& getTrack();

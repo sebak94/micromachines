@@ -1,7 +1,7 @@
 #include "../../include/sdl/SdlMusic.h"
 #include "../../include/sdl/SdlException.h"
 
-SdlMusic::SdlMusic(const std::string filename) {
+SdlMusic::SdlMusic(const std::string &filename) {
     int errCode = SDL_Init(SDL_INIT_AUDIO);
     if (errCode) {
         throw SdlException("Error en la inicialización del audio", SDL_GetError());

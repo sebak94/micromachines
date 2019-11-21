@@ -39,7 +39,7 @@ private:
     MatchWindow matchWindow;
 
 public:
-    Drawer(ModelMonitor &modelMonitor);
+    explicit Drawer(ModelMonitor &modelMonitor);
     ~Drawer();
     virtual void run() override;
     virtual void stop() override;
