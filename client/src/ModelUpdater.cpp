@@ -30,7 +30,7 @@ void ModelUpdater::run() {
             //printf("text1: %s\n", text.c_str());
             if (text[0] == 'G') {
                 //Si recibi cambio de estado lo actualizo
-                std::string text = receive();
+                //std::string text = receive();
                 printf("text: %s\n", text.c_str());
                 modelMonitor.setGameState(text);
             } else {
