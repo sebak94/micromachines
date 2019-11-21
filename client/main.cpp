@@ -1,5 +1,5 @@
 #include <iostream>
-#include "include/server.h"
+#include "include/ThreadsManager.h"
 
 #define SUCCESS 0
 
@@ -8,7 +8,7 @@ int main(int argc, char const *argv[]) {
         std::cout << "./client <hostname> <service>";
         return SUCCESS;
     }
-    Server server(argv[1], argv[2]);
-    server.runThreads();
+    ThreadsManager th_manager(argv[1], argv[2]);
+    th_manager.runThreads();
     return SUCCESS;
 }

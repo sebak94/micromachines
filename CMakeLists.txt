@@ -63,8 +63,8 @@ set(SOURCE_FILES_SERVER
 	server/src/games_th.cpp server/include/games_th.h)
 
 set(SOURCE_FILES_CLIENT
-    client/include/server.h
-    client/src/server.cpp
+    client/include/ThreadsManager.h
+    client/src/ThreadsManager.cpp
 	client/include/sdl/SdlAnimation.h
 	client/src/sdl/SdlAnimation.cpp
 	client/include/sdl/SdlException.h

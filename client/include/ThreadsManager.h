@@ -1,5 +1,5 @@
-#ifndef __SERVER_H__
-#define __SERVER_H__
+#ifndef __THREADS_MANAGER_H__
+#define __THREADS_MANAGER_H__
 
 #include "../../common/include/socket.h"
 #include "string"
@@ -8,15 +8,15 @@
 #include "Dispatcher.h"
 #include "BlockingQueue.h"
 
-class Server {
+class ThreadsManager {
     private:
     Socket skt;
     BlockingQueue queue;
     std::vector<Thread*> threads;
 
     public:
-    Server(const char *hostname, const char *service);
-    ~Server();
+    ThreadsManager(const char *hostname, const char *service);
+    ~ThreadsManager();
     void runThreads();
 };
 
