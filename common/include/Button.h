@@ -18,6 +18,7 @@ private:
 
 public:
     Button();
+    //~Button();
     Button(SDL_Renderer *renderer, SDL_Rect &area, const std::string &path);
     void draw(SDL_Renderer *renderer);
     void updateEvent(const SDL_Event *event);
@@ -28,6 +29,8 @@ public:
 
     void updatePos(int x, int y);
     void updateSize(int w, int h);
+
+    void clean();
 };
 
 

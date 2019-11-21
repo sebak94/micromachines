@@ -60,6 +60,7 @@ void TextTexture::render(SDL_Renderer *renderer,
         textBoxDimensions.h = rect->h;
     }
     SDL_RenderCopyEx(renderer, textTexture, rect, &textBoxDimensions, 0, center, flip);
+    clearText();
 }
 
 /* Gets texture width in pixels */

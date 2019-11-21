@@ -7,7 +7,7 @@
 #include <cstdint>
 
 #define SECSTOSTART 5  // secs
-#define MAXRACETIME 60  // secs
+#define MAXRACETIME 600  // secs
 #define SECTOMICROSEC 1000000
 
 class GameLoopTh: public Thread {

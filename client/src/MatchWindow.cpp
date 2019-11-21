@@ -65,6 +65,17 @@ void MatchWindow::createMatchButtons() {
     returnButton = Button(window.getRenderer(), area, BUTTONRETURNPATH);
 }
 
+void MatchWindow::resetMatchButtons() {
+    //Los creo con areas vacias y despues cuando los dibujo los actualizo acorde al tamaño de la ventana
+    createMatchButton.clean();
+    joinMatchButton.clean();
+    arrowButton.clean();
+    arrowButton2.clean();
+    arrowButton3.clean();
+    playButton.clean();
+    returnButton.clean();
+}
+
 void MatchWindow::updateSelectingButtons(const SDL_Event *event) {
     createMatchButton.updateEvent(event);
     joinMatchButton.updateEvent(event);
@@ -244,6 +255,7 @@ std::string MatchWindow::getSelection() {
 void MatchWindow::reload() {
     state = selectingMode;
     ready = false;
+    resetMatchButtons();
     createMatchButtons();
     //tambien habria que recargar las partidas
 }

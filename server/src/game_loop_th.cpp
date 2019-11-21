@@ -81,8 +81,8 @@ void GameLoopTh::play() {
             countdownTime -= MICROSECS_WAIT;
 
             if (micromachines.allPlayersWaitingEnd()) {
-                micromachines.setAllPlayersGameStates(gameEnded);
                 usleep(5000000); //Duermo para visualizar el podio 5 segundos
+                micromachines.setAllPlayersGameStates(gameEnded);
                 break;
             }
         }

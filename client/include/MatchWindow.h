@@ -75,6 +75,7 @@ private:
 
     void showPlayAndReturn();
 
+    void resetMatchButtons();
 };
 
 #endif
