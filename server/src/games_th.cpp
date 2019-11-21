@@ -15,6 +15,7 @@ void GamesTh::run() {
     while (running) {
         mapNewClients();
         deleteMapperThreads();
+        stopGameIfAllEnded();
         gameEndedPlayersToMainMenu();
         joinEndedGames();
         usleep(REFRESHPLAYERSTIME);
@@ -140,6 +141,17 @@ void GamesTh::cleanPlayers(int gameIndex) {
 // Tells how many games started
 int GamesTh::getGamesNumber() {
     return gamesNumber;
+}
+
+// If all players are in WaitingEnd state stops game
+void GamesTh::stopGameIfAllEnded() {
+    for (auto & game : games) {
+        if (game.second->allPlayersWaitingEnd()) {
+            usleep(PODIUMVIEWTIME); // Duermo para visualizar el podio
+            game.second->setAllPlayersGameStates(gameEnded);
+            game.second->stop();
+        }
+    }
 }
 
 // Checks if any player ended and resets it to main menu.

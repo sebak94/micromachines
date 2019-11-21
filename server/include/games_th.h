@@ -40,6 +40,8 @@ public:
     void gameEndedPlayersToMainMenu();
 
     void joinEndedGames();
+
+    void stopGameIfAllEnded();
 };
 
 

@@ -62,6 +62,7 @@ void GameLoopTh::countdownWait() {
 }
 
 void GameLoopTh::play() {
+    bool ending = false;
     if (running) {
         uint64_t next_game_tick = GetTickCountMs();
         uint64_t loops;
@@ -79,15 +80,11 @@ void GameLoopTh::play() {
 
             // this->executeLibraries();
             countdownTime -= MICROSECS_WAIT;
-
-            if (micromachines.allPlayersWaitingEnd()) {
-                usleep(5000000); //Duermo para visualizar el podio 5 segundos
-                micromachines.setAllPlayersGameStates(gameEnded);
-                break;
+            if (micromachines.allPlayersWaitingEnd() && !ending) {
+                countdownTime = (PODIUMVIEWTIME)*0.9;  // cuando llegan todos en 4,5 segs corta animacion
+                ending = true;
             }
         }
-        usleep(500000); //Duermo para dar tiempo a que le llegue al cliente la info de mainMenu
-        //micromachines.cleanPlayers(); //Limpio los jugadores, deberia iniciar una nueva partida
     }
 }
 
@@ -128,7 +125,7 @@ void GameLoopTh::run() {
     waitForPlayers();
     countdownWait();
     play();
-    stop();
+    //stop();
 }
 
 bool GameLoopTh::isRunning() {

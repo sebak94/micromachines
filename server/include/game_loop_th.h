@@ -9,6 +9,7 @@
 #define SECSTOSTART 5  // secs
 #define MAXRACETIME 600  // secs
 #define SECTOMICROSEC 1000000
+#define PODIUMVIEWTIME 5000000  // us
 
 class GameLoopTh: public Thread {
     private:
