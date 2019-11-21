@@ -60,7 +60,12 @@ set(SOURCE_FILES_SERVER
     common/src/directory_parser.cpp
     server/include/loader.h
     server/src/loader.cpp
-	server/src/games_th.cpp server/include/games_th.h)
+	server/src/games_th.cpp 
+	server/include/games_th.h
+    common/include/Modifier.h
+	common/src/Modifier.cpp
+    common/include/ModifierList.h
+	common/src/ModifierList.cpp)
 
 set(SOURCE_FILES_CLIENT
     client/include/ThreadsManager.h
@@ -122,8 +127,10 @@ set(SOURCE_FILES_CLIENT
 	client/include/MatchWindow.h
 	common/src/TextTexture.cpp
 	common/include/TextTexture.h
-	client/src/Modifier.cpp
-	client/include/Modifier.h)
+    common/include/Modifier.h
+	common/src/Modifier.cpp
+    common/include/ModifierList.h
+	common/src/ModifierList.cpp)
 
 set(SOURCE_FILES_EDITOR
 	common/src/TrackList.cpp

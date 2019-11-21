@@ -45,6 +45,10 @@ void ModelUpdater::run() {
                     modelMonitor.setTrackNames(text);
                     Track track = Track(receive());
                     modelMonitor.setTrack(track.getTrackPartData());
+
+                    text = receive();
+                    modelMonitor.createModifiers(text);
+
                     text = receive();
                     modelMonitor.setMyColor(text);
                     modelMonitor.updateCar(text);
@@ -52,9 +56,13 @@ void ModelUpdater::run() {
                     text = receive();
                 } else if (modelMonitor.getGameState() == joining) {
                     modelMonitor.setMatchNames(text);
-                    receive();
+                    //receive();
                     Track track = Track(receive());
                     modelMonitor.setTrack(track.getTrackPartData());
+
+                    text = receive();
+                    modelMonitor.createModifiers(text);
+
                     text = receive();
                     modelMonitor.setMyColor(text);
                     modelMonitor.updateCar(text);
