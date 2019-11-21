@@ -1,5 +1,4 @@
 #include "../include/client_th.h"
-#include "../include/model/cars/blue_car.h"
 #include "../../common/include/socket_error.h"
 #include "../../common/include/lock.h"
 #include <unistd.h>
@@ -40,6 +39,15 @@ void ClientTh::sendAllCarsToPlayer(std::vector<ClientTh *> players) {
 
 void ClientTh::sendTrackData(std::string track_serialized) {
     send(track_serialized);
+    sendModifiers();
+}
+
+void ClientTh::sendModifiers() {
+    //Por ahora creo los modificadores aca cuando los envío
+    ModifierList modifierList;
+    std::string modifs = modifierList.serialize();
+    printf("modificadores serializado: %s\n", modifs.c_str());
+    send(modifs);
 }
 
 void ClientTh::sendAllTrackNames(std::string tracks) {
@@ -75,7 +83,7 @@ void ClientTh::setMatch() {
     } else if (state == joining) {
         std::string match = parse(matchSelection, pos, ','); //numero de la partida
         gameNumber = stoi(match);
-        sendTrackData(tracks.getTrack("").serialize());
+        //sendTrackData(tracks.getTrack("").serialize());
         //aca en realidad hay que poner el nombre de la pista de la partida a la que quiere unirse
     }
 }
@@ -166,6 +174,7 @@ void ClientTh::run() {
                 break;
             case waitingEnd:
                 sendGameState(lastState, state);
+                setState(gameEnded);
                 break;
             case gameEnded:
                 sendGameState(lastState, state);

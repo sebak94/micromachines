@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 #define FPS 60
-#define MICROSECS_WAIT 1/FPS*1000000 //seria que en un segundo se dibujen aprox 60 veces
+#define MICROSECS_WAIT (1/FPS*1000000) //seria que en un segundo se dibujen aprox 60 veces
 #define MUSICPATH "../common/sounds/beat.wav"
 #define FULLSCREENBUTTON "../common/images/fullscreen.png"
 #define RECBUTTON "../common/images/buttons/recButton.png"

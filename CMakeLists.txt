@@ -16,16 +16,11 @@ set(SOURCE_FILES_SERVER
     server/include/acceptor_th.h
     server/include/client_th.h
     server/include/game_loop_th.h
-        server/include/model/micromachines_th.h
+	server/include/model/micromachines_th.h
     server/include/model/model.h
     server/include/model/point.h
     server/include/model/cars/color.h
     server/include/model/cars/car.h
-    server/include/model/cars/blue_car.h
-	server/include/model/cars/red_car.h
-    server/include/model/cars/white_car.h
-    server/include/model/cars/black_car.h
-    server/include/model/cars/yellow_car.h
 	server/include/model/box2d-entities/destruction_listener.h
 	server/include/model/box2d-entities/fixture_user_data.h
 	server/include/model/box2d-entities/tdcar.h
@@ -34,16 +29,11 @@ set(SOURCE_FILES_SERVER
     server/src/acceptor_th.cpp
     server/src/client_th.cpp
     server/src/game_loop_th.cpp
-        server/src/model/micromachines_th.cpp
+	server/src/model/micromachines_th.cpp
     server/src/model/point.cpp
     server/src/model/point.cpp
     server/src/model/cars/color.cpp
     server/src/model/cars/car.cpp
-    server/src/model/cars/blue_car.cpp
-	server/src/model/cars/red_car.cpp
-    server/src/model/cars/white_car.cpp
-    server/src/model/cars/black_car.cpp
-    server/src/model/cars/yellow_car.cpp
 	server/src/model/box2d-entities/tdcar.cpp
 	server/src/model/box2d-entities/tdtire.cpp
     common/include/socket.h
@@ -70,11 +60,17 @@ set(SOURCE_FILES_SERVER
     common/src/directory_parser.cpp
     server/include/loader.h
     server/src/loader.cpp
-        server/src/games_th.cpp server/include/games_th.h common/include/gameState.h)
+	server/src/games_th.cpp
+    common/include/Modifier.h
+	common/src/Modifier.cpp
+    common/include/ModifierList.h
+	common/src/ModifierList.cpp
+    server/include/games_th.h
+    common/include/gameState.h)
 
 set(SOURCE_FILES_CLIENT
-    client/include/server.h
-    client/src/server.cpp
+    client/include/ThreadsManager.h
+    client/src/ThreadsManager.cpp
 	client/include/sdl/SdlAnimation.h
 	client/src/sdl/SdlAnimation.cpp
 	client/include/sdl/SdlException.h
@@ -89,8 +85,8 @@ set(SOURCE_FILES_CLIENT
 	client/src/sdl/SdlMusic.cpp
 	client/include/PictureLoader.h
     client/src/PictureLoader.cpp
-	client/include/ThreadSafeQueue.h
-	client/src/ThreadSafeQueue.cpp
+	client/include/BlockingQueue.h
+	client/src/BlockingQueue.cpp
 	client/include/EventLoopSDL.h
 	client/src/EventLoopSDL.cpp
 	client/include/Dispatcher.h
@@ -132,9 +128,11 @@ set(SOURCE_FILES_CLIENT
 	client/include/MatchWindow.h
 	common/src/TextTexture.cpp
 	common/include/TextTexture.h
-	client/src/Modifier.cpp
-	client/include/Modifier.h
-        common/include/gameState.h)
+	common/src/Modifier.cpp
+	common/include/Modifier.h
+    common/include/gameState.h
+    common/include/ModifierList.h
+    common/src/ModifierList.cpp)
 
 set(SOURCE_FILES_EDITOR
 	common/src/TrackList.cpp

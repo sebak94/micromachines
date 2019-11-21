@@ -18,6 +18,7 @@ private:
     std::string text;
 
 public:
+    TextTexture() = default;
     void clearText();
     void textToTexture(SDL_Renderer *renderer, const std::string &textureText, SDL_Color textColor,
                        const char *fontName, int fontSize);

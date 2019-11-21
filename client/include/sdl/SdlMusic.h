@@ -10,7 +10,7 @@ private:
     Mix_Music *music = NULL;
 
 public:
-    SdlMusic(const std::string filename);
+    explicit SdlMusic(const std::string &filename);
     ~SdlMusic();
     void play();
     void stop();

@@ -2,14 +2,7 @@
 #include "../../common/include/TrackList.h"
 #include <algorithm>
 
-Model::Model() {
-    //Invento modificadores de prueba
-    createModifier("900,500,healthBox\n");
-    createModifier("900,575,boost\n");
-    createModifier("900,537,stones\n");
-    createModifier("800,500,oil\n");
-    createModifier("800,537,mud\n");
-}
+Model::Model() {}
 
 Model::~Model() {
     for (const auto pair : cars) {
@@ -85,10 +78,9 @@ void Model::updateCar(std::string str) {
     cars[color]->update(x, y, rotation, health, laps);
 }
 
-void Model::createModifier(std::string str) {
-    //asumo que mandan algo como "x,y,tipo\n"
-    Modifier modifier(str);
-    modifiers.push_back(modifier);
+void Model::createModifiers(std::string str) {
+    ModifierList modifierList(str);
+    modifiers = std::move(modifierList.getModifiers());
 }
 
 std::vector<Modifier>& Model::getModifiers() {

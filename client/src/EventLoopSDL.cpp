@@ -2,7 +2,7 @@
 
 #define FAKE_KEYDOWN 1
 
-EventLoopSDL::EventLoopSDL(ThreadSafeQueue &queue, Drawer *drawerThread, ModelMonitor &modelMonitor)
+EventLoopSDL::EventLoopSDL(BlockingQueue &queue, Drawer *drawerThread, ModelMonitor &modelMonitor)
         : queue(queue), drawer(drawerThread), modelMonitor(modelMonitor) {}
 
 EventLoopSDL::~EventLoopSDL() {}

@@ -10,7 +10,7 @@ private:
     Model &model;
 
 public:
-    ModelMonitor(Model& model);
+    explicit ModelMonitor(Model& model);
     ~ModelMonitor();
     void setTrack(std::vector<TrackPartData> track);
     std::vector<TrackPartData>& getTrack();
@@ -30,7 +30,7 @@ public:
     std::vector<std::string> &getMatchResults();
     void updateMatchResults(std::string results);
     std::vector<Modifier>& getModifiers();
-    void createModifier(std::string str);
+    void createModifiers(std::string str);
 };
 
 #endif

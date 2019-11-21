@@ -12,7 +12,7 @@ ModelUpdater::~ModelUpdater() {
 }
 
 bool ModelUpdater::updateState(std::string &received) {
-    std::cout << received << std::endl;
+    //std::cout << received << std::endl;
     if (received[0] == 'G') {
         modelMonitor.setGameState(received);
         received = receive();
@@ -44,6 +44,10 @@ void ModelUpdater::run() {
                     modelMonitor.setTrackNames(text);
                     Track track = Track(receive());
                     modelMonitor.setTrack(track.getTrackPartData());
+
+                    text = receive();
+                    modelMonitor.createModifiers(text);
+
                     text = receive();
                     modelMonitor.setMyColor(text);
                     modelMonitor.updateCar(text);
@@ -51,9 +55,13 @@ void ModelUpdater::run() {
                     text = receive();
                 } else if (modelMonitor.getGameState() == joining) {
                     modelMonitor.setMatchNames(text);
-                    receive();
+                    //receive();
                     Track track = Track(receive());
                     modelMonitor.setTrack(track.getTrackPartData());
+
+                    text = receive();
+                    modelMonitor.createModifiers(text);
+
                     text = receive();
                     modelMonitor.setMyColor(text);
                     modelMonitor.updateCar(text);
@@ -93,6 +101,6 @@ std::string ModelUpdater::receive() {
         this->socket.Receive(&c, 1);
     }
     std::string str_resp(response.begin(), response.end());
-    std::cout << str_resp << std::endl;
+    //std::cout << str_resp << std::endl;
     return str_resp + "\n";
 }

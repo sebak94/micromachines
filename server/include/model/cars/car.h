@@ -35,6 +35,16 @@ class Car: public Model {
     Car(uint8_t width, uint8_t height, uint16_t max_velocity, uint8_t acceleration, uint8_t grip,
         uint8_t maneuverability, Point initial_position, ColorType color, uint16_t rotation, b2World *world,
         int startID);
+    static Car* createBlackCar(b2World *world, const Point &startingPoint,
+                            uint16_t rot, int startID);
+    static Car* createBlueCar(b2World *world, const Point &startingPoint,
+                            uint16_t rot, int startID);
+    static Car* createRedCar(b2World *world, const Point &startingPoint,
+                            uint16_t rot, int startID);
+    static Car* createWhiteCar(b2World *world, const Point &startingPoint,
+                            uint16_t rot, int startID);
+    static Car* createYellowCar(b2World *world, const Point &startingPoint,
+                            uint16_t rot, int startID);
     void updateState(char action);
     virtual void update() override;
     virtual std::string serialize() override;

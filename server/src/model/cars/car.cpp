@@ -20,6 +20,41 @@ Car::Car(uint8_t width, uint8_t height, uint16_t max_velocity, uint8_t accelerat
         rotation, initial_position), control_state(0), lastTrackID(startID) {
 }
 
+Car* Car::createBlackCar(b2World *world, const Point &startingPoint,
+                        uint16_t rot, int startID) {
+    return std::move(new Car(100, 40, 150, 2, 2, 2, startingPoint, black,
+                            rot, world, startID));
+}
+
+Car* Car::createBlueCar(b2World *world, const Point &startingPoint,
+                        uint16_t rot, int startID) {
+    return std::move(new Car(100, 40, 150, 2, 2, 2, startingPoint, blue,
+                            rot, world, startID));
+}
+
+Car* Car::createRedCar(b2World *world, const Point &startingPoint,
+                        uint16_t rot, int startID) {
+    return std::move(new Car(100, 40, 150, 2, 2, 2, startingPoint, red,
+                            rot, world, startID));
+}
+
+Car* Car::createWhiteCar(b2World *world, const Point &startingPoint,
+                        uint16_t rot, int startID) {
+    return std::move(new Car(100, 40, 150, 2, 2, 2, startingPoint, white,
+                            rot, world, startID));
+}
+
+Car* Car::createYellowCar(b2World *world, const Point &startingPoint,
+                        uint16_t rot, int startID) {
+    return std::move(new Car(100, 40, 150, 2, 2, 2, startingPoint, yellow,
+                            rot, world, startID));
+}
+
+static Car createBlueCar();
+static Car createRedCar();
+static Car createWhiteCar();
+static Car createYellowCar();
+
 void Car::updateState(char action) {
     switch (action) {
         case 'L' : control_state |= TDC_LEFT;  break;

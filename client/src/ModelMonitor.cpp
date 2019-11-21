@@ -88,9 +88,9 @@ void ModelMonitor::updateMatchResults(std::string results) {
     model.updateMatchResults(results);
 }
 
-void ModelMonitor::createModifier(std::string str) {
+void ModelMonitor::createModifiers(std::string str) {
     std::lock_guard<std::mutex> lock(m);
-    model.createModifier(str);
+    model.createModifiers(str);
 }
 
 std::vector<Modifier>& ModelMonitor::getModifiers() {

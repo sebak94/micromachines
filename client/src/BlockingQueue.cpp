@@ -1,17 +1,17 @@
-#include "../include/ThreadSafeQueue.h"
+#include "../include/BlockingQueue.h"
 
-ThreadSafeQueue::ThreadSafeQueue(int limit) {
+BlockingQueue::BlockingQueue(int limit) {
     this->limit = limit;
 }
 
-ThreadSafeQueue::ThreadSafeQueue(ThreadSafeQueue &&other) {
+BlockingQueue::BlockingQueue(BlockingQueue &&other) {
     this->limit = other.limit;
     other.limit = 0;
 }
 
-ThreadSafeQueue::~ThreadSafeQueue() {}
+BlockingQueue::~BlockingQueue() {}
 
-ThreadSafeQueue& ThreadSafeQueue::operator=(ThreadSafeQueue &&other) {
+BlockingQueue& BlockingQueue::operator=(BlockingQueue &&other) {
     if (this == &other)
         return *this;
     //Me robo los punteros
@@ -20,12 +20,12 @@ ThreadSafeQueue& ThreadSafeQueue::operator=(ThreadSafeQueue &&other) {
     return *this;
 }
 
-void ThreadSafeQueue::push(std::string text) {
+void BlockingQueue::push(std::string text) {
     this->queue.push(text);
     this->condVarPop.notify_all();
 }
 
-std::string ThreadSafeQueue::pop() {
+std::string BlockingQueue::pop() {
     std::unique_lock<std::mutex> lock(this->m);
     while (this->queue.empty()) {
         this->condVarPop.wait(lock);

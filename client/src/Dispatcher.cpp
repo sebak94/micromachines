@@ -1,7 +1,7 @@
 #include "../include/Dispatcher.h"
 #include "../include/Drawer.h"
 
-Dispatcher::Dispatcher(ThreadSafeQueue &queue, Socket &socket) : queue(queue), socket(socket) {}
+Dispatcher::Dispatcher(BlockingQueue &queue, Socket &socket) : queue(queue), socket(socket) {}
 
 Dispatcher::~Dispatcher() {}
 

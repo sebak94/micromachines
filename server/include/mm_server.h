@@ -10,6 +10,7 @@ class MMServer {
     void finishThreads();
 
     public:
+    MMServer() = default;
     void start(const char *service);
 };
 

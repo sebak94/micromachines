@@ -40,7 +40,7 @@ private:
     bool ready = false;
 
 public:
-    MatchWindow(SdlWindow &sdlWindow);
+    explicit MatchWindow(SdlWindow &sdlWindow);
     ~MatchWindow();
     void updateMatchButtons(const SDL_Event *event);
     void render();
