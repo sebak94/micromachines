@@ -6,17 +6,7 @@
 #include "Car.h"
 #include "../../common/include/TrackPartData.h"
 #include "Modifier.h"
-
-typedef enum {
-    mainMenu,
-    creating,
-    joining,
-    waitingPlayers,
-    startCountdown,
-    playing,
-    waitingEnd,
-    gameEnded
-} GameState;
+#include "../../common/include/gameState.h"
 
 class Model {
 private:

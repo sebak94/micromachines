@@ -15,6 +15,8 @@ void GamesTh::run() {
     while (running) {
         mapNewClients();
         deleteMapperThreads();
+        gameEndedPlayersToMainMenu();
+        joinEndedGames();
         usleep(REFRESHPLAYERSTIME);
     }
 }
@@ -138,4 +140,29 @@ void GamesTh::cleanPlayers(int gameIndex) {
 // Tells how many games started
 int GamesTh::getGamesNumber() {
     return gamesNumber;
+}
+
+// Checks if any player ended and resets it to main menu.
+void GamesTh::gameEndedPlayersToMainMenu() {
+    for (auto & player : players) {
+        if (player.first->getState() == gameEnded) {
+            player.first->clean();
+            player.second = PLAYERTOASSIGN;
+        }
+    }
+}
+
+void GamesTh::joinEndedGames() {
+    for (auto loop = gameLoops.begin(); loop != gameLoops.end();) {
+        if (!(loop->second->isRunning())) {
+            int aux = loop->first;
+            games[aux]->stop();
+            loop->second->join();
+            games[aux]->join();
+            gameLoops.erase(loop++);
+            games.erase(aux);
+        } else {
+            loop++;
+        }
+    }
 }

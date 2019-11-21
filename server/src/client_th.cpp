@@ -304,6 +304,15 @@ void ClientTh::sendWinners() {
     send(winStr);
 }
 
+void ClientTh::clean() {
+    car = nullptr;
+    std::queue<char> empty;
+    std::swap(actions, empty);  // cleans queue
+    state = mainMenu;
+    availableGames.clear();
+    winners.clear();
+}
+
 ClientTh::~ClientTh() {
     //delete car;
     //Por ahora hago el delete de todos los autos en acceptor_th

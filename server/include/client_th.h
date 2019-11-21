@@ -4,6 +4,7 @@
 #include "../../common/include/thread.h"
 #include "../../common/include/socket.h"
 #include "../../common/include/TrackList.h"
+#include "../../common/include/gameState.h"
 #include "model/cars/car.h"
 #include <string>
 #include <vector>
@@ -19,17 +20,6 @@
 #define MSG_ST_PLAYING "G,playing\n"
 #define MSG_ST_WAITINGEND "G,waitingEnd\n"
 #define MSG_ST_GAMEENDED "G,gameEnded\n"
-
-typedef enum {
-    mainMenu,
-    creating,
-    joining,
-    waitingPlayers,
-    startCountdown,
-    playing,
-    waitingEnd,
-    gameEnded
-} GameState;
 
 class ClientTh: public Thread {
     private:
@@ -64,46 +54,28 @@ class ClientTh: public Thread {
     virtual void stop() override;
     bool isDead();
     ~ClientTh();
-
     void setState(GameState s);
-
     int getCarPosX();
-
     int getCarPosY();
-
     void reduceSpeed(float32 factor);
-
     int getCarLastTrackID();
-
     void newCarPosition(Point point);
-
     void updateLastTrackID(int ID);
-
     void updateLaps();
-
     void sendLapsData(std::string laps_serialized);
-
     GameState getState();
-
     void sendGameState(GameState &previousSt, GameState &st);
-
     void setCar(Car *matchCar);
-
     void setAvailableGames(std::string g);
-
     void sendAvailableGames();
-
     int getGameNumber();
-
     void setPlayerMode();
-
     int getLaps();
-
     std::string carColor();
-
     void setWinners(std::vector<std::string> w);
     void sendWinners();
 
+    void clean();
 };
 
 #endif

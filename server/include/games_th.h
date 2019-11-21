@@ -35,6 +35,10 @@ public:
     std::string serializeGames();
     int getPlayerGameID(ClientTh* player);
     int getGamesNumber();
+
+    void gameEndedPlayersToMainMenu();
+
+    void joinEndedGames();
 };
 
 

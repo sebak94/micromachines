@@ -220,6 +220,15 @@ bool MicroMachinesTh::somePlayersInMainMenu() {
     return false;
 }
 
+bool MicroMachinesTh::allPlayersWaitingEnd() {
+    for (int i = 0; i < players.size(); i++) {
+        if (players[i]->getState() != waitingEnd) {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool MicroMachinesTh::allPlayersGameEnded() {
     for (int i = 0; i < players.size(); i++) {
         if (players[i]->getState() != gameEnded) {

@@ -34,6 +34,8 @@ class GameLoopTh: public Thread {
                      int32 velocityIterations, int32 positionIterations);
     void play();
     void showMainMenu();
+
+    bool isRunning();
 };
 
 #endif

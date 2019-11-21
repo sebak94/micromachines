@@ -22,7 +22,6 @@ class MicroMachinesTh : public Thread {
     std::vector<std::string> winners;
     bool running = true;
     std::map<ColorType, Car*>::iterator itCar;
-
     void removePlayerFromVector(ClientTh *player);
 
     public:
@@ -54,6 +53,8 @@ class MicroMachinesTh : public Thread {
     void stop() override;
     std::string trackSerialized();
     Car *getNextCar();
+
+    bool allPlayersWaitingEnd();
 };
 
 #endif

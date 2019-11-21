@@ -70,7 +70,7 @@ set(SOURCE_FILES_SERVER
     common/src/directory_parser.cpp
     server/include/loader.h
     server/src/loader.cpp
-        server/src/games_th.cpp server/include/games_th.h)
+        server/src/games_th.cpp server/include/games_th.h common/include/gameState.h)
 
 set(SOURCE_FILES_CLIENT
     client/include/server.h
@@ -134,7 +134,7 @@ set(SOURCE_FILES_CLIENT
 	common/include/TextTexture.h
 	client/src/Modifier.cpp
 	client/include/Modifier.h
-	)
+        common/include/gameState.h)
 
 set(SOURCE_FILES_EDITOR
 	common/src/TrackList.cpp
