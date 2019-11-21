@@ -79,8 +79,8 @@ set(SOURCE_FILES_CLIENT
 	client/src/sdl/SdlMusic.cpp
 	client/include/PictureLoader.h
     client/src/PictureLoader.cpp
-	client/include/ThreadSafeQueue.h
-	client/src/ThreadSafeQueue.cpp
+	client/include/BlockingQueue.h
+	client/src/BlockingQueue.cpp
 	client/include/EventLoopSDL.h
 	client/src/EventLoopSDL.cpp
 	client/include/Dispatcher.h

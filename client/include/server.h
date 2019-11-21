@@ -6,11 +6,12 @@
 #include "EventLoopSDL.h"
 #include "Drawer.h"
 #include "Dispatcher.h"
+#include "BlockingQueue.h"
 
 class Server {
     private:
     Socket skt;
-    ThreadSafeQueue queue;
+    BlockingQueue queue;
     std::vector<Thread*> threads;
 
     public:
