@@ -38,6 +38,7 @@ void Drawer::run() {
         try {
             draw();
         } catch (std::exception &e) {
+            printf("Drawer::run() exception catched: %s\n", e.what());
             running = false;
         }
         auto end = std::chrono::system_clock::now();
@@ -101,10 +102,11 @@ void Drawer::draw() {
         drawWorld();
         drawHUD();
         camera.showCountdown();
-    } else if (modelMonitor.getGameState() == waitingEnd) {
+    } else if (modelMonitor.getGameState() == waitingEnd || modelMonitor.getGameState() == gameEnded) {
         drawWorld();
         drawHUD();
         camera.drawPodium(modelMonitor.getMatchResults());
+        matchWindow.reload();
     } else {
         drawWorld();
         drawHUD();

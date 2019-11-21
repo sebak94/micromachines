@@ -46,6 +46,7 @@ class Micromachines {
     bool somePlayersInMainMenu();
     void updateWinners();
     void sendWinners();
+    bool allPlayersGameEnded();
 };
 
 #endif

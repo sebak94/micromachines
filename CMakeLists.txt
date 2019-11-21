@@ -167,7 +167,8 @@ set(SOURCE_FILES_EDITOR
 	common/include/Error.h)
 
 add_executable(micromachines-sv ${SOURCE_FILES_SERVER} server/main.cpp)
-add_executable(micromachines-cl ${SOURCE_FILES_CLIENT} client/main.cpp)
+add_executable(micromachines-cl client/src/lua/ai.o ${SOURCE_FILES_CLIENT}
+		client/main.cpp)
 add_executable(micromachines-ed ${SOURCE_FILES_EDITOR} editor/main.cpp)
 
 target_link_libraries(micromachines-ed

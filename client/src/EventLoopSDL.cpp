@@ -2,12 +2,15 @@
 
 #define FAKE_KEYDOWN 1
 
-EventLoopSDL::EventLoopSDL(ThreadSafeQueue &queue, Drawer *drawerThread, ModelMonitor &modelMonitor)
-        : queue(queue), drawer(drawerThread), modelMonitor(modelMonitor) {}
+EventLoopSDL::EventLoopSDL(ThreadSafeQueue &queue, Drawer *drawerThread,
+                           ModelMonitor &modelMonitor)
+        : queue(queue), drawer(drawerThread), modelMonitor(modelMonitor),
+          luaIA(queue, drawer) {
+}
 
 EventLoopSDL::~EventLoopSDL() {}
 
-void EventLoopSDL::enqueueKeyDownEvent(SDL_KeyboardEvent& keyEvent) {
+void EventLoopSDL::enqueueKeyDownEvent(SDL_KeyboardEvent &keyEvent) {
     if (keyEvent.repeat == FAKE_KEYDOWN)
         return;
 
@@ -67,12 +70,18 @@ void EventLoopSDL::run() {
     while (running) {
         SDL_Event event;
         SDL_WaitEvent(&event);
+
         switch (modelMonitor.getGameState()) {
             case mainMenu:
                 quitAndResize(event);
                 drawer->getMatchWindow().updateMatchButtons(&event);
                 if (drawer->getMatchWindow().isReady()) {
                     this->queue.push(drawer->getMatchWindow().serializeData());
+                    if (drawer->getMatchWindow().isLuaSelected()) {
+                        luaPlaying = true;
+                        this->luaIA.setTrack(this->modelMonitor.getTrack());
+                        /*lua.run();*/
+                    }
                 }
                 break;
             case selectingTrack:
@@ -89,13 +98,15 @@ void EventLoopSDL::run() {
                 break;
             case playing:
                 quitAndResize(event);
-                switch (event.type) {
-                    case SDL_KEYDOWN:
-                        enqueueKeyDownEvent((SDL_KeyboardEvent &) event);
-                        break;
-                    case SDL_KEYUP:
-                        enqueueKeyUpEvent((SDL_KeyboardEvent &) event);
-                        break;
+                if (!luaPlaying) {
+                    switch (event.type) {
+                        case SDL_KEYDOWN:
+                            enqueueKeyDownEvent((SDL_KeyboardEvent &) event);
+                            break;
+                        case SDL_KEYUP:
+                            enqueueKeyUpEvent((SDL_KeyboardEvent &) event);
+                            break;
+                    }
                 }
                 break;
             case waitingEnd:

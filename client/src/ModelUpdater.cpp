@@ -27,6 +27,7 @@ void ModelUpdater::run() {
     while (running) {
         try {
             std::string text = receive(); //Recibo cambio de estado u otra cosa
+            //printf("text1: %s\n", text.c_str());
             if (text[0] == 'G') {
                 //Si recibi cambio de estado lo actualizo
                 std::string text = receive();
@@ -35,13 +36,16 @@ void ModelUpdater::run() {
             } else {
                 //Si recibi otra cosa, depende del estado actual lo que voy a hacer
                 if (modelMonitor.getGameState() == mainMenu) {
-                    Track track = Track(text);
-                    modelMonitor.setTrack(track.getTrackPartData());
+                    if (text[0] == 'T') {
+                        Track track = Track(text.substr(2, text.length()));
+                        modelMonitor.setTrack(track.getTrackPartData());
+                    }
                 } else if (modelMonitor.getGameState() == waitingPlayers
                         || modelMonitor.getGameState() == startCountdown) {
                     modelMonitor.updateCar(text);
                 } else if (modelMonitor.getGameState() == playing
-                        ||modelMonitor.getGameState() == waitingEnd) {
+                        ||modelMonitor.getGameState() == waitingEnd
+                          || modelMonitor.getGameState() == gameEnded) {
                     if (text[0] == 'W') {
                         modelMonitor.updateMatchResults(text.substr(2, text.length()));
                     } else {
@@ -50,6 +54,7 @@ void ModelUpdater::run() {
                 }
             }
         } catch (std::exception &e) {
+            printf("ModelUpdater::run() exception catched: %s\n", e.what());
             running = false;
             drawer->stop();
         }

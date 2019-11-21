@@ -21,7 +21,7 @@ extern "C" {
 lua_State *lua_initialize();
 int lua_open_files(lua_State *L);
 void lua_close_file(lua_State *L);
-void lua_load_map(lua_State *L);
+void lua_load_map(lua_State *L, const char *track[100][100]);
 int lua_get_next_movement(lua_State *L, int positionX, int positionY);
 void lua_play(lua_State *L);
 }
@@ -34,7 +34,11 @@ private:
     lua_State *L;
 
 public:
-    Ai(std::vector <TrackPartData> &track);
+    Ai();
+
+    void setTrack(std::vector <TrackPartData> &track);
+
+    const char *get_enum_as_char(trackPartType type);
 
     ~Ai();
 };

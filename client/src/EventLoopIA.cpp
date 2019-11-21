@@ -2,9 +2,12 @@
 
 #define FAKE_KEYDOWN 1
 
-EventLoopIA::EventLoopIA(ThreadSafeQueue &queue, Drawer *drawerThread,
-                         std::vector <TrackPartData> &track) :
-        queue(queue), drawer(drawerThread), lua_ai(track) {}
+EventLoopIA::EventLoopIA(ThreadSafeQueue &queue, Drawer *drawerThread) :
+        queue(queue), drawer(drawerThread) {}
+
+void EventLoopIA::setTrack(std::vector <TrackPartData> &track) {
+    this->lua_ai.setTrack(track);
+}
 
 EventLoopIA::~EventLoopIA() {}
 

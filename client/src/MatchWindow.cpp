@@ -24,6 +24,11 @@ MatchWindow::MatchWindow(SdlWindow &sdlWindow) : window(sdlWindow),
     players.push_back("5");
     itPlayers = players.begin();
 
+    //Para que el cliente decida si usa IA o no
+    scripts.push_back("No");
+    scripts.push_back("Yes");
+    itScripts = scripts.begin();
+
     //Hardcodeo los nombres de las partidas por ahora
     matchNames.push_back("partida 1");
     matchNames.push_back("partida 2");
@@ -44,6 +49,7 @@ void MatchWindow::createMatchButtons() {
     joinMatchButton = Button(window.getRenderer(), area, BUTTONJOINPATH);
     arrowButton = Button(window.getRenderer(), area, BUTTONARROWPATH);
     arrowButton2 = Button(window.getRenderer(), area, BUTTONARROWPATH);
+    arrowButton3 = Button(window.getRenderer(), area, BUTTONARROWPATH);
     playButton = Button(window.getRenderer(), area, BUTTONPLAYPATH);
     returnButton = Button(window.getRenderer(), area, BUTTONRETURNPATH);
 }
@@ -70,6 +76,7 @@ void MatchWindow::updateCreatingButtons(const SDL_Event *event) {
 
 void MatchWindow::updateNonSelectingButtons(const SDL_Event *event) {
     arrowButton.updateEvent(event);
+    arrowButton3.updateEvent(event);
     playButton.updateEvent(event);
     returnButton.updateEvent(event);
     if (arrowButton.isClicked()) {
@@ -82,6 +89,11 @@ void MatchWindow::updateNonSelectingButtons(const SDL_Event *event) {
             if (itMatchNames == matchNames.end())
                 itMatchNames = matchNames.begin();
         }
+    }
+    if (arrowButton3.isClicked()) {
+        itScripts++;
+        if (itScripts == scripts.end())
+            itScripts = scripts.begin();
     }
     if (playButton.isClicked()) {
         ready = true;
@@ -157,14 +169,16 @@ void MatchWindow::selectingScreen() {
 
 void MatchWindow::creationScreen() {
     showBackground();
-    showSelectText("Choose track: ", *itTrackNames, window.getWidth() / 9, window.getHeight() / 2, arrowButton, textTrack);
-    showSelectText("Number of players: ", *itPlayers, window.getWidth() / 9, window.getHeight() / 1.5, arrowButton2, textPlayers);
+    showSelectText("Choose track: ", *itTrackNames, window.getWidth() / 9, window.getHeight() / 2.5, arrowButton, textTrack);
+    showSelectText("Number of players: ", *itPlayers, window.getWidth() / 9, window.getHeight() / 1.9, arrowButton2, textPlayers);
+    showSelectText("Play with AI: ", *itScripts, window.getWidth() / 9, window.getHeight() / 1.5, arrowButton3, textLua);
     showPlayAndReturn();
 }
 
 void MatchWindow::joiningScreen() {
     showBackground();
     showSelectText("Available matchs: ", *itMatchNames, window.getWidth() / 9, window.getHeight() / 2, arrowButton, textMatch);
+    showSelectText("Play with AI: ", *itScripts, window.getWidth() / 9, window.getHeight() / 1.5, arrowButton3, textLua);
     showPlayAndReturn();
 }
 
@@ -202,4 +216,15 @@ void MatchWindow::showPlayAndReturn() {
 
 StateWindow MatchWindow::getState() const {
     return this->state;
+}
+
+void MatchWindow::reload() {
+    state = selecting;
+    ready = false;
+    createMatchButtons();
+    //tambien habria que recargar las partidas
+}
+
+bool MatchWindow::isLuaSelected() {
+    return (textLua.getText() != "No");
 }

@@ -4,6 +4,7 @@
 #include "ThreadSafeQueue.h"
 #include "../../common/include/thread.h"
 #include "Drawer.h"
+#include "EventLoopIA.h"
 #include <SDL2/SDL_events.h>
 
 class EventLoopSDL : public Thread {
@@ -12,6 +13,8 @@ private:
     ThreadSafeQueue &queue;
     Drawer* drawer;
     ModelMonitor &modelMonitor;
+    bool luaPlaying = false;
+    EventLoopIA luaIA;
 
 public:
     EventLoopSDL(ThreadSafeQueue &queue, Drawer *drawerThread, ModelMonitor &modelMonitor);

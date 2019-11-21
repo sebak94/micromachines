@@ -86,6 +86,7 @@ void ClientTh::updateGameState(GameState & previousSt, GameState & st) {
         previousSt = st;
         switch (st) {
             case mainMenu:
+                send(std::string(MSG_ST_MAINMENU));
                 break;
             case selectingTrack:
                 send(std::string(MSG_ST_SELECTINGTRACK));
@@ -113,12 +114,11 @@ void ClientTh::updateGameState(GameState & previousSt, GameState & st) {
 }
 
 void ClientTh::run() {
-    std::string strState = MSG_ST_MAINMENU;
-    GameState lastState = mainMenu;
+    GameState lastState = gameEnded;
     while (is_running){
         switch (state) {
             case mainMenu:
-                //updateGameState(lastState, state);
+                updateGameState(lastState, state);
                 setMatch();
                 setState(waitingPlayers);
                 break;
@@ -158,6 +158,7 @@ void ClientTh::run() {
                 break;
             case waitingEnd:
                 updateGameState(lastState, state);
+                setState(gameEnded);
                 while (state == waitingEnd) {
 
                 }
@@ -206,7 +207,7 @@ void ClientTh::setState(GameState s) {
 }
 
 void ClientTh::updateCar() {
-    if (state != waitingEnd) {
+    if (state == playing) {
         car->update();
     }
 }

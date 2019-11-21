@@ -15,10 +15,11 @@ private:
     Ai lua_ai;
 
 public:
-    EventLoopIA(ThreadSafeQueue &queue, Drawer *drawerThread,
-                std::vector <TrackPartData> &track);
+    EventLoopIA(ThreadSafeQueue &queue, Drawer *drawerThread);
 
     ~EventLoopIA();
+
+    void setTrack(std::vector <TrackPartData> &track);
 
     virtual void run() override;
 

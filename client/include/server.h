@@ -4,7 +4,6 @@
 #include "../../common/include/socket.h"
 #include "string"
 #include "EventLoopSDL.h"
-#include "EventLoopIA.h"
 #include "Drawer.h"
 #include "Dispatcher.h"
 
