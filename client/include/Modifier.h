@@ -20,7 +20,7 @@ private:
 public:
     Modifier();
     void setType(std::string str);
-    Modifier(const std::string &str);
+    explicit Modifier(const std::string &str);
     ~Modifier();
     int getX() const;
     int getY() const;

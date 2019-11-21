@@ -16,7 +16,7 @@ private:
     DIR *dir;
 
 public:
-    DirectoryParser(const char *path);
+    explicit DirectoryParser(const char *path);
 
     ~DirectoryParser();
 
