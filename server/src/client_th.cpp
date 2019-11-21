@@ -174,7 +174,6 @@ void ClientTh::run() {
                 break;
             case waitingEnd:
                 sendGameState(lastState, state);
-                setState(gameEnded);
                 break;
             case gameEnded:
                 sendGameState(lastState, state);

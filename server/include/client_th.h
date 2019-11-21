@@ -22,17 +22,6 @@
 #define MSG_ST_WAITINGEND "G,waitingEnd\n"
 #define MSG_ST_GAMEENDED "G,gameEnded\n"
 
-typedef enum {
-    mainMenu,
-    creating,
-    joining,
-    waitingPlayers,
-    startCountdown,
-    playing,
-    waitingEnd,
-    gameEnded
-} GameState;
-
 class ClientTh: public Thread {
     private:
     std::atomic<bool> keep_talking;

@@ -96,7 +96,7 @@ void GamesTh::createGame(ClientTh * player) {
 
 // Adds player to existent match. Receives match sent by user in setMatch()
 void GamesTh::addPlayer(ClientTh *player) {
-    int gameIndex = -1;
+    int gameIndex = PLAYERTOASSIGN;
     player->setAvailableGames(serializeGames());
     player->sendAvailableGames();
     player->setMatch();

@@ -5,7 +5,6 @@
 #include <map>
 #include "Car.h"
 #include "../../common/include/TrackPartData.h"
-#include "Modifier.h"
 #include "../../common/include/gameState.h"
 #include "../../common/include/ModifierList.h"
 
