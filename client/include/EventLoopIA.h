@@ -12,14 +12,18 @@ private:
     bool running;
     ThreadSafeQueue &queue;
     Drawer *drawer;
+    ModelMonitor &modelMonitor;
     Ai lua_ai;
 
 public:
-    EventLoopIA(ThreadSafeQueue &queue, Drawer *drawerThread);
+    EventLoopIA(ThreadSafeQueue &queue, Drawer *drawerThread,
+                ModelMonitor &modelMonitor);
 
     ~EventLoopIA();
 
     void setTrack(std::vector <TrackPartData> &track);
+
+    void setColor(std::string &color);
 
     virtual void run() override;
 

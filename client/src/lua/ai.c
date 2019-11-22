@@ -39,62 +39,33 @@ int lua_open_files(lua_State *L) {
     return result;
 }
 
-
-void lua_load_map(lua_State *L, const char *track[100][100]) {
-    lua_getglobal(L, "init_load_map");
-
-    printf("INICIO\n");
-    for (int i = 1; i < 99; i++) {
-        for (int j = 1; j < 99; j++) {
-            printf("%s\n", track[i][j]);
-        }
-    }
-    printf("FIN\n");
-
-    int result;
+void lua_load_map(lua_State *L, char *matrix[20][20]) {
     lua_newtable(L);
-    for (int i = 0; i < 3; i++) {
-        lua_pushnumber(L, i + 1);    // parent table index
-        lua_newtable(L);             // child table
-        for (int j = 0; j < 3; j++) {
-            lua_pushnumber(L, j + 1);  // this will be the child's index
-            lua_pushstring(L, "asd");
-            lua_settable(L, -3);
+    for (int i = 0; i <= 15; i++) {
+        lua_pushnumber(L, i);
+        lua_newtable(L);
+        for (int j = 0; j <= 15; j++) {
+            lua_pushnumber(L, j);
+            lua_pushstring(L, matrix[i][j]);
+            lua_rawset(L, -3);
         }
-        lua_settable(L, -3);
+        lua_rawset(L, -3);
     }
+    lua_setglobal(L, "track_matrix");
 
-    /* By what name is the script going to reference our table? */
-    lua_setglobal(L, "foo");
-
-    /* Ask Lua to run our little script */
-    result = lua_pcall(L, 0, LUA_MULTRET, 0);
-    if (result)
-        fprintf(stderr, "Failed to run script: %s\n", lua_tostring(L, -1));
-
-    lua_pop(L, 1);  /* Take the returned value out of the stack */
+    printf("LOAD FINISH\n");
 }
 
-
-int lua_get_next_movement(lua_State *L, int positionX, int positionY) {
+const char *lua_get_next_movement(lua_State *L, int positionX, int positionY) {
     lua_getglobal(L, "getNextMove");
-    lua_pushnumber(L, positionX);
-    lua_pushnumber(L, positionY);
+    lua_pushnumber(L, positionX / 100);
+    lua_pushnumber(L, positionY / 100);
     lua_call(L, 2, 1);
+
     const char *nextMove;
     size_t strLen = 0;
     nextMove = lua_tolstring(L, 1, &strLen);
-    printf("El nuevo movimiento es: %s\n", nextMove);
-    printf("strLen: %zu\n", strLen);
-    // Limpio el stack
-    lua_pop(L, 1);
-    return 0;
-}
+    lua_pop(L, 1);// Limpio el stack
 
-void lua_play(lua_State *L) {
-    for (int i = 1; i <= 2; ++i) {
-        for (int j = 1; j <= 2; ++j) {
-            lua_get_next_movement(L, i, j);
-        }
-    }
+    return nextMove;
 }

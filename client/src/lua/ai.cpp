@@ -8,20 +8,37 @@
 Ai::Ai() {
     this->L = lua_initialize();
     lua_open_files(this->L);
+}
 
+void Ai::setColor(std::string &color) {
+    this->carColor = color;
 }
 
 void Ai::setTrack(std::vector <TrackPartData> &track) {
-    const char *matrix[100][100];
-    printf("tracksize:%i\n", track.size());
-    for (auto &i : track) {
-        matrix[i.getPosX()][i.getPosY()] = get_enum_as_char(i.getType());
-        printf("%i,%i:%s\n", i.getPosX(), i.getPosY(), matrix[i.getPosX()][i
-                .getPosY()]);
+    const char *matrix[20][20];
+
+    for (int i = 0; i <= 15; i++) {
+        for (int j = 0; j <= 15; j++) {
+            matrix[i][j] = "empty";
+        }
     }
 
-    //lua_load_map(this->L, matrix);
+    for (auto &i : track) {
+        int x = i.getPosX() / 100;
+        int y = i.getPosY() / 100;
+        matrix[x][y] = get_enum_as_char(i.getType());
+    }
+
+    for (int i = 0; i <= 15; i++) {
+        for (int j = 0; j <= 15; j++) {
+            printf("%s|", matrix[i][j]);
+        }
+        printf("\n");
+    }
+
+    lua_load_map(this->L, matrix);
 }
+
 
 const char *Ai::get_enum_as_char(trackPartType type) {
     switch (type) {
@@ -52,6 +69,20 @@ const char *Ai::get_enum_as_char(trackPartType type) {
         case public1Right :
             return "public1Right";
     }
+}
+
+const char *Ai::get_next_move(std::map<std::string, Car *> &cars) {
+    bool carcolor = false;
+    for (auto &it : cars) {
+        Car *car = it.second;
+        //if (car->getMyColor() == this->carColor) {
+        if (carcolor) {
+            return lua_get_next_movement(this->L, car->getX(), car->getY());
+        }
+        carcolor = true;
+    }
+
+    return "";
 }
 
 Ai::~Ai() {
