@@ -152,3 +152,9 @@ void Camera::drawPodium(std::vector<std::string> &matchResults) {
         y += window.getHeight()/6;
     }
 }
+
+void Camera::reload() {
+    countDown = SECOND;
+    countDownNumber = SECSTOSTART;
+    countDownStarted = false;
+}
