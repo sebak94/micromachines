@@ -16,6 +16,7 @@ class MicroMachinesTh : public Thread {
     private:
     TrackList tracks;
     Track track;
+    Config config;
     ModifierList modifiers;
     std::mutex m;
     std::vector<ClientTh*> players;
@@ -25,7 +26,6 @@ class MicroMachinesTh : public Thread {
     std::vector<std::string> winners;
     bool running = true;
     std::map<ColorType, Car*>::iterator itCar;
-    Config config;
     void removePlayerFromVector(ClientTh *player);
 
     public:
@@ -62,6 +62,7 @@ class MicroMachinesTh : public Thread {
     std::string modifiersSerialized();
     bool allPlayersWaitingEnd();
     bool isAnAvailableMatch();
+    Config getConfig();
 };
 
 #endif
