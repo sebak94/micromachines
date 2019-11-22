@@ -20,7 +20,7 @@ void MicroMachinesTh::setTrack(std::string trackStr) {
     track = tracks.getTrack(trackStr);
 }
 
-void MicroMachinesTh::setCars() {
+void MicroMachinesTh::createCars() {
     //Agrego todos los autos disponibles en un mapa de autos
     cars[blue] = Car::createBlueCar(world,
                                     getStartingPoint(0),

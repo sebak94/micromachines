@@ -33,7 +33,7 @@ class MicroMachinesTh : public Thread {
 
     MicroMachinesTh(const Config &config);
     void setTrack(std::string trackStr);
-    void setCars();
+    void createCars();
     void update();
     void addPlayer(ClientTh *client);
     void updatePlayersState();
