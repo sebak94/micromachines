@@ -122,7 +122,10 @@ std::string GamesTh::serializeGames() {
     std::string gamesStr{};
     for (auto game : games)
         gamesStr += std::to_string(game.first) + ",";
-    gamesStr.back() = '\n';
+
+    if (!gamesStr.empty()) {
+        gamesStr.back() = '\n';
+    }
     return gamesStr;
 }
 
