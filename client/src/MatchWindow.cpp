@@ -215,7 +215,6 @@ void MatchWindow::showSelectText(std::string title, std::string textToShow, int 
     TextTexture textTitle;
     int fontSize = (window.getWidth() + window.getHeight()) / 60;
     textTitle.textToTexture(window.getRenderer(), title, white, FONTNAME, fontSize);
-    textTitle.render(window.getRenderer(), x, y);
 
     fontSize = (window.getWidth() + window.getHeight()) / 85;
     text.textToTexture(window.getRenderer(), textToShow, black, FONTNAME, fontSize);
@@ -225,6 +224,8 @@ void MatchWindow::showSelectText(std::string title, std::string textToShow, int 
 
     buttonToChangeText.updatePos(window.getWidth() / 2, y + textTitle.getHeight());
     buttonToChangeText.updateSize(window.getWidth() / 20, window.getHeight() / 20);
+
+    textTitle.render(window.getRenderer(), x, y);
     buttonToChangeText.draw(window.getRenderer());
 }
 
