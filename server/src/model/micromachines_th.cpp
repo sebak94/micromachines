@@ -11,31 +11,36 @@
 
 MicroMachinesTh::MicroMachinesTh() {
     tracks.readTracks();
-    track = tracks.getTrack("classic"); //aca hay que poner la track que eligio el cliente
     world = new b2World(b2Vec2(0, 0));
     world->SetDestructionListener(&destruction_listener);
+}
 
+void MicroMachinesTh::setTrack(std::string trackStr) {
+    track = tracks.getTrack(trackStr);
+}
+
+void MicroMachinesTh::setCars() {
     //Agrego todos los autos disponibles en un mapa de autos
     cars[blue] = Car::createBlueCar(world,
-                    getStartingPoint(0),
-                    getStartingCarRot(0),
-                    getStartID(0));
+                                    getStartingPoint(0),
+                                    getStartingCarRot(0),
+                                    getStartID(0));
     cars[white] = Car::createWhiteCar(world,
-                    getStartingPoint(1),
-                    getStartingCarRot(1),
-                    getStartID(1));
+                                      getStartingPoint(1),
+                                      getStartingCarRot(1),
+                                      getStartID(1));
     cars[black] = Car::createBlackCar(world,
-                    getStartingPoint(2),
-                    getStartingCarRot(2),
-                    getStartID(2));
+                                      getStartingPoint(2),
+                                      getStartingCarRot(2),
+                                      getStartID(2));
     cars[yellow] = Car::createYellowCar(world,
-                    getStartingPoint(3),
-                    getStartingCarRot(3),
-                    getStartID(3));
+                                        getStartingPoint(3),
+                                        getStartingCarRot(3),
+                                        getStartID(3));
     cars[red] = Car::createRedCar(world,
-                    getStartingPoint(4),
-                    getStartingCarRot(4),
-                    getStartID(4));
+                                  getStartingPoint(4),
+                                  getStartingCarRot(4),
+                                  getStartID(4));
     itCar = cars.begin();
 }
 

@@ -28,6 +28,8 @@ class MicroMachinesTh : public Thread {
     b2World *world;
 
     MicroMachinesTh();
+    void setTrack(std::string trackStr);
+    void setCars();
     void update();
     void addPlayer(ClientTh *client);
     void updatePlayersState();

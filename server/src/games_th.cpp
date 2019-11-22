@@ -82,11 +82,15 @@ void GamesTh::createGame(ClientTh * player) {
     auto * gameLoop = new GameLoopTh(*game);
     player->sendAllTrackNames(tracks.serialize());
     player->setMatch();
-    player->setCar(game->getNextCar());
-    player->sendCarData();
     game->addPlayer(player);
     players[player] = gamesNumber;
     player->setState(waitingPlayers);
+
+    game->setTrack(player->getTrackSelected());
+    game->setCars();
+
+    player->setCar(game->getNextCar());
+    player->sendCarData();
 
     games.emplace(gamesNumber, game);
     gameLoops.emplace(gamesNumber, gameLoop);

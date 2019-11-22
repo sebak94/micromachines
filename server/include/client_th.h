@@ -32,6 +32,7 @@ class ClientTh: public Thread {
     std::mutex m;
     GameState state = mainMenu;
     TrackList& tracks;
+    std::string trackSelected;
     std::string availableGames{};
     int gameNumber = -1;
     std::vector<std::string> winners;
@@ -52,6 +53,7 @@ class ClientTh: public Thread {
     void sendTrackData(std::string track_serialized);
     void sendModifiers();
     void sendAllTrackNames(std::string tracks);
+    std::string getTrackSelected();
     virtual void run() override;
     virtual void stop() override;
     bool isDead();

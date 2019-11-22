@@ -54,6 +54,10 @@ void ClientTh::sendAllTrackNames(std::string tracks) {
     send(tracks);
 }
 
+std::string ClientTh::getTrackSelected() {
+    return trackSelected;
+}
+
 std::string ClientTh::parse(const std::string &str, size_t &pos, const char delim) {
     std::string substr;
     size_t nextPos = str.find(delim, pos);
@@ -78,6 +82,7 @@ void ClientTh::setMatch() {
     //Cuando me estoy uniendo a una partida mando 0 como cantidad de jugadores
     if (state == creating) {
         std::string track = parse(matchSelection, pos, ','); //nombre de la pista
+        trackSelected = track;
         std::string numberPlayers = parse(matchSelection, pos, '\n'); //cantidad de jugadores
         sendTrackData(tracks.getTrack(track).serialize());
     } else if (state == joining) {
