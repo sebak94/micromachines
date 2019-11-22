@@ -1,4 +1,4 @@
-#include "../include/server.h"
+#include "../include/ThreadsManager.h"
 #include "../../common/include/socket_error.h"
 #include "iostream"
 #include "../include/ModelUpdater.h"
@@ -7,7 +7,7 @@
 
 #define LIMIT_QUEUE 1000 //elijo un numero maximo cualquiera
 
-Server::Server(const char *hostname, const char *service) : queue(LIMIT_QUEUE) {
+ThreadsManager::ThreadsManager(const char *hostname, const char *service) : queue(LIMIT_QUEUE) {
     try {
         skt.Connect(hostname, service);
     } catch(const SocketError &e) {
@@ -15,13 +15,13 @@ Server::Server(const char *hostname, const char *service) : queue(LIMIT_QUEUE) {
     }
 }
 
-Server::~Server() {
+ThreadsManager::~ThreadsManager() {
     for (int i = 0; i < threads.size(); i++) {
         delete threads[i];
     }
 }
 
-void Server::runThreads() {
+void ThreadsManager::runThreads() {
     Model model;
     ModelMonitor modelMonitor(model);
     Drawer* drawer = new Drawer(modelMonitor);

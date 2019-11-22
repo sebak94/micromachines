@@ -17,7 +17,11 @@ MatchWindow::MatchWindow(SdlWindow &sdlWindow) : window(sdlWindow),
     TTF_Init();
     createMatchButtons();
 
-    //Defino que el juego sea entre 2 y 5 jugadores
+    // Vacío mientras carga
+    trackNames.clear();
+    matchNames.clear();
+
+    // Defino que el juego sea entre 2 y 5 jugadores
     players.push_back("2");
     players.push_back("3");
     players.push_back("4");
@@ -29,17 +33,24 @@ MatchWindow::MatchWindow(SdlWindow &sdlWindow) : window(sdlWindow),
     scripts.push_back("Yes");
     itScripts = scripts.begin();
 
-    //Hardcodeo los nombres de las partidas por ahora
-    matchNames.push_back("partida 1");
-    matchNames.push_back("partida 2");
-    itMatchNames = matchNames.begin();
 }
 
 MatchWindow::~MatchWindow() {}
 
-void MatchWindow::setTrackNames(std::vector<std::string> tracks) {
-    trackNames = tracks;
-    itTrackNames = trackNames.begin();
+void MatchWindow::setTrackNames(const std::vector<std::string>& tracks) {
+    if (tracks != trackNames) {
+        trackNames.clear();
+        trackNames = tracks;
+        itTrackNames = trackNames.begin();
+    }
+}
+
+void MatchWindow::setMatchNames(const std::vector<std::string>& matches) {
+    if (matches != matchNames) {
+        matchNames.clear();
+        matchNames = matches;
+        itMatchNames = matchNames.begin();
+    }
 }
 
 void MatchWindow::createMatchButtons() {
@@ -54,14 +65,25 @@ void MatchWindow::createMatchButtons() {
     returnButton = Button(window.getRenderer(), area, BUTTONRETURNPATH);
 }
 
+void MatchWindow::resetMatchButtons() {
+    //Los creo con areas vacias y despues cuando los dibujo los actualizo acorde al tamaño de la ventana
+    createMatchButton.clean();
+    joinMatchButton.clean();
+    arrowButton.clean();
+    arrowButton2.clean();
+    arrowButton3.clean();
+    playButton.clean();
+    returnButton.clean();
+}
+
 void MatchWindow::updateSelectingButtons(const SDL_Event *event) {
     createMatchButton.updateEvent(event);
     joinMatchButton.updateEvent(event);
     if (createMatchButton.isClicked()) {
-        state = creating;
+        state = creatingMatch;
     }
     if (joinMatchButton.isClicked()) {
-        state = joining;
+        state = joiningMatch;
     }
 }
 
@@ -79,12 +101,13 @@ void MatchWindow::updateNonSelectingButtons(const SDL_Event *event) {
     arrowButton3.updateEvent(event);
     playButton.updateEvent(event);
     returnButton.updateEvent(event);
+    ready = false;
     if (arrowButton.isClicked()) {
-        if (state == creating) {
+        if (state == creatingMatch) {
             itTrackNames++;
             if (itTrackNames == trackNames.end())
                 itTrackNames = trackNames.begin();
-        } else if (state == joining) {
+        } else if (state == joiningMatch) {
             itMatchNames++;
             if (itMatchNames == matchNames.end())
                 itMatchNames = matchNames.begin();
@@ -99,19 +122,17 @@ void MatchWindow::updateNonSelectingButtons(const SDL_Event *event) {
         ready = true;
     }
     if (returnButton.isClicked()) {
-        state = selecting;
+        state = selectingMode;
     }
 }
 
 std::string MatchWindow::serializeData() {
-    std::string response;
-    if (state == creating) {
-        response += "C,";
+    std::string response{};
+    if (state == creatingMatch) {
         response += textTrack.getText() + ",";
         response += textPlayers.getText();
         response += "\n";
-    } else if (state == joining) {
-        response += "J,";
+    } else if (state == joiningMatch) {
         response += textMatch.getText() + ",";
         response += "0";
         response += "\n";
@@ -125,13 +146,13 @@ bool MatchWindow::isReady() {
 
 void MatchWindow::updateMatchButtons(const SDL_Event *event) {
     //Agrego estos if para no actualizar siempre todos los botones
-    if (state == selecting) {
+    if (state == selectingMode) {
         updateSelectingButtons(event);
     }
-    if (state == creating) {
+    if (state == creatingMatch) {
         updateCreatingButtons(event);
     }
-    if (state != selecting) {
+    if (state != selectingMode) {
         updateNonSelectingButtons(event);
     }
 }
@@ -144,11 +165,11 @@ void MatchWindow::showBackground() {
 }
 
 void MatchWindow::render() {
-    if (state == selecting) {
+    if (state == selectingMode) {
         selectingScreen();
-    } else if (state == creating) {
+    } else if (state == creatingMatch) {
         creationScreen();
-    } else if (state == joining) {
+    } else if (state == joiningMatch) {
         joiningScreen();
     }
 }
@@ -169,16 +190,20 @@ void MatchWindow::selectingScreen() {
 
 void MatchWindow::creationScreen() {
     showBackground();
-    showSelectText("Choose track: ", *itTrackNames, window.getWidth() / 9, window.getHeight() / 2.5, arrowButton, textTrack);
-    showSelectText("Number of players: ", *itPlayers, window.getWidth() / 9, window.getHeight() / 1.9, arrowButton2, textPlayers);
-    showSelectText("Play with AI: ", *itScripts, window.getWidth() / 9, window.getHeight() / 1.5, arrowButton3, textLua);
+    if (!trackNames.empty()) {
+        showSelectText("Choose track: ", *itTrackNames, window.getWidth() / 9, window.getHeight() / 2.5, arrowButton, textTrack);
+        showSelectText("Number of players: ", *itPlayers, window.getWidth() / 9, window.getHeight() / 1.9, arrowButton2, textPlayers);
+        showSelectText("Play with AI: ", *itScripts, window.getWidth() / 9, window.getHeight() / 1.5, arrowButton3, textLua);
+    }
     showPlayAndReturn();
 }
 
 void MatchWindow::joiningScreen() {
     showBackground();
-    showSelectText("Available matchs: ", *itMatchNames, window.getWidth() / 9, window.getHeight() / 2, arrowButton, textMatch);
-    showSelectText("Play with AI: ", *itScripts, window.getWidth() / 9, window.getHeight() / 1.5, arrowButton3, textLua);
+    if (!matchNames.empty()) {
+        showSelectText("Available matchs: ", *itMatchNames, window.getWidth() / 9, window.getHeight() / 2, arrowButton, textMatch);
+        showSelectText("Play with AI: ", *itScripts, window.getWidth() / 9, window.getHeight() / 1.5, arrowButton3, textLua);
+    }
     showPlayAndReturn();
 }
 
@@ -218,9 +243,19 @@ StateWindow MatchWindow::getState() const {
     return this->state;
 }
 
+bool MatchWindow::isModeSelected() {
+    return this->state != selectingMode;
+}
+
+std::string MatchWindow::getSelection() {
+    if (this->state == creatingMatch) return "C\n";
+    else if (this->state == joiningMatch) return "J\n";
+}
+
 void MatchWindow::reload() {
-    state = selecting;
+    state = selectingMode;
     ready = false;
+    resetMatchButtons();
     createMatchButtons();
     //tambien habria que recargar las partidas
 }

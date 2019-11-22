@@ -1,7 +1,7 @@
 #ifndef __EventLoopIA_H__
 #define __EventLoopIA_H__
 
-#include "ThreadSafeQueue.h"
+#include "BlockingQueue.h"
 #include "../../common/include/thread.h"
 #include "Drawer.h"
 #include <SDL2/SDL_events.h>
@@ -10,13 +10,13 @@
 class EventLoopIA : public Thread {
 private:
     bool running;
-    ThreadSafeQueue &queue;
+    BlockingQueue &queue;
     Drawer *drawer;
     ModelMonitor &modelMonitor;
     Ai lua_ai;
 
 public:
-    EventLoopIA(ThreadSafeQueue &queue, Drawer *drawerThread,
+    EventLoopIA(BlockingQueue &queue, Drawer *drawerThread,
                 ModelMonitor &modelMonitor);
 
     ~EventLoopIA();

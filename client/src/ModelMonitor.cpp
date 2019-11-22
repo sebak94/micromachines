@@ -24,6 +24,11 @@ void ModelMonitor::setGameState(std::string str) {
     model.setGameState(str);
 }
 
+void ModelMonitor::setGameState(GameState state) {
+    std::lock_guard<std::mutex> lock(m);
+    model.setGameState(state);
+}
+
 void ModelMonitor::updateCar(std::string str) {
     std::lock_guard<std::mutex> lock(m);
     model.updateCar(str);
@@ -59,11 +64,20 @@ void ModelMonitor::setTrackNames(std::string tracks) {
     model.setTrackNames(tracks);
 }
 
+void ModelMonitor::setMatchNames(std::string matches) {
+    std::lock_guard<std::mutex> lock(m);
+    model.setMatchNames(matches);
+}
+
 std::vector<std::string> ModelMonitor::getTrackNames() {
     std::lock_guard<std::mutex> lock(m);
     return model.getTrackNames();
 }
 
+std::vector<std::string> ModelMonitor::getMatchNames() {
+    std::lock_guard<std::mutex> lock(m);
+    return model.getMatchNames();
+}
 std::vector<std::string>& ModelMonitor::getMatchResults() {
     std::lock_guard<std::mutex> lock(m);
     return model.getMatchResults();
@@ -74,9 +88,9 @@ void ModelMonitor::updateMatchResults(std::string results) {
     model.updateMatchResults(results);
 }
 
-void ModelMonitor::createModifier(std::string str) {
+void ModelMonitor::createModifiers(std::string str) {
     std::lock_guard<std::mutex> lock(m);
-    model.createModifier(str);
+    model.createModifiers(str);
 }
 
 std::vector<Modifier>& ModelMonitor::getModifiers() {

@@ -5,21 +5,21 @@ ModelUpdater::ModelUpdater(Socket &socket, ModelMonitor &modelMonitor, Drawer* d
         socket(socket), modelMonitor(modelMonitor), drawer(drawerThread) {
     std::string welcome =  receive(); // Recibe mensaje de bienvenida
     std::cout << welcome;
-    std::string carStr = receive(); // Recibo mi auto
-    std::cout << "Auto: " << carStr;
-    std::string trackNames = receive(); //Recibo todos los nombres de las pistas
-    std::cout << "Pistas: " << trackNames;
-    std::string lapsStr = receive(); // Recibe cantidad de vueltas
-    std::cout << lapsStr;
-
-    modelMonitor.setTrackNames(trackNames);
-    modelMonitor.setTotalLaps(lapsStr);
-    modelMonitor.setMyColor(carStr);
-    modelMonitor.updateCar(carStr);
 }
 
 ModelUpdater::~ModelUpdater() {
 
+}
+
+bool ModelUpdater::updateState(std::string &received) {
+    //std::cout << received << std::endl;
+    if (received[0] == 'G') {
+        modelMonitor.setGameState(received);
+        received = receive();
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void ModelUpdater::run() {
@@ -30,7 +30,7 @@ void ModelUpdater::run() {
             //printf("text1: %s\n", text.c_str());
             if (text[0] == 'G') {
                 //Si recibi cambio de estado lo actualizo
-                std::string text = receive();
+                //std::string text = receive();
                 printf("text: %s\n", text.c_str());
                 modelMonitor.setGameState(text);
             } else {
@@ -40,12 +40,39 @@ void ModelUpdater::run() {
                         Track track = Track(text.substr(2, text.length()));
                         modelMonitor.setTrack(track.getTrackPartData());
                     }
+                } else if (modelMonitor.getGameState() == creating) {
+                    modelMonitor.setTrackNames(text);
+                    Track track = Track(receive());
+                    modelMonitor.setTrack(track.getTrackPartData());
+
+                    text = receive();
+                    modelMonitor.createModifiers(text);
+
+                    text = receive();
+                    modelMonitor.setMyColor(text);
+                    modelMonitor.updateCar(text);
+                    modelMonitor.setGameState(waitingPlayers);
+                    text = receive();
+                } else if (modelMonitor.getGameState() == joining) {
+                    modelMonitor.setMatchNames(text);
+                    //receive();
+                    Track track = Track(receive());
+                    modelMonitor.setTrack(track.getTrackPartData());
+
+                    text = receive();
+                    modelMonitor.createModifiers(text);
+
+                    text = receive();
+                    modelMonitor.setMyColor(text);
+                    modelMonitor.updateCar(text);
+                    text = receive();
+                    modelMonitor.setGameState(waitingPlayers);
                 } else if (modelMonitor.getGameState() == waitingPlayers
                         || modelMonitor.getGameState() == startCountdown) {
                     modelMonitor.updateCar(text);
                 } else if (modelMonitor.getGameState() == playing
-                        ||modelMonitor.getGameState() == waitingEnd
-                          || modelMonitor.getGameState() == gameEnded) {
+                        || modelMonitor.getGameState() == waitingEnd
+                        || modelMonitor.getGameState() == gameEnded) {
                     if (text[0] == 'W') {
                         modelMonitor.updateMatchResults(text.substr(2, text.length()));
                     } else {
@@ -74,5 +101,6 @@ std::string ModelUpdater::receive() {
         this->socket.Receive(&c, 1);
     }
     std::string str_resp(response.begin(), response.end());
+    //std::cout << str_resp << std::endl;
     return str_resp + "\n";
 }

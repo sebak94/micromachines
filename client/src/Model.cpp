@@ -2,14 +2,7 @@
 #include "../../common/include/TrackList.h"
 #include <algorithm>
 
-Model::Model() {
-    //Invento modificadores de prueba
-    createModifier("900,500,healthBox\n");
-    createModifier("900,575,boost\n");
-    createModifier("900,537,stones\n");
-    createModifier("800,500,oil\n");
-    createModifier("800,537,mud\n");
-}
+Model::Model() {}
 
 Model::~Model() {
     for (const auto pair : cars) {
@@ -42,14 +35,18 @@ void Model::setMyColor(std::string str) {
 }
 
 void Model::setGameState(std::string str) {
-    if (str == "mainMenu\n") gameState = mainMenu;
-    else if (str == "selectingTrack\n") gameState = selectingTrack;
-    else if (str == "selectingCar\n") gameState = selectingCar;
-    else if (str == "waitingPlayers\n") gameState = waitingPlayers;
-    else if (str == "startCountdown\n") gameState = startCountdown;
-    else if (str == "playing\n") gameState = playing;
-    else if (str == "waitingEnd\n") gameState = waitingEnd;
-    else if (str == "gameEnded\n") gameState = gameEnded;
+    if (str == "G,mainMenu\n") gameState = mainMenu;
+    else if (str == "G,creating\n") gameState = creating;
+    else if (str == "G,joining\n") gameState = joining;
+    else if (str == "G,waitingPlayers\n") gameState = waitingPlayers;
+    else if (str == "G,startCountdown\n") gameState = startCountdown;
+    else if (str == "G,playing\n") gameState = playing;
+    else if (str == "G,waitingEnd\n") gameState = waitingEnd;
+    else if (str == "G,gameEnded\n") gameState = gameEnded;
+}
+
+void Model::setGameState(GameState state) {
+    gameState = state;
 }
 
 GameState Model::getGameState() {
@@ -81,10 +78,9 @@ void Model::updateCar(std::string str) {
     cars[color]->update(x, y, rotation, health, laps);
 }
 
-void Model::createModifier(std::string str) {
-    //asumo que mandan algo como "x,y,tipo\n"
-    Modifier modifier(str);
-    modifiers.push_back(modifier);
+void Model::createModifiers(std::string str) {
+    ModifierList modifierList(str);
+    modifiers = std::move(modifierList.getModifiers());
 }
 
 std::vector<Modifier>& Model::getModifiers() {
@@ -104,8 +100,16 @@ void Model::setTrackNames(std::string tracks) {
     trackNames = TrackList::getTrackNames(tracks);
 }
 
+void Model::setMatchNames(std::string matches) {
+    matchNames = TrackList::getTrackNames(matches);
+}
+
 std::vector<std::string> Model::getTrackNames() {
     return trackNames;
+}
+
+std::vector<std::string> Model::getMatchNames() {
+    return matchNames;
 }
 
 std::vector<std::string>& Model::getMatchResults() {

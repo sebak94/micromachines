@@ -2,7 +2,7 @@
 
 #define FAKE_KEYDOWN 1
 
-EventLoopIA::EventLoopIA(ThreadSafeQueue &queue, Drawer *drawerThread,
+EventLoopIA::EventLoopIA(BlockingQueue &queue, Drawer *drawerThread,
                          ModelMonitor &modelMonitor) :
         queue(queue), drawer(drawerThread), modelMonitor(modelMonitor) {}
 

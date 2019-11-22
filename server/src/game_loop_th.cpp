@@ -1,14 +1,14 @@
 #include "../include/game_loop_th.h"
-#include "../include/model/micromachines.h"
+#include "../include/model/micromachines_th.h"
 #include <cstdint>
 #include <unistd.h>
 
 #define TICKS_PER_SECOND 60
-#define SKIP_TICKS 1000 / TICKS_PER_SECOND
+#define SKIP_TICKS (1000/TICKS_PER_SECOND)
 #define MAX_FRAMESKIP 10
 #define MICROSECS_WAIT 16000 //seria que en un segundo se dibujen aprox 60 veces
 
-GameLoopTh::GameLoopTh(Micromachines &micromachines) :
+GameLoopTh::GameLoopTh(MicroMachinesTh &micromachines) :
         running(true), micromachines(micromachines) {
     this->loader.load_dynamic_libraries();
 }
@@ -35,7 +35,7 @@ void GameLoopTh::waitForPlayers() {
             updateWorld(next_game_tick, 0, loops, 1.0, 1.0 / 60, 5);
             //micromachines.sendNewStateToPlayers();
             //Mientras espero jugadores no quiero recibir el estado
-            timeWait(MICROSECS_WAIT*2, begin);
+            timeWait(MICROSECS_WAIT, begin);
         } else {
             break;
         }
@@ -62,11 +62,12 @@ void GameLoopTh::countdownWait() {
 }
 
 void GameLoopTh::play() {
+    bool ending = false;
     if (running) {
         uint64_t next_game_tick = GetTickCountMs();
         uint64_t loops;
         countdownTime = MAXRACETIME * SECTOMICROSEC;  // us
-        while (countdownTime > 0) {
+        while (countdownTime > 0 && !micromachines.allPlayersGameEnded()) {
             auto begin = std::chrono::steady_clock::now();
             loops = 0;
             micromachines.updatePlayersState();
@@ -79,15 +80,11 @@ void GameLoopTh::play() {
 
             // this->executeLibraries();
             countdownTime -= MICROSECS_WAIT;
-
-            if (micromachines.allPlayersGameEnded()) {
-                usleep(5000000); //Duermo para visualizar el podio 5 segundos
-                break;
+            if (micromachines.allPlayersWaitingEnd() && !ending) {
+                countdownTime = (PODIUMVIEWTIME)*0.9;  // cuando llegan todos en 4,5 segs corta animacion
+                ending = true;
             }
         }
-        micromachines.setAllPlayersGameStates(mainMenu);
-        usleep(500000); //Duermo para dar tiempo a que le llegue al cliente la info de mainMenu
-        //micromachines.cleanPlayers(); //Limpio los jugadores, deberia iniciar una nueva partida
     }
 }
 
@@ -124,12 +121,15 @@ bool GameLoopTh::timeWait(int timeToWait, std::chrono::time_point<std::chrono::s
 
 
 void GameLoopTh::run() {
-    while (running) {
-        showMainMenu();
-        waitForPlayers();
-        countdownWait();
-        play();
-    }
+    showMainMenu();
+    waitForPlayers();
+    countdownWait();
+    play();
+    //stop();
+}
+
+bool GameLoopTh::isRunning() {
+    return running;
 }
 
 void GameLoopTh::executeLibraries() {

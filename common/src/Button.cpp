@@ -12,6 +12,17 @@
 
 Button::Button() = default;
 
+/*Button::~Button() {
+    SDL_DestroyTexture(texture);
+}*/
+
+void Button::clean() {
+    area = {};
+    pressed = false;
+    previousPressState = false;
+    SDL_DestroyTexture(texture);
+}
+
 Button::Button(SDL_Renderer *renderer, SDL_Rect &area, const std::string &path) {
     this->area = {area.x, area.y, area.w, area.h};
     texture = loadTexture(path, renderer);

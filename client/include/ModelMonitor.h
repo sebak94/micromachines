@@ -38,11 +38,19 @@ public:
 
     std::vector <std::string> getTrackNames();
 
+    void setGameState(GameState state);
+
+    void setMatchNames(std::string matches);
+
+    std::vector <std::string> getMatchNames();
+
     std::vector <std::string> &getMatchResults();
 
     void updateMatchResults(std::string results);
-    std::vector<Modifier>& getModifiers();
-    void createModifier(std::string str);
+
+    std::vector <Modifier> &getModifiers();
+
+    void createModifiers(std::string str);
 };
 
 #endif

@@ -7,15 +7,15 @@
 #include "../../common/include/TextTexture.h"
 
 typedef enum {
-    selecting,
-    creating,
-    joining
+    selectingMode,
+    creatingMatch,
+    joiningMatch
 } StateWindow;
 
 class MatchWindow {
 private:
     SdlWindow &window;
-    StateWindow state = selecting;
+    StateWindow state = selectingMode;
     SdlSurface background;
     SdlSurface logo;
     Button createMatchButton;
@@ -40,16 +40,22 @@ private:
     bool ready = false;
 
 public:
-    MatchWindow(SdlWindow &sdlWindow);
+    explicit MatchWindow(SdlWindow &sdlWindow);
     ~MatchWindow();
     void updateMatchButtons(const SDL_Event *event);
     void render();
-    void setTrackNames(std::vector<std::string> tracks);
+    void setTrackNames(const std::vector<std::string>& tracks);
     StateWindow getState() const;
     std::string serializeData();
     bool isReady();
     void reload();
     bool isLuaSelected();
+
+    bool isModeSelected();
+
+    std::string getSelection();
+
+    void setMatchNames(const std::vector<std::string>& matches);
 
 private:
     void createMatchButtons();
@@ -68,6 +74,8 @@ private:
     void showSelectText(std::string title, std::string textToShow, int x, int y, Button &buttonToChangeText, TextTexture &text);
 
     void showPlayAndReturn();
+
+    void resetMatchButtons();
 };
 
 #endif

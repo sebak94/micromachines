@@ -37,6 +37,7 @@ void Ai::setTrack(std::vector <TrackPartData> &track) {
     }
 
     lua_load_map(this->L, matrix);
+    printf("LOAD OK\n");
 }
 
 

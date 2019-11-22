@@ -14,7 +14,7 @@ private:
     std::string color;
 
 public:
-    Car(std::string color);
+    explicit Car(std::string color);
     ~Car();
     int getX() const;
     int getY() const;
