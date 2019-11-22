@@ -60,6 +60,7 @@ class MicroMachinesTh : public Thread {
     std::string modifiersSerialized();
 
     bool allPlayersWaitingEnd();
+    bool isAnAvailableMatch();
 };
 
 #endif

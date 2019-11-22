@@ -245,3 +245,12 @@ bool MicroMachinesTh::allPlayersGameEnded() {
 std::string MicroMachinesTh::modifiersSerialized() {
     return modifiers.serialize();
 }
+
+bool MicroMachinesTh::isAnAvailableMatch() {
+    for (int i = 0; i < players.size(); i++) {
+        if (players[i]->getState() != waitingPlayers) {
+            return false;
+        }
+    }
+    return true;
+}

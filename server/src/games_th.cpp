@@ -120,8 +120,10 @@ void GamesTh::addPlayer(ClientTh *player) {
 // Sends available games
 std::string GamesTh::serializeGames() {
     std::string gamesStr = "N,";
-    for (auto game : games)
-        gamesStr += std::to_string(game.first) + ",";
+    for (auto game : games) {
+        if (game.second->isAnAvailableMatch())
+            gamesStr += std::to_string(game.first) + ",";
+    }
 
     if (!gamesStr.empty()) {
         gamesStr.back() = '\n';
