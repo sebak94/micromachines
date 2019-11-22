@@ -71,6 +71,8 @@ void GamesTh::processPlayer(ClientTh * player, bool & finished) {
         usleep(REFRESHPLAYERSTIME);
     }
     player->setPlayerMode();
+    player->receiveMatchSelection();
+    player->setPlayerMode(); //actualizo el player mode, por si cambiaron de create a join o al reves
     if (player->getState() == creating) {
         printf("create\n");
         createGame(player);

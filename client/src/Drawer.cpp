@@ -97,11 +97,9 @@ void Drawer::draw() {
     window.fill();
     if (modelMonitor.getGameState() == mainMenu) {
         matchWindow.render();
-    } else if (modelMonitor.getGameState() == creating) {
         matchWindow.setTrackNames(modelMonitor.getTrackNames());
-        matchWindow.render();
-    } else if (modelMonitor.getGameState() == joining) {
         matchWindow.setMatchNames(modelMonitor.getMatchNames());
+    } else if (modelMonitor.getGameState() == creating || modelMonitor.getGameState() == joining) {
         matchWindow.render();
     } else if (modelMonitor.getGameState() == startCountdown) {
         drawWorld();

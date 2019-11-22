@@ -127,7 +127,7 @@ void MatchWindow::updateNonSelectingButtons(const SDL_Event *event) {
 }
 
 std::string MatchWindow::serializeData() {
-    std::string response{};
+    std::string response;
     if (state == creatingMatch) {
         response += textTrack.getText() + ",";
         response += textPlayers.getText();

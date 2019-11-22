@@ -35,6 +35,7 @@ class ClientTh: public Thread {
     std::string availableGames{};
     int gameNumber = -1;
     std::vector<std::string> winners;
+    std::string matchSelection;
 
     void sendWelcomeMsg();
     void receive(char *action);
@@ -78,6 +79,7 @@ class ClientTh: public Thread {
     void setWinners(std::vector<std::string> w);
     void sendWinners();
     void clean();
+    void receiveMatchSelection();
 };
 
 #endif
