@@ -42,6 +42,7 @@ public:
     void setGameState(GameState state);
     void setMatchNames(std::string matches);
     std::vector<std::string> getMatchNames();
+    void reset();
 
 private:
 

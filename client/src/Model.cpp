@@ -128,3 +128,7 @@ void Model::updateMatchResults(std::string results) {
             break;
     }
 }
+
+void Model::reset() {
+    matchResults.clear();
+}

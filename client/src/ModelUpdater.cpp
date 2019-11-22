@@ -41,6 +41,7 @@ void ModelUpdater::run() {
                         modelMonitor.setTrack(track.getTrackPartData());
                     }
                 } else if (modelMonitor.getGameState() == creating) {
+                    modelMonitor.reset();
                     modelMonitor.setTrackNames(text);
                     Track track = Track(receive());
                     modelMonitor.setTrack(track.getTrackPartData());
@@ -54,6 +55,7 @@ void ModelUpdater::run() {
                     modelMonitor.setGameState(waitingPlayers);
                     text = receive();
                 } else if (modelMonitor.getGameState() == joining) {
+                    modelMonitor.reset();
                     modelMonitor.setMatchNames(text);
                     //receive();
                     Track track = Track(receive());

@@ -153,7 +153,7 @@ void Camera::drawPodium(std::vector<std::string> &matchResults) {
     }
 }
 
-void Camera::reload() {
+void Camera::reset() {
     countDown = SECOND;
     countDownNumber = SECSTOSTART;
     countDownStarted = false;
