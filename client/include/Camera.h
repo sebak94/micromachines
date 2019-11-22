@@ -27,10 +27,14 @@ private:
     double countDown = SECOND;
     double countDownNumber = SECSTOSTART;
     bool countDownStarted = false;
+    double drawDistance;
     saveTickChrono start;
 
 public:
-    Camera(SdlWindow &window, std::map<std::string, SdlSurface*> &pictures, std::map<trackPartType, SdlSurface*> &trackPictures);
+    Camera(SdlWindow &window,
+           std::map<std::string, SdlSurface *> &pictures,
+           std::map<trackPartType, SdlSurface *> &trackPictures,
+           double drawDistance);
     ~Camera();
     void showBackground();
     void showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> &track);
@@ -42,6 +46,7 @@ public:
     void showLaps(int lap, int totalLaps);
     void drawPodium(std::vector<std::string> &matchResults);
     void reset();
+    void validateDrawDistance();
 };
 
 #endif

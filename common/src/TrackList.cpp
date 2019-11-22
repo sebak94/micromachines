@@ -10,7 +10,7 @@ void TrackList::readTracks() {
     Json::Value maps;
     Json::Reader reader;
     std::ifstream tracksFile(TRACKS_FILE_PATH, std::ifstream::binary);
-    if (!reader.parse(tracksFile, maps )){
+    if (!reader.parse(tracksFile, maps)){
         std::cout << reader.getFormattedErrorMessages() << std::endl;
     } else {
         for (int i = 0; i < maps[TRACKS_ID].size(); i++) {

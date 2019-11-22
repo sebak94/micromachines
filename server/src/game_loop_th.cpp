@@ -7,9 +7,12 @@
 #define SKIP_TICKS (1000/TICKS_PER_SECOND)
 #define MAX_FRAMESKIP 10
 #define MICROSECS_WAIT 16000 //seria que en un segundo se dibujen aprox 60 veces
+#define RACETIME "race time [mins]"
+#define REFRESH_FREQ "world refresh frequency [Hz]"
 
 GameLoopTh::GameLoopTh(MicroMachinesTh &micromachines) :
-        running(true), micromachines(micromachines) {
+        running(true), micromachines(micromachines),
+        config(micromachines.getConfig()) {
     this->loader.load_dynamic_libraries();
 }
 
@@ -32,8 +35,8 @@ void GameLoopTh::waitForPlayers() {
             auto begin = std::chrono::steady_clock::now();
             loops = 0;
             micromachines.updatePlayersState();
-            updateWorld(next_game_tick, 0, loops, 1.0, 1.0 / 60, 5);
-            //micromachines.sendNewStateToPlayers();
+            updateWorld(next_game_tick, 0, loops, 1.0 / config.getAsFloat(REFRESH_FREQ), 1 , 5);
+            micromachines.sendNewStateToPlayers();
             //Mientras espero jugadores no quiero recibir el estado
             timeWait(MICROSECS_WAIT, begin);
         } else {
@@ -47,12 +50,12 @@ void GameLoopTh::countdownWait() {
     if (running) {
         uint64_t next_game_tick = GetTickCountMs();
         uint64_t loops;
-        countdownTime = SECSTOSTART * SECTOMICROSEC;  // us
+        countdownTime = (SECSTOSTART) * (SECTOMICROSEC);  // us
         while (countdownTime > 0) {
             auto begin = std::chrono::steady_clock::now();
             loops = 0;
             micromachines.updatePlayersState();
-            updateWorld(next_game_tick, SKIP_TICKS, loops, 1.0 / 60, 5, 5);
+            updateWorld(next_game_tick, SKIP_TICKS, loops, 1.0 / config.getAsFloat(REFRESH_FREQ), 5, 5);
             micromachines.sendNewStateToPlayers();
             timeWait(MICROSECS_WAIT, begin);
             countdownTime -= MICROSECS_WAIT;
@@ -66,13 +69,13 @@ void GameLoopTh::play() {
     if (running) {
         uint64_t next_game_tick = GetTickCountMs();
         uint64_t loops;
-        countdownTime = MAXRACETIME * SECTOMICROSEC;  // us
+        countdownTime = (MINTOMICROSEC) * config.getAsInt(RACETIME);  // us
         while (countdownTime > 0 && !micromachines.allPlayersGameEnded()) {
             auto begin = std::chrono::steady_clock::now();
             loops = 0;
             micromachines.updatePlayersState();
             micromachines.monitorTrack();
-            updateWorld(next_game_tick, SKIP_TICKS, loops, 1.0 / 60, 5, 5);
+            updateWorld(next_game_tick, SKIP_TICKS, loops, 1.0 / config.getAsFloat(REFRESH_FREQ), 5, 5);
             micromachines.sendNewStateToPlayers();
             micromachines.updateWinners();
             micromachines.sendWinners();
@@ -125,7 +128,7 @@ void GameLoopTh::run() {
     waitForPlayers();
     countdownWait();
     play();
-    //stop();
+    stop();
 }
 
 bool GameLoopTh::isRunning() {

@@ -86,7 +86,7 @@ void GamesTh::processPlayer(ClientTh * player, bool & finished) {
 
 // Creates new game and adds player to it
 void GamesTh::createGame(ClientTh * player) {
-    auto * game = new MicroMachinesTh();
+    auto * game = new MicroMachinesTh(config);
     auto * gameLoop = new GameLoopTh(*game);
     player->setMatch();
     player->sendModifiers(game->modifiersSerialized());
@@ -163,7 +163,6 @@ void GamesTh::stopGameIfAllEnded() {
         if (game.second->allPlayersWaitingEnd()) {
             usleep(PODIUMVIEWTIME); // Duermo para visualizar el podio
             game.second->setAllPlayersGameStates(gameEnded);
-            game.second->stop();
         }
     }
 }

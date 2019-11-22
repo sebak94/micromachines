@@ -7,7 +7,7 @@
 #include <cstdint>
 
 #define SECSTOSTART 5  // secs
-#define MAXRACETIME 600  // secs
+#define MINTOMICROSEC 60000000  // secs
 #define SECTOMICROSEC 1000000
 #define PODIUMVIEWTIME 5000000  // us
 
@@ -18,6 +18,7 @@ class GameLoopTh: public Thread {
     Loader loader;
     uint8_t game_loops = 1;
     double countdownTime;
+    Config config;
 
     uint64_t GetTickCountMs();
     void executeLibraries();

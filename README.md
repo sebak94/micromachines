@@ -102,5 +102,21 @@ target_link_libraries(main
         avcodec)
 ```
 
+## Config defaults
+```
+{
+   "max velocity [%]": 100,
+   "acceleration [%]" : 100,
+   "grip [%]" : 50,
+   "maneuverability [%]" : 50,
+   "race time [mins]" : 10,
+   "world refresh frequency [Hz]" : 60,
+   "play music" : "false",
+   "fullscreen" : "false",
+   "draw distance [4 - 8]" : 4,
+   "fps limit" : 60,
+   "rec fps limit" : 30
+}
+```
 
 ***NOTA: Cualquier modificación de estos pasos hacer el cambio correspondiente en este Readme.***

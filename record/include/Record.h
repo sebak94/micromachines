@@ -15,8 +15,6 @@ extern "C" {
 #include <libswscale/swscale.h>
 }
 
-#define RECORD_FPS 60
-
 class Record {
 private:
     int size{};
@@ -31,7 +29,7 @@ private:
     AVFormatContext * formatContext{};
     SwsContext * sContext{};
     bool recording = false;
-    int fps = 30;
+    int fps;
     int width;
     int height;
 

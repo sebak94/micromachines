@@ -98,7 +98,7 @@ public:
 
     void saveTrackSequence(int row, int col);
 
-    uint16_t getCarStartingRotation(int order);
+    float getCarStartingRotation(int order);
 
     bool jumpedTrackPart(int posX, int posY, int lastTrackPartID);
 

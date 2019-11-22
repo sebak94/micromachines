@@ -19,9 +19,11 @@
 #include "../../common/include/Button.h"
 #include "../../record/include/Record.h"
 #include "MatchWindow.h"
+#include "../../common/include/Config.h"
 
 class Drawer : public Thread {
 private:
+    Config config;  // must load first
     bool running;
     SdlWindow window;
     std::map<std::string, SdlSurface*> pictures;
@@ -37,6 +39,8 @@ private:
     std::mutex recordMutex;
     bool lastRecordState = false;
     MatchWindow matchWindow;
+    double drawWait;
+    double recWait;
 
 public:
     explicit Drawer(ModelMonitor &modelMonitor);
@@ -57,9 +61,7 @@ private:
     void showRecButton();
     void recorderTh();
     void saveLastFrame();
-
     void drawWorld();
-
     void drawHUD();
 };
 

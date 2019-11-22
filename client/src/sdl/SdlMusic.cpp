@@ -22,10 +22,10 @@ SdlMusic::~SdlMusic() {
     Mix_CloseAudio();
 }
 
-void SdlMusic::play() {
-    Mix_PlayMusic(music, -1);
+void SdlMusic::play(bool run) {
+    if (run) Mix_PlayMusic(music, -1);
 }
 
-void SdlMusic::stop() {
-    Mix_HaltMusic();
+void SdlMusic::stop(bool run) {
+    if (run) Mix_HaltMusic();
 }
