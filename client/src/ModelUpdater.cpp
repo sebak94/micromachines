@@ -36,16 +36,18 @@ void ModelUpdater::run() {
             } else {
                 //Si recibi otra cosa, depende del estado actual lo que voy a hacer
                 if (modelMonitor.getGameState() == mainMenu) {
+                    printf("MENU\n");
                     if (text[0] == 'T') {
                         Track track = Track(text.substr(2, text.length()));
                         modelMonitor.setTrack(track.getTrackPartData());
                     }
+                    modelMonitor.setTrackNames(text);
+                    text = receive();
+                    modelMonitor.setMatchNames(text.substr(2, text.length()));
                 } else if (modelMonitor.getGameState() == creating) {
                     modelMonitor.reset();
-                    modelMonitor.setTrackNames(text);
-                    Track track = Track(receive());
+                    Track track = Track(text);
                     modelMonitor.setTrack(track.getTrackPartData());
-
                     text = receive();
                     modelMonitor.createModifiers(text);
 
@@ -56,11 +58,9 @@ void ModelUpdater::run() {
                     text = receive();
                 } else if (modelMonitor.getGameState() == joining) {
                     modelMonitor.reset();
-                    modelMonitor.setMatchNames(text);
                     //receive();
-                    Track track = Track(receive());
+                    Track track = Track(text);
                     modelMonitor.setTrack(track.getTrackPartData());
-
                     text = receive();
                     modelMonitor.createModifiers(text);
 
