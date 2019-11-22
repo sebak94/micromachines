@@ -78,7 +78,7 @@ void GamesTh::processPlayer(ClientTh * player, bool & finished) {
 void GamesTh::createGame(ClientTh * player) {
     TrackList tracks;
     tracks.readTracks();
-    auto * game = new MicroMachinesTh();
+    auto * game = new MicroMachinesTh(config);
     auto * gameLoop = new GameLoopTh(*game);
     player->sendAllTrackNames(tracks.serialize());
     player->setMatch();
@@ -156,7 +156,6 @@ void GamesTh::stopGameIfAllEnded() {
         if (game.second->allPlayersWaitingEnd()) {
             usleep(PODIUMVIEWTIME); // Duermo para visualizar el podio
             game.second->setAllPlayersGameStates(gameEnded);
-            game.second->stop();
         }
     }
 }

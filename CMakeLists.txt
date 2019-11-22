@@ -66,7 +66,9 @@ set(SOURCE_FILES_SERVER
     common/include/ModifierList.h
 	common/src/ModifierList.cpp
     server/include/games_th.h
-    common/include/gameState.h)
+    common/include/gameState.h
+	common/src/Config.cpp
+	common/include/Config.h)
 
 set(SOURCE_FILES_CLIENT
     client/include/ThreadsManager.h
@@ -132,7 +134,9 @@ set(SOURCE_FILES_CLIENT
 	common/include/Modifier.h
     common/include/gameState.h
     common/include/ModifierList.h
-    common/src/ModifierList.cpp)
+    common/src/ModifierList.cpp
+	common/src/Config.cpp
+	common/include/Config.h)
 
 set(SOURCE_FILES_EDITOR
 	common/src/TrackList.cpp

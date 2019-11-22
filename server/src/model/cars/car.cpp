@@ -9,45 +9,61 @@
 
 #define PI 3.14159265
 #define RADTODEG 57.295779513082320876f
+#define VEL_CONFIG "max velocity [%]"
+#define ACCEL_CONFIG "acceleration [%]"
+#define GRIP_CONFIG "grip [%]"
+#define MANEU_CONFIG "maneuverability [%]"
 
-Car::Car(uint8_t width, uint8_t height, uint16_t max_velocity, uint8_t acceleration, uint8_t grip,
-         uint8_t maneuverability, Point initial_position, ColorType color, uint16_t rotation, b2World *world,
-         int startID) :
+Car::Car(uint8_t width, uint8_t height, uint16_t max_velocity,
+         float acceleration, float grip, float maneuverability,
+         Point initial_position, ColorType color, uint16_t rotation,
+         b2World *world, int startID) :
         width(width), height(height), max_velocity(max_velocity),
         acceleration(acceleration), grip(grip),
         maneuverability(maneuverability), health(100), color(color),
         td_car(world, max_velocity, acceleration, grip, maneuverability,
-        rotation, initial_position), control_state(0), lastTrackID(startID) {
+        rotation, initial_position), control_state(0), lastTrackID(startID){
 }
 
-Car* Car::createBlackCar(b2World *world, const Point &startingPoint,
-                        uint16_t rot, int startID) {
-    return std::move(new Car(100, 40, 150, 2, 2, 2, startingPoint, black,
-                            rot, world, startID));
+Car * Car::createBlackCar(b2World *world, const Point &startingPoint,
+                          float rot,
+                          int startID, Config & config) {
+    return std::move(new Car(100, 40, config.getAsUint16(VEL_CONFIG),
+            config.getAsFloat(ACCEL_CONFIG), config.getAsFloat(GRIP_CONFIG),
+            config.getAsFloat(MANEU_CONFIG), startingPoint, black, rot, world,
+            startID));
 }
 
 Car* Car::createBlueCar(b2World *world, const Point &startingPoint,
-                        uint16_t rot, int startID) {
-    return std::move(new Car(100, 40, 150, 2, 2, 2, startingPoint, blue,
-                            rot, world, startID));
+                        float rot, int startID, Config & config) {
+    return std::move(new Car(100, 40, config.getAsUint16(VEL_CONFIG),
+            config.getAsFloat(ACCEL_CONFIG), config.getAsFloat(GRIP_CONFIG),
+            config.getAsFloat(MANEU_CONFIG), startingPoint, blue, rot, world,
+            startID));
 }
 
 Car* Car::createRedCar(b2World *world, const Point &startingPoint,
-                        uint16_t rot, int startID) {
-    return std::move(new Car(100, 40, 150, 2, 2, 2, startingPoint, red,
-                            rot, world, startID));
+                       float rot, int startID, Config & config) {
+    return std::move(new Car(100, 40, config.getAsUint16(VEL_CONFIG),
+            config.getAsFloat(ACCEL_CONFIG), config.getAsFloat(GRIP_CONFIG),
+            config.getAsFloat(MANEU_CONFIG), startingPoint, red, rot, world,
+            startID));
 }
 
 Car* Car::createWhiteCar(b2World *world, const Point &startingPoint,
-                        uint16_t rot, int startID) {
-    return std::move(new Car(100, 40, 150, 2, 2, 2, startingPoint, white,
-                            rot, world, startID));
+                         float rot, int startID, Config & config) {
+    return std::move(new Car(100, 40, config.getAsUint16(VEL_CONFIG),
+            config.getAsFloat(ACCEL_CONFIG), config.getAsFloat(GRIP_CONFIG),
+            config.getAsFloat(MANEU_CONFIG), startingPoint, white, rot, world,
+            startID));
 }
 
 Car* Car::createYellowCar(b2World *world, const Point &startingPoint,
-                        uint16_t rot, int startID) {
-    return std::move(new Car(100, 40, 150, 2, 2, 2, startingPoint, yellow,
-                            rot, world, startID));
+                          float rot, int startID, Config & config) {
+    return std::move(new Car(100, 40, config.getAsUint16(VEL_CONFIG),
+            config.getAsFloat(ACCEL_CONFIG), config.getAsFloat(GRIP_CONFIG),
+            config.getAsFloat(MANEU_CONFIG), startingPoint, yellow, rot, world,
+            startID));
 }
 
 void Car::updateState(char action) {

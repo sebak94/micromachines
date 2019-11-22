@@ -6,6 +6,7 @@
 #include "../client_th.h"
 #include "../../../common/include/TrackList.h"
 #include "../../../common/include/ModifierList.h"
+#include "../../../common/include/Config.h"
 #include <vector>
 #include <mutex>
 #include <cstring>
@@ -19,17 +20,18 @@ class MicroMachinesTh : public Thread {
     std::mutex m;
     std::vector<ClientTh*> players;
     std::map<ColorType, Car*> cars;
-    int laps = 1;
+    int laps = 2;
     DestructionListener destruction_listener;
     std::vector<std::string> winners;
     bool running = true;
     std::map<ColorType, Car*>::iterator itCar;
+    Config config;
     void removePlayerFromVector(ClientTh *player);
 
     public:
     b2World *world;
 
-    MicroMachinesTh();
+    MicroMachinesTh(const Config &config);
     void setTrack(std::string trackStr);
     void setCars();
     void update();
@@ -60,6 +62,8 @@ class MicroMachinesTh : public Thread {
     std::string modifiersSerialized();
 
     bool allPlayersWaitingEnd();
+
+    Config getConfig();
 };
 
 #endif

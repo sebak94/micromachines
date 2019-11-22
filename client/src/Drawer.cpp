@@ -6,30 +6,38 @@
 #include "../../common/include/Error.h"
 #include <unistd.h>
 
-#define FPS 60
-#define MICROSECS_WAIT (1/FPS*1000000) //seria que en un segundo se dibujen aprox 60 veces
+#define FPS "fps limit"
+//#define MICROSECS_WAIT (1/FPS*1000000) //seria que en un segundo se dibujen aprox 60 veces
 #define MUSICPATH "../common/sounds/beat.wav"
 #define FULLSCREENBUTTON "../common/images/fullscreen.png"
 #define RECBUTTON "../common/images/buttons/recButton.png"
 #define VIDEOPATH "./recorded.mp4"
-#define VIDEOFPS 30
+#define VIDEOFPS "rec fps limit"
+#define PLAY_MUSIC "play music"
+#define FULLSCN "fullscreen"
+#define DRAW_DISTANCE "draw distance [4 - 8]"
+#define SECTOMICROSEC 1000000.0
 
 Drawer::Drawer(ModelMonitor &modelMonitor) :
     window(WIDTH, HEIGHT),
     loader(window, pictures, trackPictures),
-    camera(window, pictures, trackPictures),
+    camera(window, pictures, trackPictures, config.getAsDouble(DRAW_DISTANCE)),
     modelMonitor(modelMonitor), music(MUSICPATH),
-    video(std::string(VIDEOPATH), VIDEOFPS, WIDTH, HEIGHT),
+    video(std::string(VIDEOPATH), config.getAsDouble(VIDEOFPS), WIDTH, HEIGHT),
     matchWindow(window) {
     createFullScreenButton();
     createRecButton();
-    lastFrame.reserve(3*WIDTH*HEIGHT);
+    lastFrame.reserve(3*WIDTH*HEIGHT),
+    drawWait = SECTOMICROSEC / config.getAsDouble(FPS),
+    recWait = SECTOMICROSEC / config.getAsDouble(VIDEOFPS); // us
+
 }
 
 Drawer::~Drawer() {}
 
 void Drawer::run() {
-    //music.play();
+    music.play(config.isSet(PLAY_MUSIC));
+    if (config.isSet(FULLSCN)) window.changeFullScreen();
     running = true;
     std::thread recorder = std::thread(&Drawer::recorderTh, this);
     while (running) {
@@ -42,11 +50,11 @@ void Drawer::run() {
         }
         auto end = std::chrono::system_clock::now();
         int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-        if (MICROSECS_WAIT > microsecsPassed)
-            usleep(MICROSECS_WAIT - microsecsPassed);
+        if (drawWait > microsecsPassed)
+            usleep(drawWait - microsecsPassed);
     }
     recorder.join();
-    //music.stop();
+    music.stop(config.isSet(PLAY_MUSIC));
 }
 
 void Drawer::stop() {
@@ -163,14 +171,13 @@ void Drawer::recorderTh() {
         } else if (lastRecordState && !video.isRecording()) {
             std::lock_guard<std::mutex> lock(recordMutex);
             lastRecordState = false;
-            video.close();
         } else {
-            sleep (2);
+            sleep (1);
         }
         auto end = std::chrono::system_clock::now();
         int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(end - frameStart).count();
-        if ( 1000000 * 1 / VIDEOFPS > microsecsPassed )
-            usleep(1000000 * 1 / VIDEOFPS - microsecsPassed);
+        if (recWait > microsecsPassed)
+            usleep(recWait - microsecsPassed);
     }
     video.close();
 }

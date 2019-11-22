@@ -20,6 +20,7 @@ private:
     std::map<int, bool> mapperThreadList;  // true if thread finished
     bool running = true;
     int gamesNumber = 0;
+    Config config;
 
 public:
     GamesTh() = default;

@@ -12,8 +12,8 @@ private:
 public:
     explicit SdlMusic(const std::string &filename);
     ~SdlMusic();
-    void play();
-    void stop();
+    void play(bool run);
+    void stop(bool run);
 };
 
 #endif

@@ -7,11 +7,14 @@
 #define HEART "heart"
 #define FONTNAME "../common/fonts/OpenSans-Bold.ttf"
 
-Camera::Camera(SdlWindow &window, std::map<std::string, SdlSurface*> &pictures,
-        std::map<trackPartType, SdlSurface*> &trackPictures) :
+Camera::Camera(SdlWindow &window,
+               std::map<std::string, SdlSurface *> &pictures,
+               std::map<trackPartType, SdlSurface *> &trackPictures,
+               double drawDistance) :
         window(window), pictures(pictures), trackPictures(trackPictures),
-        lapBox(SdlSurface(LAPBOXPATH, window)) {
+        lapBox(SdlSurface(LAPBOXPATH, window)), drawDistance(drawDistance) {
     TTF_Init();
+    validateDrawDistance();
 }
 
 Camera::~Camera() {}
@@ -120,8 +123,8 @@ void Camera::showCountdown() {
 
 void Camera::updateBlockSize() {
     //Las imagenes son cuadradas, asi que le pongo el mismo ancho que largo
-    blockWidth = (window.getWidth() + window.getHeight()) / 4.0;
-    blockHeight = (window.getWidth() + window.getHeight()) / 4.0;
+    blockWidth = (window.getWidth() + window.getHeight()) / drawDistance;
+    blockHeight = (window.getWidth() + window.getHeight()) / drawDistance;
 }
 
 void Camera::showLaps(int lap, int totalLaps) {
@@ -151,4 +154,9 @@ void Camera::drawPodium(std::vector<std::string> &matchResults) {
         pictures[matchResults[i]]->renderRotate(carArea, 90, SDL_FLIP_NONE);
         y += window.getHeight()/6;
     }
+}
+
+void Camera::validateDrawDistance() {
+    if (drawDistance < 4 || drawDistance > 8)
+        drawDistance = 4;
 }

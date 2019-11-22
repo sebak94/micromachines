@@ -148,7 +148,6 @@ void ClientTh::run() {
     while (is_running){
         switch (state) {
             case mainMenu:
-                //EUNI.updateGameState(lastState, state);
                 sendGameState(lastState, state);
                 break;
             case creating:

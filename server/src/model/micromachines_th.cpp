@@ -10,7 +10,7 @@
 #define SPEED_INCREASE_FACTOR 2
 #define REFRESHTIME 5000000  // us
 
-MicroMachinesTh::MicroMachinesTh() {
+MicroMachinesTh::MicroMachinesTh(const Config &config) : config(config) {
     tracks.readTracks();
     world = new b2World(b2Vec2(0, 0));
     world->SetDestructionListener(&destruction_listener);
@@ -25,23 +25,23 @@ void MicroMachinesTh::setCars() {
     cars[blue] = Car::createBlueCar(world,
                                     getStartingPoint(0),
                                     getStartingCarRot(0),
-                                    getStartID(0));
+                                    getStartID(0), config);
     cars[white] = Car::createWhiteCar(world,
                                       getStartingPoint(1),
                                       getStartingCarRot(1),
-                                      getStartID(1));
+                                      getStartID(1), config);
     cars[black] = Car::createBlackCar(world,
                                       getStartingPoint(2),
                                       getStartingCarRot(2),
-                                      getStartID(2));
+                                      getStartID(2), config);
     cars[yellow] = Car::createYellowCar(world,
                                         getStartingPoint(3),
                                         getStartingCarRot(3),
-                                        getStartID(3));
+                                        getStartID(3), config);
     cars[red] = Car::createRedCar(world,
                                   getStartingPoint(4),
                                   getStartingCarRot(4),
-                                  getStartID(4));
+                                  getStartID(4), config);
     itCar = cars.begin();
 }
 
@@ -244,4 +244,8 @@ bool MicroMachinesTh::allPlayersGameEnded() {
 
 std::string MicroMachinesTh::modifiersSerialized() {
     return modifiers.serialize();
+}
+
+Config MicroMachinesTh::getConfig() {
+    return config;
 }

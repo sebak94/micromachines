@@ -506,27 +506,27 @@ Point Track::getCarStartingPos(int order) {
         return Point(blockPoint.getX() + BLOCKSIZE*3/4, blockPoint.getY() + BLOCKSIZE*3/4);
 }
 
-uint16_t Track::getCarStartingRotation(int order) {
+float Track::getCarStartingRotation(int order) {
     Point act = trackSequence.at(partCounter - 1 - order/STARTCARSPERBLOCK);
     Point prev = trackSequence.at(partCounter - 2 - order/STARTCARSPERBLOCK);
     trackPartType t = getTrackPart(act.getX(), act.getY()).getType();
 
     if (act.getX() > prev.getX()) {
-        if (t == upLeft) return 45;
-        else if (t == downLeft) return 135;
-        else if (t == horizontal || t == finishH) return 90;
+        if (t == upLeft) return 45.0f;
+        else if (t == downLeft) return 135.0f;
+        else if (t == horizontal || t == finishH) return 90.0f;
     } else if (act.getX() < prev.getX()) {
-        if (t == upRight) return -45;
-        else if (t == downRight) return -135;
-        else if (t == horizontal || t == finishH) return -90;
+        if (t == upRight) return -45.0f;
+        else if (t == downRight) return -135.0f;
+        else if (t == horizontal || t == finishH) return -90.0f;
     } else if (act.getY() > prev.getY()) {
-        if (t == downLeft) return -45;
-        else if (t == downRight) return 45;
-        else if (t == vertical || t == finishV) return 0;
+        if (t == downLeft) return -45.0f;
+        else if (t == downRight) return 45.0f;
+        else if (t == vertical || t == finishV) return 0.0f;
     } else if (act.getY() < prev.getY()) {
-        if (t == upRight) return 135;
-        else if (t == upLeft) return -135;
-        else if (t == vertical || t == finishV) return 180;
+        if (t == upRight) return 135.0f;
+        else if (t == upLeft) return -135.0f;
+        else if (t == vertical || t == finishV) return 180.0f;
     }
 }
 
@@ -549,16 +549,6 @@ bool Track::jumpedTrackPart(int xCar, int yCar, int lastTrackPartID) {
     else if (lastTrackPartID == partCounter - 1 && (currentID == 0 || currentID == 1))
         return false;
     else return currentID > lastTrackPartID + JUMPEDBLOCKS;
-        /*if (lastTrackPartID == partCounter - 1) {
-        // finish line
-        x = trackSequence.at(0).getX();
-        y = trackSequence.at(0).getY();
-    } else {
-        // any other
-        x = trackSequence.at(lastTrackPartID + 1).getX();
-        y = trackSequence.at(lastTrackPartID + 1).getY();
-    }
-    return !(xCar >= x && xCar <= x + BLOCKSIZE && yCar >= y && yCar <= y + BLOCKSIZE);*/
 }
 
 Point Track::getTrackPartPoint(int trackID) {
