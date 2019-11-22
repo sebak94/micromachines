@@ -5,7 +5,6 @@
 #include "../../common/include/socket.h"
 #include "../../common/include/TrackList.h"
 #include "../../common/include/gameState.h"
-#include "../../common/include/ModifierList.h"
 #include "model/cars/car.h"
 #include <string>
 #include <vector>
@@ -50,7 +49,7 @@ class ClientTh: public Thread {
     void sendCarData();
     void sendAllCarsToPlayer(std::vector<ClientTh*> players);
     void sendTrackData(std::string track_serialized);
-    void sendModifiers();
+    void sendModifiers(std::string modifiers_serialized);
     void sendAllTrackNames(std::string tracks);
     virtual void run() override;
     virtual void stop() override;

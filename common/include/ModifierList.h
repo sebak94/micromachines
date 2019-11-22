@@ -13,7 +13,7 @@ public:
     ModifierList(std::string str);
     ~ModifierList();
     std::string serialize();
-    std::vector<Modifier> getModifiers() const;
+    std::vector<Modifier>& getModifiers();
 
 private:
     std::string parse(const std::string &str, size_t &pos, const char delim);

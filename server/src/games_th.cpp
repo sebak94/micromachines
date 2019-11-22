@@ -82,6 +82,7 @@ void GamesTh::createGame(ClientTh * player) {
     auto * gameLoop = new GameLoopTh(*game);
     player->sendAllTrackNames(tracks.serialize());
     player->setMatch();
+    player->sendModifiers(game->modifiersSerialized());
     player->setCar(game->getNextCar());
     player->sendCarData();
     game->addPlayer(player);
@@ -106,6 +107,7 @@ void GamesTh::addPlayer(ClientTh *player) {
     games[gameIndex]->addPlayer(player);
     players[player] = gameIndex;
     player->sendTrackData(games[gameIndex]->trackSerialized());
+    player->sendModifiers(games[gameIndex]->modifiersSerialized());
     player->sendCarData();
     player->setState(waitingPlayers);
 }

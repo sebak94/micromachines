@@ -115,7 +115,7 @@ void MicroMachinesTh::updatePlayersState() {
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
         players[i]->processNextAction();
-        if (!track.isOnTrack(players[i]->getCarPosX(),players[i]->getCarPosY()))
+        if (!track.isOnTrack(players[i]->getCarPosX(), players[i]->getCarPosY()))
             players[i]->reduceSpeed(SPEEDREDUCTIONFACTOR);
     }
 }
@@ -232,4 +232,8 @@ bool MicroMachinesTh::allPlayersGameEnded() {
         }
     }
     return true;
+}
+
+std::string MicroMachinesTh::modifiersSerialized() {
+    return modifiers.serialize();
 }

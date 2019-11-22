@@ -54,6 +54,6 @@ std::string ModifierList::parse(const std::string &str, size_t &pos, const char 
     return substr;
 }
 
-std::vector<Modifier> ModifierList::getModifiers() const {
+std::vector<Modifier>& ModifierList::getModifiers() {
     return modifiers;
 }
