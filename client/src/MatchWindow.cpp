@@ -258,7 +258,7 @@ void MatchWindow::reload() {
     ready = false;
     resetMatchButtons();
     createMatchButtons();
-    //tambien habria que recargar las partidas
+    matchNames.clear();
 }
 
 bool MatchWindow::isLuaSelected() {
