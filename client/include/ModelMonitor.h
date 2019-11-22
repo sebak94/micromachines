@@ -31,6 +31,7 @@ public:
     void updateMatchResults(std::string results);
     std::vector<Modifier>& getModifiers();
     void createModifiers(std::string str);
+    void reset();
 };
 
 #endif

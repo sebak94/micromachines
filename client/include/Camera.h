@@ -45,8 +45,7 @@ public:
     void updateBlockSize();
     void showLaps(int lap, int totalLaps);
     void drawPodium(std::vector<std::string> &matchResults);
-
-    void validateDrawDistance();
+    void reset();
 };
 
 #endif

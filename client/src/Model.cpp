@@ -101,7 +101,9 @@ void Model::setTrackNames(std::string tracks) {
 }
 
 void Model::setMatchNames(std::string matches) {
-    matchNames = TrackList::getTrackNames(matches);
+    if (matches.length() > 0) {
+        matchNames = TrackList::getTrackNames(matches);
+    }
 }
 
 std::vector<std::string> Model::getTrackNames() {
@@ -127,4 +129,8 @@ void Model::updateMatchResults(std::string results) {
         if (pos == 0)
             break;
     }
+}
+
+void Model::reset() {
+    matchResults.clear();
 }

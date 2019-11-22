@@ -120,6 +120,7 @@ void Drawer::draw() {
         drawHUD();
         camera.drawPodium(modelMonitor.getMatchResults());
         matchWindow.reload();
+        camera.reset();
     } else {
         drawWorld();
         drawHUD();

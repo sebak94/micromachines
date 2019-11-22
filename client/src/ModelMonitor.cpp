@@ -97,3 +97,8 @@ std::vector<Modifier>& ModelMonitor::getModifiers() {
     std::lock_guard<std::mutex> lock(m);
     return model.getModifiers();
 }
+
+void ModelMonitor::reset() {
+    std::lock_guard<std::mutex> lock(m);
+    model.reset();
+}

@@ -160,3 +160,9 @@ void Camera::validateDrawDistance() {
     if (drawDistance < 4 || drawDistance > 8)
         drawDistance = 4;
 }
+
+void Camera::reset() {
+    countDown = SECOND;
+    countDownNumber = SECSTOSTART;
+    countDownStarted = false;
+}

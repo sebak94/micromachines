@@ -61,14 +61,22 @@ void GamesTh::stop() {
 
 // decides if creates or joins
 void GamesTh::processPlayer(ClientTh * player, bool & finished) {
-    while (player->getState() == mainMenu) {
-        player->setPlayerMode(); //setea join o create
+    TrackList tracks;
+    tracks.readTracks();
+    if (player->getState() == mainMenu) {
+        printf("menu\n");
+        player->sendAllTrackNames(tracks.serialize());
+        player->setAvailableGames(serializeGames());
+        player->sendAvailableGames();
         usleep(REFRESHPLAYERSTIME);
     }
+    player->setPlayerMode();
     if (player->getState() == creating) {
+        printf("create\n");
         createGame(player);
         finished = true;
     } else if (player->getState() == joining) {
+        printf("join\n");
         addPlayer(player);
         finished = true;
     }
@@ -76,21 +84,15 @@ void GamesTh::processPlayer(ClientTh * player, bool & finished) {
 
 // Creates new game and adds player to it
 void GamesTh::createGame(ClientTh * player) {
-    TrackList tracks;
-    tracks.readTracks();
     auto * game = new MicroMachinesTh(config);
     auto * gameLoop = new GameLoopTh(*game);
-    player->sendAllTrackNames(tracks.serialize());
     player->setMatch();
     player->sendModifiers(game->modifiersSerialized());
-
     game->addPlayer(player);
     players[player] = gamesNumber;
     player->setState(waitingPlayers);
-
     game->setTrack(player->getTrackSelected());
     game->setCars();
-
     player->setCar(game->getNextCar());
     player->sendCarData();
 
@@ -104,8 +106,6 @@ void GamesTh::createGame(ClientTh * player) {
 // Adds player to existent match. Receives match sent by user in setMatch()
 void GamesTh::addPlayer(ClientTh *player) {
     int gameIndex = PLAYERTOASSIGN;
-    player->setAvailableGames(serializeGames());
-    player->sendAvailableGames();
     player->setMatch();
     gameIndex = player->getGameNumber();
     player->setCar(games[gameIndex]->getNextCar());
@@ -119,10 +119,15 @@ void GamesTh::addPlayer(ClientTh *player) {
 
 // Sends available games
 std::string GamesTh::serializeGames() {
-    std::string gamesStr{};
-    for (auto game : games)
-        gamesStr += std::to_string(game.first) + ",";
-    gamesStr.back() = '\n';
+    std::string gamesStr = "N,";
+    for (auto game : games) {
+        if (game.second->isAnAvailableMatch())
+            gamesStr += std::to_string(game.first) + ",";
+    }
+
+    if (!gamesStr.empty()) {
+        gamesStr.back() = '\n';
+    }
     return gamesStr;
 }
 

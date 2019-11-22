@@ -249,3 +249,12 @@ std::string MicroMachinesTh::modifiersSerialized() {
 Config MicroMachinesTh::getConfig() {
     return config;
 }
+
+bool MicroMachinesTh::isAnAvailableMatch() {
+    for (int i = 0; i < players.size(); i++) {
+        if (players[i]->getState() != waitingPlayers) {
+            return false;
+        }
+    }
+    return true;
+}
