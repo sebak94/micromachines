@@ -5,7 +5,6 @@
 #include "../../common/include/socket.h"
 #include "../../common/include/TrackList.h"
 #include "../../common/include/gameState.h"
-#include "../../common/include/ModifierList.h"
 #include "model/cars/car.h"
 #include <string>
 #include <vector>
@@ -43,61 +42,41 @@ class ClientTh: public Thread {
     std::string parse(const std::string &str, size_t &pos, const char delim);
 
     public:
-    void setMatch();
     ClientTh(Socket *peer, TrackList &tracks);
+    ~ClientTh();
+    void setMatch();
     void receiveActionPlugin(char *action);
     void processNextAction();
     void updateCar();
     void sendCarData();
     void sendAllCarsToPlayer(std::vector<ClientTh*> players);
     void sendTrackData(std::string track_serialized);
-    void sendModifiers();
+    void sendModifiers(std::string modifiers_serialized);
     void sendAllTrackNames(std::string tracks);
     std::string getTrackSelected();
     virtual void run() override;
     virtual void stop() override;
     bool isDead();
-    ~ClientTh();
-
     void setState(GameState s);
-
     int getCarPosX();
-
     int getCarPosY();
-
-    void reduceSpeed(float32 factor);
-
+    void modifySpeedByFactor(float32 factor);
     int getCarLastTrackID();
-
     void newCarPosition(Point point);
-
     void updateLastTrackID(int ID);
-
     void updateLaps();
-
     void sendLapsData(std::string laps_serialized);
-
     GameState getState();
-
     void sendGameState(GameState &previousSt, GameState &st);
-
     void setCar(Car *matchCar);
-
     void setAvailableGames(std::string g);
-
     void sendAvailableGames();
-
     int getGameNumber();
-
     void setPlayerMode();
-
     int getLaps();
-
     std::string carColor();
-
     void setWinners(std::vector<std::string> w);
     void sendWinners();
-
     void clean();
 };
 

@@ -2,13 +2,29 @@
 
 ModifierList::ModifierList() {
     Modifier modifier(900,500,"healthBox");
-    Modifier modifier2(900,575,"boost");
+    Modifier modifier21(800,525,"boost");
+    Modifier modifier22(825,525,"boost");
+    Modifier modifier23(850,525,"boost");
+    Modifier modifier24(875,525,"boost");
+    Modifier modifier25(900,525,"boost");
+    Modifier modifier26(925,525,"boost");
+    Modifier modifier27(950,525,"boost");
+    Modifier modifier28(975,525,"boost");
+    Modifier modifier29(1000,525,"boost");
     Modifier modifier3(900,537,"stones");
     Modifier modifier4(800,500,"oil");
     Modifier modifier5(800,537,"mud");
 
     modifiers.push_back(modifier);
-    modifiers.push_back(modifier2);
+    modifiers.push_back(modifier21);
+    modifiers.push_back(modifier22);
+    modifiers.push_back(modifier23);
+    modifiers.push_back(modifier24);
+    modifiers.push_back(modifier25);
+    modifiers.push_back(modifier26);
+    modifiers.push_back(modifier27);
+    modifiers.push_back(modifier28);
+    modifiers.push_back(modifier29);
     modifiers.push_back(modifier3);
     modifiers.push_back(modifier4);
     modifiers.push_back(modifier5);
@@ -54,6 +70,21 @@ std::string ModifierList::parse(const std::string &str, size_t &pos, const char 
     return substr;
 }
 
-std::vector<Modifier> ModifierList::getModifiers() const {
+std::vector<Modifier>& ModifierList::getModifiers() {
     return modifiers;
+}
+
+bool ModifierList::isOnBoost(int posX, int posY) {
+    bool result = false;
+    for (auto modifier : modifiers) {
+        if (modifier.getType() == "boost") {
+            if (posX >= modifier.getX()
+                && posX <= modifier.getX() + MODIFIER_SIZE
+                && posY >= modifier.getY()
+                && posY <= modifier.getY() + MODIFIER_SIZE
+            )
+                result = true;
+        }
+    }
+    return result;
 }

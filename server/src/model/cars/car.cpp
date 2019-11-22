@@ -50,11 +50,6 @@ Car* Car::createYellowCar(b2World *world, const Point &startingPoint,
                             rot, world, startID));
 }
 
-static Car createBlueCar();
-static Car createRedCar();
-static Car createWhiteCar();
-static Car createYellowCar();
-
 void Car::updateState(char action) {
     switch (action) {
         case 'L' : control_state |= TDC_LEFT;  break;
@@ -85,8 +80,8 @@ int Car::getPosY() {
     return (int)td_car.body->GetPosition().y;
 }
 
-void Car::reduceSpeed(float32 factor){
-    td_car.reduceVelocity(factor);
+void Car::modifySpeedByFactor(float32 factor){
+    td_car.modifySpeedByFactor(factor);
 }
 
 void Car::setTrackID(int ID) {

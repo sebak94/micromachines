@@ -6,7 +6,8 @@
 #include <unistd.h>
 
 #define DEGTORAD 0.0174532925199432957f
-#define SPEEDREDUCTIONFACTOR 0.9
+#define SPEED_REDUCTION_FACTOR 0.9
+#define SPEED_INCREASE_FACTOR 2
 #define REFRESHTIME 5000000  // us
 
 MicroMachinesTh::MicroMachinesTh() {
@@ -120,8 +121,10 @@ void MicroMachinesTh::updatePlayersState() {
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
         players[i]->processNextAction();
-        if (!track.isOnTrack(players[i]->getCarPosX(),players[i]->getCarPosY()))
-            players[i]->reduceSpeed(SPEEDREDUCTIONFACTOR);
+        if (!track.isOnTrack(players[i]->getCarPosX(), players[i]->getCarPosY()))
+            players[i]->modifySpeedByFactor(SPEED_REDUCTION_FACTOR);
+        if (modifiers.isOnBoost(players[i]->getCarPosX(), players[i]->getCarPosY()))
+            players[i]->modifySpeedByFactor(SPEED_INCREASE_FACTOR);
     }
 }
 
@@ -237,4 +240,8 @@ bool MicroMachinesTh::allPlayersGameEnded() {
         }
     }
     return true;
+}
+
+std::string MicroMachinesTh::modifiersSerialized() {
+    return modifiers.serialize();
 }

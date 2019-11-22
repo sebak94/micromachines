@@ -39,15 +39,10 @@ void ClientTh::sendAllCarsToPlayer(std::vector<ClientTh *> players) {
 
 void ClientTh::sendTrackData(std::string track_serialized) {
     send(track_serialized);
-    sendModifiers();
 }
 
-void ClientTh::sendModifiers() {
-    //Por ahora creo los modificadores aca cuando los envío
-    ModifierList modifierList;
-    std::string modifs = modifierList.serialize();
-    printf("modificadores serializado: %s\n", modifs.c_str());
-    send(modifs);
+void ClientTh::sendModifiers(std::string modifiers_serialized) {
+    send(modifiers_serialized);
 }
 
 void ClientTh::sendAllTrackNames(std::string tracks) {
@@ -207,9 +202,9 @@ int ClientTh::getCarPosY() {
     return car->getPosY();
 }
 
-void ClientTh::reduceSpeed(float32 factor){
+void ClientTh::modifySpeedByFactor(float32 factor){
     Lock l(m);
-    car->reduceSpeed(factor);
+    car->modifySpeedByFactor(factor);
 }
 
 int ClientTh::getCarLastTrackID() {

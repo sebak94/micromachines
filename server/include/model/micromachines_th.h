@@ -5,6 +5,7 @@
 #include "box2d-entities/destruction_listener.h"
 #include "../client_th.h"
 #include "../../../common/include/TrackList.h"
+#include "../../../common/include/ModifierList.h"
 #include <vector>
 #include <mutex>
 #include <cstring>
@@ -14,6 +15,7 @@ class MicroMachinesTh : public Thread {
     private:
     TrackList tracks;
     Track track;
+    ModifierList modifiers;
     std::mutex m;
     std::vector<ClientTh*> players;
     std::map<ColorType, Car*> cars;
@@ -55,6 +57,7 @@ class MicroMachinesTh : public Thread {
     void stop() override;
     std::string trackSerialized();
     Car *getNextCar();
+    std::string modifiersSerialized();
 
     bool allPlayersWaitingEnd();
 };

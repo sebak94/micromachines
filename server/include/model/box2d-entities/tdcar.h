@@ -20,7 +20,7 @@ class TDCar {
 
     void newPosition(Point point);
 
-    void reduceVelocity(float32 factor);
+    void modifySpeedByFactor(float32 factor);
 };
 
 #endif
