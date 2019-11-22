@@ -4,9 +4,13 @@
 #include <vector>
 #include "Modifier.h"
 
+#define MODIFIER_SIZE 25
+
 class ModifierList {
 private:
     std::vector<Modifier> modifiers;
+
+    std::string parse(const std::string &str, size_t &pos, const char delim);
 
 public:
     ModifierList();
@@ -14,9 +18,7 @@ public:
     ~ModifierList();
     std::string serialize();
     std::vector<Modifier>& getModifiers();
-
-private:
-    std::string parse(const std::string &str, size_t &pos, const char delim);
+    bool isOnBoost(int posX, int posY);
 };
 
 #endif

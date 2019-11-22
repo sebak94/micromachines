@@ -117,7 +117,7 @@ void TDCar::newPosition(Point point) {
     body->SetAngularVelocity(0);  // avoids weird effects of teleporting
 }
 
-void TDCar::reduceVelocity(float32 factor) {
+void TDCar::modifySpeedByFactor(float32 factor) {
     b2Vec2 vel = body->GetLinearVelocity();
-    body->SetLinearVelocity(b2Vec2(vel.x*factor,vel.y*factor));
+    body->SetLinearVelocity(b2Vec2(vel.x*factor, vel.y*factor));
 }

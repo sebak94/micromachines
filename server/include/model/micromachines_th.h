@@ -19,7 +19,7 @@ class MicroMachinesTh : public Thread {
     std::mutex m;
     std::vector<ClientTh*> players;
     std::map<ColorType, Car*> cars;
-    int laps = 3;
+    int laps = 6;
     DestructionListener destruction_listener;
     std::vector<std::string> winners;
     bool running = true;

@@ -197,9 +197,9 @@ int ClientTh::getCarPosY() {
     return car->getPosY();
 }
 
-void ClientTh::reduceSpeed(float32 factor){
+void ClientTh::modifySpeedByFactor(float32 factor){
     Lock l(m);
-    car->reduceSpeed(factor);
+    car->modifySpeedByFactor(factor);
 }
 
 int ClientTh::getCarLastTrackID() {

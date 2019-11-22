@@ -41,8 +41,9 @@ class ClientTh: public Thread {
     std::string parse(const std::string &str, size_t &pos, const char delim);
 
     public:
-    void setMatch();
     ClientTh(Socket *peer, TrackList &tracks);
+    ~ClientTh();
+    void setMatch();
     void receiveActionPlugin(char *action);
     void processNextAction();
     void updateCar();
@@ -54,47 +55,26 @@ class ClientTh: public Thread {
     virtual void run() override;
     virtual void stop() override;
     bool isDead();
-    ~ClientTh();
-
     void setState(GameState s);
-
     int getCarPosX();
-
     int getCarPosY();
-
-    void reduceSpeed(float32 factor);
-
+    void modifySpeedByFactor(float32 factor);
     int getCarLastTrackID();
-
     void newCarPosition(Point point);
-
     void updateLastTrackID(int ID);
-
     void updateLaps();
-
     void sendLapsData(std::string laps_serialized);
-
     GameState getState();
-
     void sendGameState(GameState &previousSt, GameState &st);
-
     void setCar(Car *matchCar);
-
     void setAvailableGames(std::string g);
-
     void sendAvailableGames();
-
     int getGameNumber();
-
     void setPlayerMode();
-
     int getLaps();
-
     std::string carColor();
-
     void setWinners(std::vector<std::string> w);
     void sendWinners();
-
     void clean();
 };
 

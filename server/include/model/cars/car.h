@@ -57,7 +57,7 @@ class Car: public Model {
 
     void updateLaps();
 
-    void reduceSpeed(float32 factor);
+    void modifySpeedByFactor(float32 factor);
 
     int getLaps();
 
