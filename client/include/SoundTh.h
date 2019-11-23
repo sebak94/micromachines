@@ -18,6 +18,7 @@ class SoundTh : public Thread {
 private:
     SdlSoundFX carSound;
     SdlSoundFX engineStartSound;
+    SdlSoundFX collisionSound;
     SdlSoundFX winSound;
     SdlWindow & window;
     ModelMonitor & modelMonitor;
@@ -39,6 +40,8 @@ public:
     void musicPlayOnce(SdlMusic &music1, SdlMusic &music2);
     void playOnce();
     void soundPlayOnce(SdlSoundFX &sound, int duration);
+
+    void playCarSoundFX(uint8_t volume, int ticks, bool collided);
 };
 
 

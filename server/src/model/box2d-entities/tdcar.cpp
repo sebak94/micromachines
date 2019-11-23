@@ -13,6 +13,7 @@ TDCar::TDCar(b2World *world, uint16_t max_velocity, float acceleration,
              float grip, float maneuverability, float rotation, Point initial_position) {
 
     checkConfigLimits(max_velocity, acceleration, grip, maneuverability);
+    world->SetContactListener(&contactListener);
 
     //create car body
     b2BodyDef bodyDef;
@@ -22,6 +23,7 @@ TDCar::TDCar(b2World *world, uint16_t max_velocity, float acceleration,
     body = world->CreateBody(&bodyDef);
     body->SetAngularDamping(1);
     body->SetLinearDamping(1);
+    body->SetUserData(&contacting);
 
     b2Vec2 vertices[8];
     vertices[0].Set(1.5, 0);
@@ -137,3 +139,24 @@ void TDCar::modifySpeedByFactor(float32 factor) {
     b2Vec2 vel = body->GetLinearVelocity();
     body->SetLinearVelocity(b2Vec2(vel.x*factor, vel.y*factor));
 }
+
+bool TDCar::isContacting() {
+    bool aux = contacting;
+    contacting = false;
+    return aux;
+}
+
+void ContactListener::BeginContact(b2Contact* contact) {
+    void * data = contact->GetFixtureA()->GetBody()->GetUserData();
+    if (data) {
+        bool * cont = static_cast<bool*>(data);
+        *cont = true;
+    }
+    data = contact->GetFixtureB()->GetBody()->GetUserData();
+    if (data) {
+        bool * cont = static_cast<bool*>(data);
+        *cont = true;
+    }
+}
+
+void ContactListener::EndContact(b2Contact* contact) {}

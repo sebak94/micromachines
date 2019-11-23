@@ -10,13 +10,14 @@
 #include <iostream>
 
 #define VOL_ATTENUATION 0.2
-#define SOUND_REFRESH 500000
+#define SOUND_REFRESH 400000
 #define DRAW_DISTANCE "draw distance [4 - 8]"
 #define CAR_SOUND_PATH "../common/sounds/engine.wav"
 #define ENGINE_START_PATH "../common/sounds/engineStartUp.wav"
 #define MUSICPATH1 "../common/sounds/beat.wav"
 #define MUSICPATH2 "../common/sounds/50s-bit.ogg"
 #define RACE_FINISH_PATH "../common/sounds/win.wav"
+#define COLLISION_PATH "../common/sounds/punch.ogg"
 
 SoundTh::SoundTh(ModelMonitor &modelMonitor, SdlWindow &window,
                  Config &config) :
@@ -26,6 +27,7 @@ SoundTh::SoundTh(ModelMonitor &modelMonitor, SdlWindow &window,
         drawDistance(config.getAsDouble(DRAW_DISTANCE)),
         carSound(CAR_SOUND_PATH),
         engineStartSound(ENGINE_START_PATH),
+        collisionSound(COLLISION_PATH),
         winSound(RACE_FINISH_PATH),
         menuMusic(MUSICPATH1),
         raceMusic(MUSICPATH2) {
@@ -75,7 +77,7 @@ void SoundTh::playOnce() {
 
 // duration 0 to play entire sound. plays only if changed state
 void SoundTh::soundPlayOnce(SdlSoundFX & sound, int duration) {
-    if (once) sound.play(duration);
+    if (once) sound.play(duration, 0);
 }
 
 // plays only if changed state
@@ -98,14 +100,21 @@ void SoundTh::playCarSounds() {
     for (auto & it : cars) {
         Car * car = it.second;
         if (car == myCar) {
-            carSound.volume(5);
-            carSound.play(0);
+            playCarSoundFX(5, -1, car->collided());
         } else {
             double vol = calcSoundLevel(xMyCar, yMyCar, car->getX(), car->getY());
             vol *= VOL_ATTENUATION;
-            carSound.volume(vol);
-            carSound.play(200);
+            playCarSoundFX(vol, -1, car->collided());
         }
+    }
+}
+
+void SoundTh::playCarSoundFX(uint8_t volume, int ticks, bool collided) {
+    carSound.volume(volume);
+    carSound.play(ticks, 0);
+    if (collided) {
+        collisionSound.volume(volume);
+        collisionSound.play(ticks, 0);
     }
 }
 

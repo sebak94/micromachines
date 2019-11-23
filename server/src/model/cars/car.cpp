@@ -84,6 +84,22 @@ void Car::update() {
     td_car.update(control_state);
 }
 
+void Car::reduceHealth(uint8_t reduction) {
+    health -= reduction;
+}
+
+void Car::resetHealth() {
+    health = 100;
+}
+
+uint8_t Car::getHealth() {
+    return health;
+}
+
+bool Car::isContacting() {
+    return td_car.isContacting();
+}
+
 void Car::newPos(Point point) {
     td_car.newPosition(point);
 }

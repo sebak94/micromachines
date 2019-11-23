@@ -80,6 +80,8 @@ class ClientTh: public Thread {
     void sendWinners();
     void clean();
     void receiveMatchSelection();
+
+    bool updateHealth();
 };
 
 #endif

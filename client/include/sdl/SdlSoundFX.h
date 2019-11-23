@@ -16,7 +16,7 @@ private:
 public:
     ~SdlSoundFX();
     explicit SdlSoundFX(const std::string &filename);
-    void play(int ticks);
+    void play(int ticks, uint8_t loops);
     void volume(uint8_t vol);
 };
 

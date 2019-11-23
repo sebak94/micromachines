@@ -26,8 +26,8 @@ SdlSoundFX::~SdlSoundFX() {
     sound = nullptr;
 }
 
-void SdlSoundFX::play(int ticks) {
-    Mix_PlayChannelTimed(-1, sound, 0, ticks);
+void SdlSoundFX::play(int ticks, uint8_t loops) {
+    Mix_PlayChannelTimed(-1, sound, loops, ticks);
 }
 
 // vol from 0 to 100 [%]

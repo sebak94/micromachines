@@ -28,6 +28,14 @@ int Car::getMyLap() const {
     return this->laps;
 }
 
+bool Car::collided() {
+    if (collision) {
+        collision = false;
+        return true;
+    } else
+        return false;
+}
+
 std::string Car::getMyColor() const {
     return this->color;
 }
@@ -38,4 +46,8 @@ void Car::update(int x, int y, int degrees, int health, int laps) {
     this->degrees = degrees;
     this->health = health;
     this->laps = laps;
+    if (health != lastHealth) {
+        lastHealth = health;
+        collision = true;
+    }
 }

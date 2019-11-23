@@ -125,6 +125,12 @@ void MicroMachinesTh::updatePlayersState() {
             players[i]->modifySpeedByFactor(SPEED_REDUCTION_FACTOR);
         if (modifiers.isOnBoost(players[i]->getCarPosX(), players[i]->getCarPosY()))
             players[i]->modifySpeedByFactor(SPEED_INCREASE_FACTOR);
+        if(players[i]->getState() == playing && players[i]->updateHealth()) {
+            std::cout << "boom" << std::endl;
+            players[i]->newCarPosition(track.getTrackPartPoint(players[i]->getCarLastTrackID()) +
+                                               Point(BLOCKSIZE/2,BLOCKSIZE*(1.1)));
+
+        }
     }
 }
 

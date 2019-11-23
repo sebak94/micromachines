@@ -71,6 +71,14 @@ class Car: public Model {
     int getLaps();
 
     std::string getColor();
+
+    void reduceHealth(uint8_t reduction);
+
+    bool isContacting();
+
+    uint8_t getHealth();
+
+    void resetHealth();
 };
 
 #endif

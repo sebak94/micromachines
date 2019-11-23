@@ -7,6 +7,7 @@
 #include "string"
 
 #define SPEEDREDUCTIONFACTOR 0.9
+#define HEALTH_REDUCTION 5
 
 ClientTh::ClientTh(Socket *peer, TrackList &tracks)
         : keep_talking(true),
@@ -206,6 +207,17 @@ int ClientTh::getCarPosY() {
 void ClientTh::modifySpeedByFactor(float32 factor){
     Lock l(m);
     car->modifySpeedByFactor(factor);
+}
+
+bool ClientTh::updateHealth() {
+    Lock l(m);
+    bool dead = false;
+    if (car->isContacting()) car->reduceHealth(HEALTH_REDUCTION);
+    if (car->getHealth() <= 0) {
+        dead = true;
+        car->resetHealth();
+    }
+    return dead;
 }
 
 int ClientTh::getCarLastTrackID() {
