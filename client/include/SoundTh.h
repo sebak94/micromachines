@@ -26,7 +26,7 @@ private:
     SdlMusic raceMusic;
     double drawDistance;
     bool running = false;
-    GameState lastState = mainMenu;
+    GameState lastState = gameEnded;
     bool once = false;
 
 public:

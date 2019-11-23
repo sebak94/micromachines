@@ -12,7 +12,7 @@
 #define VOL_ATTENUATION 0.2
 #define SOUND_REFRESH 500000
 #define DRAW_DISTANCE "draw distance [4 - 8]"
-#define CAR_SOUND_PATH "../common/sounds/engine2.wav"
+#define CAR_SOUND_PATH "../common/sounds/engine.wav"
 #define ENGINE_START_PATH "../common/sounds/engineStartUp.wav"
 #define MUSICPATH1 "../common/sounds/beat.wav"
 #define MUSICPATH2 "../common/sounds/50s-bit.ogg"
@@ -33,12 +33,13 @@ SoundTh::SoundTh(ModelMonitor &modelMonitor, SdlWindow &window,
 
 void SoundTh::run() {
     running = true;
-    menuMusic.play(config.isSet(PLAY_MUSIC));
     while (running) {
         auto start = std::chrono::system_clock::now();
         try {
             playOnce();
-            if (modelMonitor.getGameState() == waitingPlayers) {
+            if (modelMonitor.getGameState() == mainMenu) {
+                musicPlayOnce(raceMusic, menuMusic);
+            } else if (modelMonitor.getGameState() == waitingPlayers) {
                 menuMusic.stop(config.isSet(PLAY_MUSIC));
                 soundPlayOnce(engineStartSound,0);
             } else if (modelMonitor.getGameState() == startCountdown) {
@@ -48,6 +49,7 @@ void SoundTh::run() {
                 playCarSounds();
                 musicPlayOnce(menuMusic, raceMusic);
             } else if (modelMonitor.getGameState() == waitingEnd) {
+                winSound.volume(50);
                 soundPlayOnce(winSound, 0);
             }
         } catch (std::exception &e) {
