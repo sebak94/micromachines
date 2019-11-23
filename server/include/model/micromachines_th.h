@@ -27,6 +27,7 @@ class MicroMachinesTh : public Thread {
     bool running = true;
     std::map<ColorType, Car*>::iterator itCar;
     void removePlayerFromVector(ClientTh *player);
+    int numberPlayers;
 
     public:
     b2World *world;
@@ -63,6 +64,8 @@ class MicroMachinesTh : public Thread {
     bool allPlayersWaitingEnd();
     bool isAnAvailableMatch();
     Config getConfig();
+    void setTotalNumberPlayers(int number);
+    int getTotalNumberPlayers();
 };
 
 #endif

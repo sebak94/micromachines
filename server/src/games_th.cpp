@@ -96,6 +96,7 @@ void GamesTh::createGame(ClientTh * player) {
     players[player] = gamesNumber;
     player->setState(waitingPlayers);
     game->setTrack(player->getTrackSelected());
+    game->setTotalNumberPlayers(player->getNumberPlayersSelected());
     game->createCars();
     player->setCar(game->getNextCar());
     player->sendCarData();
