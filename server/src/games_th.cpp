@@ -72,6 +72,7 @@ void GamesTh::processPlayer(ClientTh * player, bool & finished) {
     }
     player->setPlayerMode();
     player->receiveMatchSelection();
+    if (!player->stillTalking()) return;
     player->setPlayerMode(); //actualizo el player mode, por si cambiaron de create a join o al reves
     if (player->getState() == creating) {
         printf("create\n");
@@ -139,13 +140,12 @@ void GamesTh::setPlayerToAssign(ClientTh * player) {
     players.emplace(player, PLAYERTOASSIGN);
 }
 
-void GamesTh::removePlayer(ClientTh *player, int gameIndex) {
-    games[gameIndex]->removePlayer(player);
-}
-
-// Tells where a player is playing
-int GamesTh::getPlayerGameID(ClientTh* player) {
-    return players[player];
+void GamesTh::removePlayer(ClientTh *player) {
+    std::map<int, MicroMachinesTh *>::iterator gameIt = games.find(players[player]);
+    if (gameIt != games.end()) {
+        gameIt->second->removePlayer(player);
+    }
+    players.erase(player);
 }
 
 // Removes all players from game

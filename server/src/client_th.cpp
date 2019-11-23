@@ -18,6 +18,10 @@ ClientTh::ClientTh(Socket *peer, TrackList &tracks)
     //sendCarData();
 }
 
+bool ClientTh::stillTalking() {
+    return keep_talking;
+}
+
 void ClientTh::sendWelcomeMsg() {
     std::string welcome_msg = "Bienvenido!\n";
     send(welcome_msg);
@@ -66,7 +70,7 @@ std::string ClientTh::parse(const std::string &str, size_t &pos, const char deli
 void ClientTh::receiveMatchSelection() {
     matchSelection.clear();
     char action;
-    while (action != '\n') {
+    while (keep_talking && action != '\n') {
         receive(&action);
         matchSelection += action;
     }
@@ -95,7 +99,7 @@ void ClientTh::setMatch() {
 void ClientTh::setPlayerMode() {
     std::string modeSelection;
     char action;
-    while (action != '\n') {
+    while (keep_talking && action != '\n') {
         receive(&action);
         modeSelection += action;
     }
@@ -253,7 +257,7 @@ void ClientTh::receive(char *action) {
     } catch (const SocketError &e) {
         keep_talking = false;
         is_running = false;
-        std::cout << e.what() << "\n";
+        std::cout << "Receive: " << e.what() << "\n";
     }
 }
 
@@ -269,7 +273,7 @@ void ClientTh::send(std::basic_string<char> response) {
     } catch (const SocketError &e) {
         keep_talking = false;
         is_running = false;
-        std::cout << e.what() << "\n";
+        std::cout << "Send: " << e.what() << "\n";
     }
 }
 

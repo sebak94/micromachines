@@ -78,8 +78,8 @@ void EventLoopSDL::run() {
                 }
                 break;
             case creating:
-                drawer->getMatchWindow().updateMatchButtons(&event);
                 quitAndResize(event);
+                drawer->getMatchWindow().updateMatchButtons(&event);
                 if (drawer->getMatchWindow().isReady()) {
                     if (drawer->getMatchWindow().isLuaSelected()) {
                         printf("AI Playing\n");
@@ -91,8 +91,8 @@ void EventLoopSDL::run() {
                 }
                 break;
             case joining:
-                drawer->getMatchWindow().updateMatchButtons(&event);
                 quitAndResize(event);
+                drawer->getMatchWindow().updateMatchButtons(&event);
                 if (drawer->getMatchWindow().isReady()) {
                     if (drawer->getMatchWindow().isLuaSelected()) {
                         printf("AI Playing\n");

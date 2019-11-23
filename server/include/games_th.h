@@ -27,7 +27,7 @@ public:
     void run() override;
     void stop() override;
     void addPlayer(ClientTh *player);
-    void removePlayer(ClientTh *player, int gameIndex);
+    void removePlayer(ClientTh *player);
     void cleanPlayers(int gameIndex);
     void createGame(ClientTh *player);
     void setPlayerToAssign(ClientTh *player);
@@ -35,7 +35,6 @@ public:
     void deleteMapperThreads();
     void mapNewClients();
     std::string serializeGames();
-    int getPlayerGameID(ClientTh* player);
     int getGamesNumber();
 
     void gameEndedPlayersToMainMenu();

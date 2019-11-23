@@ -45,6 +45,7 @@ class ClientTh: public Thread {
     public:
     ClientTh(Socket *peer, TrackList &tracks);
     ~ClientTh();
+    bool stillTalking();
     void setMatch();
     void receiveActionPlugin(char *action);
     void processNextAction();

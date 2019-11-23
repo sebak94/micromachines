@@ -84,7 +84,7 @@ void ClientList::deleteDeadClients() {
     auto it = clients.begin();
     while (it != clients.end()) {
         if ((*it)->isDead()) {
-            games.removePlayer(*it, games.getPlayerGameID(*it));
+            games.removePlayer(*it);
             (*it)->join();
             delete *it;
             clients.erase(it);
