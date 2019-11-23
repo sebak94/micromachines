@@ -20,6 +20,7 @@
 #include "../../record/include/Record.h"
 #include "MatchWindow.h"
 #include "../../common/include/Config.h"
+#include "SoundTh.h"
 
 class Drawer : public Thread {
 private:
@@ -31,7 +32,6 @@ private:
     PictureLoader loader;
     ModelMonitor &modelMonitor;
     Camera camera;
-    SdlMusic music;
     Button fullScreenButton;
     Button recButton;
     std::vector<char> lastFrame;
@@ -41,6 +41,7 @@ private:
     MatchWindow matchWindow;
     double drawWait;
     double recWait;
+    SoundTh sound;
 
 public:
     explicit Drawer(ModelMonitor &modelMonitor);

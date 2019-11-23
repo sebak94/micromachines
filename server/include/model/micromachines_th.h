@@ -21,7 +21,7 @@ class MicroMachinesTh : public Thread {
     std::mutex m;
     std::vector<ClientTh*> players;
     std::map<ColorType, Car*> cars;
-    int laps = 1;
+    int laps = 2;
     DestructionListener destruction_listener;
     std::vector<std::string> winners;
     bool running = true;

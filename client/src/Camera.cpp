@@ -3,6 +3,7 @@
 #include "../include/Camera.h"
 #include "../../common/include/TextTexture.h"
 #include "../include/sdl/SdlTexture.h"
+#include "../include/sdl/SdlSoundFX.h"
 
 #define HEART "heart"
 #define FONTNAME "../common/fonts/OpenSans-Bold.ttf"
@@ -80,7 +81,6 @@ void Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car *> &cars
     double yBegin = - yMyCar * (blockHeight / 100.0) - (window.getHeight() / 2.0);
     SDL_Color color = {0, 0, 0, 0};
     TextTexture text;
-
     for (auto & it : cars) {
         Car* car = it.second;
         double x = car->getX() * (blockWidth / 100.0) - (widthCar / 2.0);

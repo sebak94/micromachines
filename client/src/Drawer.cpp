@@ -4,41 +4,38 @@
 #include "../include/sdl/SdlAnimation.h"
 #include "../../record/include/Record.h"
 #include "../../common/include/Error.h"
+#include "../include/SoundTh.h"
 #include <unistd.h>
 
 #define FPS "fps limit"
-//#define MICROSECS_WAIT (1/FPS*1000000) //seria que en un segundo se dibujen aprox 60 veces
-#define MUSICPATH "../common/sounds/beat.wav"
 #define FULLSCREENBUTTON "../common/images/fullscreen.png"
 #define RECBUTTON "../common/images/buttons/recButton.png"
 #define VIDEOPATH "./recorded.mp4"
 #define VIDEOFPS "rec fps limit"
-#define PLAY_MUSIC "play music"
 #define FULLSCN "fullscreen"
 #define DRAW_DISTANCE "draw distance [4 - 8]"
 #define SECTOMICROSEC 1000000.0
 
 Drawer::Drawer(ModelMonitor &modelMonitor) :
-    window(WIDTH, HEIGHT),
-    loader(window, pictures, trackPictures),
-    camera(window, pictures, trackPictures, config.getAsDouble(DRAW_DISTANCE)),
-    modelMonitor(modelMonitor), music(MUSICPATH),
-    video(std::string(VIDEOPATH), config.getAsDouble(VIDEOFPS), WIDTH, HEIGHT),
-    matchWindow(window) {
+        window(WIDTH, HEIGHT),
+        loader(window, pictures, trackPictures),
+        camera(window, pictures, trackPictures, config.getAsDouble(DRAW_DISTANCE)),
+        modelMonitor(modelMonitor),
+        video(std::string(VIDEOPATH), config.getAsDouble(VIDEOFPS), WIDTH, HEIGHT),
+        matchWindow(window), sound(modelMonitor, window, config) {
     createFullScreenButton();
     createRecButton();
     lastFrame.reserve(3*WIDTH*HEIGHT),
     drawWait = SECTOMICROSEC / config.getAsDouble(FPS),
     recWait = SECTOMICROSEC / config.getAsDouble(VIDEOFPS); // us
-
 }
 
 Drawer::~Drawer() {}
 
 void Drawer::run() {
-    music.play(config.isSet(PLAY_MUSIC));
     if (config.isSet(FULLSCN)) window.changeFullScreen();
     running = true;
+    sound.start();
     std::thread recorder = std::thread(&Drawer::recorderTh, this);
     while (running) {
         auto start = std::chrono::system_clock::now();
@@ -54,7 +51,8 @@ void Drawer::run() {
             usleep(drawWait - microsecsPassed);
     }
     recorder.join();
-    music.stop(config.isSet(PLAY_MUSIC));
+    sound.stop();
+    sound.join();
 }
 
 void Drawer::stop() {
