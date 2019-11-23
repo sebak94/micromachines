@@ -62,20 +62,12 @@ std::map<std::string, Car*>& Model::getCars() {
 }
 
 void Model::updateCar(std::string str) {
-    //serializacion: current_velocity, health, rotation, x, y, color\n
-    size_t pos = 0;
-    int velocity = std::stoi(parse(str, pos, ','));
-    int health = std::stoi(parse(str, pos, ','));
-    int rotation = std::stoi(parse(str, pos, ','));
-    int x = std::stoi(parse(str, pos, ','));
-    int y = std::stoi(parse(str, pos, ','));
-    int laps = std::stoi(parse(str, pos, ','));
+    size_t pos = str.find_last_of(',') + 1;
     std::string color = parse(str, pos, '\n');
-
     if (cars[color] == nullptr) {
-        cars[color] = new Car(color);
+        cars[color] = new Car(str);
     }
-    cars[color]->update(x, y, rotation, health, laps);
+    cars[color]->update(str);
 }
 
 void Model::createModifiers(std::string str) {
@@ -122,9 +114,9 @@ void Model::updateMatchResults(std::string results) {
     results.erase(results.length() -1); //borro el \n
     size_t pos = 0;
     while (pos < results.size()) {
-        std::string substr = parse(results, pos, ',');
-        if (std::find(matchResults.begin(), matchResults.end(), substr) == matchResults.end()) {
-            matchResults.push_back(substr);
+        std::string car = parse(results, pos, ',');
+        if (std::find(matchResults.begin(), matchResults.end(), car) == matchResults.end()) {
+            matchResults.push_back(car);
         }
         if (pos == 0)
             break;
