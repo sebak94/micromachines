@@ -94,6 +94,8 @@ void ClientList::deleteDeadClients() {
 }
 
 ClientList::~ClientList() {
+    Lock l(m);
+
     for (size_t i = 0; i < clients.size(); i++) {
         clients[i]->stop();
         clients[i]->join();

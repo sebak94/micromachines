@@ -6,10 +6,11 @@
 #define MICROMACHINES_GAMES_TH_H
 
 
-#include <vector>
 #include "../../common/include/thread.h"
 #include "model/micromachines_th.h"
 #include "game_loop_th.h"
+#include <vector>
+#include <mutex>
 
 class GamesTh : public Thread {
 private:
@@ -21,6 +22,7 @@ private:
     bool running = true;
     int gamesNumber = 0;
     Config config;
+    std::mutex m;
 
 public:
     GamesTh() = default;
@@ -38,6 +40,7 @@ public:
     void gameEndedPlayersToMainMenu();
     void joinEndedGames();
     void stopGameIfAllEnded();
+    void stopAllThreads();
 };
 
 

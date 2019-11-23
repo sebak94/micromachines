@@ -5,6 +5,7 @@
 #include "../include/games_th.h"
 #include "../include/model/micromachines_th.h"
 #include "../include/game_loop_th.h"
+#include "../../common/include/lock.h"
 #include <unistd.h>
 
 #define PLAYERTOASSIGN -1
@@ -25,6 +26,8 @@ void GamesTh::run() {
 // process new player create/join in new thread
 void GamesTh::mapNewClients() {
     int i = 0;
+    Lock l(m);
+
     for (auto & newPlayer : players) {
         if (newPlayer.second == PLAYERTOASSIGN) {
             newPlayer.second = PLAYERBEINGASSIGNED;
@@ -42,6 +45,8 @@ void GamesTh::mapNewClients() {
 
 // joins mapper thread if finished
 void GamesTh::deleteMapperThreads() {
+    Lock l(m);
+
     auto it2 = mapperThreads.begin();
     for (auto it1 = mapperThreadList.begin(); it1 != mapperThreadList.end();) {
         if (it1->second){
@@ -55,8 +60,32 @@ void GamesTh::deleteMapperThreads() {
     }
 }
 
+void GamesTh::stopAllThreads() {
+    Lock l(m);
+    
+    for (auto game : games) {
+        game.second->stop();
+        game.second->join();
+    }
+    games.clear();
+
+    for (auto gameLoop : gameLoops) {
+        gameLoop.second->stop();
+        gameLoop.second->join();
+    }
+    gameLoops.clear();
+
+    players.clear();
+
+    for (auto mapperThread : mapperThreads) {
+        mapperThread.second->join();
+    }
+    mapperThreads.clear();
+}
+
 void GamesTh::stop() {
     running = false;
+    stopAllThreads();
 }
 
 // decides if creates or joins
@@ -157,6 +186,8 @@ void GamesTh::cleanPlayers() {
 
 // If all players are in WaitingEnd state stops game
 void GamesTh::stopGameIfAllEnded() {
+    Lock l(m);
+
     for (auto & game : games) {
         if (game.second->allPlayersWaitingEnd()) {
             usleep(PODIUMVIEWTIME); // Duermo para visualizar el podio
@@ -167,6 +198,8 @@ void GamesTh::stopGameIfAllEnded() {
 
 // Checks if any player ended and resets it to main menu.
 void GamesTh::gameEndedPlayersToMainMenu() {
+    Lock l(m);
+
     for (auto & player : players) {
         if (player.first->getState() == gameEnded) {
             player.first->clean();
@@ -176,6 +209,8 @@ void GamesTh::gameEndedPlayersToMainMenu() {
 }
 
 void GamesTh::joinEndedGames() {
+    Lock l(m);
+
     for (auto loop = gameLoops.begin(); loop != gameLoops.end();) {
         if (!(loop->second->isRunning())) {
             int aux = loop->first;
