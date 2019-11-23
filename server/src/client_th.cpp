@@ -62,14 +62,17 @@ std::string ClientTh::parse(const std::string &str, size_t &pos, const char deli
     return substr;
 }
 
-void ClientTh::setMatch() {
-    std::string matchSelection;
+void ClientTh::receiveMatchSelection() {
+    matchSelection.clear();
     char action;
     while (action != '\n') {
         receive(&action);
         matchSelection += action;
     }
-    std::cout << "match" << matchSelection << std::endl;
+    std::cout << "match: " << matchSelection << std::endl;
+}
+
+void ClientTh::setMatch() {
     tracks.readTracks();
     size_t pos = 0;
     //Ejemplo de protocolo para crear: nameTrack,2\n
@@ -99,7 +102,6 @@ void ClientTh::setPlayerMode() {
         state = creating;
     else if (modeSelection[0] == 'J')
         state = joining;
-
 }
 
 void ClientTh::setCar(Car * matchCar) {

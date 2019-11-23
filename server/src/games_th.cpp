@@ -71,6 +71,8 @@ void GamesTh::processPlayer(ClientTh * player, bool & finished) {
         usleep(REFRESHPLAYERSTIME);
     }
     player->setPlayerMode();
+    player->receiveMatchSelection();
+    player->setPlayerMode(); //actualizo el player mode, por si cambiaron de create a join o al reves
     if (player->getState() == creating) {
         printf("create\n");
         createGame(player);
@@ -89,10 +91,12 @@ void GamesTh::createGame(ClientTh * player) {
     player->setMatch();
     player->sendModifiers(game->modifiersSerialized());
     game->addPlayer(player);
+
+    gamesNumber++;
     players[player] = gamesNumber;
     player->setState(waitingPlayers);
     game->setTrack(player->getTrackSelected());
-    game->setCars();
+    game->createCars();
     player->setCar(game->getNextCar());
     player->sendCarData();
 
@@ -100,7 +104,6 @@ void GamesTh::createGame(ClientTh * player) {
     gameLoops.emplace(gamesNumber, gameLoop);
     games[gamesNumber]->start();
     gameLoops[gamesNumber]->start();
-    gamesNumber++;
 }
 
 // Adds player to existent match. Receives match sent by user in setMatch()

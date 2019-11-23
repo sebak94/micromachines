@@ -127,7 +127,7 @@ void MatchWindow::updateNonSelectingButtons(const SDL_Event *event) {
 }
 
 std::string MatchWindow::serializeData() {
-    std::string response{};
+    std::string response;
     if (state == creatingMatch) {
         response += textTrack.getText() + ",";
         response += textPlayers.getText();
@@ -258,7 +258,7 @@ void MatchWindow::reload() {
     ready = false;
     resetMatchButtons();
     createMatchButtons();
-    //tambien habria que recargar las partidas
+    matchNames.clear();
 }
 
 bool MatchWindow::isLuaSelected() {

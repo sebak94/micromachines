@@ -132,5 +132,6 @@ void Model::updateMatchResults(std::string results) {
 }
 
 void Model::reset() {
+    matchNames.clear();
     matchResults.clear();
 }

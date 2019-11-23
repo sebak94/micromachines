@@ -87,6 +87,7 @@ void EventLoopSDL::run() {
                         //acá lanzar el nuevo hilo de los eventos de lua (pero dejar este hilo corriendo)
                     }
                     this->queue.push(drawer->getMatchWindow().serializeData());
+                    this->queue.push(drawer->getMatchWindow().getSelection());
                 }
                 break;
             case joining:
@@ -99,6 +100,7 @@ void EventLoopSDL::run() {
                         //acá lanzar el nuevo hilo de los eventos de lua (pero dejar este hilo corriendo)
                     }
                     this->queue.push(drawer->getMatchWindow().serializeData());
+                    this->queue.push(drawer->getMatchWindow().getSelection());
                 }
                 break;
             case waitingPlayers:
