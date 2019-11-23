@@ -150,13 +150,9 @@ void GamesTh::removePlayer(ClientTh *player) {
 }
 
 // Removes all players from game
-void GamesTh::cleanPlayers(int gameIndex) {
-    games[gameIndex]->cleanPlayers();
-}
-
-// Tells how many games started
-int GamesTh::getGamesNumber() {
-    return gamesNumber;
+void GamesTh::cleanPlayers() {
+    for (int i=0; i < gamesNumber; i++)
+        games[i]->cleanPlayers();
 }
 
 // If all players are in WaitingEnd state stops game

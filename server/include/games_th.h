@@ -28,19 +28,15 @@ public:
     void stop() override;
     void addPlayer(ClientTh *player);
     void removePlayer(ClientTh *player);
-    void cleanPlayers(int gameIndex);
+    void cleanPlayers();
     void createGame(ClientTh *player);
     void setPlayerToAssign(ClientTh *player);
     void processPlayer(ClientTh *player, bool &finished);
     void deleteMapperThreads();
     void mapNewClients();
     std::string serializeGames();
-    int getGamesNumber();
-
     void gameEndedPlayersToMainMenu();
-
     void joinEndedGames();
-
     void stopGameIfAllEnded();
 };
 

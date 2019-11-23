@@ -48,8 +48,7 @@ void AcceptorTh::stop() {
     looking_th->stop();
     looking_th->join();
     skt.Release();
-    for (int i=0; i<games.getGamesNumber(); i++)
-        games.cleanPlayers(i);
+    games.cleanPlayers();
 }
 
 AcceptorTh::~AcceptorTh() {
