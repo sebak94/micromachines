@@ -115,7 +115,7 @@ void Drawer::draw() {
         drawWorld();
         drawHUD();
         camera.drawPodium(modelMonitor.getMatchResults());
-        matchWindow.reload();
+        matchWindow.reset();
         camera.reset();
     } else {
         drawWorld();
@@ -129,7 +129,6 @@ void Drawer::draw() {
 
 void Drawer::drawWorld() {
     camera.updateBlockSize();
-    camera.showBackground();
     int x = modelMonitor.getCars()[modelMonitor.getMyColor()]->getX();
     int y = modelMonitor.getCars()[modelMonitor.getMyColor()]->getY();
     camera.showTrack(x, y, modelMonitor.getTrack());

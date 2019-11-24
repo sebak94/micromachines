@@ -66,7 +66,6 @@ void MatchWindow::createMatchButtons() {
 }
 
 void MatchWindow::resetMatchButtons() {
-    //Los creo con areas vacias y despues cuando los dibujo los actualizo acorde al tamaño de la ventana
     createMatchButton.clean();
     joinMatchButton.clean();
     arrowButton.clean();
@@ -175,6 +174,7 @@ void MatchWindow::render() {
 }
 
 void MatchWindow::selectingScreen() {
+    //Pantalla para decidir si crear o unirse a una partida
     showBackground();
     int w = window.getWidth() / 4;
     int h = window.getHeight() / 10;
@@ -189,6 +189,7 @@ void MatchWindow::selectingScreen() {
 }
 
 void MatchWindow::creationScreen() {
+    //Pantalla para crear una partida
     showBackground();
     if (!trackNames.empty()) {
         showSelectText("Choose track: ", *itTrackNames, window.getWidth() / 9, window.getHeight() / 2.5, arrowButton, textTrack);
@@ -199,6 +200,7 @@ void MatchWindow::creationScreen() {
 }
 
 void MatchWindow::joiningScreen() {
+    //Pantalla para unirse a una partida
     showBackground();
     if (!matchNames.empty()) {
         showSelectText("Available matchs: ", *itMatchNames, window.getWidth() / 9, window.getHeight() / 2, arrowButton, textMatch);
@@ -207,7 +209,8 @@ void MatchWindow::joiningScreen() {
     showPlayAndReturn();
 }
 
-void MatchWindow::showSelectText(std::string title, std::string textToShow, int x, int y, Button &buttonToChangeText, TextTexture &text) {
+void MatchWindow::showSelectText(std::string title, std::string textToShow, int x, int y,
+        Button &buttonToChangeText, TextTexture &text) {
     SDL_Color black = {0, 0, 0, 0};
     SDL_Color white = {255,255,255,0};
     SDL_Color lightGrey = {226, 214, 214, 0};
@@ -253,7 +256,7 @@ std::string MatchWindow::getSelection() {
     else if (this->state == joiningMatch) return "J\n";
 }
 
-void MatchWindow::reload() {
+void MatchWindow::reset() {
     state = selectingMode;
     ready = false;
     resetMatchButtons();

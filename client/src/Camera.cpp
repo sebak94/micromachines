@@ -6,6 +6,7 @@
 #include "../include/sdl/SdlSoundFX.h"
 
 #define HEART "heart"
+#define PODIUM "podium"
 #define FONTNAME "../common/fonts/OpenSans-Bold.ttf"
 
 Camera::Camera(SdlWindow &window,
@@ -20,22 +21,6 @@ Camera::Camera(SdlWindow &window,
 
 Camera::~Camera() {}
 
-void Camera::showBackground() {
-    //Pinto el backgroud de pasto
-    double x = 0, y = 0;
-    double width = window.getWidth() / 3;
-    double height = window.getHeight() / 2;
-    while (y < window.getHeight()) {
-        while (x < window.getWidth()) {
-            SDL_Rect sdlDestGrass = {(int)x, (int)y, (int)width, (int)height};
-            //trackPictures[empty]->render(sdlDestGrass);
-            x += width;
-        }
-        x = 0;
-        y += height;
-    }
-}
-
 void Camera::showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> track) {
     //Transformo las coordenadas para que mi auto quede en el medio de la pantalla
     //y se muestre la parte de la pista correspondiente
@@ -45,7 +30,8 @@ void Camera::showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> track)
     for (int i = 0; i < track.size(); i++) {
         double x = track[i].getPosX() * (blockWidth / 100);
         double y = track[i].getPosY() * (blockHeight / 100);
-        SDL_Rect sdlDestRoad = {(int) (x + xBegin), (int) (-y - yBegin), (int) blockWidth, (int) blockHeight};
+        SDL_Rect sdlDestRoad = {(int) (x + xBegin), (int) (-y - yBegin),
+                                (int) blockWidth, (int) blockHeight};
         if (sdlDestRoad.x + sdlDestRoad.w > 0 &&
             sdlDestRoad.x  < window.getWidth() &&
             sdlDestRoad.y + sdlDestRoad.h > 0 &&
@@ -96,7 +82,8 @@ void Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car *> cars,
 
         SDL_Rect sdlDestHeart = {realX, (int)(realY+heightCar), (int)blockWidth / 20, (int)blockHeight / 20};
         pictures[HEART]->render(sdlDestHeart);
-        text.textToTexture(window.getRenderer(), std::to_string(car->getHealth()) + "%", color, FONTNAME, blockWidth / 26);
+        text.textToTexture(window.getRenderer(), std::to_string(car->getHealth()) + "%",
+                            color, FONTNAME, blockWidth / 26);
         text.render(window.getRenderer(), (int)(realX+sdlDestHeart.w), (int)(realY+heightCar));
     }
 }
@@ -149,7 +136,7 @@ void Camera::drawPodium(std::vector<std::string> matchResults) {
         SDL_Rect area = {x, y, w, h};
         SDL_Rect numberArea = {window.getWidth()/5, y+(h/3), w/15, h/2};
         SDL_Rect carArea = {(int)(window.getWidth()/2.5), y, w/10, h};
-        pictures["podium"]->render(area);
+        pictures[PODIUM]->render(area);
         pictures[std::to_string(i+1)]->render(numberArea);
         pictures[matchResults[i]]->renderRotate(carArea, 90, SDL_FLIP_NONE);
         y += window.getHeight()/6;
