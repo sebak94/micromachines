@@ -262,3 +262,11 @@ bool MicroMachinesTh::isAnAvailableMatch() {
     }
     return true;
 }
+
+void MicroMachinesTh::setTotalNumberPlayers(int number) {
+    numberPlayers = number;
+}
+
+int MicroMachinesTh::getTotalNumberPlayers() {
+    return numberPlayers;
+}

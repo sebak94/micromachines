@@ -36,6 +36,7 @@ class ClientTh: public Thread {
     int gameNumber = -1;
     std::vector<std::string> winners;
     std::string matchSelection;
+    int numberPlayersSelected;
 
     void sendWelcomeMsg();
     void receive(char *action);
@@ -45,6 +46,7 @@ class ClientTh: public Thread {
     public:
     ClientTh(Socket *peer, TrackList &tracks);
     ~ClientTh();
+    bool stillTalking();
     void setMatch();
     void receiveActionPlugin(char *action);
     void processNextAction();
@@ -55,6 +57,7 @@ class ClientTh: public Thread {
     void sendModifiers(std::string modifiers_serialized);
     void sendAllTrackNames(std::string tracks);
     std::string getTrackSelected();
+    int getNumberPlayersSelected();
     virtual void run() override;
     virtual void stop() override;
     bool isDead();

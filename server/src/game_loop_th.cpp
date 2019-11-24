@@ -29,15 +29,13 @@ void GameLoopTh::showMainMenu() {
 void GameLoopTh::waitForPlayers() {
     uint64_t next_game_tick = GetTickCountMs();
     uint64_t loops;
-    //el 2 cambiarlo por el numerito que recibo del cliente cuando crea la partida
-    while (micromachines.getPlayersNumber() < 2 || micromachines.somePlayersInMainMenu()) {
+    while (micromachines.getPlayersNumber() < micromachines.getTotalNumberPlayers() || micromachines.somePlayersInMainMenu()) {
         if (running) {
             auto begin = std::chrono::steady_clock::now();
             loops = 0;
             micromachines.updatePlayersState();
             updateWorld(next_game_tick, 0, loops, 1.0 / config.getAsFloat(REFRESH_FREQ), 1 , 5);
             micromachines.sendNewStateToPlayers();
-            //Mientras espero jugadores no quiero recibir el estado
             timeWait(MICROSECS_WAIT, begin);
         } else {
             break;

@@ -21,12 +21,13 @@ class MicroMachinesTh : public Thread {
     std::mutex m;
     std::vector<ClientTh*> players;
     std::map<ColorType, Car*> cars;
-    int laps = 2;
+    int laps = 5;
     DestructionListener destruction_listener;
     std::vector<std::string> winners;
     bool running = true;
     std::map<ColorType, Car*>::iterator itCar;
     void removePlayerFromVector(ClientTh *player);
+    int numberPlayers;
 
     public:
     b2World *world;
@@ -63,6 +64,8 @@ class MicroMachinesTh : public Thread {
     bool allPlayersWaitingEnd();
     bool isAnAvailableMatch();
     Config getConfig();
+    void setTotalNumberPlayers(int number);
+    int getTotalNumberPlayers();
 };
 
 #endif

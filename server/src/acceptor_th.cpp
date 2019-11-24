@@ -48,8 +48,7 @@ void AcceptorTh::stop() {
     looking_th->stop();
     looking_th->join();
     skt.Release();
-    for (int i=0; i<games.getGamesNumber(); i++)
-        games.cleanPlayers(i);
+    games.cleanPlayers();
 }
 
 AcceptorTh::~AcceptorTh() {
@@ -84,7 +83,7 @@ void ClientList::deleteDeadClients() {
     auto it = clients.begin();
     while (it != clients.end()) {
         if ((*it)->isDead()) {
-            games.removePlayer(*it, games.getPlayerGameID(*it));
+            games.removePlayer(*it);
             (*it)->join();
             delete *it;
             clients.erase(it);
@@ -95,6 +94,8 @@ void ClientList::deleteDeadClients() {
 }
 
 ClientList::~ClientList() {
+    Lock l(m);
+
     for (size_t i = 0; i < clients.size(); i++) {
         clients[i]->stop();
         clients[i]->join();
