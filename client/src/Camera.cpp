@@ -14,6 +14,8 @@
 #define HEART "heart"
 #define FONTNAME "../common/fonts/OpenSans-Bold.ttf"
 #define EXPL_PATH "../common/images/explosion.png"
+#define VIBRATE_MAG 0.1
+#define VIBRATE_RATE 2
 
 Camera::Camera(SdlWindow &window,
                std::map<std::string, SdlSurface *> &pictures,
@@ -98,10 +100,23 @@ void Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car *> cars,
             realX = window.getWidth()/2 - (widthCar / 2);
             realY = window.getHeight()/2 - (heightCar / 2);
         }
+        showLife(car, realX, realY, heightCar);
+        vibrateCar(car, realX, realY);
         SDL_Rect sdlDestCar = {realX, realY, (int)widthCar, (int)heightCar};
         pictures[car->getMyColor()]->renderRotate(sdlDestCar, car->getDegrees(), SDL_FLIP_NONE);
         explodeCar(car, realX + widthCar/2, realY + heightCar/2, EXPLOSION_SIZE, EXPLOSION_SIZE);
-        showLife(car, realX, realY, heightCar);
+    }
+}
+
+void Camera::vibrateCar(Car *car, int &x, int &y) {
+    auto it = carVibration.find(car);
+    if (it != carVibration.end()) {
+        if (it->second >= 0) x += VIBRATE_MAG;
+        else if (it->second < 0) y -= VIBRATE_MAG;
+        it->second++;
+        if (it->second == VIBRATE_RATE) it->second = -VIBRATE_RATE;
+    } else {
+        carVibration.emplace(car, 0);
     }
 }
 

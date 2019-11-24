@@ -115,13 +115,12 @@ void SoundTh::playCarSoundFX(uint8_t volume, int ticks, bool collided,
                              bool exploded) {
     carSound.volume(volume);
     carSound.play(ticks, 0);
-    if (collided) {
-        collisionSound.volume(volume);
-        collisionSound.play(ticks, 0);
-    }
     if (exploded) {
         explosionSound.volume(50);
         explosionSound.play(ticks, 0);
+    } else if (collided) {
+        collisionSound.volume(volume);
+        collisionSound.play(ticks, 0);
     }
 }
 

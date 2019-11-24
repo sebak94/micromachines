@@ -23,6 +23,7 @@ private:
     std::map<Car*, SdlAnimation> explosions;
     std::map<std::string, SdlSurface*> &pictures;
     std::map<trackPartType, SdlSurface*> &trackPictures;
+    std::map<Car*, int> carVibration;
     double blockWidth;
     double blockHeight;
     SdlSurface lapBox;
@@ -57,6 +58,8 @@ public:
     void explodeCar(Car *car, int x, int y, int w, int h);
 
     void showLife(Car *car, int &realX, int &realY, double &heightCar);
+
+    void vibrateCar(Car *car, int &x, int &y);
 };
 
 #endif
