@@ -37,14 +37,14 @@ public:
            double drawDistance);
     ~Camera();
     void showBackground();
-    void showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> &track);
-    void showModifiers(int xMyCar, int yMyCar, std::vector<Modifier> &modifiers);
-    void showCars(int xMyCar, int yMyCar, std::map<std::string, Car *> &cars,
+    void showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> track);
+    void showModifiers(int xMyCar, int yMyCar, std::vector<Modifier> modifiers);
+    void showCars(int xMyCar, int yMyCar, std::map<std::string, Car *> cars,
                   const std::string& string);
     void showCountdown();
     void updateBlockSize();
     void showLaps(int lap, int totalLaps);
-    void drawPodium(std::vector<std::string> &matchResults);
+    void drawPodium(std::vector<std::string> matchResults);
     void reset();
     void validateDrawDistance();
 };

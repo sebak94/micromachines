@@ -20,14 +20,16 @@ private:
     std::vector<std::string> matchResults;
     std::vector<Modifier> modifiers;
 
+    //El modelo no devuelve referencias, para que desde afuera nadie pueda modificar sus elementos
+
 public:
     Model();
     ~Model();
     void setTrack(std::vector<TrackPartData> track);
-    std::vector<TrackPartData>& getTrack();
+    std::vector<TrackPartData> getTrack();
     void setMyColor(std::string str); //Se usa una sola vez, para setear el color de mi auto
     std::string getMyColor() const;
-    std::map<std::string, Car*>& getCars();
+    std::map<std::string, Car*> getCars();
     void updateCar(std::string str);
     void setGameState(std::string str);
     void setTotalLaps(const std::string& str);
@@ -35,9 +37,9 @@ public:
     GameState getGameState();
     void setTrackNames(std::string tracks);
     std::vector<std::string> getTrackNames();
-    std::vector<std::string>& getMatchResults();
+    std::vector<std::string> getMatchResults();
     void updateMatchResults(std::string results);
-    std::vector<Modifier>& getModifiers();
+    std::vector<Modifier> getModifiers();
     void createModifiers(std::string str);
     void setGameState(GameState state);
     void setMatchNames(std::string matches);
@@ -45,9 +47,7 @@ public:
     void reset();
 
 private:
-
     std::string parse(const std::string &str, size_t &pos, const char delim);
-
 
 };
 
