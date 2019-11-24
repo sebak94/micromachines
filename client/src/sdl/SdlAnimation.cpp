@@ -3,8 +3,10 @@
 #include "../../include/sdl/SdlAnimation.h"
 #include "../../include/sdl/SdlSurface.h"
 
-SdlAnimation::SdlAnimation(SdlTexture &texture, int framesInX, int framesInY, int widthFrame, int heightFrame) : texture(texture) {
-    this->frames = framesInX * framesInY;
+SdlAnimation::SdlAnimation(SdlTexture &texture, int framesInX,
+                           int framesInY, int widthFrame, int heightFrame,
+                           int spriteLen) : texture(texture) {
+    this->spriteLen = spriteLen;
     int xValue = 0;
     int yValue = 0;
     //Creo un vector con los frames para la animacion
@@ -21,20 +23,48 @@ SdlAnimation::SdlAnimation(SdlTexture &texture, int framesInX, int framesInY, in
 
 SdlAnimation::~SdlAnimation() {}
 
-void SdlAnimation::render(SDL_Rect &sdlDest, SdlWindow &window) {
-    int startTime = SDL_GetTicks();
-    int animationRate = this->frames;
-    int animationLength = this->frames + 1; //cantidad de frames + 1
-    int milliseconds = 1000;
-    int frameToDraw = 0;
-
-    while (frameToDraw < animationRate) {
-        frameToDraw = ((SDL_GetTicks() - startTime) * animationRate / milliseconds) % animationLength;
-        SDL_Rect currentClip = this->spriteClips[frameToDraw];
-        //Lleno la pantalla para "borrar" lo anterior
-        window.fill(); //window.fill() tiene que cargar todo el fondo
-        this->texture.render(currentClip, sdlDest);
-        //Update screen
-        window.render();
+void SdlAnimation::renderLooped(SDL_Rect &sdlDest, SdlWindow &window) {
+    if (!started) {
+        started = true;
+        spriteStart = SDL_GetTicks();
     }
+    int now = SDL_GetTicks();
+    if (now - spriteStart > spriteLen) {
+        spriteStart = SDL_GetTicks();
+        sprite++;
+        if (sprite == spriteClips.size()) {
+            sprite = 0;
+            started = false;
+        }
+    }
+    SDL_Rect currentClip = *spIt;
+    this->texture.render(currentClip, sdlDest);
+}
+
+void SdlAnimation::trigger() {
+    triggered = true;
+}
+
+bool SdlAnimation::isTriggered() {
+    return triggered;
+}
+
+void SdlAnimation::render(SDL_Rect &sdlDest, SdlWindow &window) {
+        if (!started) {
+            started = true;
+            spriteStart = SDL_GetTicks();
+        }
+        int now = SDL_GetTicks();
+        if (now - spriteStart > spriteLen) {
+            spriteStart = SDL_GetTicks();
+            sprite++;
+            if (sprite == spriteClips.size()) {
+                sprite = 0;
+                triggered = false;
+                started = false;
+            }
+        } else {
+            SDL_Rect currentClip = spriteClips[sprite];
+            this->texture.render(currentClip, sdlDest);
+        }
 }

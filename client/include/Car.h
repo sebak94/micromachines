@@ -9,8 +9,11 @@ private:
     int y;
     int degrees;
     int health;
-    int lastHealth;
+    int lastHealth = 100;
     bool collision = false;
+    bool explosion = false;
+    int explosionX;
+    int explosionY;
     int laps = 0;
     int lastTrackPart = 0;
     std::string color;
@@ -26,6 +29,11 @@ public:
     void update(int x, int y, int degrees, int health, int laps);
     int getMyLap() const;
     bool collided();
+    bool exploded();
+
+    int getExplosionX();
+
+    int getExplosionY();
 };
 
 #endif

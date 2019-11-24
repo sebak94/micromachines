@@ -29,11 +29,21 @@ int Car::getMyLap() const {
 }
 
 bool Car::collided() {
-    if (collision) {
-        collision = false;
-        return true;
-    } else
-        return false;
+    return collision;
+}
+
+bool Car::exploded() {
+    bool aux = explosion;
+    explosion = false;
+    return aux;
+}
+
+int Car::getExplosionX() {
+    return explosionX;
+}
+
+int Car::getExplosionY() {
+    return explosionY;
 }
 
 std::string Car::getMyColor() const {
@@ -41,13 +51,19 @@ std::string Car::getMyColor() const {
 }
 
 void Car::update(int x, int y, int degrees, int health, int laps) {
-    this->x = x;
-    this->y = y;
     this->degrees = degrees;
     this->health = health;
     this->laps = laps;
+    collision = false;
     if (health != lastHealth) {
+        if (health > lastHealth) {
+            explosion = true;
+            explosionX = this->x;
+            explosionY = this->y;
+        }
         lastHealth = health;
         collision = true;
     }
+    this->x = x;
+    this->y = y;
 }
