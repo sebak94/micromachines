@@ -12,8 +12,7 @@ private:
     int lastHealth = 100;
     bool collision = false;
     bool explosion = false;
-    int explosionX;
-    int explosionY;
+    bool explosionSound = false;
     int laps = 0;
     int lastTrackPart = 0;
     std::string color;
@@ -30,12 +29,12 @@ public:
     void update(std::string carStr);
     int getMyLap() const;
     bool collided();
+    bool exploded();
+    bool explodedSound();
 
 private:
     std::string parse(const std::string &str, size_t &pos, const char delim);
-    bool exploded();
-    int getExplosionX();
-    int getExplosionY();
+
 };
 
 #endif

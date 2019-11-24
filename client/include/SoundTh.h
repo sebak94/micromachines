@@ -19,6 +19,7 @@ private:
     SdlSoundFX carSound;
     SdlSoundFX engineStartSound;
     SdlSoundFX collisionSound;
+    SdlSoundFX explosionSound;
     SdlSoundFX winSound;
     SdlWindow & window;
     ModelMonitor & modelMonitor;
@@ -41,7 +42,8 @@ public:
     void playOnce();
     void soundPlayOnce(SdlSoundFX &sound, int duration);
 
-    void playCarSoundFX(uint8_t volume, int ticks, bool collided);
+    void playCarSoundFX(uint8_t volume, int ticks, bool collided,
+                        bool exploded);
 };
 
 
