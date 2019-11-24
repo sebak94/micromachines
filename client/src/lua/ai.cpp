@@ -73,16 +73,11 @@ const char *Ai::get_enum_as_char(trackPartType type) {
 }
 
 const char *Ai::get_next_move(std::map<std::string, Car *> &cars) {
-    bool carcolor = false;
     for (auto &it : cars) {
         Car *car = it.second;
-        //if (car->getMyColor() == this->carColor) {
-        if (carcolor) {
+        if (car->getMyColor() == this->carColor)
             return lua_get_next_movement(this->L, car->getX(), car->getY());
-        }
-        carcolor = true;
     }
-
     return "";
 }
 

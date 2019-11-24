@@ -105,14 +105,9 @@ void EventLoopSDL::run() {
                 if (!luaPlaying && drawer->getMatchWindow().isReady() &&
                     drawer->getMatchWindow().isLuaSelected()) {
                     luaPlaying = true;
-                    printf("len track:%zu\n", this->modelMonitor.getTrack()
-                    .size());
                     this->luaIA.setTrack(this->modelMonitor.getTrack());
-
                     std::string color = modelMonitor.getMyColor();
-                    printf("color:%s\n", color);
                     this->luaIA.setColor(color);
-
                     this->luaIA.run();
                 }
                 break;
