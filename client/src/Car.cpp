@@ -48,11 +48,21 @@ int Car::getMyLap() const {
 }
 
 bool Car::collided() {
-    if (collision) {
-        collision = false;
-        return true;
-    } else
-        return false;
+    bool aux = collision;
+    collision = false;
+    return aux;
+}
+
+bool Car::exploded() {
+    bool aux = explosion;
+    explosion = false;
+    return aux;
+}
+
+bool Car::explodedSound() {
+    bool aux = explosionSound;
+    explosionSound = false;
+    return aux;
 }
 
 std::string Car::getMyColor() const {
@@ -61,9 +71,14 @@ std::string Car::getMyColor() const {
 
 void Car::update(std::string carStr) {
     setCarParams(carStr);
-
     if (health != lastHealth) {
+        if (health > lastHealth) {
+            explosion = true;
+            explosionSound = true;
+        }
         lastHealth = health;
         collision = true;
     }
+    this->x = x;
+    this->y = y;
 }

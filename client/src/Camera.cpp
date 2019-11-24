@@ -5,16 +5,26 @@
 #include "../include/sdl/SdlTexture.h"
 #include "../include/sdl/SdlSoundFX.h"
 
+#define EXPLOSION_SIZE 300  // pixels
+#define EXPLOSION_LEN 150  // ms
+#define EXPLOSION_SPRITE_W 960
+#define EXPLOSION_SPRITE_H 384
+#define EXPLOSION_SPRITES_X 5
+#define EXPLOSION_SPRITES_Y 2
 #define HEART "heart"
 #define PODIUM "podium"
 #define FONTNAME "../common/fonts/OpenSans-Bold.ttf"
+#define EXPL_PATH "../common/images/explosion.png"
+#define VIBRATE_MAG 0.1
+#define VIBRATE_RATE 2
 
 Camera::Camera(SdlWindow &window,
                std::map<std::string, SdlSurface *> &pictures,
                std::map<trackPartType, SdlSurface *> &trackPictures,
                double drawDistance) :
         window(window), pictures(pictures), trackPictures(trackPictures),
-        lapBox(SdlSurface(LAPBOXPATH, window)), drawDistance(drawDistance) {
+        lapBox(SdlSurface(LAPBOXPATH, window)), drawDistance(drawDistance),
+        explosionTex(SdlTexture(EXPL_PATH, window)) {
     TTF_Init();
     validateDrawDistance();
 }
@@ -65,7 +75,6 @@ void Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car *> cars,
     double heightCar = blockHeight / 3.0;
     double xBegin = - xMyCar * (blockWidth / 100.0) + (window.getWidth() / 2.0);
     double yBegin = - yMyCar * (blockHeight / 100.0) - (window.getHeight() / 2.0);
-    SDL_Color color = {0, 0, 0, 0};
     TextTexture text;
     for (auto & it : cars) {
         Car* car = it.second;
@@ -77,15 +86,59 @@ void Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car *> cars,
             realX = window.getWidth()/2 - (widthCar / 2);
             realY = window.getHeight()/2 - (heightCar / 2);
         }
+        showLife(car, realX, realY, heightCar);
+        vibrateCar(car, realX, realY);
         SDL_Rect sdlDestCar = {realX, realY, (int)widthCar, (int)heightCar};
         pictures[car->getMyColor()]->renderRotate(sdlDestCar, car->getDegrees(), SDL_FLIP_NONE);
-
-        SDL_Rect sdlDestHeart = {realX, (int)(realY+heightCar), (int)blockWidth / 20, (int)blockHeight / 20};
-        pictures[HEART]->render(sdlDestHeart);
-        text.textToTexture(window.getRenderer(), std::to_string(car->getHealth()) + "%",
-                            color, FONTNAME, blockWidth / 26);
-        text.render(window.getRenderer(), (int)(realX+sdlDestHeart.w), (int)(realY+heightCar));
+        explodeCar(car, realX + widthCar/2, realY + heightCar/2, EXPLOSION_SIZE, EXPLOSION_SIZE);
     }
+}
+
+void Camera::vibrateCar(Car *car, int &x, int &y) {
+    auto it = carVibration.find(car);
+    if (it != carVibration.end()) {
+        if (it->second >= 0) x += VIBRATE_MAG;
+        else if (it->second < 0) y -= VIBRATE_MAG;
+        it->second++;
+        if (it->second == VIBRATE_RATE) it->second = -VIBRATE_RATE;
+    } else {
+        carVibration.emplace(car, 0);
+    }
+}
+
+void Camera::explodeCar(Car * car, int x, int y, int w, int h) {
+    if (car->exploded()) triggerExplosion(car);
+    auto exploding = explosions.find(car);
+    if (exploding != explosions.end() && exploding->second.isTriggered()) {
+        SDL_Rect sdlExp = {x - w/2, y - h/2, w, h};
+        exploding->second.render(sdlExp, window);
+    }
+}
+
+void Camera::triggerExplosion(Car * car) {
+    auto it = explosions.find(car);
+    if (it != explosions.end()) {
+        it->second.trigger();
+    } else {
+        int framesInX = EXPLOSION_SPRITES_X;
+        int framesInY = EXPLOSION_SPRITES_Y;
+        //Divido el ancho de la imagen por la cantidad de frames a lo ancho
+        int widthFrame = EXPLOSION_SPRITE_W / framesInX;
+        //Divido el largo de la imagen por la cantidad de frames a lo largo
+        int heightFrame = EXPLOSION_SPRITE_H / framesInY;
+        explosions.emplace(car, SdlAnimation(explosionTex, framesInX,
+                                             framesInY, widthFrame, heightFrame, EXPLOSION_LEN));
+        explosions.at(car).trigger();
+    }
+}
+
+void Camera::showLife(Car * car, int & realX, int & realY, double &heightCar) {
+    TextTexture text;
+    SDL_Color color = {0, 0, 0, 0};
+    SDL_Rect sdlDestHeart = {realX, (int)(realY+heightCar), (int)blockWidth / 20, (int)blockHeight / 20};
+    pictures[HEART]->render(sdlDestHeart);
+    text.textToTexture(window.getRenderer(), std::to_string(car->getHealth()) + "%", color, FONTNAME, blockWidth / 26);
+    text.render(window.getRenderer(), (int)(realX+sdlDestHeart.w), (int)(realY+heightCar));
 }
 
 void Camera::showCountdown() {

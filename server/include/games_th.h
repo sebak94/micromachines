@@ -30,7 +30,6 @@ public:
     void stop() override;
     void addPlayer(ClientTh *player);
     void removePlayer(ClientTh *player);
-    void cleanPlayers();
     void createGame(ClientTh *player);
     void setPlayerToAssign(ClientTh *player);
     void processPlayer(ClientTh *player, bool &finished);

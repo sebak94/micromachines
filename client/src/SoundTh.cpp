@@ -18,6 +18,7 @@
 #define MUSICPATH2 "../common/sounds/50s-bit.ogg"
 #define RACE_FINISH_PATH "../common/sounds/win.wav"
 #define COLLISION_PATH "../common/sounds/punch.ogg"
+#define EXPLODE_PATH "../common/sounds/explodemini.wav"
 
 SoundTh::SoundTh(ModelMonitor &modelMonitor, SdlWindow &window,
                  Config &config) :
@@ -30,7 +31,8 @@ SoundTh::SoundTh(ModelMonitor &modelMonitor, SdlWindow &window,
         collisionSound(COLLISION_PATH),
         winSound(RACE_FINISH_PATH),
         menuMusic(MUSICPATH1),
-        raceMusic(MUSICPATH2) {
+        raceMusic(MUSICPATH2),
+        explosionSound(EXPLODE_PATH) {
 }
 
 void SoundTh::run() {
@@ -100,19 +102,23 @@ void SoundTh::playCarSounds() {
     for (auto & it : cars) {
         Car * car = it.second;
         if (car == myCar) {
-            playCarSoundFX(5, -1, car->collided());
+            playCarSoundFX(5, -1, car->collided(), car->explodedSound());
         } else {
             double vol = calcSoundLevel(xMyCar, yMyCar, car->getX(), car->getY());
             vol *= VOL_ATTENUATION;
-            playCarSoundFX(vol, -1, car->collided());
+            playCarSoundFX(vol, -1, car->collided(), car->explodedSound());
         }
     }
 }
 
-void SoundTh::playCarSoundFX(uint8_t volume, int ticks, bool collided) {
+void SoundTh::playCarSoundFX(uint8_t volume, int ticks, bool collided,
+                             bool exploded) {
     carSound.volume(volume);
     carSound.play(ticks, 0);
-    if (collided) {
+    if (exploded) {
+        explosionSound.volume(50);
+        explosionSound.play(ticks, 0);
+    } else if (collided) {
         collisionSound.volume(volume);
         collisionSound.play(ticks, 0);
     }

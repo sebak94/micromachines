@@ -188,9 +188,10 @@ void Drawer::showAnimation(SdlWindow &window) {
     int heightFrame = 384 / framesInY;
 
     SdlTexture texture("images/explosion.png", window);
-    SdlAnimation anim(texture, framesInX, framesInY, widthFrame, heightFrame);
+    SdlAnimation anim(texture, framesInX, framesInY, widthFrame, heightFrame,
+                      0);
     SDL_Rect sdlDest = {(window.getWidth() - widthFrame) / 2, (window.getHeight() - heightFrame) / 2, widthFrame, heightFrame};
-    anim.render(sdlDest, window);
+    anim.renderLooped(sdlDest, window);
 }
 
 MatchWindow& Drawer::getMatchWindow() {

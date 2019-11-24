@@ -9,8 +9,10 @@ private:
     int y;
     int degrees;
     int health;
-    int lastHealth;
+    int lastHealth = 100;
     bool collision = false;
+    bool explosion = false;
+    bool explosionSound = false;
     int laps = 0;
     int lastTrackPart = 0;
     std::string color;
@@ -27,9 +29,12 @@ public:
     void update(std::string carStr);
     int getMyLap() const;
     bool collided();
+    bool exploded();
+    bool explodedSound();
 
 private:
     std::string parse(const std::string &str, size_t &pos, const char delim);
+
 };
 
 #endif
