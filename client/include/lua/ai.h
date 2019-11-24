@@ -35,7 +35,7 @@ const char *lua_get_next_movement(lua_State *L, int positionX, int positionY);
 class Ai {
 private:
     lua_State *L;
-    std::string carColor = "white";
+    std::string carColor;
 
 public:
     Ai();

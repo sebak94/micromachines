@@ -29,13 +29,6 @@ void Ai::setTrack(std::vector <TrackPartData> &track) {
         matrix[x][y] = get_enum_as_char(i.getType());
     }
 
-    for (int i = 0; i <= 15; i++) {
-        for (int j = 0; j <= 15; j++) {
-            printf("%s|", matrix[i][j]);
-        }
-        printf("\n");
-    }
-
     lua_load_map(this->L, matrix);
     printf("LOAD OK\n");
 }

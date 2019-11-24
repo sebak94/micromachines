@@ -15,12 +15,5 @@ lua_data_actions = { ["empty"] = "Y",
                      ["public1Right"] = "R" };
 
 function getNextMove(positionX, positionY)
-    --[=====[
-    print(positionX, positionY, track_matrix[positionX][positionY])
-    --]=====]
-
-    print(positionX, positionY, track_matrix[positionX][positionY],
-            lua_data_actions[track_matrix[positionX][positionY]])
-
     return lua_data_actions[track_matrix[positionX][positionY]];
 end

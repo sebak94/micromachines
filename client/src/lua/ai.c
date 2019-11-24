@@ -52,8 +52,6 @@ void lua_load_map(lua_State *L, char *matrix[20][20]) {
         lua_rawset(L, -3);
     }
     lua_setglobal(L, "track_matrix");
-
-    printf("LOAD FINISH\n");
 }
 
 const char *lua_get_next_movement(lua_State *L, int positionX, int positionY) {
