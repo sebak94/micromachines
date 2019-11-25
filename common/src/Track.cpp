@@ -516,9 +516,9 @@ Point Track::getCarStartingPos(int order) {
         return Point(blockPoint.getX() + BLOCKSIZE*1/4, blockPoint.getY() + BLOCKSIZE*1/4);
     else if (order % 2 == 0 && (t == upRight))
         return Point(blockPoint.getX() + BLOCKSIZE*1/2, blockPoint.getY() + BLOCKSIZE*1/2);
-    else if (order % 2 == 0 && (t == downLeft))
+    else if (order % 2 == 1 && (t == downLeft))
         return Point(blockPoint.getX() + BLOCKSIZE*1/2, blockPoint.getY() + BLOCKSIZE*1/2);
-    else if (order % 2 == 0 && (t == upRight))
+    else if (order % 2 == 1 && (t == upRight))
         return Point(blockPoint.getX() + BLOCKSIZE*3/4, blockPoint.getY() + BLOCKSIZE*3/4);
     return {0,0};
 }
