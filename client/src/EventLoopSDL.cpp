@@ -99,10 +99,10 @@ void EventLoopSDL::run() {
                 break;
             case waitingPlayers:
                 quitAndResize(event);
-                selectionSent = false;
                 break;
             case startCountdown:
                 quitAndResize(event);
+                selectionSent = false;
                 break;
             case playing:
                 quitAndResize(event);
