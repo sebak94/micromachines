@@ -85,7 +85,7 @@ void ClientList::deleteDeadClients() {
             games.removePlayer(*it);
             (*it)->join();
             delete *it;
-            clients.erase(it);
+            it = clients.erase(it);
         } else {
             it++;
         }

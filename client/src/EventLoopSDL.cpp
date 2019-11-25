@@ -104,9 +104,9 @@ void EventLoopSDL::run() {
                 break;
             case startCountdown:
                 quitAndResize(event);
-                selectionSent = false;
                 break;
             case playing:
+                selectionSent = false;
                 quitAndResize(event);
                 if (!luaPlaying) {
                     switch (event.type) {
