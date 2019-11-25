@@ -14,7 +14,6 @@ private:
     std::map<int, Modifier> modifiers;
     std::map<int, int> distance;
     int N = 1;
-
     std::string parse(const std::string &str, size_t &pos, const char delim);
 
 public:
@@ -24,11 +23,8 @@ public:
     std::string serialize();
     std::vector<Modifier> getModifiers();
     bool isOnBoost(int posX, int posY);
-
     void append(int x, int y, std::string type, direction dir);
-
     void updateDistance();
-
     void eraseModifier(int i);
 };
 
