@@ -1,9 +1,10 @@
 #include "../include/Modifier.h"
 
-Modifier::Modifier(int x, int y, std::string type) {
+Modifier::Modifier(int x, int y, std::string type, direction dir) {
     this->x = x;
     this->y = y;
     setType(type);
+    this->dir = dir;
 }
 
 Modifier::~Modifier() {}
@@ -34,6 +35,15 @@ int Modifier::getY() const {
 
 std::string Modifier::serialize() {
     std::string resp;
-    resp += std::to_string(x) + ',' + std::to_string(y) + ',' + getType();
+    resp = std::to_string(x) + ',' + std::to_string(y) + ',' + getType();
     return resp;
+}
+
+void Modifier::travel(int step) {
+    switch(dir) {
+        case left: x -= step; break;
+        case right: x += step; break;
+        case up: y += step; break;
+        case down: y -= step; break;
+    }
 }

@@ -113,6 +113,10 @@ public:
     int getTrackW();
 
     int getTrackH();
+
+    Grandstand getRandomGrandstand();
+
+    bool hasGrandstands();
 };
 
 

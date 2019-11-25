@@ -12,12 +12,16 @@
 #include <cstring>
 #include <Box2D/Box2D.h>
 
+typedef std::chrono::time_point<std::chrono::steady_clock> modifierChrono;
+
 class MicroMachinesTh : public Thread {
     private:
     TrackList tracks;
     Track track;
     Config config;
     ModifierList modifiers;
+    int modifiersThrown = 0;
+    std::vector<std::string> modifierTypes;
     std::mutex m;
     std::vector<ClientTh*> players;
     std::map<ColorType, Car*> cars;
@@ -66,6 +70,14 @@ class MicroMachinesTh : public Thread {
     Config getConfig();
     void setTotalNumberPlayers(int number);
     int getTotalNumberPlayers();
+
+    void throwModifier();
+
+    direction setModifierDirection(trackPartType type);
+
+    void updateModifiersPosition();
+
+    void sendModifiersToPlayers();
 };
 
 #endif

@@ -32,6 +32,8 @@ public:
     std::vector<Modifier> getModifiers();
     void createModifiers(std::string str);
     void reset();
+
+    void updateModifiers(std::string str);
 };
 
 #endif

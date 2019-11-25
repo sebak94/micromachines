@@ -9,11 +9,13 @@
 #define SPEED_REDUCTION_FACTOR 0.9
 #define SPEED_INCREASE_FACTOR 2
 #define REFRESHTIME 5000000  // us
+#define MAX_MODIFIERS_THROWN 30
 
 MicroMachinesTh::MicroMachinesTh(const Config &config) : config(config) {
     tracks.readTracks();
     world = new b2World(b2Vec2(0, 0));
     world->SetDestructionListener(&destruction_listener);
+    modifierTypes = {"healthBox", "boost", "stones", "oil", "mud"};
 }
 
 void MicroMachinesTh::setTrack(std::string trackStr) {
@@ -123,8 +125,10 @@ void MicroMachinesTh::updatePlayersState() {
         players[i]->processNextAction();
         if (!track.isOnTrack(players[i]->getCarPosX(), players[i]->getCarPosY()))
             players[i]->modifySpeedByFactor(SPEED_REDUCTION_FACTOR);
-        if (modifiers.isOnBoost(players[i]->getCarPosX(), players[i]->getCarPosY()))
+        if (modifiers.isOnBoost(players[i]->getCarPosX(), players[i]->getCarPosY())) {
             players[i]->modifySpeedByFactor(SPEED_INCREASE_FACTOR);
+            modifiersThrown--;
+        }
         if(players[i]->getState() == playing && players[i]->updateHealth()) {
             players[i]->newCarPosition(track.getTrackPartPoint(players[i]->getCarLastTrackID()) +
                                                Point(BLOCKSIZE/2,BLOCKSIZE*(1.1)));
@@ -199,6 +203,14 @@ void MicroMachinesTh::sendNewStateToPlayers() {
     }
 }
 
+void MicroMachinesTh::sendModifiersToPlayers() {
+    Lock l(m);
+    for (size_t i = 0; i < players.size(); i++) {
+        std::string borrar = modifiersSerialized();
+        players[i]->sendModifiers(modifiersSerialized());
+    }
+}
+
 std::string MicroMachinesTh::allTrackNames() {
     return tracks.serialize();
 }
@@ -250,6 +262,30 @@ std::string MicroMachinesTh::modifiersSerialized() {
     return modifiers.serialize();
 }
 
+void MicroMachinesTh::throwModifier() {
+    Lock l(m);
+    if (modifiersThrown < MAX_MODIFIERS_THROWN) {
+        Grandstand gs = track.getRandomGrandstand();
+        direction dir = setModifierDirection(gs.getType());
+        int x = gs.getPosX() + BLOCKSIZE/2;
+        int y = gs.getPosY() + BLOCKSIZE/2;
+        modifiers.append(x, y, modifierTypes[rand() % modifierTypes.size()], dir);
+        modifiersThrown++;
+    }
+}
+
+void MicroMachinesTh::updateModifiersPosition() {
+    Lock l(m);
+    modifiers.updateDistance();
+}
+
+direction MicroMachinesTh::setModifierDirection(trackPartType type) {
+    if (type == public1Up) return down;
+    if (type == public1Down) return up;
+    if (type == public1Left) return right;
+    if (type == public1Right) return left;
+}
+
 Config MicroMachinesTh::getConfig() {
     return config;
 }
@@ -268,5 +304,6 @@ void MicroMachinesTh::setTotalNumberPlayers(int number) {
 }
 
 int MicroMachinesTh::getTotalNumberPlayers() {
+    Lock l(m);
     return numberPlayers;
 }

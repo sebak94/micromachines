@@ -1,37 +1,28 @@
 #include "../include/ModifierList.h"
 
 ModifierList::ModifierList() {
-    Modifier modifier(900,500,"healthBox");
-    Modifier modifier21(800,525,"boost");
-    Modifier modifier22(825,525,"boost");
-    Modifier modifier23(850,525,"boost");
-    Modifier modifier24(875,525,"boost");
-    Modifier modifier25(900,525,"boost");
-    Modifier modifier26(925,525,"boost");
-    Modifier modifier27(950,525,"boost");
-    Modifier modifier28(975,525,"boost");
-    Modifier modifier29(1000,525,"boost");
-    Modifier modifier3(900,537,"stones");
-    Modifier modifier4(800,500,"oil");
-    Modifier modifier5(800,537,"mud");
+    modifiers.emplace(0, Modifier(0, 0, "boost", left));
+    distance.emplace(0, 100 - rand() % 50);
+}
 
-    modifiers.push_back(modifier);
-    modifiers.push_back(modifier21);
-    modifiers.push_back(modifier22);
-    modifiers.push_back(modifier23);
-    modifiers.push_back(modifier24);
-    modifiers.push_back(modifier25);
-    modifiers.push_back(modifier26);
-    modifiers.push_back(modifier27);
-    modifiers.push_back(modifier28);
-    modifiers.push_back(modifier29);
-    modifiers.push_back(modifier3);
-    modifiers.push_back(modifier4);
-    modifiers.push_back(modifier5);
+void ModifierList::append(int x, int y, std::string type, direction dir) {
+    modifiers.emplace(N, Modifier(x, y, type, dir));
+    distance.emplace(N, 100 - rand() % 50);
+    N++;
+}
+
+void ModifierList::updateDistance() {
+    for (auto & modifier : modifiers) {
+        if (distance[modifier.first] > 0) {
+            modifier.second.travel(MODIFIER_STEP);
+            distance[modifier.first] -= MODIFIER_STEP;
+        }
+    }
 }
 
 ModifierList::ModifierList(std::string str) {
     size_t pos = 0;
+    N = 0;
     parse(str, pos, ','); //salteo hasta la primer coma
     str.erase(str.length()-1); //borro el \n
 
@@ -39,8 +30,9 @@ ModifierList::ModifierList(std::string str) {
         int x = std::stoi(parse(str, pos, ','));
         int y = std::stoi(parse(str, pos, ','));
         std::string type = parse(str, pos, ',');
-        Modifier modifier(x, y, type);
-        modifiers.push_back(modifier);
+        Modifier modifier(x, y, type, left);
+        modifiers.emplace(N, modifier);
+        N++;
         if (pos == 0)
             break;
     }
@@ -51,14 +43,14 @@ ModifierList::~ModifierList() {
 }
 
 std::string ModifierList::serialize() {
-    std::string resp = "M,";
-    for (int i = 0; i < modifiers.size(); i++) {
-        resp += modifiers[i].serialize();
+    std::string resp{};
+    //resp = std::string("M,");
+    for (auto it = modifiers.begin(); it!=modifiers.end(); it++) {
+        resp += it->second.serialize();
         resp += ',';
     }
-    resp.erase(resp.length()-1);
-    resp += '\n';
-    return resp;
+    resp.back() = '\n';
+    return std::string("M,") + resp;
 }
 
 std::string ModifierList::parse(const std::string &str, size_t &pos, const char delim) {
@@ -70,21 +62,29 @@ std::string ModifierList::parse(const std::string &str, size_t &pos, const char 
     return substr;
 }
 
-std::vector<Modifier>& ModifierList::getModifiers() {
-    return modifiers;
+std::vector<Modifier> ModifierList::getModifiers() {
+    std::vector<Modifier> vect{};
+    for (auto it = modifiers.begin(); it!=modifiers.end(); it++)
+        vect.push_back(it->second);
+    return vect;
 }
 
 bool ModifierList::isOnBoost(int posX, int posY) {
-    bool result = false;
     for (auto modifier : modifiers) {
-        if (modifier.getType() == "boost") {
-            if (posX >= modifier.getX()
-                && posX <= modifier.getX() + MODIFIER_SIZE
-                && posY >= modifier.getY()
-                && posY <= modifier.getY() + MODIFIER_SIZE
-            )
-                result = true;
+        if (modifier.second.getType() == "boost") {
+            if (posX >= modifier.second.getX()
+                && posX <= modifier.second.getX() + MODIFIER_SIZE
+                && posY >= modifier.second.getY()
+                && posY <= modifier.second.getY() + MODIFIER_SIZE
+            ) {
+                eraseModifier(modifier.first);
+                return true;
+            }
         }
     }
-    return result;
+    return false;
+}
+
+void ModifierList::eraseModifier(int i) {
+    modifiers.erase(i);
 }

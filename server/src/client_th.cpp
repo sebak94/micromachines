@@ -33,6 +33,7 @@ void ClientTh::sendCarData() {
 }
 
 void ClientTh::sendAllCarsToPlayer(std::vector<ClientTh *> players) {
+    Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
         //No mando los autos que ya terminaron, mando solo los otros autos
         //if (players[i]->getState() != waitingEnd) {
@@ -47,6 +48,7 @@ void ClientTh::sendTrackData(std::string track_serialized) {
 }
 
 void ClientTh::sendModifiers(std::string modifiers_serialized) {
+    Lock l(m);
     send(modifiers_serialized);
 }
 

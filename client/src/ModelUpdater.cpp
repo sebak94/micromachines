@@ -28,6 +28,7 @@ void ModelUpdater::run() {
         try {
             std::string text = receive(); //Recibo cambio de estado u otra cosa
             //printf("text1: %s\n", text.c_str());
+            printf("text: %s\n", text.c_str());
             if (text[0] == 'G') {
                 //Si recibi cambio de estado lo actualizo
                 //std::string text = receive();
@@ -71,12 +72,18 @@ void ModelUpdater::run() {
                     modelMonitor.setGameState(waitingPlayers);
                 } else if (modelMonitor.getGameState() == waitingPlayers
                         || modelMonitor.getGameState() == startCountdown) {
-                    modelMonitor.updateCar(text);
+                    if (text[0] == 'M') {
+                        modelMonitor.updateModifiers(text);
+                    } else {
+                        modelMonitor.updateCar(text);
+                    }
                 } else if (modelMonitor.getGameState() == playing
                         || modelMonitor.getGameState() == waitingEnd
                         || modelMonitor.getGameState() == gameEnded) {
                     if (text[0] == 'W') {
                         modelMonitor.updateMatchResults(text.substr(2, text.length()));
+                    } else if (text[0] == 'M') {
+                        modelMonitor.updateModifiers(text);
                     } else {
                         modelMonitor.updateCar(text);
                     }

@@ -73,8 +73,14 @@ void GameLoopTh::play() {
             loops = 0;
             micromachines.updatePlayersState();
             micromachines.monitorTrack();
+            micromachines.updateModifiersPosition();
+            if (timeElapsed(modifTimer) > 100000) {
+                micromachines.throwModifier();
+                modifTimer = std::chrono::steady_clock::now();
+            }
             updateWorld(next_game_tick, SKIP_TICKS, loops, 1.0 / config.getAsFloat(REFRESH_FREQ), 5, 5);
             micromachines.sendNewStateToPlayers();
+            micromachines.sendModifiersToPlayers();
             micromachines.updateWinners();
             micromachines.sendWinners();
             timeWait(MICROSECS_WAIT, begin);

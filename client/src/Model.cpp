@@ -75,6 +75,11 @@ void Model::createModifiers(std::string str) {
     modifiers = std::move(modifierList.getModifiers());
 }
 
+void Model::updateModifiers(std::string str) {
+    ModifierList modifierList(str);
+    modifiers = modifierList.getModifiers();
+}
+
 std::vector<Modifier> Model::getModifiers() {
     return this->modifiers;
 }

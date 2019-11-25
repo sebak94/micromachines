@@ -19,6 +19,7 @@ class GameLoopTh: public Thread {
     uint8_t game_loops = 1;
     double countdownTime;
     Config config;
+    modifierChrono modifTimer = std::chrono::steady_clock::now();
 
     uint64_t GetTickCountMs();
     void executeLibraries();

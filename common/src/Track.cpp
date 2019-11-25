@@ -50,6 +50,15 @@ void Track::loadGrandstands(const Json::Value &fileTracks, int trackNumber) {
     }
 }
 
+Grandstand Track::getRandomGrandstand() {
+    int randomIndex = rand() % grandstands.size();
+    return grandstands[rand() % grandstands.size()];
+}
+
+bool Track::hasGrandstands() {
+    return !grandstands.empty();
+}
+
 // Gets track name
 std::string Track::getName() {
     return name;

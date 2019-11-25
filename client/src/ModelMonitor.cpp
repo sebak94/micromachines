@@ -93,6 +93,11 @@ void ModelMonitor::createModifiers(std::string str) {
     model.createModifiers(str);
 }
 
+void ModelMonitor::updateModifiers(std::string str) {
+    std::lock_guard<std::mutex> lock(m);
+    model.updateModifiers(str);
+}
+
 std::vector<Modifier> ModelMonitor::getModifiers() {
     std::lock_guard<std::mutex> lock(m);
     return model.getModifiers();
