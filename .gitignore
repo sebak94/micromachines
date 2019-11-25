@@ -42,3 +42,5 @@ cmake-build-debug
 /.idea/modules.xml
 /.idea/micromachines.iml
 /.idea/misc.xml
+/cpplint.py
+/cpplint.sh

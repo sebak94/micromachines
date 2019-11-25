@@ -178,10 +178,9 @@ void Camera::showLife(Car * car, int & realX, int & realY, double &heightCar) {
 }
 
 void Camera::showCountdown() {
-    SDL_Color color = {255, 255, 255, 0};
-    TextTexture text;
-    int fontsize = 300;
-    int s = fontsize*128/96;  // offset from center of number
+    SDL_Color white = {255, 255, 255, 0};
+    SDL_Color black = {0, 0, 0, 0};
+
     if (countDownStarted) {
         auto end = std::chrono::steady_clock::now();
         auto duration = std::chrono::duration_cast< ms >(end - start);
@@ -192,15 +191,22 @@ void Camera::showCountdown() {
         countDown = SECOND;
         countDownNumber--;
     }
-    text.textToTexture(window.getRenderer(),
-            std::to_string((int)countDownNumber),
-            color,
-            FONTNAME,
-            fontsize);
-    text.render(window.getRenderer(),
-                (window.getWidth()/2 - s/5),
-                (window.getHeight() - s)/2);
+    showNumber(black, 300, 8);
+    showNumber(white, 300, 0);
     countDownStarted = true;
+}
+
+void Camera::showNumber(SDL_Color &color, int fontsize, int displacement) {
+    TextTexture text;
+    int offset = fontsize*128/96;  // offset from center of number
+    text.textToTexture(window.getRenderer(),
+                       std::to_string((int)countDownNumber),
+                       color,
+                       FONTNAME,
+                       fontsize);
+    text.render(window.getRenderer(),
+                (window.getWidth()/2 - offset/5) + displacement,
+                (window.getHeight() - offset)/2 + displacement);
 }
 
 void Camera::updateBlockSize() {

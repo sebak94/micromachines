@@ -288,13 +288,17 @@ std::string Track::typeToFileType(int row, int col) {
 
 // Checks if "actual" Part is properly connected based on last curve "prev"
 bool Track::validateConnection(trackPartType prev, trackPartType actual) {
-    if ((actual == horizontal || actual == finishH)  && (prev == upRight || prev == downRight))
+    if ((actual == horizontal || actual == finishH)
+        && (prev == upRight || prev == downRight))
         return true;
-    else if ((actual == horizontal || actual == finishH) && (prev == upLeft || prev == downLeft))
+    else if ((actual == horizontal || actual == finishH)
+        && (prev == upLeft || prev == downLeft))
         return true;
-    else if ((actual == vertical || actual == finishV) && (prev == upRight || prev == upLeft))
+    else if ((actual == vertical || actual == finishV)
+        && (prev == upRight || prev == upLeft))
         return true;
-    else if((actual == vertical || actual == finishV) && (prev == downRight || prev == downLeft))
+    else if((actual == vertical || actual == finishV)
+        && (prev == downRight || prev == downLeft))
         return true;
     else if (actual == downRight && prev == downLeft)
         return true;
@@ -333,13 +337,17 @@ int Track::setNextCoord(int &row,
                          int lastRow) {
     bool sameRow = (row == lastRow);  // elem and prev on same row
     lastRow = row;
-    if ((elem == horizontal || elem == finishH) && (prev == upRight || prev == downRight))
+    if ((elem == horizontal || elem == finishH)
+        && (prev == upRight || prev == downRight))
         col++;
-    else if ((elem == horizontal || elem == finishH) && (prev == upLeft || prev == downLeft))
+    else if ((elem == horizontal || elem == finishH)
+              && (prev == upLeft || prev == downLeft))
         col--;
-    else if ((elem == vertical || elem == finishV) && (prev == upRight || prev == upLeft))
+    else if ((elem == vertical || elem == finishV)
+           && (prev == upRight || prev == upLeft))
         row--;
-    else if((elem == vertical || elem == finishV) && (prev == downRight || prev == downLeft))
+    else if((elem == vertical || elem == finishV)
+        && (prev == downRight || prev == downLeft))
         row++;
     else if (elem == downRight && prev == downLeft)
         row++;
@@ -457,9 +465,8 @@ void Track::parseTrackParts(const std::string & trackStr, size_t & pos) {
     for (int i=1; i <= width*height; i++){
         x = std::stoi(parseTrackParam(trackStr, pos, ','));
         y = std::stoi(parseTrackParam(trackStr, pos, ','));
-        type = static_cast<trackPartType>(std::stoi(parseTrackParam(trackStr,
-                                                                     pos,
-                                                                     ',')));
+        std::string typeStr = parseTrackParam(trackStr,pos, ',');
+        type = static_cast<trackPartType>(std::stoi(typeStr));
         part.loadPosClient(x,y);
         part.loadType(type);
         trackPartData.emplace_back(part);
@@ -469,10 +476,9 @@ void Track::parseTrackParts(const std::string & trackStr, size_t & pos) {
 // Parses initial non-parts attributes of track
 std::string Track::parseTrackParam(const std::string & initString,
                                    size_t & pos,
-                                   const char delim) {
+                                   const char delimiter) {
     std::string substr;
-
-    size_t nextPos = initString.find(delim, pos);
+    size_t nextPos = initString.find(delimiter, pos);
     size_t len = nextPos - pos;
     substr = initString.substr(pos, len);
     pos = nextPos + 1;
@@ -549,6 +555,7 @@ void Track::setTrackStart(int row, int col, int rowN, int colN) {
     nextToStartCol = colN;
 }
 
+/* True if jumps to track block +JUMPEDBLOCKS above last block */
 bool Track::jumpedTrackPart(int xCar, int yCar, int lastTrackPartID) {
     TrackPartData part = getTrackPart(findNearestPos(xCar), findNearestPos(yCar));
     int currentID = part.getID();
@@ -557,7 +564,7 @@ bool Track::jumpedTrackPart(int xCar, int yCar, int lastTrackPartID) {
     else if (currentID == lastTrackPartID)
         return false;  // is on same block
     else if (lastTrackPartID == partCounter - 1 && (currentID == 0 || currentID == 1))
-        return false;
+        return false;  // is crossing finish line
     else return currentID > lastTrackPartID + JUMPEDBLOCKS;
 }
 

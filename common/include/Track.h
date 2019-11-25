@@ -45,78 +45,66 @@ class Point;
 
 class Track {
 protected:
-    int startCol = 0;
-    int startRow = 0;
-    int nextToStartCol = 0;
-    int nextToStartRow = 0;
+    int startCol = 0;  // start line
+    int startRow = 0;  // start line
+    int nextToStartCol = 0;  // next to start line
+    int nextToStartRow = 0;  // next to start line
     int width = 0;  // blocks
     int height = 0;  // blocks
     int partCounter = 0;  // number of track elements
-    std::vector<TrackPartData> trackPartData{};
-    std::vector<Grandstand> grandstands;
-    std::map<int, Point> trackSequence;
-    std::string name{};
+    std::vector<TrackPartData> trackPartData{};  // data of blocks
+    std::vector<Grandstand> grandstands;  // public
+    std::map<int, Point> trackSequence;  // stores race blocks positions ordered
+    std::string name{};  // of track
 
 public:
     Track(int width, int height, const std::string &name);
     Track();
-    void setTrackStart(int row, int col, int rowN, int colN);
     explicit Track(const std::string &trackStr);
-    void loadTrack(const Json::Value &fileTracks, int trackNumber);
-    void print();
-    void initLayout();
-    void loadPart(int row, int col, trackPartType elem);
+    void loadGrandstands(const Json::Value &fileTracks, int trackNumber);
     void initTrackParts(const std::vector<std::string> & trackLayout);
-    static trackPartType identifyElem(const std::string &layoutElem);
-    std::string getName();
-    trackPartType getPartType(int row, int col);
-    static bool isCurve(const trackPartType & elem);
+    void parseTrackParts(const std::string &trackStr, size_t &pos);
+    void loadTrack(const Json::Value &fileTracks, int trackNumber);
+    void setTrackPartType(int row, int col, trackPartType type);
+    void setTrackStart(int row, int col, int rowN, int colN);
+    void loadPart(int row, int col, trackPartType elem);
+    void saveTrackSequence(int row, int col);
+    void initLayout();
+    void print();
+    bool validateConnection(trackPartType prev, trackPartType actual);
+    bool jumpedTrackPart(int posX, int posY, int lastTrackPartID);
+    bool isOnTrack(int posX, int posY);
+    bool isTrackPart(int row, int col);
+    bool hasGrandstands();
+    bool validateTrack();
+    int setNextCoord(int &row, int &col, trackPartType elem,
+                     trackPartType prev, int lastRow);
+    int getCurrentID(int posX, int posY);
+    int getStartingID(int order);
+    int getPartsNumber();
+    int getTrackW();
+    int getTrackH();
     static void printElem(const TrackPartData &part);
-    TrackPartData & getTrackPart(int posX, int posY);
+    static bool inCurveRange(bool invertedX, bool invertedY, int x, int y);
+    static bool isCurve(const trackPartType & elem);
+    static bool isTrackLinePart(trackPartType type);
+    static bool isTrackPart(trackPartType type);
     static int findNearestPos(int pos);
     static int posToIndex(int pos);
-    bool isOnTrack(int posX, int posY);
-    static bool inCurveRange(bool invertedX, bool invertedY, int x, int y);
-    std::string serialize();
-    static std::string parseTrackParam(const std::string &initString, size_t &pos, const char delim);
-    void parseTrackParts(const std::string &trackStr, size_t &pos);
-    std::vector<TrackPartData> getTrackPartData() const;
-    bool validateTrack();
-    bool validateConnection(trackPartType prev, trackPartType actual);
-    std::string typeToFileType(int row, int col);
-    int setNextCoord(int &row, int &col, trackPartType elem, trackPartType prev, int lastRow);
-    trackPartType setStartingPreviousTrackPart(int row, int col);
-    static bool isTrackPart(trackPartType type);
-    static bool isTrackLinePart(trackPartType type);
-    bool isTrackPart(int row, int col);
-
-    void setTrackPartType(int row, int col, trackPartType type);
-
-    void loadGrandstands(const Json::Value &fileTracks, int trackNumber);
-
-    Point getCarStartingPos(int order);
-
-    void saveTrackSequence(int row, int col);
-
+    static trackPartType identifyElem(const std::string &layoutElem);
+    static std::string parseTrackParam(const std::string &initString,
+                                       size_t &pos, const char delimiter);
     float getCarStartingRotation(int order);
-
-    bool jumpedTrackPart(int posX, int posY, int lastTrackPartID);
-
-    Point getTrackPartPoint(int trackID);
-
-    int getStartingID(int order);
-
-    int getCurrentID(int posX, int posY);
-
-    int getPartsNumber();
-
-    int getTrackW();
-
-    int getTrackH();
-
+    std::vector<TrackPartData> getTrackPartData() const;
+    TrackPartData & getTrackPart(int posX, int posY);
+    trackPartType getPartType(int row, int col);
+    trackPartType setStartingPreviousTrackPart(int row, int col);
+    std::string getName();
+    std::string serialize();
+    std::string typeToFileType(int row, int col);
     Grandstand getRandomGrandstand();
-
-    bool hasGrandstands();
+    Point getCarStartingPos(int order);
+    Point getTrackPartPoint(int trackID);
 };
 
 
