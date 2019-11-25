@@ -2,12 +2,15 @@
 
 #define FAKE_KEYDOWN 1
 
-EventLoopSDL::EventLoopSDL(BlockingQueue &queue, Drawer *drawerThread, ModelMonitor &modelMonitor)
-        : queue(queue), drawer(drawerThread), modelMonitor(modelMonitor) {}
+EventLoopSDL::EventLoopSDL(BlockingQueue &queue, Drawer *drawerThread,
+                           ModelMonitor &modelMonitor) :
+        queue(queue), drawer(drawerThread), modelMonitor(modelMonitor),
+        luaIA(queue, drawer, modelMonitor) {
+}
 
 EventLoopSDL::~EventLoopSDL() {}
 
-void EventLoopSDL::enqueueKeyDownEvent(SDL_KeyboardEvent& keyEvent) {
+void EventLoopSDL::enqueueKeyDownEvent(SDL_KeyboardEvent &keyEvent) {
     if (keyEvent.repeat == FAKE_KEYDOWN)
         return;
 
@@ -82,28 +85,43 @@ void EventLoopSDL::run() {
     while (running) {
         SDL_Event event;
         SDL_WaitEvent(&event);
+
         switch (modelMonitor.getGameState()) {
             case mainMenu:
                 quitAndResize(event);
                 drawer->getMatchWindow().updateMatchButtons(&event);
-                if (drawer->getMatchWindow().isModeSelected() && !selectionSent) {
+                //EUNI.this->queue.push(drawer->getMatchWindow().serializeData());
+                if (drawer->getMatchWindow().isModeSelected() &&
+                    !selectionSent) {
                     this->queue.push(drawer->getMatchWindow().getSelection());
                     selectionSent = true;
                 }
                 break;
             case creating:
                 quitAndResize(event);
-                matchWindowInfo(event);
+                if (drawer->getMatchWindow().isReady()) {
+                    this->queue.push(drawer->getMatchWindow().serializeData());
+                }
                 break;
             case joining:
                 quitAndResize(event);
-                matchWindowInfo(event);
+                if (drawer->getMatchWindow().isReady()) {
+                    this->queue.push(drawer->getMatchWindow().serializeData());
+                }
                 break;
             case waitingPlayers:
                 quitAndResize(event);
                 break;
             case startCountdown:
                 quitAndResize(event);
+                if (!luaPlaying && drawer->getMatchWindow().isReady() &&
+                    drawer->getMatchWindow().isLuaSelected()) {
+                    luaPlaying = true;
+                    this->luaIA.setTrack(this->modelMonitor.getTrack());
+                    std::string color = modelMonitor.getMyColor();
+                    this->luaIA.setColor(color);
+                    this->luaIA.run();
+                }
                 break;
             case playing:
                 selectionSent = false;

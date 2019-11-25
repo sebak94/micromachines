@@ -11,13 +11,5 @@ using namespace std;
 bool state = false;
 
 extern "C" void execute(char *command) {
-    /*
-    if (state) {
-        state = false;
-        memcpy(command, "Y", 1);
-    } else {
-        state = true;
-    }
-    */
     memcpy(command, "Y", 1);
 }

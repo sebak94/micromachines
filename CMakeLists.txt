@@ -87,10 +87,14 @@ set(SOURCE_FILES_CLIENT
 	client/src/sdl/SdlMusic.cpp
 	client/include/PictureLoader.h
     client/src/PictureLoader.cpp
+	client/include/lua/ai.h
+	client/src/lua/ai.cpp
 	client/include/BlockingQueue.h
 	client/src/BlockingQueue.cpp
 	client/include/EventLoopSDL.h
 	client/src/EventLoopSDL.cpp
+	client/include/EventLoopIA.h
+	client/src/EventLoopIA.cpp
 	client/include/Dispatcher.h
 	client/src/Dispatcher.cpp
 	client/include/Drawer.h
@@ -167,7 +171,8 @@ set(SOURCE_FILES_EDITOR
 	common/include/Error.h)
 
 add_executable(micromachines-sv ${SOURCE_FILES_SERVER} server/main.cpp)
-add_executable(micromachines-cl ${SOURCE_FILES_CLIENT} client/main.cpp)
+add_executable(micromachines-cl client/src/lua/ai.o ${SOURCE_FILES_CLIENT}
+		client/main.cpp)
 add_executable(micromachines-ed ${SOURCE_FILES_EDITOR} editor/main.cpp)
 
 target_link_libraries(micromachines-ed

@@ -1,9 +1,17 @@
-print("IA Lua loaded")
+lua_data_actions = { ["empty"] = "Y",
+                     ["downLeft"] = "L",
+                     ["downRight"] = "R",
+                     ["upRight"] = "R",
+                     ["upLeft"] = "L",
+                     ["horizontal"] = "A",
+                     ["vertical"] = "A",
+                     ["finishH"] = "A",
+                     ["finishV"] = "Y",
+                     ["public1Up"] = "Y",
+                     ["public1Down"] = "Y",
+                     ["public1Left"] = "L",
+                     ["public1Right"] = "R" };
 
 function getNextMove(positionX, positionY)
-    local trackDir = map[positionX][positionY]
-    local nextMove = movements[trackDir]
-    print(string.format("positionX: %d, positionY: %d, trackDir: %s,
-    nextMove: %s", positionX, positionY, trackDir, nextMove))
-    return nextMove
+    return lua_data_actions[track_matrix[positionX][positionY]];
 end
