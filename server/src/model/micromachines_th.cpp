@@ -21,7 +21,7 @@ MicroMachinesTh::MicroMachinesTh(Config &config) : config(config) {
     world = new b2World(b2Vec2(0, 0));
     world->SetDestructionListener(&destruction_listener);
     modifierTypes = {"healthBox", "boost", "stones", "oil", "mud"};
-    this->laps = config.getAsInt(LAPS_CONFIG);
+    this->laps = config.getAsInt(LAPS_CONFIG) + 1;
 }
 
 void MicroMachinesTh::setTrack(std::string trackStr) {

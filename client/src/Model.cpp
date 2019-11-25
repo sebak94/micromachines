@@ -17,7 +17,7 @@ void Model::setTrack(std::vector<TrackPartData> track) {
 void Model::setTotalLaps(const std::string& str) {
     size_t pos = str.find_last_of(',') + 1;
     int laps = stoi(parse(str, pos, '\n'));
-    this->totalLaps = laps - 1;
+    this->totalLaps = laps;
 }
 
 int Model::getTotalLaps() {
