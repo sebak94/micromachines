@@ -14,12 +14,14 @@
 #define MAX_MODIFIERS_THROWN 30
 #define HEALTH_GIFT 25
 #define ROCK_HEALTH_REDUCTION 75
+#define LAPS_CONFIG "laps"
 
-MicroMachinesTh::MicroMachinesTh(const Config &config) : config(config) {
+MicroMachinesTh::MicroMachinesTh(Config &config) : config(config) {
     tracks.readTracks();
     world = new b2World(b2Vec2(0, 0));
     world->SetDestructionListener(&destruction_listener);
     modifierTypes = {"healthBox", "boost", "stones", "oil", "mud"};
+    this->laps = config.getAsInt(LAPS_CONFIG) + 1;
 }
 
 void MicroMachinesTh::setTrack(std::string trackStr) {

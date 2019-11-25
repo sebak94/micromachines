@@ -26,8 +26,6 @@ void MMServer::finishThreads() {
 
 void MMServer::start(const char *service) {
     try {
-        //Micromachines micromachines;
-        //GameLoopTh game_loop_th(micromachines);
         GamesTh games;
         AcceptorTh acceptor_th(service, games);
         threads.push_back(&acceptor_th);

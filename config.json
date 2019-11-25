@@ -9,5 +9,6 @@
    "fullscreen" : "false",
    "draw distance [4 - 8]" : 4,
    "fps limit" : 60,
-   "rec fps limit" : 30
+   "rec fps limit" : 30,
+   "laps" : 0
 }
