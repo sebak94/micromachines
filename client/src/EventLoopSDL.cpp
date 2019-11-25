@@ -70,10 +70,6 @@ void EventLoopSDL::quitAndResize(SDL_Event &event) {
 void EventLoopSDL::matchWindowInfo(SDL_Event &event) {
     drawer->getMatchWindow().updateMatchButtons(&event);
     if (drawer->getMatchWindow().isReady()) {
-        if (drawer->getMatchWindow().isLuaSelected()) {
-            printf("AI Playing\n");
-            luaPlaying = true;
-        }
         this->queue.push(drawer->getMatchWindow().serializeData());
         this->queue.push(drawer->getMatchWindow().getSelection());
     }
