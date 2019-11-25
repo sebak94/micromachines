@@ -73,7 +73,6 @@ void EventLoopSDL::matchWindowInfo(SDL_Event &event) {
         if (drawer->getMatchWindow().isLuaSelected()) {
             printf("AI Playing\n");
             luaPlaying = true;
-            //acá lanzar el nuevo hilo de los eventos de lua (pero dejar este hilo corriendo)
         }
         this->queue.push(drawer->getMatchWindow().serializeData());
         this->queue.push(drawer->getMatchWindow().getSelection());
@@ -90,7 +89,6 @@ void EventLoopSDL::run() {
             case mainMenu:
                 quitAndResize(event);
                 drawer->getMatchWindow().updateMatchButtons(&event);
-                //EUNI.this->queue.push(drawer->getMatchWindow().serializeData());
                 if (drawer->getMatchWindow().isModeSelected() &&
                     !selectionSent) {
                     this->queue.push(drawer->getMatchWindow().getSelection());
@@ -99,15 +97,11 @@ void EventLoopSDL::run() {
                 break;
             case creating:
                 quitAndResize(event);
-                if (drawer->getMatchWindow().isReady()) {
-                    this->queue.push(drawer->getMatchWindow().serializeData());
-                }
+                matchWindowInfo(event);
                 break;
             case joining:
                 quitAndResize(event);
-                if (drawer->getMatchWindow().isReady()) {
-                    this->queue.push(drawer->getMatchWindow().serializeData());
-                }
+                matchWindowInfo(event);
                 break;
             case waitingPlayers:
                 quitAndResize(event);
