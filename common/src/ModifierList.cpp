@@ -2,12 +2,12 @@
 
 ModifierList::ModifierList() {
     modifiers.emplace(0, Modifier(0, 0, "boost", left));
-    distance.emplace(0, 100 - rand() % 50);
+    distance.emplace(0, 150 - rand() % 75);
 }
 
 void ModifierList::append(int x, int y, std::string type, direction dir) {
     modifiers.emplace(N, Modifier(x, y, type, dir));
-    distance.emplace(N, 100 - rand() % 50);
+    distance.emplace(N, 150 - rand() % 75);
     N++;
 }
 
@@ -70,15 +70,34 @@ std::vector<Modifier> ModifierList::getModifiers() {
 }
 
 bool ModifierList::isOnBoost(int posX, int posY) {
-    for (auto modifier : modifiers) {
-        if (modifier.second.getType() == "boost") {
+    return isOnModif(posX, posY, "boost");
+}
+
+bool ModifierList::isOnHealth(int posX, int posY) {
+    return isOnModif(posX, posY, "healthBox");
+}
+
+bool ModifierList::isOnStones(int posX, int posY) {
+    return isOnModif(posX, posY, "stones");
+}
+
+bool ModifierList::isOnOil(int posX, int posY) {
+    return isOnModif(posX, posY, "oil");
+}
+
+bool ModifierList::isOnMud(int posX, int posY) {
+    return isOnModif(posX, posY, "mud");
+}
+
+bool ModifierList::isOnModif(int & posX, int & posY, const std::string& type) {
+    for (const auto& modifier : modifiers) {
+        if (modifier.second.getType() == type) {
             if (posX >= modifier.second.getX()
                 && posX <= modifier.second.getX() + MODIFIER_SIZE
                 && posY >= modifier.second.getY()
-                && posY <= modifier.second.getY() + MODIFIER_SIZE
-            ) {
-                eraseModifier(modifier.first);
-                return true;
+                && posY <= modifier.second.getY() + MODIFIER_SIZE) {
+                    eraseModifier(modifier.first);
+                    return true;
             }
         }
     }

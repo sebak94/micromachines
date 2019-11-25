@@ -7,9 +7,13 @@
 
 #define DEGTORAD 0.0174532925199432957f
 #define SPEED_REDUCTION_FACTOR 0.9
+#define SPEED_STOP 0.1
 #define SPEED_INCREASE_FACTOR 2
+#define SPEED_BOOST_TICKS 50
 #define REFRESHTIME 5000000  // us
 #define MAX_MODIFIERS_THROWN 30
+#define HEALTH_GIFT 25
+#define ROCK_HEALTH_REDUCTION 75
 
 MicroMachinesTh::MicroMachinesTh(const Config &config) : config(config) {
     tracks.readTracks();
@@ -32,15 +36,18 @@ void MicroMachinesTh::createCars() {
                                       getStartingPoint(1),
                                       getStartingCarRot(1),
                                       getStartID(1), config);
-    cars[black] = Car::createBlackCar(world,
+    if (numberPlayers > 2)
+        cars[black] = Car::createBlackCar(world,
                                       getStartingPoint(2),
                                       getStartingCarRot(2),
                                       getStartID(2), config);
-    cars[yellow] = Car::createYellowCar(world,
+    if (numberPlayers > 3)
+        cars[yellow] = Car::createYellowCar(world,
                                         getStartingPoint(3),
                                         getStartingCarRot(3),
                                         getStartID(3), config);
-    cars[red] = Car::createRedCar(world,
+    if (numberPlayers > 4)
+        cars[red] = Car::createRedCar(world,
                                   getStartingPoint(4),
                                   getStartingCarRot(4),
                                   getStartID(4), config);
@@ -123,15 +130,40 @@ void MicroMachinesTh::updatePlayersState() {
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
         players[i]->processNextAction();
-        if (!track.isOnTrack(players[i]->getCarPosX(), players[i]->getCarPosY()))
+        int x = players[i]->getCarPosX();
+        int y = players[i]->getCarPosY();
+        if (!track.isOnTrack(x, y))
             players[i]->modifySpeedByFactor(SPEED_REDUCTION_FACTOR);
-        if (modifiers.isOnBoost(players[i]->getCarPosX(), players[i]->getCarPosY())) {
+        if (modifiers.isOnBoost(x, y)) {
+            players[i]->setBoost(SPEED_BOOST_TICKS);
             players[i]->modifySpeedByFactor(SPEED_INCREASE_FACTOR);
             modifiersThrown--;
         }
+        if (players[i]->getBoost() > 0) {
+            players[i]->modifySpeedByFactor(SPEED_INCREASE_FACTOR);
+        }
+        if (modifiers.isOnHealth(x, y)) {
+            players[i]->giftHealth(HEALTH_GIFT);
+            modifiersThrown--;
+        }
+        if (modifiers.isOnMud(x, y)) {
+            players[i]->modifySpeedByFactor(SPEED_STOP);
+            modifiersThrown--;
+        }
+        if (modifiers.isOnOil(x, y)) {
+            players[i]->modifySpeedByFactor(SPEED_STOP);
+            modifiersThrown--;
+        }
+        if (modifiers.isOnStones(x, y)) {
+            players[i]->modifySpeedByFactor(SPEED_STOP);
+            players[i]->reduceHealth(ROCK_HEALTH_REDUCTION);
+            modifiersThrown--;
+        }
         if(players[i]->getState() == playing && players[i]->updateHealth()) {
-            players[i]->newCarPosition(track.getTrackPartPoint(players[i]->getCarLastTrackID()) +
-                                               Point(BLOCKSIZE/2,BLOCKSIZE*(1.1)));
+            int ID = players[i]->getCarLastTrackID();
+            Point newPos(track.getTrackPartPoint(ID));
+            newPos = newPos + Point(BLOCKSIZE/2,BLOCKSIZE*(1.1));
+            players[i]->newCarPosition(newPos);
         }
     }
 }

@@ -31,6 +31,7 @@ class Car: public Model {
     int control_state;
     int lastTrackID = -1;
     int laps = 0;
+    int boost = 0;
 
     public:
     Car(uint8_t width, uint8_t height, uint16_t max_velocity,
@@ -70,6 +71,8 @@ class Car: public Model {
 
     int getLaps();
 
+    int getBoost();
+
     std::string getColor();
 
     void reduceHealth(uint8_t reduction);
@@ -79,6 +82,10 @@ class Car: public Model {
     uint8_t getHealth();
 
     void resetHealth();
+
+    void giftHealth(int h);
+
+    void setBoost(int b);
 };
 
 #endif

@@ -96,6 +96,13 @@ uint8_t Car::getHealth() {
     return health;
 }
 
+void Car::giftHealth(int h) {
+    if (health + h < 100)
+        health += h;
+    else
+        health = 99;
+}
+
 bool Car::isContacting() {
     return td_car.isContacting();
 }
@@ -143,6 +150,15 @@ std::string Car::serialize() {
 
 int Car::getLaps() {
     return laps;
+}
+
+int Car::getBoost() {
+    boost--;
+    return boost;
+}
+
+void Car::setBoost(int b) {
+    boost = b;
 }
 
 std::string Car::getColor() {
