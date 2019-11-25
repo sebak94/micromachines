@@ -36,13 +36,13 @@ Camera::Camera(SdlWindow &window,
 
 Camera::~Camera() {}
 
-/* Transformo las coordenadas para que mi auto quede en el medio de la
-* pantalla y se muestre la parte de la pista correspondiente */
-void Camera::showTrack(int xMyCar,
-        int yMyCar,
-        std::vector<TrackPartData> track) {
-    double xBegin, yBegin;
-    calcBeginPos(xBegin, yBegin, xMyCar, yMyCar);
+void
+Camera::showTrack(int xMyCar, std::vector<TrackPartData> track, int yMyCar) {
+    /* Transformo las coordenadas para que mi auto quede en el medio de la
+    * pantalla y se muestre la parte de la pista correspondiente */
+    double xBegin = - xMyCar * (blockWidth / 100) + (window.getWidth() / 2);
+    double yBegin = - yMyCar * (blockHeight / 100) - (window.getHeight() / 2)
+                    + blockHeight;
 
     for (auto & i : track) {
         double x = i.getPosX() * (blockWidth / (BLOCKSIZE));
