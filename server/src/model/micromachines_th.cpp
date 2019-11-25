@@ -155,6 +155,7 @@ void MicroMachinesTh::updatePlayersState() {
             modifiersThrown--;
         }
         if (modifiers.isOnStones(x, y)) {
+            players[i]->modifySpeedByFactor(SPEED_STOP);
             players[i]->reduceHealth(ROCK_HEALTH_REDUCTION);
             modifiersThrown--;
         }
