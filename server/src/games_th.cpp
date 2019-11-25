@@ -11,6 +11,7 @@
 #define PLAYERTOASSIGN -1
 #define PLAYERBEINGASSIGNED -2
 #define REFRESHPLAYERSTIME 500000  // us
+#define LAPS_CONFIG "laps"
 
 void GamesTh::run() {
     while (running) {
@@ -131,6 +132,7 @@ void GamesTh::createGame(ClientTh * player) {
     game->createCars();
     player->setCar(game->getNextCar());
     player->sendCarData();
+    player->sendLapsData(config.getAsString(LAPS_CONFIG));
 
     games.emplace(gamesNumber, game);
     gameLoops.emplace(gamesNumber, gameLoop);
@@ -149,6 +151,7 @@ void GamesTh::addPlayer(ClientTh *player) {
     player->sendTrackData(games[gameIndex]->trackSerialized());
     player->sendModifiers(games[gameIndex]->modifiersSerialized());
     player->sendCarData();
+    player->sendLapsData(config.getAsString(LAPS_CONFIG));
     player->setState(waitingPlayers);
 }
 

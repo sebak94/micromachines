@@ -173,6 +173,7 @@ void Camera::showLaps(int lap, int totalLaps) {
     int w = window.getWidth(); int h = window.getHeight();
     SDL_Rect rect = {w - 130, h - 110, 200, 110};
     lapBox.render(rect);
+    if (lap > totalLaps) lap = totalLaps;
     lapNumber.textToTexture(r, std::to_string(lap), textColor, LAPFONT, 50);
     lapNumber.render(r, w - 100, h - 75);
     std::string totStr = "/" + std::to_string(totalLaps);

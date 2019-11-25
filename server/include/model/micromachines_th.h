@@ -25,7 +25,7 @@ class MicroMachinesTh : public Thread {
     std::mutex m;
     std::vector<ClientTh*> players;
     std::map<ColorType, Car*> cars;
-    int laps = 1;
+    int laps;
     DestructionListener destruction_listener;
     std::vector<std::string> winners;
     bool running = true;
@@ -36,7 +36,7 @@ class MicroMachinesTh : public Thread {
     public:
     b2World *world;
 
-    MicroMachinesTh(const Config &config);
+    MicroMachinesTh(Config &config);
     void setTrack(std::string trackStr);
     void createCars();
     void update();

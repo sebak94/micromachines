@@ -43,6 +43,8 @@ void ModelUpdater::run() {
                     text = receive();
                     modelMonitor.setMyColor(text);
                     modelMonitor.updateCar(text);
+                    text = receive();
+                    modelMonitor.setTotalLaps(text);
                     modelMonitor.setGameState(waitingPlayers);
                 } else if (modelMonitor.getGameState() == joining) {
                     modelMonitor.reset();
@@ -53,6 +55,8 @@ void ModelUpdater::run() {
                     text = receive();
                     modelMonitor.setMyColor(text);
                     modelMonitor.updateCar(text);
+                    text = receive();
+                    modelMonitor.setTotalLaps(text);
                     modelMonitor.setGameState(waitingPlayers);
                 } else if (modelMonitor.getGameState() == waitingPlayers
                         || modelMonitor.getGameState() == startCountdown) {

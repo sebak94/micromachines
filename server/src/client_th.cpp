@@ -118,7 +118,7 @@ void ClientTh::setCar(Car * matchCar) {
 }
 
 void ClientTh::sendLapsData(std::string laps_serialized) {
-    send(laps_serialized);
+    send("L," + laps_serialized + "\n");
 }
 
 void ClientTh::sendGameState(GameState & previousSt, GameState & st) {

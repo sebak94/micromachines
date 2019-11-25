@@ -13,7 +13,7 @@ private:
     std::map<std::string, Car*> cars;
     std::vector<TrackPartData> track;
     std::string myColor;
-    int totalLaps = 10;
+    int totalLaps{};
     GameState gameState = mainMenu;
     std::vector<std::string> trackNames;
     std::vector<std::string> matchNames;
