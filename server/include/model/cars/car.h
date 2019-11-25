@@ -79,6 +79,8 @@ class Car: public Model {
     uint8_t getHealth();
 
     void resetHealth();
+
+    void giftHealth(int h);
 };
 
 #endif

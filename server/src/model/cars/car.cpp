@@ -96,6 +96,13 @@ uint8_t Car::getHealth() {
     return health;
 }
 
+void Car::giftHealth(int h) {
+    if (health + h <= 100)
+        health += h;
+    else
+        health = 100;
+}
+
 bool Car::isContacting() {
     return td_car.isContacting();
 }

@@ -26,6 +26,16 @@ public:
     void append(int x, int y, std::string type, direction dir);
     void updateDistance();
     void eraseModifier(int i);
+
+    bool isOnModif(int &posX, int &posY, const std::string &type);
+
+    bool isOnHealth(int posX, int posY);
+
+    bool isOnStones(int posX, int posY);
+
+    bool isOnOil(int posX, int posY);
+
+    bool isOnMud(int posX, int posY);
 };
 
 #endif

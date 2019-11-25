@@ -7,9 +7,12 @@
 
 #define DEGTORAD 0.0174532925199432957f
 #define SPEED_REDUCTION_FACTOR 0.9
-#define SPEED_INCREASE_FACTOR 2
+#define SPEED_STOP 0.1
+#define SPEED_INCREASE_FACTOR 50
 #define REFRESHTIME 5000000  // us
 #define MAX_MODIFIERS_THROWN 30
+#define HEALTH_GIFT 25
+#define ROCK_HEALTH_REDUCTION 75
 
 MicroMachinesTh::MicroMachinesTh(const Config &config) : config(config) {
     tracks.readTracks();
@@ -123,10 +126,28 @@ void MicroMachinesTh::updatePlayersState() {
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
         players[i]->processNextAction();
-        if (!track.isOnTrack(players[i]->getCarPosX(), players[i]->getCarPosY()))
+        int x = players[i]->getCarPosX();
+        int y = players[i]->getCarPosY();
+        if (!track.isOnTrack(x, y))
             players[i]->modifySpeedByFactor(SPEED_REDUCTION_FACTOR);
-        if (modifiers.isOnBoost(players[i]->getCarPosX(), players[i]->getCarPosY())) {
+        if (modifiers.isOnBoost(x, y)) {
             players[i]->modifySpeedByFactor(SPEED_INCREASE_FACTOR);
+            modifiersThrown--;
+        }
+        if (modifiers.isOnHealth(x, y)) {
+            players[i]->giftHealth(HEALTH_GIFT);
+            modifiersThrown--;
+        }
+        if (modifiers.isOnMud(x, y)) {
+            players[i]->modifySpeedByFactor(SPEED_STOP);
+            modifiersThrown--;
+        }
+        if (modifiers.isOnOil(x, y)) {
+            players[i]->modifySpeedByFactor(SPEED_STOP);
+            modifiersThrown--;
+        }
+        if (modifiers.isOnStones(x, y)) {
+            players[i]->reduceHealth(ROCK_HEALTH_REDUCTION);
             modifiersThrown--;
         }
         if(players[i]->getState() == playing && players[i]->updateHealth()) {

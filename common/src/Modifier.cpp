@@ -41,9 +41,21 @@ std::string Modifier::serialize() {
 
 void Modifier::travel(int step) {
     switch(dir) {
-        case left: x -= step; break;
-        case right: x += step; break;
-        case up: y += step; break;
-        case down: y -= step; break;
+        case left:
+            x -= step;
+            y += (rand() - rand()) % 2*step;
+            break;
+        case right:
+            x += step;
+            y += (rand() - rand()) % 2*step;
+            break;
+        case up:
+            y += step;
+            x += (rand() - rand()) % 2*step;
+            break;
+        case down:
+            y -= step;
+            x += (rand() - rand()) % 2*step;
+            break;
     }
 }

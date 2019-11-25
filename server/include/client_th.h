@@ -85,6 +85,10 @@ class ClientTh: public Thread {
     void receiveMatchSelection();
 
     bool updateHealth();
+
+    void giftHealth(int health);
+
+    void reduceHealth(int health);
 };
 
 #endif

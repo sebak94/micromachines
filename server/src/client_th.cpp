@@ -6,8 +6,7 @@
 #include "vector"
 #include "string"
 
-#define SPEEDREDUCTIONFACTOR 0.9
-#define HEALTH_REDUCTION 5
+#define HEALTH_REDUCTION 15
 
 ClientTh::ClientTh(Socket *peer, TrackList &tracks)
         : keep_talking(true),
@@ -15,7 +14,6 @@ ClientTh::ClientTh(Socket *peer, TrackList &tracks)
           peer(peer),
           tracks(tracks) {
     sendWelcomeMsg();
-    //sendCarData();
 }
 
 bool ClientTh::stillTalking() {
@@ -223,11 +221,21 @@ bool ClientTh::updateHealth() {
     Lock l(m);
     bool dead = false;
     if (car->isContacting()) car->reduceHealth(HEALTH_REDUCTION);
-    if (car->getHealth() <= 0) {
+    if (car->getHealth() <= 0 || car->getHealth() > 100) {
         dead = true;
         car->resetHealth();
     }
     return dead;
+}
+
+void ClientTh::giftHealth(int health) {
+    Lock l(m);
+    car->giftHealth(health);
+}
+
+void ClientTh::reduceHealth(int health) {
+    Lock l(m);
+    car->reduceHealth(health);
 }
 
 int ClientTh::getCarLastTrackID() {
