@@ -70,13 +70,9 @@ class MicroMachinesTh : public Thread {
     Config getConfig();
     void setTotalNumberPlayers(int number);
     int getTotalNumberPlayers();
-
     void throwModifier();
-
     direction setModifierDirection(trackPartType type);
-
     void updateModifiersPosition();
-
     void sendModifiersToPlayers();
 };
 

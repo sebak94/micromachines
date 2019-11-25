@@ -212,6 +212,16 @@ int ClientTh::getCarPosY() {
     return car->getPosY();
 }
 
+int ClientTh::getBoost() {
+    Lock l(m);
+    return car->getBoost();
+}
+
+void ClientTh::setBoost(int b) {
+    Lock l(m);
+    car->setBoost(b);
+}
+
 void ClientTh::modifySpeedByFactor(float32 factor){
     Lock l(m);
     car->modifySpeedByFactor(factor);

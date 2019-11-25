@@ -89,6 +89,10 @@ class ClientTh: public Thread {
     void giftHealth(int health);
 
     void reduceHealth(int health);
+
+    int getBoost();
+
+    void setBoost(int b);
 };
 
 #endif

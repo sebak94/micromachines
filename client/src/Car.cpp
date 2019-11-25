@@ -1,5 +1,7 @@
 #include "../include/Car.h"
 
+#define MAX_HEALTH 100
+
 Car::Car(std::string carStr) {
     setCarParams(carStr);
 }
@@ -72,7 +74,7 @@ std::string Car::getMyColor() const {
 void Car::update(std::string carStr) {
     setCarParams(carStr);
     if (health != lastHealth) {
-        if (health > lastHealth) {
+        if (health == MAX_HEALTH) {
             explosion = true;
             explosionSound = true;
         }
