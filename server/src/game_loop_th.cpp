@@ -7,6 +7,7 @@
 #define SKIP_TICKS (1000/TICKS_PER_SECOND)
 #define MAX_FRAMESKIP 10
 #define MICROSECS_WAIT 16000 //seria que en un segundo se dibujen aprox 60 veces
+#define MODIFIER_TIME 100000
 #define RACETIME "race time [mins]"
 #define REFRESH_FREQ "world refresh frequency [Hz]"
 
@@ -74,7 +75,7 @@ void GameLoopTh::play() {
         micromachines.updatePlayersState();
         micromachines.monitorTrack();
         micromachines.updateModifiersPosition();
-        if (timeElapsed(modifTimer) > 100000) {
+        if (timeElapsed(modifTimer) > MODIFIER_TIME) {
             micromachines.throwModifier();
             modifTimer = std::chrono::steady_clock::now();
         }

@@ -42,7 +42,8 @@ void TrackEditor::loadTrack() {
 
 /* Creates screen with grid and samples for track edition */
 void TrackEditor::editTrack(Window & editor){
-    std::thread drawer = std::thread(&TrackEditor::drawTh, this, std::ref(editor));
+    std::thread drawer;
+    drawer = std::thread(&TrackEditor::drawTh, this, std::ref(editor));
     while (!quit && !homePressed){
         while ( SDL_PollEvent( &event ) ) {
             if ( event.type == SDL_QUIT ) {
@@ -77,8 +78,8 @@ void TrackEditor::drawTh(Window & editor){
         drawWayArrow(editor.renderer);
         SDL_RenderPresent(editor.renderer);
         auto end = std::chrono::system_clock::now();
-        int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-        usleep(1000000 * 1 / FPS - microsecsPassed);
+        int microsecs = std::chrono::duration_cast<us>(end - start).count();
+        usleep(1000000 * 1 / FPS - microsecs);
     }
 }
 
@@ -323,7 +324,8 @@ void TrackEditor::createButtons(Window & game) {
     exitButton = Button(game.renderer, buttonPos, EXIT_BUTTON_PATH);
     buttonPos.w = 25;
     buttonPos.h = 25;
-    buttonPos.x = 2*(WINDOW_W - EDITOR_BUTTONS_WIDTH)/(BUTTONS + 1) - sep/2 - buttonPos.w/2;
+    buttonPos.x = 2*(WINDOW_W - EDITOR_BUTTONS_WIDTH)/(BUTTONS + 1) - sep/2
+                - buttonPos.w/2;
     buttonPos.y = WINDOW_H - (grid.getGridMarginHeight() + buttonPos.h)/2;
     savedTick = Button(game.renderer, buttonPos, SAVED_TICK_PATH);
 }

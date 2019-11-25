@@ -39,6 +39,7 @@ void Track::loadTrack(const Json::Value &fileTracks, int trackNumber) {
 
 // Loads grandstands in grandstands vector and as trackPartData
 void Track::loadGrandstands(const Json::Value &fileTracks, int trackNumber) {
+    grandstands.clear();
     for (const auto & j : fileTracks[TRACKS_ID][trackNumber][GRANDSTANDS_ID]) {
         trackPartType type =  Grandstand::identifyElem(j[0].asString());
         grandstands.emplace_back(Grandstand(type,

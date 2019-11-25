@@ -30,26 +30,26 @@ void MicroMachinesTh::setTrack(std::string trackStr) {
 
 void MicroMachinesTh::createCars() {
     //Agrego todos los autos disponibles en un mapa de autos
-    cars[blue] = Car::createBlueCar(world,
+    cars[blue] = Car::createRedCar(world,
                                     getStartingPoint(0),
                                     getStartingCarRot(0),
                                     getStartID(0), config);
-    cars[white] = Car::createWhiteCar(world,
+    cars[white] = Car::createYellowCar(world,
                                       getStartingPoint(1),
                                       getStartingCarRot(1),
                                       getStartID(1), config);
     if (numberPlayers > 2)
-        cars[black] = Car::createBlackCar(world,
+        cars[black] = Car::createWhiteCar(world,
                                       getStartingPoint(2),
                                       getStartingCarRot(2),
                                       getStartID(2), config);
     if (numberPlayers > 3)
-        cars[yellow] = Car::createYellowCar(world,
+        cars[yellow] = Car::createBlackCar(world,
                                         getStartingPoint(3),
                                         getStartingCarRot(3),
                                         getStartID(3), config);
     if (numberPlayers > 4)
-        cars[red] = Car::createRedCar(world,
+        cars[red] = Car::createBlueCar(world,
                                   getStartingPoint(4),
                                   getStartingCarRot(4),
                                   getStartID(4), config);
@@ -239,9 +239,11 @@ void MicroMachinesTh::sendNewStateToPlayers() {
 
 void MicroMachinesTh::sendModifiersToPlayers() {
     Lock l(m);
-    for (size_t i = 0; i < players.size(); i++) {
-        std::string borrar = modifiersSerialized();
-        players[i]->sendModifiers(modifiersSerialized());
+    if (track.hasGrandstands()) {
+        for (size_t i = 0; i < players.size(); i++) {
+            std::string borrar = modifiersSerialized();
+            players[i]->sendModifiers(modifiersSerialized());
+        }
     }
 }
 
@@ -298,7 +300,7 @@ std::string MicroMachinesTh::modifiersSerialized() {
 
 void MicroMachinesTh::throwModifier() {
     Lock l(m);
-    if (modifiersThrown < MAX_MODIFIERS_THROWN) {
+    if (modifiersThrown < MAX_MODIFIERS_THROWN && track.hasGrandstands()) {
         Grandstand gs = track.getRandomGrandstand();
         direction dir = setModifierDirection(gs.getType());
         int x = gs.getPosX() + BLOCKSIZE/2;

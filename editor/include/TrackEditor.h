@@ -27,6 +27,7 @@ class Point;
 
 typedef std::chrono::time_point<std::chrono::steady_clock> saveTickChrono;
 typedef std::chrono::milliseconds ms;
+typedef std::chrono::microseconds us;
 
 typedef enum {
     home,
@@ -88,11 +89,8 @@ public:
     void setWay(trackPartType type);
     void drawWayArrow(SDL_Renderer *renderer);
     trackPartType setStartingPreviousTrackPart(int row, int col);
-
     void loadTrack();
-
     void drawSavedTick(SDL_Renderer *renderer);
-
     void createHomeButton(Window &window);
 };
 
