@@ -14,7 +14,7 @@ BlockingQueue::~BlockingQueue() {}
 BlockingQueue& BlockingQueue::operator=(BlockingQueue &&other) {
     if (this == &other)
         return *this;
-    //Me robo los punteros
+    // Me robo los punteros
     this->limit = other.limit;
     other.limit = 0;
     return *this;

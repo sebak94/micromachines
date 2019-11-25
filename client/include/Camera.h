@@ -3,6 +3,8 @@
 
 #include <map>
 #include <chrono>
+#include <string>
+#include <vector>
 #include "Model.h"
 #include "sdl/SdlSurface.h"
 #include "../../common/include/TextTexture.h"
@@ -15,10 +17,10 @@
 #define SECOND 900
 
 typedef std::chrono::time_point<std::chrono::steady_clock> saveTickChrono;
+typedef std::chrono::milliseconds ms;
 
 class Camera {
 private:
-
     SdlWindow &window;
     std::map<Car*, SdlAnimation> explosions;
     std::map<std::string, SdlSurface*> &pictures;
@@ -44,21 +46,20 @@ public:
     void showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> track);
     void showModifiers(int xMyCar, int yMyCar, std::vector<Modifier> modifiers);
     void showCars(int xMyCar, int yMyCar, std::map<std::string, Car *> cars,
-                  const std::string& string);
+                  const std::string& myCar);
     void showCountdown();
     void updateBlockSize();
     void showLaps(int lap, int totalLaps);
     void drawPodium(std::vector<std::string> matchResults);
     void reset();
     void validateDrawDistance();
-
     void triggerExplosion(Car *car);
-
-    void explodeCar(Car *car, int x, int y, int w, int h);
-
+    void explodeCar(Car *car, int x, int y, int s);
     void showLife(Car *car, int &realX, int &realY, double &heightCar);
-
     void vibrateCar(Car *car, int &x, int &y);
+    void calcBeginPos(double &xBegin, double &yBegin, int &x, int &y);
+    void setCarSize(double &widthCar, double &heightCar);
+    bool isOnWindow(const SDL_Rect &sdlDestRoad);
 };
 
 #endif

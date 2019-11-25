@@ -14,7 +14,9 @@ public:
     SdlSurface(const std::string &filename, const SdlWindow& window);
     ~SdlSurface();
     int render(SDL_Rect& sdlDest) const;
-    int renderRotate(SDL_Rect& sdlDest, double angle, SDL_RendererFlip flip) const;
+    int renderRotate(SDL_Rect& sdlDest,
+            double angle,
+            SDL_RendererFlip flip) const;
 
 private:
     SDL_Surface* loadSurface(const std::string &filename);

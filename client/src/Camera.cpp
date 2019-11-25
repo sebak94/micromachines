@@ -5,7 +5,7 @@
 #include "../include/sdl/SdlTexture.h"
 #include "../include/sdl/SdlSoundFX.h"
 
-#define EXPLOSION_SIZE 300  // pixels
+#define EXPLOS_SIZE 300  // pixels
 #define EXPLOSION_LEN 150  // ms
 #define EXPLOSION_SPRITE_W 960
 #define EXPLOSION_SPRITE_H 384
@@ -17,6 +17,10 @@
 #define EXPL_PATH "../common/images/explosion.png"
 #define VIBRATE_MAG 0.1
 #define VIBRATE_RATE 2
+#define BLOCKSIZE 100.0
+#define MODIFIER_SIZE_FACTOR 4
+#define CAR_HEIGHT 3  // compression from blockheight
+#define CAR_WIDTH 6  // compression from blockwidth
 
 Camera::Camera(SdlWindow &window,
                std::map<std::string, SdlSurface *> &pictures,
@@ -32,68 +36,89 @@ Camera::Camera(SdlWindow &window,
 
 Camera::~Camera() {}
 
-void Camera::showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> track) {
-    //Transformo las coordenadas para que mi auto quede en el medio de la pantalla
-    //y se muestre la parte de la pista correspondiente
-    double xBegin = - xMyCar * (blockWidth / 100) + (window.getWidth() / 2);
-    double yBegin = - yMyCar * (blockHeight / 100) - (window.getHeight() / 2) + blockHeight;
+/* Transformo las coordenadas para que mi auto quede en el medio de la
+* pantalla y se muestre la parte de la pista correspondiente */
+void Camera::showTrack(int xMyCar,
+        int yMyCar,
+        std::vector<TrackPartData> track) {
+    double xBegin, yBegin;
+    calcBeginPos(xBegin, yBegin, xMyCar, yMyCar);
 
     for (auto & i : track) {
-        double x = i.getPosX() * (blockWidth / 100);
-        double y = i.getPosY() * (blockHeight / 100);
+        double x = i.getPosX() * (blockWidth / (BLOCKSIZE));
+        double y = i.getPosY() * (blockHeight / (BLOCKSIZE));
         SDL_Rect sdlDestRoad = {(int) (x + xBegin), (int) (-y - yBegin),
                                 (int) blockWidth, (int) blockHeight};
-        if (sdlDestRoad.x + sdlDestRoad.w > 0 &&
-            sdlDestRoad.x  < window.getWidth() &&
-            sdlDestRoad.y + sdlDestRoad.h > 0 &&
-            sdlDestRoad.y < window.getHeight()) {
-                trackPictures[empty]->render(sdlDestRoad);
-                trackPictures[i.getType()]->render(sdlDestRoad);
+        if (isOnWindow(sdlDestRoad)) {
+            trackPictures[empty]->render(sdlDestRoad);
+            trackPictures[i.getType()]->render(sdlDestRoad);
         }
     }
 }
 
-void Camera::showModifiers(int xMyCar, int yMyCar, std::vector<Modifier> modifiers) {
-    //asumo que del lado del server cada modificador mide 25 x 25 (como los bloques miden 100 x 100)
-    double width = blockWidth / 4.0;
-    double height = blockHeight / 4.0;
-    double xBegin = - xMyCar * (blockWidth / 100.0) + (window.getWidth() / 2.0);
-    double yBegin = - yMyCar * (blockHeight / 100.0) - (window.getHeight() / 2.0);
+/* Determina si el bloque a renderizar caerá dentro de la ventana */
+bool Camera::isOnWindow(const SDL_Rect &sdlDestRoad) {
+    return sdlDestRoad.x + sdlDestRoad.w > 0 &&
+          sdlDestRoad.x  < window.getWidth() &&
+          sdlDestRoad.y + sdlDestRoad.h > 0 &&
+          sdlDestRoad.y < window.getHeight();
+}
+
+/* Asumo que del lado del server cada modificador mide 25 x 25
+* (como los bloques miden 100 x 100) */
+void Camera::showModifiers(int xMyCar,
+        int yMyCar, std::vector<Modifier> modifiers) {
+    double modifWidth = blockWidth / MODIFIER_SIZE_FACTOR;
+    double modifHeight = blockHeight / MODIFIER_SIZE_FACTOR;
+    double xBegin, yBegin;
+    calcBeginPos(xBegin, yBegin, xMyCar, yMyCar);
 
     for (auto & modifier : modifiers) {
-        double x = modifier.getX() * (blockWidth / 100);
-        double y = modifier.getY() * (blockHeight / 100) + height;
+        double x = modifier.getX() * (blockWidth / (BLOCKSIZE));
+        double y = modifier.getY() * (blockHeight / (BLOCKSIZE)) + modifHeight;
         int realX = x + xBegin;
         int realY = - y - yBegin;
-        SDL_Rect area = {realX, realY, (int)width, (int)height};
+        SDL_Rect area = {realX, realY, (int)modifWidth, (int)modifHeight};
         pictures[modifier.getType()]->render(area);
     }
 }
 
+void Camera::calcBeginPos(double & xBegin, double & yBegin, int & x, int & y) {
+    xBegin = - x * (blockWidth / (BLOCKSIZE)) + (window.getWidth() / 2.0);
+    yBegin = - y * (blockHeight / (BLOCKSIZE)) - (window.getHeight() / 2.0);
+}
+
+void Camera::setCarSize(double & widthCar, double & heightCar) {
+    widthCar = blockWidth / CAR_WIDTH;
+    heightCar = blockHeight / CAR_HEIGHT;
+}
+
 void Camera::showCars(int xMyCar, int yMyCar, std::map<std::string, Car *> cars,
-                 const std::string& string) {
-    double widthCar = blockWidth / 6.0;
-    double heightCar = blockHeight / 3.0;
-    double xBegin = - xMyCar * (blockWidth / 100.0) + (window.getWidth() / 2.0);
-    double yBegin = - yMyCar * (blockHeight / 100.0) - (window.getHeight() / 2.0);
+                 const std::string& myCar) {
+    double widthCar, heightCar, xBegin, yBegin;
+    setCarSize(widthCar, heightCar);
+    calcBeginPos(xBegin, yBegin, xMyCar, yMyCar);
     TextTexture text;
     for (auto & it : cars) {
         Car* car = it.second;
-        double x = car->getX() * (blockWidth / 100.0) - (widthCar / 2.0);
-        double y = car->getY() * (blockHeight / 100.0) + (heightCar / 2.0);
+        double x = car->getX() * (blockWidth / (BLOCKSIZE)) - (widthCar / 2.0);
+        double y = car->getY() * (blockHeight / (BLOCKSIZE)) + (heightCar / 2.0);
         int realX = x + xBegin;
         int realY = - y - yBegin;
-        if (it.first == string) {
+        if (it.first == myCar) {
             realX = window.getWidth()/2 - (widthCar / 2);
             realY = window.getHeight()/2 - (heightCar / 2);
         }
         showLife(car, realX, realY, heightCar);
         vibrateCar(car, realX, realY);
         SDL_Rect sdlDestCar = {realX, realY, (int)widthCar, (int)heightCar};
-        pictures[car->getMyColor()]->renderRotate(sdlDestCar, car->getDegrees(), SDL_FLIP_NONE);
-        explodeCar(car, realX + widthCar/2, realY + heightCar/2, EXPLOSION_SIZE, EXPLOSION_SIZE);
+        pictures[car->getMyColor()]->renderRotate(sdlDestCar,
+                                                  car->getDegrees(),
+                                                  SDL_FLIP_NONE);
+        explodeCar(car, realX + widthCar/2, realY + heightCar/2, EXPLOS_SIZE);
     }
 }
+
 
 void Camera::vibrateCar(Car *car, int &x, int &y) {
     auto it = carVibration.find(car);
@@ -107,11 +132,11 @@ void Camera::vibrateCar(Car *car, int &x, int &y) {
     }
 }
 
-void Camera::explodeCar(Car * car, int x, int y, int w, int h) {
+void Camera::explodeCar(Car *car, int x, int y, int s) {
     if (car->exploded()) triggerExplosion(car);
     auto exploding = explosions.find(car);
     if (exploding != explosions.end() && exploding->second.isTriggered()) {
-        SDL_Rect sdlExp = {x - w/2, y - h/2, w, h};
+        SDL_Rect sdlExp = {x - s / 2, y - s / 2, s, s};
         exploding->second.render(sdlExp, window);
     }
 }
@@ -123,12 +148,13 @@ void Camera::triggerExplosion(Car * car) {
     } else {
         int framesInX = EXPLOSION_SPRITES_X;
         int framesInY = EXPLOSION_SPRITES_Y;
-        //Divido el ancho de la imagen por la cantidad de frames a lo ancho
+        // Divido el ancho de la imagen por la cantidad de frames a lo ancho
         int widthFrame = EXPLOSION_SPRITE_W / framesInX;
-        //Divido el largo de la imagen por la cantidad de frames a lo largo
+        // Divido el largo de la imagen por la cantidad de frames a lo largo
         int heightFrame = EXPLOSION_SPRITE_H / framesInY;
         explosions.emplace(car, SdlAnimation(explosionTex, framesInX,
-                                             framesInY, widthFrame, heightFrame, EXPLOSION_LEN));
+                                             framesInY, widthFrame, heightFrame,
+                                             EXPLOSION_LEN));
         explosions.at(car).trigger();
     }
 }
@@ -136,20 +162,29 @@ void Camera::triggerExplosion(Car * car) {
 void Camera::showLife(Car * car, int & realX, int & realY, double &heightCar) {
     TextTexture text;
     SDL_Color color = {0, 0, 0, 0};
-    SDL_Rect sdlDestHeart = {realX, (int)(realY+heightCar), (int)blockWidth / 20, (int)blockHeight / 20};
+    SDL_Rect sdlDestHeart = {realX,
+                             (int)(realY+heightCar),
+                             (int)blockWidth / 20,
+                             (int)blockHeight / 20};
     pictures[HEART]->render(sdlDestHeart);
-    text.textToTexture(window.getRenderer(), std::to_string(car->getHealth()) + "%", color, FONTNAME, blockWidth / 26);
-    text.render(window.getRenderer(), (int)(realX+sdlDestHeart.w), (int)(realY+heightCar));
+    text.textToTexture(window.getRenderer(),
+            std::to_string(car->getHealth()) + "%",
+            color,
+            FONTNAME,
+            blockWidth / 26);
+    text.render(window.getRenderer(),
+            (int)(realX+sdlDestHeart.w),
+            (int)(realY+heightCar));
 }
 
 void Camera::showCountdown() {
     SDL_Color color = {255, 255, 255, 0};
     TextTexture text;
-    int fontsize = 100;
-    int s = fontsize*96/128;  //offset from center of number
+    int fontsize = 300;
+    int s = fontsize*128/96;  // offset from center of number
     if (countDownStarted) {
         auto end = std::chrono::steady_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        auto duration = std::chrono::duration_cast< ms >(end - start);
         countDown -= duration.count();
     }
     start = std::chrono::steady_clock::now();
@@ -157,8 +192,14 @@ void Camera::showCountdown() {
         countDown = SECOND;
         countDownNumber--;
     }
-    text.textToTexture(window.getRenderer(), std::to_string((int)countDownNumber), color, FONTNAME, 100);
-    text.render(window.getRenderer(), window.getWidth()/2, window.getHeight()/2 - s);
+    text.textToTexture(window.getRenderer(),
+            std::to_string((int)countDownNumber),
+            color,
+            FONTNAME,
+            fontsize);
+    text.render(window.getRenderer(),
+                (window.getWidth()/2 - s/5),
+                (window.getHeight() - s)/2);
     countDownStarted = true;
 }
 
@@ -176,7 +217,7 @@ void Camera::showLaps(int lap, int totalLaps) {
     lapBox.render(rect);
     if (lap > totalLaps) lap = totalLaps;
     lapNumber.textToTexture(r, std::to_string(lap), textColor, LAPFONT, 50);
-    lapNumber.render(r, w - 100, h - 75);
+    lapNumber.render(r, w - (BLOCKSIZE), h - 75);
     std::string totStr = "/" + std::to_string(totalLaps);
     lapNumber.textToTexture(r, totStr, textColor, LAPFONT, 25);
     lapNumber.render(r, w - 45, h - 50);

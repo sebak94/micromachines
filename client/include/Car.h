@@ -34,7 +34,6 @@ public:
 
 private:
     std::string parse(const std::string &str, size_t &pos, const char delim);
-
 };
 
 #endif

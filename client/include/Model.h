@@ -2,6 +2,7 @@
 #define __MODEL_H__
 
 #include <vector>
+#include <string>
 #include <map>
 #include "Car.h"
 #include "../../common/include/TrackPartData.h"
@@ -21,14 +22,15 @@ private:
     std::vector<Modifier> modifiers;
     bool braking = false;
 
-    //El modelo no devuelve referencias, para que desde afuera nadie pueda modificar sus elementos
+    /* El modelo no devuelve referencias, para que
+     * desde afuera nadie pueda modificar sus elementos */
 
 public:
     Model();
     ~Model();
     void setTrack(std::vector<TrackPartData> track);
     std::vector<TrackPartData>& getTrack();
-    void setMyColor(std::string str); //Se usa una sola vez, para setear el color de mi auto
+    void setMyColor(std::string str);  // Usado unica vez, set color de mi auto
     std::string getMyColor() const;
     std::map<std::string, Car*>& getCars();
     void updateCar(std::string str);
@@ -46,18 +48,13 @@ public:
     void setMatchNames(std::string matches);
     std::vector<std::string> getMatchNames();
     void reset();
-
     void updateModifiers(std::string str);
-
     bool isBraking();
-
     void setBrake();
-
     void unsetBrake();
 
 private:
     std::string parse(const std::string &str, size_t &pos, const char delim);
-
 };
 
 #endif

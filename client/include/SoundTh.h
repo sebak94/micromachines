@@ -42,10 +42,9 @@ public:
     void musicPlayOnce(SdlMusic &music1, SdlMusic &music2);
     void playOnce();
     void soundPlayOnce(SdlSoundFX &sound, int duration);
-
-    void playCarSoundFX(uint8_t volume, int ticks, bool collided,
-                        bool exploded);
+    void playCarSoundFX(uint8_t volume, int ticks,
+            bool collided, bool exploded);
 };
 
 
-#endif //MICROMACHINES_SOUNDTH_H
+#endif  // MICROMACHINES_SOUNDTH_H

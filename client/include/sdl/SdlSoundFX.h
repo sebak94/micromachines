@@ -21,4 +21,4 @@ public:
 };
 
 
-#endif //MICROMACHINES_SDLSOUNDFX_H
+#endif  // MICROMACHINES_SDLSOUNDFX_H

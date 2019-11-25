@@ -140,7 +140,11 @@ set(SOURCE_FILES_CLIENT
     common/include/ModifierList.h
     common/src/ModifierList.cpp
 	common/src/Config.cpp
-	common/include/Config.h client/src/sdl/SdlSoundFX.cpp client/include/sdl/SdlSoundFX.h client/src/SoundTh.cpp client/include/SoundTh.h)
+	common/include/Config.h
+	client/src/sdl/SdlSoundFX.cpp
+	client/include/sdl/SdlSoundFX.h
+	client/src/SoundTh.cpp
+	client/include/SoundTh.h)
 
 set(SOURCE_FILES_EDITOR
 	common/src/TrackList.cpp

@@ -21,18 +21,13 @@ private:
 public:
     EventLoopSDL(BlockingQueue &queue, Drawer *drawerThread,
                  ModelMonitor &modelMonitor);
-
     ~EventLoopSDL();
-
-    virtual void run() override;
-
-    virtual void stop() override;
+    void run() override;
+    void stop() override;
 
 private:
     void enqueueKeyDownEvent(SDL_KeyboardEvent &keyEvent);
-
     void enqueueKeyUpEvent(SDL_KeyboardEvent &keyEvent);
-
     void quitAndResize(SDL_Event &event);
     void matchWindowInfo(SDL_Event &event);
 };

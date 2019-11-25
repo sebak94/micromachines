@@ -2,6 +2,7 @@
 #define __PICTURELOADER_H__
 
 #include <map>
+#include <string>
 #include "sdl/SdlSurface.h"
 #include "../../common/include/TrackPartData.h"
 #include "../../common/include/Track.h"
@@ -13,8 +14,9 @@ private:
     std::map<trackPartType, SdlSurface*> &trackPictures;
 
 public:
-    PictureLoader(SdlWindow &window, std::map<std::string, SdlSurface*> &pictures,
-                    std::map<trackPartType, SdlSurface*> &trackPictures);
+    PictureLoader(SdlWindow &window,
+            std::map<std::string, SdlSurface*> &pictures,
+            std::map<trackPartType, SdlSurface*> &trackPictures);
     ~PictureLoader();
 };
 

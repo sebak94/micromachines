@@ -7,6 +7,7 @@ class SdlException : public std::exception {
 public:
     SdlException(const char* description, const char* sdlError);
     const char* what() const noexcept;
+
 private:
     std::string description;
 };

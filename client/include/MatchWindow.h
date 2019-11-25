@@ -1,6 +1,8 @@
 #ifndef __MATCHWINDOW_H__
 #define __MATCHWINDOW_H__
 
+#include <string>
+#include <vector>
 #include "sdl/SdlWindow.h"
 #include "../../common/include/Button.h"
 #include "sdl/SdlSurface.h"
@@ -63,14 +65,13 @@ private:
     void selectingScreen();
     void creationScreen();
     void joiningScreen();
-
-    //Crea un selector a partir de la posicion x, y. Tiene un titulo (title),
-    //un texto (textToShow), y un boton flecha para cambiar el texto (buttonToChangeText).
-    //text es la textura donde se visualiza el textToShow
-    //Todas las posiciones de textos y botones se calculan dentro de la función respecto al x, y.
+    /* Crea un selector a partir de la posicion x, y. Tiene un titulo (title),
+     * un texto (textToShow), y un boton flecha para cambiar el texto
+     * (buttonToChangeText). text es la textura donde se visualiza el
+     * textToShow. Todas las posiciones de textos y botones se calculan dentro
+     * de la función respecto al x, y. */
     void showSelectText(std::string title, std::string textToShow, int x, int y,
                         Button &buttonToChangeText, TextTexture &text);
-
     void showPlayAndReturn();
     void resetMatchButtons();
 };

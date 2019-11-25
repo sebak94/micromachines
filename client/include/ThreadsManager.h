@@ -2,6 +2,7 @@
 #ifndef __THREADS_MANAGER_H__
 #define __THREADS_MANAGER_H__
 
+#include <vector>
 #include "../../common/include/socket.h"
 #include "string"
 #include "EventLoopSDL.h"

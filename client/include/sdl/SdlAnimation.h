@@ -25,7 +25,6 @@ public:
     void render(SDL_Rect &sdlDest, SdlWindow &window);
     bool isTriggered();
     void trigger();
-
     void render(SdlWindow &window);
 };
 

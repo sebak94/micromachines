@@ -1,6 +1,7 @@
 #ifndef __MODELUPDATER_H
 #define __MODELUPDATER_H
 
+#include <string>
 #include "../../common/include/thread.h"
 #include "Model.h"
 #include "../../common/include/socket.h"
@@ -14,10 +15,12 @@ private:
     Drawer* drawer;
 
 public:
-    ModelUpdater(Socket &socket, ModelMonitor &modelMonitor, Drawer* drawerThread);
+    ModelUpdater(Socket &socket,
+            ModelMonitor &modelMonitor,
+            Drawer* drawerThread);
     ~ModelUpdater();
-    virtual void run() override;
-    virtual void stop() override;
+    void run() override;
+    void stop() override;
 
 private:
     std::string receive();
