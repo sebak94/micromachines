@@ -66,6 +66,7 @@ void GamesTh::stopAllThreads() {
     for (auto game : games) {
         game.second->stop();
         game.second->join();
+        game.second->cleanPlayers();
     }
     games.clear();
 
@@ -176,12 +177,6 @@ void GamesTh::removePlayer(ClientTh *player) {
         gameIt->second->removePlayer(player);
     }
     players.erase(player);
-}
-
-// Removes all players from game
-void GamesTh::cleanPlayers() {
-    for (int i=0; i < gamesNumber; i++)
-        games[i]->cleanPlayers();
 }
 
 // If all players are in WaitingEnd state stops game

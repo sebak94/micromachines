@@ -48,13 +48,10 @@ public:
     StateWindow getState() const;
     std::string serializeData();
     bool isReady();
-    void reload();
+    void reset();
     bool isLuaSelected();
-
     bool isModeSelected();
-
     std::string getSelection();
-
     void setMatchNames(const std::vector<std::string>& matches);
 
 private:
@@ -67,14 +64,14 @@ private:
     void creationScreen();
     void joiningScreen();
 
-    //Crea un selector a partir de la posicion x, y.
-    //Tiene un titulo (title), un texto (textToShow), y un boton flecha para cambiar el texto (buttonToChangeText).
+    //Crea un selector a partir de la posicion x, y. Tiene un titulo (title),
+    //un texto (textToShow), y un boton flecha para cambiar el texto (buttonToChangeText).
     //text es la textura donde se visualiza el textToShow
     //Todas las posiciones de textos y botones se calculan dentro de la función respecto al x, y.
-    void showSelectText(std::string title, std::string textToShow, int x, int y, Button &buttonToChangeText, TextTexture &text);
+    void showSelectText(std::string title, std::string textToShow, int x, int y,
+                        Button &buttonToChangeText, TextTexture &text);
 
     void showPlayAndReturn();
-
     void resetMatchButtons();
 };
 

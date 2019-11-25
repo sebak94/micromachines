@@ -64,33 +64,32 @@ void GameLoopTh::countdownWait() {
 
 void GameLoopTh::play() {
     bool ending = false;
-    if (running) {
-        uint64_t next_game_tick = GetTickCountMs();
-        uint64_t loops;
-        countdownTime = (MINTOMICROSEC) * config.getAsInt(RACETIME);  // us
-        while (countdownTime > 0 && !micromachines.allPlayersGameEnded()) {
-            auto begin = std::chrono::steady_clock::now();
-            loops = 0;
-            micromachines.updatePlayersState();
-            micromachines.monitorTrack();
-            micromachines.updateModifiersPosition();
-            if (timeElapsed(modifTimer) > 100000) {
-                micromachines.throwModifier();
-                modifTimer = std::chrono::steady_clock::now();
-            }
-            updateWorld(next_game_tick, SKIP_TICKS, loops, 1.0 / config.getAsFloat(REFRESH_FREQ), 5, 5);
-            micromachines.sendNewStateToPlayers();
-            micromachines.sendModifiersToPlayers();
-            micromachines.updateWinners();
-            micromachines.sendWinners();
-            timeWait(MICROSECS_WAIT, begin);
+    std::cout << "inicio del while \n";
+    uint64_t next_game_tick = GetTickCountMs();
+    uint64_t loops;
+    countdownTime = (MINTOMICROSEC) * config.getAsInt(RACETIME);  // us
+    while (running && countdownTime > 0 && !micromachines.allPlayersGameEnded()) {
+        auto begin = std::chrono::steady_clock::now();
+        loops = 0;
+        micromachines.updatePlayersState();
+        micromachines.monitorTrack();
+        micromachines.updateModifiersPosition();
+        if (timeElapsed(modifTimer) > 100000) {
+            micromachines.throwModifier();
+            modifTimer = std::chrono::steady_clock::now();
+        }
+        updateWorld(next_game_tick, SKIP_TICKS, loops, 1.0 / config.getAsFloat(REFRESH_FREQ), 5, 5);
+        micromachines.sendNewStateToPlayers();
+        micromachines.sendModifiersToPlayers();
+        micromachines.updateWinners();
+        micromachines.sendWinners();
+        timeWait(MICROSECS_WAIT, begin);
 
-            // this->executeLibraries();
-            countdownTime -= MICROSECS_WAIT;
-            if (micromachines.allPlayersWaitingEnd() && !ending) {
-                countdownTime = (PODIUMVIEWTIME)*0.9;  // cuando llegan todos en 4,5 segs corta animacion
-                ending = true;
-            }
+        // this->executeLibraries();
+        countdownTime -= MICROSECS_WAIT;
+        if (micromachines.allPlayersWaitingEnd() && !ending) {
+            countdownTime = (PODIUMVIEWTIME)*0.9;  // cuando llegan todos en 4,5 segs corta animacion
+            ending = true;
         }
     }
 }

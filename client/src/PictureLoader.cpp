@@ -46,6 +46,8 @@ PictureLoader::PictureLoader(SdlWindow &window, std::map<std::string, SdlSurface
     pictures[CAR_ORANGE] = new SdlSurface("../common/images/car_orange.png", window);
     pictures[CAR_WHITE] = new SdlSurface("../common/images/car_white.png", window);
     pictures[CAR_YELLOW] = new SdlSurface("../common/images/car_yellow.png", window);
+
+    //Imagenes varias
     pictures[HEART] = new SdlSurface("../common/images/heart.png", window);
     pictures[PODIUM] = new SdlSurface("../common/images/podium.png", window);
     pictures[NUMBER_ONE] = new SdlSurface("../common/images/1.png", window);
@@ -54,12 +56,12 @@ PictureLoader::PictureLoader(SdlWindow &window, std::map<std::string, SdlSurface
     pictures[NUMBER_FOUR] = new SdlSurface("../common/images/4.png", window);
     pictures[NUMBER_FIVE] = new SdlSurface("../common/images/5.png", window);
 
+    //Imagenes de modificadores
     pictures[MUD] = new SdlSurface("../common/images/mud.png", window);
     pictures[OIL] = new SdlSurface("../common/images/oil.png", window);
     pictures[STONES] = new SdlSurface("../common/images/stones.png", window);
     pictures[HEALTHBOX] = new SdlSurface("../common/images/healthBox.png", window);
     pictures[BOOST] = new SdlSurface("../common/images/boost.png", window);
-
 }
 
 PictureLoader::~PictureLoader() {

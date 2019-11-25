@@ -41,7 +41,6 @@ public:
            std::map<trackPartType, SdlSurface *> &trackPictures,
            double drawDistance);
     ~Camera();
-    void showBackground();
     void showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> track);
     void showModifiers(int xMyCar, int yMyCar, std::vector<Modifier> modifiers);
     void showCars(int xMyCar, int yMyCar, std::map<std::string, Car *> cars,
