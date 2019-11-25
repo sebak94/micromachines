@@ -14,6 +14,7 @@ cmake ../
 - Ejecutar `make`
 ```
 make
+make install
 ```
 
 ## Ejecución
@@ -100,6 +101,17 @@ target_link_libraries(main
         avformat
         swscale
         avcodec)
+```
+
+### Box2D
+* Instalar:
+```
+sudo apt-get install libbox2d-dev
+```
+
+* Cmake:
+```
+target_link_libraries(main -ldl -lBox2D)
 ```
 
 ## Config defaults
