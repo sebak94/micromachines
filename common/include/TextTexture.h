@@ -5,19 +5,20 @@
 #ifndef MAP_TEXTTEXTURE_H
 #define MAP_TEXTTEXTURE_H
 
-
 #include <SDL2/SDL_system.h>
 
 class TextTexture {
 private:
-    SDL_Texture* textTexture;
+    SDL_Texture* textTexture = nullptr;
     SDL_Rect fieldBox;
     SDL_Rect fieldBoxBorder;
     SDL_Color fieldColor;
     int width;
     int height;
+    std::string text;
 
 public:
+    TextTexture() = default;
     void clearText();
     void textToTexture(SDL_Renderer *renderer, const std::string &textureText, SDL_Color textColor,
                        const char *fontName, int fontSize);
@@ -29,8 +30,9 @@ public:
                 SDL_RendererFlip flip = SDL_FLIP_NONE);
     int getWidth();
     int getHeight();
-    void createFieldBox(int posX, int posY, SDL_Color color);
+    void createFieldBox(int posX, int posY, SDL_Color color, int w);
     void renderFieldBox(SDL_Renderer *renderer);
+    std::string getText();
 };
 
 

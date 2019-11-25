@@ -80,6 +80,12 @@ public:
     int getPixelPosY(int row);
 
     trackPartType getType(int col, int row);
+
+    TrackGrid(Window &game, Track loadedTrack);
+
+    void initGridFromTrack(const Track &loadedTrack);
+
+    SDL_Texture *getTexture(trackPartType type);
 };
 
 

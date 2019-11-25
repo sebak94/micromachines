@@ -2,27 +2,30 @@
 #define __GAME_LOOP_TH_H__
 
 #include "../../common/include/thread.h"
-#include "model/micromachines.h"
+#include "model/micromachines_th.h"
 #include "loader.h"
 #include <cstdint>
 
 #define SECSTOSTART 5  // secs
-#define MAXRACETIME 60  // secs
+#define MINTOMICROSEC 60000000  // secs
 #define SECTOMICROSEC 1000000
+#define PODIUMVIEWTIME 5000000  // us
 
 class GameLoopTh: public Thread {
     private:
     bool running;
-    Micromachines &micromachines;
+    MicroMachinesTh &micromachines;
     Loader loader;
     uint8_t game_loops = 1;
     double countdownTime;
+    Config config;
+    modifierChrono modifTimer = std::chrono::steady_clock::now();
 
     uint64_t GetTickCountMs();
     void executeLibraries();
 
     public:
-    GameLoopTh(Micromachines &micromachines);
+    explicit GameLoopTh(MicroMachinesTh &micromachines);
     virtual void run() override;
     virtual void stop() override;
     ~GameLoopTh();
@@ -34,6 +37,8 @@ class GameLoopTh: public Thread {
                      int32 velocityIterations, int32 positionIterations);
     void play();
     void showMainMenu();
+
+    bool isRunning();
 };
 
 #endif

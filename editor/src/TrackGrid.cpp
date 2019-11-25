@@ -16,6 +16,15 @@ TrackGrid::TrackGrid(Window & game, int widthBlocks, int heightBlocks) {
     initGrid();
 }
 
+/* Creates track grid of trackBlocks for editor from existent track */
+TrackGrid::TrackGrid(Window & game, Track loadedTrack) {
+    wBlocks = loadedTrack.getTrackW();
+    hBlocks = loadedTrack.getTrackH();
+    setGridSize();
+    loadTextures(game.renderer);
+    initGridFromTrack(loadedTrack);
+}
+
 /* Configs grid size in pixels based on widest dimension.
  * Also configs blocks size and adjust them to window size.
  * Considers non-square tracks.*/
@@ -47,6 +56,25 @@ void TrackGrid::initGrid() {
                 col * blockWidth + gridMarginWidth,
                 row * blockHeight + gridMarginHeight,
                 blockWidth, blockHeight);
+        grid.emplace_back(auxBlock);
+    }
+}
+
+/* Creates empty grid */
+void TrackGrid::initGridFromTrack(const Track & loadedTrack) {
+    TrackBlock auxBlock;
+    TrackPartData auxPart;
+    std::vector<TrackPartData> parts = loadedTrack.getTrackPartData();
+    int row = 0;
+    int col = 0;
+    for (int i = 1; i <= wBlocks*hBlocks; i++) {
+        col = (i-1)%wBlocks, row = (i-1)/wBlocks;
+        auxPart = parts[row*wBlocks + col];
+        auxBlock.setBlock(getTexture(auxPart.getType()),
+                          auxPart.getType(),
+                          col * blockWidth + gridMarginWidth,
+                          row * blockHeight + gridMarginHeight,
+                          blockWidth, blockHeight);
         grid.emplace_back(auxBlock);
     }
 }
@@ -142,7 +170,25 @@ void TrackGrid::loadTextures(SDL_Renderer * renderer){
     textures.emplace(TEX_PUB1LEFT, loadTexture(IMG_PUB1LEFT, renderer));
     textures.emplace(TEX_PUB1RIGHT, loadTexture(IMG_PUB1RIGHT, renderer));
     textures.emplace(TEX_PUB1UP, loadTexture(IMG_PUB1UP, renderer));
+}
 
+/* Gets textures */
+SDL_Texture * TrackGrid::getTexture(trackPartType type){
+    switch(type){
+        case empty: return textures[TEX_GRASS];
+        case downRight: return textures[TEX_DOWNRIGHT];
+        case downLeft: return textures[TEX_DOWNLEFT];
+        case upRight: return textures[TEX_UPRIGHT];
+        case upLeft: return textures[TEX_UPLEFT];
+        case horizontal: return textures[TEX_HORIZONTAL];
+        case vertical: return textures[TEX_VERTICAL];
+        case finishH: return textures[TEX_FINISH_H];
+        case finishV: return textures[TEX_FINISH_V];
+        case public1Up: return textures[TEX_PUB1UP];
+        case public1Down: return textures[TEX_PUB1DOWN];
+        case public1Left: return textures[TEX_PUB1LEFT];
+        case public1Right: return textures[TEX_PUB1RIGHT];
+    }
 }
 
 /* Loads and configs samples considering window and grid size */

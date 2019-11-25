@@ -5,19 +5,65 @@
 #include <cstdint>
 #include <math.h>
 #include <Box2D/Box2D.h>
+#include <iostream>
 
 #define PI 3.14159265
 #define RADTODEG 57.295779513082320876f
+#define VEL_CONFIG "max velocity [%]"
+#define ACCEL_CONFIG "acceleration [%]"
+#define GRIP_CONFIG "grip [%]"
+#define MANEU_CONFIG "maneuverability [%]"
 
 Car::Car(uint8_t width, uint8_t height, uint16_t max_velocity,
-         uint8_t acceleration, uint8_t grip, uint8_t maneuverability,
+         float acceleration, float grip, float maneuverability,
          Point initial_position, ColorType color, uint16_t rotation,
-         b2World *world) :
+         b2World *world, int startID) :
         width(width), height(height), max_velocity(max_velocity),
         acceleration(acceleration), grip(grip),
         maneuverability(maneuverability), health(100), color(color),
         td_car(world, max_velocity, acceleration, grip, maneuverability,
-        rotation, initial_position), control_state(0) {
+        rotation, initial_position), control_state(0), lastTrackID(startID){
+}
+
+Car * Car::createBlackCar(b2World *world, const Point &startingPoint,
+                          float rot,
+                          int startID, Config & config) {
+    return std::move(new Car(100, 40, config.getAsUint16(VEL_CONFIG),
+            config.getAsFloat(ACCEL_CONFIG), config.getAsFloat(GRIP_CONFIG),
+            config.getAsFloat(MANEU_CONFIG), startingPoint, black, rot, world,
+            startID));
+}
+
+Car* Car::createBlueCar(b2World *world, const Point &startingPoint,
+                        float rot, int startID, Config & config) {
+    return std::move(new Car(100, 40, config.getAsUint16(VEL_CONFIG),
+            config.getAsFloat(ACCEL_CONFIG), config.getAsFloat(GRIP_CONFIG),
+            config.getAsFloat(MANEU_CONFIG), startingPoint, blue, rot, world,
+            startID));
+}
+
+Car* Car::createRedCar(b2World *world, const Point &startingPoint,
+                       float rot, int startID, Config & config) {
+    return std::move(new Car(100, 40, config.getAsUint16(VEL_CONFIG),
+            config.getAsFloat(ACCEL_CONFIG), config.getAsFloat(GRIP_CONFIG),
+            config.getAsFloat(MANEU_CONFIG), startingPoint, red, rot, world,
+            startID));
+}
+
+Car* Car::createWhiteCar(b2World *world, const Point &startingPoint,
+                         float rot, int startID, Config & config) {
+    return std::move(new Car(100, 40, config.getAsUint16(VEL_CONFIG),
+            config.getAsFloat(ACCEL_CONFIG), config.getAsFloat(GRIP_CONFIG),
+            config.getAsFloat(MANEU_CONFIG), startingPoint, white, rot, world,
+            startID));
+}
+
+Car* Car::createYellowCar(b2World *world, const Point &startingPoint,
+                          float rot, int startID, Config & config) {
+    return std::move(new Car(100, 40, config.getAsUint16(VEL_CONFIG),
+            config.getAsFloat(ACCEL_CONFIG), config.getAsFloat(GRIP_CONFIG),
+            config.getAsFloat(MANEU_CONFIG), startingPoint, yellow, rot, world,
+            startID));
 }
 
 void Car::updateState(char action) {
@@ -38,15 +84,85 @@ void Car::update() {
     td_car.update(control_state);
 }
 
+void Car::reduceHealth(uint8_t reduction) {
+    health -= reduction;
+}
+
+void Car::resetHealth() {
+    health = 100;
+}
+
+uint8_t Car::getHealth() {
+    return health;
+}
+
+void Car::giftHealth(int h) {
+    if (health + h < 100)
+        health += h;
+    else
+        health = 99;
+}
+
+bool Car::isContacting() {
+    return td_car.isContacting();
+}
+
+void Car::newPos(Point point) {
+    td_car.newPosition(point);
+}
+
+int Car::getPosX() {
+    return (int)td_car.body->GetPosition().x;
+}
+
+int Car::getPosY() {
+    return (int)td_car.body->GetPosition().y;
+}
+
+void Car::modifySpeedByFactor(float32 factor){
+    td_car.modifySpeedByFactor(factor);
+}
+
+void Car::setTrackID(int ID) {
+    lastTrackID = ID;
+}
+
+int Car::getTrackID() {
+    return lastTrackID;
+}
+
+void Car::updateLaps() {
+    laps++;
+    std::cout << std::endl << std::endl << laps << std::endl;
+}
+
 std::string Car::serialize() {
     // La serializacion es:
-    // current_velocity,health,rotation,x,y,color\n
+    // current_velocity,health,rotation,x,y,laps,color\n
     return std::to_string(0) + ","
            + std::to_string(health) + ","
            + std::to_string((int)(td_car.body->GetAngle()*RADTODEG*-1)) + ","
            + std::to_string((int)td_car.body->GetPosition().x) + ","
            + std::to_string((int)td_car.body->GetPosition().y) + ","
+           + std::to_string(laps) + ","
            + color.name() + "\n";
+}
+
+int Car::getLaps() {
+    return laps;
+}
+
+int Car::getBoost() {
+    boost--;
+    return boost;
+}
+
+void Car::setBoost(int b) {
+    boost = b;
+}
+
+std::string Car::getColor() {
+    return color.name();
 }
 
 Car::~Car() {}

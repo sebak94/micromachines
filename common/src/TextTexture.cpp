@@ -5,7 +5,6 @@
 #include <SDL2/SDL_ttf.h>
 #include <string>
 #include "../include/TextTexture.h"
-#include "../../common/include/Error.h"
 #include "../../editor/include/Window.h"
 #define BOX_BORDER_THICKNESS 3
 
@@ -15,6 +14,7 @@ void TextTexture::textToTexture(SDL_Renderer *renderer,
                                 SDL_Color textColor,
                                 const char *fontName,
                                 int fontSize) {
+    text = textureText;
     TTF_Font *font = TTF_OpenFont(fontName, fontSize);
     clearText();
     SDL_Surface* textSurface = TTF_RenderText_Solid(font, textureText.c_str(), textColor);
@@ -60,6 +60,7 @@ void TextTexture::render(SDL_Renderer *renderer,
         textBoxDimensions.h = rect->h;
     }
     SDL_RenderCopyEx(renderer, textTexture, rect, &textBoxDimensions, 0, center, flip);
+    clearText();
 }
 
 /* Gets texture width in pixels */
@@ -73,12 +74,12 @@ int TextTexture::getHeight() {
 }
 
 /* Creates box with border for user to write in */
-void TextTexture::createFieldBox(int posX, int posY, SDL_Color color) {
+void TextTexture::createFieldBox(int posX, int posY, SDL_Color color, int w) {
     int boxBorderFactor = BOX_BORDER_THICKNESS;
     fieldColor = color;
     fieldBox = {fieldBox.x = posX,
                 fieldBox.y = posY,
-                fieldBox.w = (WINDOW_W - 2*posX),
+                fieldBox.w = w,
                 fieldBox.h = height};
     fieldBoxBorder = {fieldBoxBorder.x = posX-boxBorderFactor,
             fieldBoxBorder.y = posY-boxBorderFactor,
@@ -100,4 +101,8 @@ void TextTexture::renderFieldBox(SDL_Renderer * renderer) {
                            fieldColor.b,
                            0);
     SDL_RenderFillRect(renderer, &fieldBox);
+}
+
+std::string TextTexture::getText() {
+    return this->text;
 }

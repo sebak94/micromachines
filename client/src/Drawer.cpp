@@ -4,48 +4,55 @@
 #include "../include/sdl/SdlAnimation.h"
 #include "../../record/include/Record.h"
 #include "../../common/include/Error.h"
+#include "../include/SoundTh.h"
 #include <unistd.h>
 
-#define FPS 80
-#define MICROSECS_WAIT 1/FPS*1000000 //seria que en un segundo se dibujen aprox 60 veces
-#define MUSICPATH "../common/sounds/beat.wav"
+#define FPS "fps limit"
 #define FULLSCREENBUTTON "../common/images/fullscreen.png"
 #define RECBUTTON "../common/images/buttons/recButton.png"
 #define VIDEOPATH "./recorded.mp4"
-#define VIDEOFPS 30
+#define VIDEOFPS "rec fps limit"
+#define FULLSCN "fullscreen"
+#define DRAW_DISTANCE "draw distance [4 - 8]"
+#define SECTOMICROSEC 1000000.0
 
 Drawer::Drawer(ModelMonitor &modelMonitor) :
-    window(WIDTH, HEIGHT),
-    loader(window, pictures, trackPictures),
-    camera(window, pictures, trackPictures),
-    modelMonitor(modelMonitor), music(MUSICPATH),
-    video(std::string(VIDEOPATH), VIDEOFPS, WIDTH, HEIGHT){
+        window(WIDTH, HEIGHT),
+        loader(window, pictures, trackPictures),
+        camera(window, pictures, trackPictures, config.getAsDouble(DRAW_DISTANCE)),
+        modelMonitor(modelMonitor),
+        video(std::string(VIDEOPATH), config.getAsDouble(VIDEOFPS), WIDTH, HEIGHT),
+        matchWindow(window), sound(modelMonitor, window, config) {
     createFullScreenButton();
     createRecButton();
-    lastFrame.reserve(3*WIDTH*HEIGHT);
-    videoTexture = video.getSDLRecordTexture(window.getRenderer());
+    lastFrame.reserve(3*WIDTH*HEIGHT),
+    drawWait = SECTOMICROSEC / config.getAsDouble(FPS),
+    recWait = SECTOMICROSEC / config.getAsDouble(VIDEOFPS); // us
 }
 
 Drawer::~Drawer() {}
 
 void Drawer::run() {
-    music.play();
+    if (config.isSet(FULLSCN)) window.changeFullScreen();
     running = true;
+    sound.start();
     std::thread recorder = std::thread(&Drawer::recorderTh, this);
     while (running) {
         auto start = std::chrono::system_clock::now();
         try {
             draw();
         } catch (std::exception &e) {
+            printf("Drawer::run() exception catched: %s\n", e.what());
             running = false;
         }
         auto end = std::chrono::system_clock::now();
         int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-        if ( MICROSECS_WAIT > microsecsPassed )
-            usleep(MICROSECS_WAIT - microsecsPassed);
+        if (drawWait > microsecsPassed)
+            usleep(drawWait - microsecsPassed);
     }
     recorder.join();
-    music.stop();
+    sound.stop();
+    sound.join();
 }
 
 void Drawer::stop() {
@@ -58,18 +65,17 @@ void Drawer::resize(int width, int height) {
 
 void Drawer::createFullScreenButton() {
     int size = (window.getWidth() + window.getHeight()) / 37;
-    SDL_Rect area = {0, 0, size, size};
+    SDL_Rect area = {10, 10, size, size};
     fullScreenButton = Button(window.getRenderer(), area, FULLSCREENBUTTON);
 }
 
 void Drawer::createRecButton() {
-    SDL_Rect area = {WIDTH - 80, 10, 100, 35};
+    SDL_Rect area = {WIDTH - 80, 10, 100, 30};
     recButton = Button(window.getRenderer(), area, RECBUTTON);
 }
 
 void Drawer::updateFullScreenButton(const SDL_Event *event) {
     fullScreenButton.updateEvent(event);
-
     if (fullScreenButton.isClicked()) {
         window.changeFullScreen();
     }
@@ -95,16 +101,45 @@ void Drawer::showRecButton() {
 
 void Drawer::draw() {
     window.fill();
-    camera.updateBlockSize();
-    camera.showBackground();
-    int x = modelMonitor.getCars()[modelMonitor.getMyColor()]->getX();
-    int y = modelMonitor.getCars()[modelMonitor.getMyColor()]->getY();
-    camera.showTrack(x, y, modelMonitor.getTrack());
-    camera.showCars(x, y, modelMonitor.getCars());
+    if (modelMonitor.getGameState() == mainMenu) {
+        matchWindow.render();
+        matchWindow.setTrackNames(modelMonitor.getTrackNames());
+        matchWindow.setMatchNames(modelMonitor.getMatchNames());
+    } else if (modelMonitor.getGameState() == creating || modelMonitor.getGameState() == joining) {
+        matchWindow.render();
+    } else if (modelMonitor.getGameState() == startCountdown) {
+        drawWorld();
+        drawHUD();
+        camera.showCountdown();
+    } else if (modelMonitor.getGameState() == waitingEnd || modelMonitor.getGameState() == gameEnded) {
+        drawWorld();
+        drawHUD();
+        camera.drawPodium(modelMonitor.getMatchResults());
+        matchWindow.reset();
+        camera.reset();
+    } else {
+        drawWorld();
+        drawHUD();
+    }
     showFullScreenButton();
     showRecButton();
     window.render();
     saveLastFrame();
+}
+
+void Drawer::drawWorld() {
+    camera.updateBlockSize();
+    int x = modelMonitor.getCars()[modelMonitor.getMyColor()]->getX();
+    int y = modelMonitor.getCars()[modelMonitor.getMyColor()]->getY();
+    camera.showTrack(x, y, modelMonitor.getTrack());
+    camera.showModifiers(x, y, modelMonitor.getModifiers());
+    camera.showCars(x, y, modelMonitor.getCars(), modelMonitor.getMyColor());
+}
+
+void Drawer::drawHUD() {
+    int laps = modelMonitor.getCars()[modelMonitor.getMyColor()]->getMyLap();
+    int totalLaps = modelMonitor.getTotalLaps();
+    camera.showLaps(laps, totalLaps);
 }
 
 void Drawer::saveLastFrame() {
@@ -132,14 +167,15 @@ void Drawer::recorderTh() {
         } else if (lastRecordState && !video.isRecording()) {
             std::lock_guard<std::mutex> lock(recordMutex);
             lastRecordState = false;
-            std::cout << "Rec file written." << std::endl;
-            video.close();
+        } else {
+            sleep (1);
         }
         auto end = std::chrono::system_clock::now();
         int microsecsPassed = std::chrono::duration_cast<std::chrono::microseconds>(end - frameStart).count();
-        if ( 1000000 * 1 / VIDEOFPS > microsecsPassed )
-            usleep(1000000 * 1 / VIDEOFPS - microsecsPassed);
+        if (recWait > microsecsPassed)
+            usleep(recWait - microsecsPassed);
     }
+    video.close();
 }
 
 void Drawer::showAnimation(SdlWindow &window) {
@@ -152,7 +188,12 @@ void Drawer::showAnimation(SdlWindow &window) {
     int heightFrame = 384 / framesInY;
 
     SdlTexture texture("images/explosion.png", window);
-    SdlAnimation anim(texture, framesInX, framesInY, widthFrame, heightFrame);
+    SdlAnimation anim(texture, framesInX, framesInY, widthFrame, heightFrame,
+                      0);
     SDL_Rect sdlDest = {(window.getWidth() - widthFrame) / 2, (window.getHeight() - heightFrame) / 2, widthFrame, heightFrame};
-    anim.render(sdlDest, window);
+    anim.renderLooped(sdlDest, window);
+}
+
+MatchWindow& Drawer::getMatchWindow() {
+    return this->matchWindow;
 }

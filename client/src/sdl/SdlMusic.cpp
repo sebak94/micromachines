@@ -1,7 +1,7 @@
 #include "../../include/sdl/SdlMusic.h"
 #include "../../include/sdl/SdlException.h"
 
-SdlMusic::SdlMusic(const std::string filename) {
+SdlMusic::SdlMusic(const std::string &filename) {
     int errCode = SDL_Init(SDL_INIT_AUDIO);
     if (errCode) {
         throw SdlException("Error en la inicialización del audio", SDL_GetError());
@@ -22,10 +22,10 @@ SdlMusic::~SdlMusic() {
     Mix_CloseAudio();
 }
 
-void SdlMusic::play() {
-    Mix_PlayMusic(music, -1);
+void SdlMusic::play(bool run) {
+    if (run) Mix_PlayMusic(music, -1);
 }
 
-void SdlMusic::stop() {
-    Mix_HaltMusic();
+void SdlMusic::stop(bool run) {
+    if (run) Mix_HaltMusic();
 }

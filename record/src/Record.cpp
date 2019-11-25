@@ -17,6 +17,7 @@ Record::Record(const std::string &filePath, const int &fps, int width, int heigh
     //3 because of RGB (3 bytes for each color)
     this->width = width;
     this->height = height;
+    this->fps = fps;
     initScaleAndColorContext();
     allocContext();
     allocBuffer();
