@@ -11,6 +11,7 @@
 
 #define VOL_ATTENUATION 0.2
 #define SOUND_REFRESH 400000
+#define BRAKE_LEN 500
 #define DRAW_DISTANCE "draw distance [4 - 8]"
 #define CAR_SOUND_PATH "../common/sounds/engine.wav"
 #define ENGINE_START_PATH "../common/sounds/engineStartUp.wav"
@@ -19,6 +20,7 @@
 #define RACE_FINISH_PATH "../common/sounds/win.wav"
 #define COLLISION_PATH "../common/sounds/punch.ogg"
 #define EXPLODE_PATH "../common/sounds/explodemini.wav"
+#define TIRES_PATH "../common/sounds/tires.wav"
 
 SoundTh::SoundTh(ModelMonitor &modelMonitor, SdlWindow &window,
                  Config &config) :
@@ -32,7 +34,8 @@ SoundTh::SoundTh(ModelMonitor &modelMonitor, SdlWindow &window,
         winSound(RACE_FINISH_PATH),
         menuMusic(MUSICPATH1),
         raceMusic(MUSICPATH2),
-        explosionSound(EXPLODE_PATH) {
+        explosionSound(EXPLODE_PATH),
+        brakeSound(TIRES_PATH){
 }
 
 void SoundTh::run() {
@@ -122,6 +125,8 @@ void SoundTh::playCarSoundFX(uint8_t volume, int ticks, bool collided,
         collisionSound.volume(volume);
         collisionSound.play(ticks, 0);
     }
+    if (modelMonitor.isBraking())
+        brakeSound.play(BRAKE_LEN, 0);
 }
 
 // if distance is greater than drawDistance/2, volume is 0.

@@ -23,6 +23,7 @@ void EventLoopSDL::enqueueKeyDownEvent(SDL_KeyboardEvent& keyEvent) {
             break;
         case SDLK_DOWN:
             this->queue.push("B"); //break
+            modelMonitor.setBrake();
             break;
     }
 }
@@ -40,6 +41,7 @@ void EventLoopSDL::enqueueKeyUpEvent(SDL_KeyboardEvent &keyEvent) {
             break;
         case SDLK_DOWN:
             this->queue.push("Z"); //break
+            modelMonitor.unsetBrake();
             break;
     }
 }

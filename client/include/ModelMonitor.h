@@ -34,6 +34,12 @@ public:
     void reset();
 
     void updateModifiers(std::string str);
+
+    bool isBraking();
+
+    void setBrake();
+
+    void unsetBrake();
 };
 
 #endif

@@ -20,6 +20,7 @@ private:
     SdlSoundFX engineStartSound;
     SdlSoundFX collisionSound;
     SdlSoundFX explosionSound;
+    SdlSoundFX brakeSound;
     SdlSoundFX winSound;
     SdlWindow & window;
     ModelMonitor & modelMonitor;

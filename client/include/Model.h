@@ -19,6 +19,7 @@ private:
     std::vector<std::string> matchNames;
     std::vector<std::string> matchResults;
     std::vector<Modifier> modifiers;
+    bool braking = false;
 
     //El modelo no devuelve referencias, para que desde afuera nadie pueda modificar sus elementos
 
@@ -47,6 +48,12 @@ public:
     void reset();
 
     void updateModifiers(std::string str);
+
+    bool isBraking();
+
+    void setBrake();
+
+    void unsetBrake();
 
 private:
     std::string parse(const std::string &str, size_t &pos, const char delim);

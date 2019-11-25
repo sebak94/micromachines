@@ -88,6 +88,21 @@ void ModelMonitor::updateMatchResults(std::string results) {
     model.updateMatchResults(results);
 }
 
+bool ModelMonitor::isBraking() {
+    std::lock_guard<std::mutex> lock(m);
+    return model.isBraking();
+}
+
+void ModelMonitor::setBrake() {
+    std::lock_guard<std::mutex> lock(m);
+    model.setBrake();
+}
+
+void ModelMonitor::unsetBrake() {
+    std::lock_guard<std::mutex> lock(m);
+    model.unsetBrake();
+}
+
 void ModelMonitor::createModifiers(std::string str) {
     std::lock_guard<std::mutex> lock(m);
     model.createModifiers(str);

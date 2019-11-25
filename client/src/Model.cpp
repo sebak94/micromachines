@@ -84,6 +84,18 @@ std::vector<Modifier> Model::getModifiers() {
     return this->modifiers;
 }
 
+bool Model::isBraking() {
+    return braking;
+}
+
+void Model::setBrake() {
+    braking = true;
+}
+
+void Model::unsetBrake() {
+    braking = false;
+}
+
 std::string Model::parse(const std::string &str, size_t &pos, const char delim) {
     std::string substr;
     size_t nextPos = str.find(delim, pos);
