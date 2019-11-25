@@ -345,8 +345,8 @@ void ClientTh::setWinners(std::vector<std::string> w) {
 
 void ClientTh::sendWinners() {
     std::string winStr = "W,";
-    for (int i = 0; i < winners.size(); i++) {
-        winStr += winners[i] + ',';
+    for (const auto & winner : winners) {
+        winStr += winner + ',';
     }
     winStr.erase(winStr.length()-1); //borro la ultima coma
     winStr.append("\n");

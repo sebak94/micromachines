@@ -7,7 +7,7 @@
 
 class SdlAnimation {
 private:
-    int sprite = 0;
+    size_t sprite = 0;
     SdlTexture &texture;
     std::vector<SDL_Rect> spriteClips;
     std::vector<SDL_Rect>::iterator spIt;

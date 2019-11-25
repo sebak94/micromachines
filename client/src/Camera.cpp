@@ -23,8 +23,9 @@ Camera::Camera(SdlWindow &window,
                std::map<trackPartType, SdlSurface *> &trackPictures,
                double drawDistance) :
         window(window), pictures(pictures), trackPictures(trackPictures),
-        lapBox(SdlSurface(LAPBOXPATH, window)), drawDistance(drawDistance),
-        explosionTex(SdlTexture(EXPL_PATH, window)) {
+        lapBox(SdlSurface(LAPBOXPATH, window)),
+        explosionTex(SdlTexture(EXPL_PATH, window)),
+        drawDistance(drawDistance) {
     TTF_Init();
     validateDrawDistance();
 }
@@ -37,9 +38,9 @@ void Camera::showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> track)
     double xBegin = - xMyCar * (blockWidth / 100) + (window.getWidth() / 2);
     double yBegin = - yMyCar * (blockHeight / 100) - (window.getHeight() / 2) + blockHeight;
 
-    for (int i = 0; i < track.size(); i++) {
-        double x = track[i].getPosX() * (blockWidth / 100);
-        double y = track[i].getPosY() * (blockHeight / 100);
+    for (auto & i : track) {
+        double x = i.getPosX() * (blockWidth / 100);
+        double y = i.getPosY() * (blockHeight / 100);
         SDL_Rect sdlDestRoad = {(int) (x + xBegin), (int) (-y - yBegin),
                                 (int) blockWidth, (int) blockHeight};
         if (sdlDestRoad.x + sdlDestRoad.w > 0 &&
@@ -47,7 +48,7 @@ void Camera::showTrack(int xMyCar, int yMyCar, std::vector<TrackPartData> track)
             sdlDestRoad.y + sdlDestRoad.h > 0 &&
             sdlDestRoad.y < window.getHeight()) {
                 trackPictures[empty]->render(sdlDestRoad);
-                trackPictures[track[i].getType()]->render(sdlDestRoad);
+                trackPictures[i.getType()]->render(sdlDestRoad);
         }
     }
 }
@@ -59,13 +60,13 @@ void Camera::showModifiers(int xMyCar, int yMyCar, std::vector<Modifier> modifie
     double xBegin = - xMyCar * (blockWidth / 100.0) + (window.getWidth() / 2.0);
     double yBegin = - yMyCar * (blockHeight / 100.0) - (window.getHeight() / 2.0);
 
-    for (int i = 0; i < modifiers.size(); i++) {
-        double x = modifiers[i].getX() * (blockWidth / 100);
-        double y = modifiers[i].getY() * (blockHeight / 100) + height;
+    for (auto & modifier : modifiers) {
+        double x = modifier.getX() * (blockWidth / 100);
+        double y = modifier.getY() * (blockHeight / 100) + height;
         int realX = x + xBegin;
         int realY = - y - yBegin;
         SDL_Rect area = {realX, realY, (int)width, (int)height};
-        pictures[modifiers[i].getType()]->render(area);
+        pictures[modifier.getType()]->render(area);
     }
 }
 
@@ -186,7 +187,7 @@ void Camera::drawPodium(std::vector<std::string> matchResults) {
     int y = window.getHeight()/12;
     int w = window.getWidth()/1.8;
     int h = window.getHeight()/6;
-    for (int i = 0; i < matchResults.size(); i++) {
+    for (size_t i = 0; i < matchResults.size(); i++) {
         SDL_Rect area = {x, y, w, h};
         SDL_Rect numberArea = {window.getWidth()/5, y+(h/3), w/15, h/2};
         SDL_Rect carArea = {(int)(window.getWidth()/2.5), y, w/10, h};

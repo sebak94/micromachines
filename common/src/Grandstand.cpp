@@ -32,6 +32,7 @@ std::string Grandstand::getTypeAsString() {
     if (type == public1Right) return LAYOUT_PUB1RIGHT;
     if (type == public1Up) return LAYOUT_PUB1UP;
     if (type == public1Down) return LAYOUT_PUB1DOWN;
+    return LAYOUT_PUB1LEFT;
 }
 
 int Grandstand::getRow() {
@@ -56,4 +57,5 @@ trackPartType Grandstand::identifyElem(const std::string & layoutElem){
     if (layoutElem == LAYOUT_PUB1DOWN) return public1Down;
     if (layoutElem == LAYOUT_PUB1RIGHT) return public1Right;
     if (layoutElem == LAYOUT_PUB1UP) return public1Up;
+    return empty;
 }

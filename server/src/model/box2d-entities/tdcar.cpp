@@ -37,6 +37,7 @@ TDCar::TDCar(b2World *world, uint16_t max_velocity, float acceleration,
     b2PolygonShape polygonShape;
     polygonShape.Set(vertices, 8);
     b2Fixture* fixture = body->CreateFixture(&polygonShape, 0.1f);//shape, density
+    fix = fixture;
 
     //prepare common joint parameters
     b2RevoluteJointDef jointDef;
@@ -99,15 +100,15 @@ void TDCar::checkConfigLimits(uint16_t & max_velocity, float & acceleration,
 }
 
 TDCar::~TDCar() {
-    for (int i = 0; i < tires.size(); i++)
-        delete tires[i];
+    for (auto & tire : tires)
+        delete tire;
 }
 
 void TDCar::update(int control_state) {
-    for (int i = 0; i < tires.size(); i++)
-        tires[i]->updateFriction();
-    for (int i = 0; i < tires.size(); i++)
-        tires[i]->updateDrive(control_state);
+    for (auto & tire : tires)
+        tire->updateFriction();
+    for (auto & tire : tires)
+        tire->updateDrive(control_state);
 
     //control steering
     float lockAngle = 35 * (DEGTORAD);
@@ -129,8 +130,8 @@ void TDCar::update(int control_state) {
 
 void TDCar::newPosition(Point point) {
     body->SetTransform(b2Vec2(point.getX(),point.getY()),body->GetAngle());
-    for (int i = 0; i < tires.size(); i++)
-        tires[i]->newPosition(point.getX(), point.getY());
+    for (auto & tire : tires)
+        tire->newPosition(point.getX(), point.getY());
     body->SetLinearVelocity(b2Vec2(0,0));  // avoids weird effects of teleporting
     body->SetAngularVelocity(0);  // avoids weird effects of teleporting
 }

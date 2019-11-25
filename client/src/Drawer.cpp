@@ -19,8 +19,8 @@
 Drawer::Drawer(ModelMonitor &modelMonitor) :
         window(WIDTH, HEIGHT),
         loader(window, pictures, trackPictures),
-        camera(window, pictures, trackPictures, config.getAsDouble(DRAW_DISTANCE)),
         modelMonitor(modelMonitor),
+        camera(window, pictures, trackPictures, config.getAsDouble(DRAW_DISTANCE)),
         video(std::string(VIDEOPATH), config.getAsDouble(VIDEOFPS), WIDTH, HEIGHT),
         matchWindow(window), sound(modelMonitor, window, config) {
     createFullScreenButton();

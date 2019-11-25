@@ -62,6 +62,8 @@ const char *Ai::get_enum_as_char(trackPartType type) {
             return "public1Left";
         case public1Right :
             return "public1Right";
+        default :
+            return "empty";
     }
 }
 

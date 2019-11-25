@@ -23,6 +23,7 @@ std::string Modifier::getType() const {
     else if (this->type == stones) return "stones";
     else if (this->type == oil) return "oil";
     else if (this->type == mud) return "mud";
+    return "boost";
 }
 
 int Modifier::getX() const {

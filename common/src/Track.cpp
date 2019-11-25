@@ -51,7 +51,6 @@ void Track::loadGrandstands(const Json::Value &fileTracks, int trackNumber) {
 }
 
 Grandstand Track::getRandomGrandstand() {
-    int randomIndex = rand() % grandstands.size();
     return grandstands[rand() % grandstands.size()];
 }
 
@@ -67,8 +66,8 @@ std::string Track::getName() {
 // Print tracks sketch to terminal
 void Track::print() {
     int column = 0;
-    for (int i=0; i < trackPartData.size(); i++) {
-        printElem(trackPartData[i]);
+    for (auto i : trackPartData) {
+        printElem(i);
         column++;
         if (column == width) {
             std::cout << std::endl;
@@ -186,7 +185,7 @@ void Track::initTrackParts(const std::vector<std::string> & trackLayout) {
     trackPartType prevElem = setStartingPreviousTrackPart(row, col);
     trackPartType actualElem;
     row = nextToStartRow, col = nextToStartCol;
-    for (int i=1; i < trackLayout.size(); i++){
+    for (size_t i=1; i < trackLayout.size(); i++){
         actualElem = identifyElem(trackLayout[i]);
         loadPart(row, col, actualElem);
         saveTrackSequence(row, col);
@@ -211,6 +210,7 @@ trackPartType Track::setStartingPreviousTrackPart(int row, int col) {
     if (t == finishV && startRow > nextToStartRow) return upLeft;
     if (t == finishH && startCol < nextToStartCol) return upRight;
     if (t == finishH && startCol > nextToStartRow) return upLeft;
+    return empty;
 }
 
 // Checks if track parts are properly connected. Assumes first is downRight
@@ -218,7 +218,6 @@ bool Track::validateTrack() {
     int row = startRow;
     int lastRow = row;
     int col = startCol;
-    int i = 0;
     trackPartType actual;
     trackPartType previous = setStartingPreviousTrackPart(row, col);
     row = nextToStartRow, col = nextToStartCol;
@@ -259,6 +258,7 @@ trackPartType Track::identifyElem(const std::string & layoutElem){
         return finishH;
     else if (layoutElem == LAYOUT_FV)
         return finishV;
+    return empty;
 }
 
 /* Returns Json string track-type format based on part type*/
@@ -513,6 +513,7 @@ Point Track::getCarStartingPos(int order) {
         return Point(blockPoint.getX() + BLOCKSIZE*1/2, blockPoint.getY() + BLOCKSIZE*1/2);
     else if (order % 2 == 0 && (t == upRight))
         return Point(blockPoint.getX() + BLOCKSIZE*3/4, blockPoint.getY() + BLOCKSIZE*3/4);
+    return {0,0};
 }
 
 float Track::getCarStartingRotation(int order) {
@@ -537,6 +538,7 @@ float Track::getCarStartingRotation(int order) {
         else if (t == upLeft) return -135.0f;
         else if (t == vertical || t == finishV) return 180.0f;
     }
+    return 0;
 }
 
 /* Sets start line and next position to start line */
@@ -549,7 +551,6 @@ void Track::setTrackStart(int row, int col, int rowN, int colN) {
 
 bool Track::jumpedTrackPart(int xCar, int yCar, int lastTrackPartID) {
     TrackPartData part = getTrackPart(findNearestPos(xCar), findNearestPos(yCar));
-    uint16_t x = 0, y = 0;
     int currentID = part.getID();
     if (!isTrackPart(part.getType()))
         return false;  // is outside of track
@@ -577,6 +578,7 @@ int Track::getCurrentID(int posX, int posY) {
         if (it.second.getX() == x && it.second.getY() == y)
             return it.first;
     }
+    return -1;
 }
 
 int Track::getPartsNumber() {

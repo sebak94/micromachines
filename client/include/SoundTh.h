@@ -16,18 +16,18 @@
 
 class SoundTh : public Thread {
 private:
+    SdlWindow & window;
+    ModelMonitor & modelMonitor;
+    Config config;
+    double drawDistance;
+    SdlMusic menuMusic;
+    SdlMusic raceMusic;
     SdlSoundFX carSound;
     SdlSoundFX engineStartSound;
     SdlSoundFX collisionSound;
     SdlSoundFX explosionSound;
-    SdlSoundFX brakeSound;
     SdlSoundFX winSound;
-    SdlWindow & window;
-    ModelMonitor & modelMonitor;
-    Config config;
-    SdlMusic menuMusic;
-    SdlMusic raceMusic;
-    double drawDistance;
+    SdlSoundFX brakeSound;
     bool running = false;
     GameState lastState = gameEnded;
     bool once = false;

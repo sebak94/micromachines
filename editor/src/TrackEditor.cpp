@@ -200,6 +200,7 @@ trackPartType TrackEditor::setStartingPreviousTrackPart(int row, int col) {
     if (t == finishV && startRow > nextToStartRow) return upLeft;
     if (t == finishH && startCol < nextToStartCol) return upRight;
     if (t == finishH && startCol > nextToStartRow) return upLeft;
+    return empty;
 }
 
 /* Creates Json structure for new track and writes file */
@@ -210,7 +211,7 @@ void TrackEditor::updateTrackFile() {
 }
 
 /* Creates Json track structure*/
-bool TrackEditor::createJsonTrack(Json::Value & newTrack) {
+void TrackEditor::createJsonTrack(Json::Value & newTrack) {
     newTrack[NAME_ID] = track.getName();
     newTrack[WIDTH_ID] = trackWidth;
     newTrack[HEIGHT_ID] = trackHeight;
@@ -218,7 +219,7 @@ bool TrackEditor::createJsonTrack(Json::Value & newTrack) {
     newTrack[START_ID][1] = startCol;
     newTrack[NEXT_TO_START_ID][0] = nextToStartRow;
     newTrack[NEXT_TO_START_ID][1] = nextToStartCol;
-    for (int i = 0; i < grandstands.size(); i++){
+    for (uint32_t i = 0; i < grandstands.size(); i++){
         newTrack[GRANDSTANDS_ID][i][0] = grandstands[i].getTypeAsString();
         newTrack[GRANDSTANDS_ID][i][1] = grandstands[i].getRow();
         newTrack[GRANDSTANDS_ID][i][2] = grandstands[i].getCol();
@@ -228,7 +229,7 @@ bool TrackEditor::createJsonTrack(Json::Value & newTrack) {
 }
 
 /* Writes new value to file. Replaces track if existent */
-bool TrackEditor::writeJsonValue(const Json::Value & newTrack) {
+void TrackEditor::writeJsonValue(const Json::Value & newTrack) {
     Json::Value tracks;
     Json::Reader reader;
     std::fstream tracksFile;
@@ -244,11 +245,11 @@ bool TrackEditor::writeJsonValue(const Json::Value & newTrack) {
 }
 
 /* Add tracks to file or replaces it if existent */
-bool TrackEditor::appendJsonValue(const Json::Value & newTrack,
+void TrackEditor::appendJsonValue(const Json::Value & newTrack,
                                   Json::Value & tracks) {
     int trackIndex = -1; // non-existent
     Json::Value removed;
-    for (int i = 0; i < tracks[TRACKS_ID].size(); i++) {
+    for (uint32_t i = 0; i < tracks[TRACKS_ID].size(); i++) {
         if (tracks[TRACKS_ID][i][NAME_ID].asString() == track.getName())
             trackIndex = i;
     }

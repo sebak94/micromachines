@@ -13,7 +13,7 @@ void TrackList::readTracks() {
     if (!reader.parse(tracksFile, maps)){
         std::cout << reader.getFormattedErrorMessages() << std::endl;
     } else {
-        for (int i = 0; i < maps[TRACKS_ID].size(); i++) {
+        for (uint32_t i = 0; i < maps[TRACKS_ID].size(); i++) {
             track.loadTrack(maps, i);
             tracks[track.getName()] = track;
         }
@@ -41,7 +41,7 @@ std::vector<std::string> TrackList::getTrackNames() {
     if (!reader.parse(tracksFile, maps )){
         std::cout << reader.getFormattedErrorMessages() << std::endl;
     } else {
-        for (int i = 0; i < maps[TRACKS_ID].size(); i++) {
+        for (uint32_t i = 0; i < maps[TRACKS_ID].size(); i++) {
              nameList.push_back(maps[TRACKS_ID][i][NAME_ID].asString());
         }
     }

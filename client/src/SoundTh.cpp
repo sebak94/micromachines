@@ -24,17 +24,17 @@
 
 SoundTh::SoundTh(ModelMonitor &modelMonitor, SdlWindow &window,
                  Config &config) :
-        modelMonitor(modelMonitor),
         window(window),
+        modelMonitor(modelMonitor),
         config(config),
         drawDistance(config.getAsDouble(DRAW_DISTANCE)),
+        menuMusic(MUSICPATH1),
+        raceMusic(MUSICPATH2),
         carSound(CAR_SOUND_PATH),
         engineStartSound(ENGINE_START_PATH),
         collisionSound(COLLISION_PATH),
-        winSound(RACE_FINISH_PATH),
-        menuMusic(MUSICPATH1),
-        raceMusic(MUSICPATH2),
         explosionSound(EXPLODE_PATH),
+        winSound(RACE_FINISH_PATH),
         brakeSound(TIRES_PATH){
 }
 

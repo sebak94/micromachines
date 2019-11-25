@@ -98,7 +98,7 @@ void MicroMachinesTh::removePlayer(ClientTh *client) {
 }
 
 void MicroMachinesTh::removePlayerFromVector(ClientTh *player) {
-    size_t index_to_remove = -1;
+    int index_to_remove = -1;
 
     for (size_t i = 0; i < players.size(); i++) {
         if (players[i] == player) {
@@ -197,23 +197,23 @@ void MicroMachinesTh::monitorTrack() {
 }
 
 void MicroMachinesTh::updateWinners() {
-    for (int i = 0; i < players.size(); i++) {
+    for (auto & player : players) {
         //Si alcanzó la cantidad de vueltas y no contiene el elemento, le cambio el estado y agrego a los ganadores
-        std::string color = players[i]->carColor();
-        if (players[i]->getLaps() == laps &&
+        std::string color = player->carColor();
+        if (player->getLaps() == laps &&
         (std::find(winners.begin(), winners.end(), color) == winners.end())) {
-            players[i]->setState(waitingEnd);
+            player->setState(waitingEnd);
             winners.push_back(color);
         }
-        players[i]->setWinners(winners);
+        player->setWinners(winners);
     }
 }
 
 void MicroMachinesTh::sendWinners() {
     //Mando los ganadores cuando termine la carrera
-    for (int i = 0; i < players.size(); i++) {
-        if (players[i]->getState() == waitingEnd || players[i]->getState() == gameEnded) {
-            players[i]->sendWinners();
+    for (auto & player : players) {
+        if (player->getState() == waitingEnd || player->getState() == gameEnded) {
+            player->sendWinners();
         }
     }
 }
@@ -266,8 +266,8 @@ TrackList& MicroMachinesTh::getTracks() {
 }
 
 bool MicroMachinesTh::somePlayersInMainMenu() {
-    for (int i = 0; i < players.size(); i++) {
-        if (players[i]->getState() == mainMenu) {
+    for (auto & player : players) {
+        if (player->getState() == mainMenu) {
             return true;
         }
     }
@@ -275,8 +275,8 @@ bool MicroMachinesTh::somePlayersInMainMenu() {
 }
 
 bool MicroMachinesTh::allPlayersWaitingEnd() {
-    for (int i = 0; i < players.size(); i++) {
-        if (players[i]->getState() != waitingEnd) {
+    for (auto & player : players) {
+        if (player->getState() != waitingEnd) {
             return false;
         }
     }
@@ -284,8 +284,8 @@ bool MicroMachinesTh::allPlayersWaitingEnd() {
 }
 
 bool MicroMachinesTh::allPlayersGameEnded() {
-    for (int i = 0; i < players.size(); i++) {
-        if (players[i]->getState() != gameEnded) {
+    for (auto & player : players) {
+        if (player->getState() != gameEnded) {
             return false;
         }
     }
@@ -318,6 +318,7 @@ direction MicroMachinesTh::setModifierDirection(trackPartType type) {
     if (type == public1Down) return up;
     if (type == public1Left) return right;
     if (type == public1Right) return left;
+    return down;
 }
 
 Config MicroMachinesTh::getConfig() {
@@ -325,8 +326,8 @@ Config MicroMachinesTh::getConfig() {
 }
 
 bool MicroMachinesTh::isAnAvailableMatch() {
-    for (int i = 0; i < players.size(); i++) {
-        if (players[i]->getState() != waitingPlayers) {
+    for (auto & player : players) {
+        if (player->getState() != waitingPlayers) {
             return false;
         }
     }

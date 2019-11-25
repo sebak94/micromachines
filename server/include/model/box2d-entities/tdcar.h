@@ -18,6 +18,7 @@ class TDCar {
     std::vector<TDTire*> tires;
     b2RevoluteJoint *flJoint, *frJoint;
     ContactListener contactListener;
+    b2Fixture * fix;
     bool contacting = false;
 
     public:

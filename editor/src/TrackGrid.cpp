@@ -133,7 +133,7 @@ void TrackGrid::updateSamples(const SDL_Event *event) {
 bool TrackGrid::findStartLine(int & startRow, int & startCol) {
     trackPartType type;
     bool found = false;
-    for (int i = 0; i < grid.size(); i++) {
+    for (size_t i = 0; i < grid.size(); i++) {
         type = grid[i].getType();
         if ((type == finishH || type == finishV) && found)
             return false;  // avoids double finish lines;
@@ -143,8 +143,7 @@ bool TrackGrid::findStartLine(int & startRow, int & startCol) {
             startRow = i / wBlocks;
         }
     }
-    if (found)
-        return true;
+    return found;
 }
 
 int TrackGrid::getPixelPosX(int col) {
@@ -188,6 +187,7 @@ SDL_Texture * TrackGrid::getTexture(trackPartType type){
         case public1Down: return textures[TEX_PUB1DOWN];
         case public1Left: return textures[TEX_PUB1LEFT];
         case public1Right: return textures[TEX_PUB1RIGHT];
+        default: return textures[TEX_GRASS];
     }
 }
 

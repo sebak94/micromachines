@@ -80,9 +80,9 @@ public:
     void updateTrackFile();
     bool trackValid();
     void trackToFileLayout();
-    bool createJsonTrack(Json::Value &newTrack);
-    bool writeJsonValue(const Json::Value &newTrack);
-    bool appendJsonValue(const Json::Value &newTrack, Json::Value &tracks);
+    void createJsonTrack(Json::Value &newTrack);
+    void writeJsonValue(const Json::Value &newTrack);
+    void appendJsonValue(const Json::Value &newTrack, Json::Value &tracks);
     void drawTh(Window &editor);
     bool findStartLine();
     void setWay(trackPartType type);

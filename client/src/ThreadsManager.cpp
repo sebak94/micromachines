@@ -16,8 +16,8 @@ ThreadsManager::ThreadsManager(const char *hostname, const char *service) : queu
 }
 
 ThreadsManager::~ThreadsManager() {
-    for (int i = 0; i < threads.size(); i++) {
-        delete threads[i];
+    for (auto & thread : threads) {
+        delete thread;
     }
 }
 
@@ -32,10 +32,10 @@ void ThreadsManager::runThreads() {
     threads.push_back(drawer);
     //Cuando el ModelUpdater finaliza, le hace stop al Drawer
 
-    for (int i = 0; i < threads.size(); i++) {
-        threads[i]->start();
+    for (auto & thread : threads) {
+        thread->start();
     }
-    for (int i = 0; i < threads.size(); i++) {
-        threads[i]->join();
+    for (auto & thread : threads) {
+        thread->join();
     }
 }

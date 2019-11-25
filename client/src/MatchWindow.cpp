@@ -13,7 +13,7 @@
 #define BACK "../common/images/back.png"
 
 MatchWindow::MatchWindow(SdlWindow &sdlWindow) : window(sdlWindow),
-    logo(LOGOPATH, window), background(BACK, window) {
+            background(BACK, window), logo(LOGOPATH, window) {
     TTF_Init();
     createMatchButtons();
 
@@ -254,6 +254,7 @@ bool MatchWindow::isModeSelected() {
 std::string MatchWindow::getSelection() {
     if (this->state == creatingMatch) return "C\n";
     else if (this->state == joiningMatch) return "J\n";
+    else return ".";
 }
 
 void MatchWindow::reset() {
