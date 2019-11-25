@@ -60,7 +60,6 @@ public:
     void calcBeginPos(double &xBegin, double &yBegin, int &x, int &y);
     void setCarSize(double &widthCar, double &heightCar);
     bool isOnWindow(const SDL_Rect &sdlDestRoad);
-
     void showNumber(SDL_Color &color, int fontsize, int displacement);
 };
 
