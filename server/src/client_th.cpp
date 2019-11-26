@@ -73,7 +73,7 @@ std::string ClientTh::parse(const std::string &str, size_t &pos, const char deli
 
 bool ClientTh::receiveMatchSelection() {
     matchSelection.clear();
-    char action;
+    char action{};
     while (keep_talking && action != '\n') {
         receive(&action);
         matchSelection += action;
@@ -107,8 +107,8 @@ void ClientTh::setMatch() {
 }
 
 void ClientTh::setPlayerMode() {
-    std::string modeSelection;
-    char action;
+    std::string modeSelection{};
+    char action{};
     while (keep_talking && action != '\n') {
         receive(&action);
         modeSelection += action;

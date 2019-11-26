@@ -14,7 +14,6 @@ void ModelUpdater::run() {
     while (running) {
         try {
             std::string text = receive(); //Recibo cambio de estado u otra cosa
-            //printf("text: %s\n", text.c_str());
             if (text[0] == 'G') {
                 //Si recibi cambio de estado lo actualizo
                 printf("text: %s\n", text.c_str());

@@ -52,7 +52,7 @@ void GamesTh::deleteMapperThreads() {
     for (auto it1 = mapperThreadList.begin(); it1 != mapperThreadList.end();) {
         if (it1->second){
             (it2->second)->join();
-            free(it2->second);
+            delete it2->second;
             mapperThreads.erase(it2++);
             mapperThreadList.erase(it1++);
         } else {
