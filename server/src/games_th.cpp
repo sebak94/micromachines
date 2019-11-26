@@ -175,7 +175,7 @@ void GamesTh::setPlayerToAssign(ClientTh * player) {
 }
 
 void GamesTh::removePlayer(ClientTh *player) {
-    std::map<int, MicroMachinesTh *>::iterator gameIt = games.find(players[player]);
+    auto gameIt = games.find(players[player]);
     if (gameIt != games.end()) {
         gameIt->second->removePlayer(player);
     }
@@ -185,7 +185,6 @@ void GamesTh::removePlayer(ClientTh *player) {
 // If all players are in WaitingEnd state stops game
 void GamesTh::stopGameIfAllEnded() {
     Lock l(m);
-
     for (auto & game : games) {
         if (game.second->allPlayersWaitingEnd()) {
             usleep(PODIUMVIEWTIME); // Duermo para visualizar el podio
@@ -197,7 +196,6 @@ void GamesTh::stopGameIfAllEnded() {
 // Checks if any player ended and resets it to main menu.
 void GamesTh::gameEndedPlayersToMainMenu() {
     Lock l(m);
-
     for (auto & player : players) {
         if (player.first->getState() == gameEnded) {
             player.first->clean();
