@@ -8,8 +8,8 @@
 #include <unistd.h>
 
 #define FPS "fps limit"
-#define FULLSCREENBUTTON "../common/images/fullscreen.png"
-#define RECBUTTON "../common/images/buttons/recButton.png"
+#define FULLSCREENBUTTON "../assets/images/fullscreen.png"
+#define RECBUTTON "../assets/images/buttons/recButton.png"
 #define VIDEOPATH "./recorded.mp4"
 #define VIDEOFPS "rec fps limit"
 #define FULLSCN "fullscreen"

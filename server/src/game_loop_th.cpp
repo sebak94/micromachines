@@ -10,6 +10,7 @@
 #define MODIFIER_TIME 100000
 #define RACETIME "race time [mins]"
 #define REFRESH_FREQ "world refresh frequency [Hz]"
+#define MODS "mods"
 
 GameLoopTh::GameLoopTh(MicroMachinesTh &micromachines) :
         running(true), micromachines(micromachines),
@@ -83,7 +84,7 @@ void GameLoopTh::play() {
         micromachines.sendWinners();
         timeWait(MICROSECS_WAIT, begin);
 
-        // this->executeLibraries();
+        if (config.isSet(MODS)) this->executeLibraries();
         countdownTime -= MICROSECS_WAIT;
         if (micromachines.allPlayersWaitingEnd() && !ending) {
             countdownTime = (PODIUMVIEWTIME)*0.9;  // cuando llegan todos en 4,5 segs corta animacion

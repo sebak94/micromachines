@@ -13,8 +13,8 @@
 #define EXPLOSION_SPRITES_Y 2
 #define HEART "heart"
 #define PODIUM "podium"
-#define FONTNAME "../common/fonts/OpenSans-Bold.ttf"
-#define EXPL_PATH "../common/images/explosion.png"
+#define FONTNAME "../assets/fonts/OpenSans-Bold.ttf"
+#define EXPL_PATH "../assets/images/explosion.png"
 #define VIBRATE_MAG 0.1
 #define VIBRATE_RATE 2
 #define BLOCKSIZE 100.0

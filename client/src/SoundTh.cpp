@@ -13,14 +13,14 @@
 #define SOUND_REFRESH 400000
 #define BRAKE_LEN 500
 #define DRAW_DISTANCE "draw distance [4 - 8]"
-#define CAR_SOUND_PATH "../common/sounds/engine.wav"
-#define ENGINE_START_PATH "../common/sounds/engineStartUp.wav"
-#define MUSICPATH1 "../common/sounds/beat.wav"
-#define MUSICPATH2 "../common/sounds/50s-bit.ogg"
-#define RACE_FINISH_PATH "../common/sounds/win.wav"
-#define COLLISION_PATH "../common/sounds/punch.ogg"
-#define EXPLODE_PATH "../common/sounds/explodemini.wav"
-#define TIRES_PATH "../common/sounds/tires.wav"
+#define CAR_SOUND_PATH "../assets/sounds/engine.wav"
+#define ENGINE_START_PATH "../assets/sounds/engineStartUp.wav"
+#define MUSICPATH1 "../assets/sounds/beat.wav"
+#define MUSICPATH2 "../assets/sounds/50s-bit.ogg"
+#define RACE_FINISH_PATH "../assets/sounds/win.wav"
+#define COLLISION_PATH "../assets/sounds/punch.ogg"
+#define EXPLODE_PATH "../assets/sounds/explodemini.wav"
+#define TIRES_PATH "../assets/sounds/tires.wav"
 
 SoundTh::SoundTh(ModelMonitor &modelMonitor, SdlWindow &window,
                  Config &config) :

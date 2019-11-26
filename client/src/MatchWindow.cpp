@@ -3,14 +3,14 @@
 #include <sstream>
 #include "../include/MatchWindow.h"
 
-#define LOGOPATH "../common/images/micromachines.png"
-#define BUTTONCREATEPATH "../common/images/buttons/buttonCreate.png"
-#define BUTTONJOINPATH "../common/images/buttons/buttonJoin.png"
-#define BUTTONPLAYPATH "../common/images/buttons/buttonPlay.png"
-#define BUTTONRETURNPATH "../common/images/buttons/buttonReturn.png"
-#define BUTTONARROWPATH "../common/images/arrow.png"
-#define FONTNAME "../common/fonts/OpenSans-Bold.ttf"
-#define BACK "../common/images/back.png"
+#define LOGOPATH "../assets/images/micromachines.png"
+#define BUTTONCREATEPATH "../assets/images/buttons/buttonCreate.png"
+#define BUTTONJOINPATH "../assets/images/buttons/buttonJoin.png"
+#define BUTTONPLAYPATH "../assets/images/buttons/buttonPlay.png"
+#define BUTTONRETURNPATH "../assets/images/buttons/buttonReturn.png"
+#define BUTTONARROWPATH "../assets/images/arrow.png"
+#define FONTNAME "../assets/fonts/OpenSans-Bold.ttf"
+#define BACK "../assets/images/back.png"
 
 MatchWindow::MatchWindow(SdlWindow &sdlWindow) : window(sdlWindow),
             background(BACK, window), logo(LOGOPATH, window) {

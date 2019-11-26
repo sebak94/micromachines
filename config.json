@@ -5,10 +5,11 @@
    "maneuverability [%]" : 50,
    "race time [mins]" : 10,
    "world refresh frequency [Hz]" : 60,
-   "play music" : "false",
+   "play music" : "true",
    "fullscreen" : "false",
    "draw distance [4 - 8]" : 4,
    "fps limit" : 60,
    "rec fps limit" : 30,
-   "laps" : 0
+   "laps" : 8,
+   "mods" : "false"
 }
