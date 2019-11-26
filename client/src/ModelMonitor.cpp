@@ -9,7 +9,7 @@ void ModelMonitor::setTrack(std::vector<TrackPartData> track) {
     model.setTrack(track);
 }
 
-std::vector<TrackPartData>& ModelMonitor::getTrack() {
+std::vector<TrackPartData> ModelMonitor::getTrack() {
     std::lock_guard<std::mutex> lock(m);
     return model.getTrack();
 }
@@ -44,7 +44,7 @@ std::string ModelMonitor::getMyColor() const {
     return model.getMyColor();
 }
 
-std::map<std::string, Car*>& ModelMonitor::getCars() {
+std::map<std::string, Car*> ModelMonitor::getCars() {
     std::lock_guard<std::mutex> lock(m);
     return model.getCars();
 }
@@ -78,7 +78,7 @@ std::vector<std::string> ModelMonitor::getMatchNames() {
     std::lock_guard<std::mutex> lock(m);
     return model.getMatchNames();
 }
-std::vector<std::string>& ModelMonitor::getMatchResults() {
+std::vector<std::string> ModelMonitor::getMatchResults() {
     std::lock_guard<std::mutex> lock(m);
     return model.getMatchResults();
 }
@@ -113,7 +113,7 @@ void ModelMonitor::updateModifiers(std::string str) {
     model.updateModifiers(str);
 }
 
-std::vector<Modifier>& ModelMonitor::getModifiers() {
+std::vector<Modifier> ModelMonitor::getModifiers() {
     std::lock_guard<std::mutex> lock(m);
     return model.getModifiers();
 }

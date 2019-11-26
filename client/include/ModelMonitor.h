@@ -16,13 +16,13 @@ public:
 
     void setTrack(std::vector <TrackPartData> track);
 
-    std::vector <TrackPartData> &getTrack();
+    std::vector <TrackPartData> getTrack();
 
     void setMyColor(std::string str);
 
     std::string getMyColor() const;
 
-    std::map<std::string, Car *> &getCars();
+    std::map<std::string, Car *> getCars();
 
     void updateCar(std::string str);
 
@@ -44,11 +44,11 @@ public:
 
     std::vector <std::string> getMatchNames();
 
-    std::vector <std::string> &getMatchResults();
+    std::vector <std::string> getMatchResults();
 
     void updateMatchResults(std::string results);
 
-    std::vector <Modifier> &getModifiers();
+    std::vector <Modifier> getModifiers();
 
     void createModifiers(std::string str);
 

@@ -24,7 +24,7 @@ int Model::getTotalLaps() {
     return totalLaps;
 }
 
-std::vector<TrackPartData>& Model::getTrack() {
+std::vector<TrackPartData> Model::getTrack() {
     return this->track;
 }
 
@@ -57,7 +57,7 @@ std::string Model::getMyColor() const {
     return myColor;
 }
 
-std::map<std::string, Car*>& Model::getCars() {
+std::map<std::string, Car*> Model::getCars() {
     return this->cars;
 }
 
@@ -80,7 +80,7 @@ void Model::updateModifiers(std::string str) {
     modifiers = modifierList.getModifiers();
 }
 
-std::vector<Modifier>& Model::getModifiers() {
+std::vector<Modifier> Model::getModifiers() {
     return this->modifiers;
 }
 
@@ -123,7 +123,7 @@ std::vector<std::string> Model::getMatchNames() {
     return matchNames;
 }
 
-std::vector<std::string>& Model::getMatchResults() {
+std::vector<std::string> Model::getMatchResults() {
     return matchResults;
 }
 
