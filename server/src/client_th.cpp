@@ -7,6 +7,7 @@
 #include "string"
 
 #define HEALTH_REDUCTION 15
+#define CLIENT_REFRESH 200000
 
 ClientTh::ClientTh(Socket *peer, TrackList const &tracks)
         : keep_talking(true),
@@ -215,7 +216,6 @@ void ClientTh::run() {
                 while (keep_talking && state == playing) {
                     char action;
                     receive(&action);
-                    std:: cout << action << std::endl;
                     Lock l(m);
                     actions.push(action);
                 }
@@ -226,15 +226,13 @@ void ClientTh::run() {
                 while (keep_talking && state == waitingEnd && !flushed) {
                     char action;
                     receive(&action);
-                    //std:: cout << action << std::endl;
                     if (action == 'I') flushed = true;
                 }
                 break;
             case gameEnded:
-                //sendGameState(lastState, state);
                 break;
         }
-        usleep(200000);
+        usleep(CLIENT_REFRESH);
     }
 }
 
