@@ -10,5 +10,5 @@
    "draw distance [4 - 8]" : 4,
    "fps limit" : 60,
    "rec fps limit" : 30,
-   "laps" : 1
+   "laps" : 0
 }

@@ -80,6 +80,7 @@ bool ClientTh::receiveMatchSelection() {
     }
     std::cout << "match: " << matchSelection << std::endl;
     if (matchSelection[0] == 'B') {
+        sendGameState(mainMenu);
         state = mainMenu;
         return false;
     }
@@ -132,7 +133,6 @@ void ClientTh::sendGameState(GameState & previousSt, GameState & st) {
         switch (st) {
             case mainMenu:
                 send(std::string(MSG_ST_MAINMENU));
-                setPlayerMode();
                 break;
             case creating:
                 send(std::string(MSG_ST_CREATING));
@@ -221,6 +221,7 @@ void ClientTh::run() {
                 break;
             case waitingEnd:
                 sendGameState(lastState, state);
+                // flushes client queue, 'I' indicating end of game commands
                 while (keep_talking && state == waitingEnd && !flushed) {
                     char action;
                     receive(&action);
@@ -231,7 +232,7 @@ void ClientTh::run() {
                 sendGameState(lastState, state);
                 break;
         }
-        usleep(500000);
+        usleep(200000);
     }
 }
 

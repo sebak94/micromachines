@@ -97,11 +97,11 @@ void GamesTh::processPlayer(ClientTh * player, bool & finished) {
     bool selected = false;
     while (!selected) {
         while (player->getState() == mainMenu) {
-            player->sendGameState(mainMenu);
             printf("menu\n");
             player->sendAllTrackNames(tracks.serialize());
             player->setAvailableGames(serializeGames());
             player->sendAvailableGames();
+            player->setPlayerMode();
             usleep(REFRESHPLAYERSTIME);
         }
         player->sendGameState(player->getState());
@@ -202,6 +202,7 @@ void GamesTh::gameEndedPlayersToMainMenu() {
     for (auto & player : players) {
         if (player.first->getState() == gameEnded) {
             player.first->clean();
+            player.first->sendGameState(mainMenu);
             player.second = PLAYERTOASSIGN;
         }
     }
