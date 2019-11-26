@@ -18,7 +18,7 @@ private:
 
 public:
     ModifierList();
-    ModifierList(std::string str);
+    explicit ModifierList(std::string str);
     ~ModifierList();
     std::string serialize();
     std::vector<Modifier> getModifiers();

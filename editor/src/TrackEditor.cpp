@@ -272,9 +272,9 @@ void TrackEditor::createTrack() {
     parts = 0; grandstands.clear();
     track = Track(trackWidth, trackHeight, trackName);
     track.setTrackStart(startRow, startCol, nextToStartRow, nextToStartCol);
-    int row = 0, col = 0;
     for (int i = 0; i < grid.getSize(); i++) {
-        col = i % trackWidth, row = i / trackWidth;
+        int col = i % trackWidth;
+        int row = i / trackWidth;
         track.loadPart(row, col, grid.getType(i));
         if (track.isTrackPart(row, col))
             parts++;

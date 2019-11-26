@@ -10,7 +10,7 @@ class Color {
     ColorType color;
 
     public:
-    Color(ColorType color);
+    explicit Color(ColorType color);
     std::string name();
 };
 

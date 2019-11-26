@@ -13,7 +13,7 @@ class FixtureUserData {
     fixtureUserDataType m_type;
     
     protected:
-    FixtureUserData(fixtureUserDataType type): m_type(type) {}
+    explicit FixtureUserData(fixtureUserDataType type): m_type(type) {}
     
     public:
     virtual fixtureUserDataType getType() { return m_type; }

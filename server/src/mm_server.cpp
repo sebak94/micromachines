@@ -11,14 +11,14 @@
 
 void MMServer::startThreads() {
     for (std::vector<Thread*>::iterator it = threads.begin();
-        it != threads.end(); it++) {
+        it != threads.end(); ++it) {
         (*it)->start();
     }
 }
 
 void MMServer::finishThreads() {
     for (std::vector<Thread*>::iterator it = threads.begin();
-        it != threads.end(); it++) {
+        it != threads.end(); ++it) {
         (*it)->stop();
         (*it)->join();
     }

@@ -26,17 +26,17 @@ class ClientTh: public Thread {
     std::atomic<bool> keep_talking;
     std::atomic<bool> is_running;
     Socket *peer;
-    Car *car;
+    Car *car = nullptr;
     std::queue<char> actions;
     std::mutex m;
     GameState state = mainMenu;
-    TrackList& tracks;
+    TrackList tracks;
     std::string trackSelected;
     std::string availableGames{};
     int gameNumber = -1;
     std::vector<std::string> winners;
     std::string matchSelection;
-    int numberPlayersSelected;
+    int numberPlayersSelected = 0;
 
     void sendWelcomeMsg();
     void receive(char *action);
@@ -44,7 +44,7 @@ class ClientTh: public Thread {
     std::string parse(const std::string &str, size_t &pos, const char delim);
 
     public:
-    ClientTh(Socket *peer, TrackList &tracks);
+    ClientTh(Socket *peer, TrackList const &tracks);
     ~ClientTh();
     bool stillTalking();
     void setMatch();
@@ -53,9 +53,9 @@ class ClientTh: public Thread {
     void updateCar();
     void sendCarData();
     void sendAllCarsToPlayer(std::vector<ClientTh*> players);
-    void sendTrackData(std::string track_serialized);
-    void sendModifiers(std::string modifiers_serialized);
-    void sendAllTrackNames(std::string tracks);
+    void sendTrackData(std::string const &track_serialized);
+    void sendModifiers(std::string const &modifiers_serialized);
+    void sendAllTrackNames(std::string const &tracks);
     std::string getTrackSelected();
     int getNumberPlayersSelected();
     virtual void run() override;
@@ -69,17 +69,17 @@ class ClientTh: public Thread {
     void newCarPosition(Point point);
     void updateLastTrackID(int ID);
     void updateLaps();
-    void sendLapsData(std::string laps_serialized);
+    void sendLapsData(std::string const &laps_serialized);
     GameState getState();
     void sendGameState(GameState &previousSt, GameState &st);
     void setCar(Car *matchCar);
-    void setAvailableGames(std::string g);
+    void setAvailableGames(std::string const &g);
     void sendAvailableGames();
     int getGameNumber();
     void setPlayerMode();
     int getLaps();
     std::string carColor();
-    void setWinners(std::vector<std::string> w);
+    void setWinners(std::vector<std::string> &w);
     void sendWinners();
     void clean();
     void receiveMatchSelection();

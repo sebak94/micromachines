@@ -72,9 +72,8 @@ bool Button::isClicked() {
 }
 
 SDL_Texture * Button::loadTexture(const std::string & img_path, SDL_Renderer * renderer) {
-        SDL_Surface* rawImage = nullptr;
+        SDL_Surface* rawImage = IMG_Load(img_path.c_str());;
         SDL_Texture* tex = nullptr;
-        rawImage = IMG_Load(img_path.c_str());
         if (rawImage == nullptr)
             throw Error("Loading Image: %s.", img_path.c_str());
         tex = SDL_CreateTextureFromSurface(renderer, rawImage);

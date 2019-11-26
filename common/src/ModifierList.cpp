@@ -1,7 +1,8 @@
 #include "../include/ModifierList.h"
 
 ModifierList::ModifierList() {
-    modifiers.emplace(0, Modifier(0, 0, "boost", left));
+    std::string type = "boost";
+    modifiers.emplace(0, Modifier(0, 0, type, left));
     distance.emplace(0, 150 - rand() % 75);
 }
 

@@ -8,7 +8,7 @@
 
 #define HEALTH_REDUCTION 15
 
-ClientTh::ClientTh(Socket *peer, TrackList &tracks)
+ClientTh::ClientTh(Socket *peer, TrackList const &tracks)
         : keep_talking(true),
           is_running(true),
           peer(peer),
@@ -41,16 +41,16 @@ void ClientTh::sendAllCarsToPlayer(std::vector<ClientTh *> players) {
     }
 }
 
-void ClientTh::sendTrackData(std::string track_serialized) {
+void ClientTh::sendTrackData(std::string const &track_serialized) {
     send(track_serialized);
 }
 
-void ClientTh::sendModifiers(std::string modifiers_serialized) {
+void ClientTh::sendModifiers(std::string const &modifiers_serialized) {
     Lock l(m);
     send(modifiers_serialized);
 }
 
-void ClientTh::sendAllTrackNames(std::string tracks) {
+void ClientTh::sendAllTrackNames(std::string const &tracks) {
     send(tracks);
 }
 
@@ -117,7 +117,7 @@ void ClientTh::setCar(Car * matchCar) {
     car = matchCar;
 }
 
-void ClientTh::sendLapsData(std::string laps_serialized) {
+void ClientTh::sendLapsData(std::string const &laps_serialized) {
     send("L," + laps_serialized + "\n");
 }
 
@@ -301,7 +301,7 @@ void ClientTh::send(std::basic_string<char> response) {
     }
 }
 
-void ClientTh::setAvailableGames(std::string g) {
+void ClientTh::setAvailableGames(std::string const &g) {
     Lock l(m);
     if (g != availableGames)
         availableGames = g;
@@ -339,7 +339,7 @@ std::string ClientTh::carColor() {
     return car->getColor();
 }
 
-void ClientTh::setWinners(std::vector<std::string> w) {
+void ClientTh::setWinners(std::vector<std::string> &w) {
     winners = w;
 }
 

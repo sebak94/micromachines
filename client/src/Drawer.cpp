@@ -178,22 +178,6 @@ void Drawer::recorderTh() {
     video.close();
 }
 
-void Drawer::showAnimation(SdlWindow &window) {
-    //Muestro una animacion de prueba
-    int framesInX = 5;
-    int framesInY = 2;
-    //Divido el ancho de la imagen por la cantidad de frames a lo ancho
-    int widthFrame = 960 / framesInX;
-    //Divido el largo de la imagen por la cantidad de frames a lo largo
-    int heightFrame = 384 / framesInY;
-
-    SdlTexture texture("images/explosion.png", window);
-    SdlAnimation anim(texture, framesInX, framesInY, widthFrame, heightFrame,
-                      0);
-    SDL_Rect sdlDest = {(window.getWidth() - widthFrame) / 2, (window.getHeight() - heightFrame) / 2, widthFrame, heightFrame};
-    anim.renderLooped(sdlDest, window);
-}
-
 MatchWindow& Drawer::getMatchWindow() {
     return this->matchWindow;
 }

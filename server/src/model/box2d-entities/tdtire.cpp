@@ -75,16 +75,6 @@ void TDTire::updateDrive(int control_state) {
     body->ApplyForce(force * currentForwardNormal, body->GetWorldCenter(), true);
 }
 
-void TDTire::updateTurn(int control_state) {
-    float desiredTorque = 0;
-    switch (control_state & (TDC_LEFT|TDC_RIGHT)) {
-        case TDC_LEFT: desiredTorque = 15; break;
-        case TDC_RIGHT: desiredTorque = -15; break;
-        default: ;
-    }
-    body->ApplyTorque(desiredTorque, true);
-}
-
 TDTire::~TDTire() {
     body->GetWorld()->DestroyBody(body);
 }

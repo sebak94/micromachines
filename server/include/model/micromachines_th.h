@@ -31,12 +31,12 @@ class MicroMachinesTh : public Thread {
     bool running = true;
     std::map<ColorType, Car*>::iterator itCar;
     void removePlayerFromVector(ClientTh *player);
-    int numberPlayers;
+    int numberPlayers = 0;
 
     public:
     b2World *world;
 
-    MicroMachinesTh(Config &config);
+    explicit MicroMachinesTh(Config &config);
     void setTrack(std::string trackStr);
     void createCars();
     void update();
@@ -45,17 +45,13 @@ class MicroMachinesTh : public Thread {
     void removePlayer(ClientTh *client);
     void cleanPlayers();
     void sendNewStateToPlayers();
-    std::string allTrackNames();
     Point getStartingPoint(int position);
     uint16_t getStartingCarRot(int position);
     void changeCarState(char *new_command);
     int getPlayersNumber();
-    void setPlayerGameState(ClientTh *player, GameState state);
     void setAllPlayersGameStates(GameState state);
-    std::string lapsSerialized();
     void monitorTrack();
     int getStartID(int order);
-    TrackList& getTracks();
     bool somePlayersInMainMenu();
     void updateWinners();
     void sendWinners();

@@ -18,15 +18,15 @@ private:
     std::string color;
 
 public:
-    explicit Car(std::string carStr);
+    explicit Car(std::string &carStr);
     ~Car();
-    void setCarParams(std::string carStr);
+    void setCarParams(std::string &carStr);
     int getX() const;
     int getY() const;
     int getDegrees() const;
     int getHealth() const;
     std::string getMyColor() const;
-    void update(std::string carStr);
+    void update(std::string &carStr);
     int getMyLap() const;
     bool collided();
     bool exploded();

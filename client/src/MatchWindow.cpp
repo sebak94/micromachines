@@ -89,7 +89,7 @@ void MatchWindow::updateSelectingButtons(const SDL_Event *event) {
 void MatchWindow::updateCreatingButtons(const SDL_Event *event) {
     arrowButton2.updateEvent(event);
     if (arrowButton2.isClicked()) {
-        itPlayers++;
+        ++itPlayers;
         if (itPlayers == players.end())
             itPlayers = players.begin();
     }
@@ -103,17 +103,17 @@ void MatchWindow::updateNonSelectingButtons(const SDL_Event *event) {
     ready = false;
     if (arrowButton.isClicked()) {
         if (state == creatingMatch) {
-            itTrackNames++;
+            ++itTrackNames;
             if (itTrackNames == trackNames.end())
                 itTrackNames = trackNames.begin();
         } else if (state == joiningMatch) {
-            itMatchNames++;
+            ++itMatchNames;
             if (itMatchNames == matchNames.end())
                 itMatchNames = matchNames.begin();
         }
     }
     if (arrowButton3.isClicked()) {
-        itScripts++;
+        ++itScripts;
         if (itScripts == scripts.end())
             itScripts = scripts.begin();
     }

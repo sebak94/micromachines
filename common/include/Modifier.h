@@ -19,9 +19,9 @@ private:
     direction dir = left;
 
 public:
-    Modifier(int x, int y, std::string type, direction dir);
+    Modifier(int x, int y, std::string &type, direction dir);
     ~Modifier();
-    void setType(std::string str);
+    void setType(std::string &str);
     std::string getType() const;
     int getX() const;
     int getY() const;

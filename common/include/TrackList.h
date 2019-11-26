@@ -42,7 +42,6 @@ private:
 
 public:
     void readTracks();
-    void printTrack(const std::string &name);
     Track& getTrack(const std::string &name);
 
     std::vector<std::string> getTrackNames();

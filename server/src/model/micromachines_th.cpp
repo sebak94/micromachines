@@ -75,17 +75,13 @@ void MicroMachinesTh::update() {
 
 Car * MicroMachinesTh::getNextCar() {
     Car * car = itCar->second;
-    itCar++;
+    ++itCar;
     return car;
 }
 
 void MicroMachinesTh::addPlayer(ClientTh *client) {
     Lock l(m);
     players.push_back(client);
-}
-
-std::string MicroMachinesTh::lapsSerialized() {
-    return std::to_string(laps) += "\n";
 }
 
 std::string MicroMachinesTh::trackSerialized() {
@@ -114,11 +110,6 @@ void MicroMachinesTh::removePlayerFromVector(ClientTh *player) {
 int MicroMachinesTh::getPlayersNumber() {
     Lock l(m);
     return players.size();
-}
-
-void MicroMachinesTh::setPlayerGameState(ClientTh *player, GameState state) {
-    Lock l(m);
-    player->setState(state);
 }
 
 void MicroMachinesTh::setAllPlayersGameStates(GameState state) {
@@ -172,13 +163,12 @@ void MicroMachinesTh::updatePlayersState() {
 
 // Checks if cars jump track parts and updates laps
 void MicroMachinesTh::monitorTrack() {
-    int x, y, lastID, currentID;
     Lock l(m);
     for (size_t i = 0; i < players.size(); i++) {
-        x = players[i]->getCarPosX();
-        y = players[i]->getCarPosY();
-        lastID = players[i]->getCarLastTrackID();
-        currentID = track.getTrackPart(x, y).getID();
+        int x = players[i]->getCarPosX();
+        int y = players[i]->getCarPosY();
+        int lastID = players[i]->getCarLastTrackID();
+        int currentID = track.getTrackPart(x, y).getID();
         if (currentID == lastID || !track.isOnTrack(x,y)) {
             // sigue en el mismo o está fuera de pista
         } else if (track.jumpedTrackPart(x, y, lastID)) {
@@ -241,14 +231,9 @@ void MicroMachinesTh::sendModifiersToPlayers() {
     Lock l(m);
     if (track.hasGrandstands()) {
         for (size_t i = 0; i < players.size(); i++) {
-            std::string borrar = modifiersSerialized();
             players[i]->sendModifiers(modifiersSerialized());
         }
     }
-}
-
-std::string MicroMachinesTh::allTrackNames() {
-    return tracks.serialize();
 }
 
 Point MicroMachinesTh::getStartingPoint(int position) {
@@ -261,10 +246,6 @@ int MicroMachinesTh::getStartID(int order) {
 
 uint16_t MicroMachinesTh::getStartingCarRot(int position) {
     return track.getCarStartingRotation(position);
-}
-
-TrackList& MicroMachinesTh::getTracks() {
-    return tracks;
 }
 
 bool MicroMachinesTh::somePlayersInMainMenu() {

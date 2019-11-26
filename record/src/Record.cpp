@@ -162,14 +162,6 @@ bool Record::isRecording() {
     return recording;
 }
 
-SDL_Texture * Record::getSDLRecordTexture(SDL_Renderer * renderer) {
-    return SDL_CreateTexture(renderer,
-                             SDL_PIXELFORMAT_RGB24,
-                             SDL_TEXTUREACCESS_TARGET,
-                             width,
-                             height);
-}
-
 Record::~Record() {
     avcodec_close(codecContext);
     avcodec_free_context(&codecContext);

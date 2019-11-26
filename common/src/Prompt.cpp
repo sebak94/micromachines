@@ -119,7 +119,6 @@ void Prompt::editOrNewTrack(Window & game) {
     newButton = Button(game.renderer, saveButtonPos, NEW_BUTTON_PATH);
     editButton = Button(game.renderer, editButtonPos, EDIT_BUTTON_PATH);
     TrackList trackList;
-    std::vector<std::string> trackNames = trackList.getTrackNames();
     while (!quit && !modeAccepted) {
         getModeEvent();
         processModeEvent();

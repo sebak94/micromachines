@@ -1,6 +1,6 @@
 #include "../include/Modifier.h"
 
-Modifier::Modifier(int x, int y, std::string type, direction dir) {
+Modifier::Modifier(int x, int y, std::string &type, direction dir) {
     this->x = x;
     this->y = y;
     setType(type);
@@ -9,7 +9,7 @@ Modifier::Modifier(int x, int y, std::string type, direction dir) {
 
 Modifier::~Modifier() {}
 
-void Modifier::setType(std::string str) {
+void Modifier::setType(std::string &str) {
     if (str == "healthBox") this->type = healthBox;
     else if (str == "boost") this->type = boost;
     else if (str == "stones") this->type = stones;

@@ -19,7 +19,6 @@ class TDTire {
     b2Vec2 getForwardVelocity();
     void updateFriction();
     void updateDrive(int control_state);
-    void updateTurn(int control_state);
 
 
     TDTire(b2World* world, Point initial_position);

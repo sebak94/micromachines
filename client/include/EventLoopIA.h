@@ -11,7 +11,7 @@
 
 class EventLoopIA : public Thread {
 private:
-    bool running;
+    bool running = false;
     BlockingQueue &queue;
     Drawer *drawer;
     ModelMonitor &modelMonitor;

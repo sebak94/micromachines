@@ -9,7 +9,7 @@
 
 class Dispatcher : public Thread {
 private:
-    bool running;
+    bool running = false;
     BlockingQueue &queue;
     Socket &socket;
 

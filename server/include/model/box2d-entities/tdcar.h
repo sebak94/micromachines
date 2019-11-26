@@ -7,7 +7,6 @@
 #include <vector>
 
 class ContactListener : public b2ContactListener {
-private:
 public:
     void BeginContact(b2Contact *contact) override;
     void EndContact(b2Contact *contact) override;
@@ -18,7 +17,7 @@ class TDCar {
     std::vector<TDTire*> tires;
     b2RevoluteJoint *flJoint, *frJoint;
     ContactListener contactListener;
-    b2Fixture * fix;
+    b2Fixture *fix;
     bool contacting = false;
 
     public:

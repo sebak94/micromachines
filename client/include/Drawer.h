@@ -25,7 +25,7 @@
 class Drawer : public Thread {
 private:
     Config config;  // must load first
-    bool running;
+    bool running = false;
     SdlWindow window;
     std::map<std::string, SdlSurface*> pictures;
     std::map<trackPartType, SdlSurface*> trackPictures;
@@ -57,7 +57,6 @@ private:
     void createFullScreenButton();
     void showFullScreenButton();
     void draw();
-    void showAnimation(SdlWindow &window);
     void createRecButton();
     void showRecButton();
     void recorderTh();

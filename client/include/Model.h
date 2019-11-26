@@ -28,13 +28,13 @@ private:
 public:
     Model();
     ~Model();
-    void setTrack(std::vector<TrackPartData> track);
+    void setTrack(std::vector<TrackPartData> &track);
     std::vector<TrackPartData>& getTrack();
     void setMyColor(std::string str);  // Usado unica vez, set color de mi auto
     std::string getMyColor() const;
     std::map<std::string, Car*>& getCars();
     void updateCar(std::string str);
-    void setGameState(std::string str);
+    void setGameState(std::string &str);
     void setTotalLaps(const std::string& str);
     int getTotalLaps();
     GameState getGameState();

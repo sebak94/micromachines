@@ -74,12 +74,12 @@ public:
     void updateSamples(const SDL_Event *event);
     void applyAllSamplesToGrid();
     void applySampleToGrid(TrackBlock &sample);
-    bool findStartLine(int &startCol, int &startRow);
+    bool findStartLine(int &startRow, int &startCol);
     int getPixelPosX(int index);
 
     int getPixelPosY(int row);
 
-    trackPartType getType(int col, int row);
+    trackPartType getType(int row, int col);
 
     TrackGrid(Window &game, Track loadedTrack);
 

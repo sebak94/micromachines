@@ -7,11 +7,9 @@
 #include "../include/Track.h"
 
 /* Constructor: Creates track for track editor */
-Track::Track(int width, int height, const std::string &name) {
+Track::Track(int width, int height, const std::string &name) : width(width),
+    height(height), name(name) {
     TrackPartData emptyPart;
-    this->name = name;
-    this->width = width;
-    this->height = height;
     partCounter = 0;
     trackPartData.clear();
     trackPartData.reserve(width * height);
@@ -129,14 +127,6 @@ bool Track::isTrackPart(int row, int col) {
             type == downLeft ||
             type == upLeft ||
             type == upRight);
-}
-
-// Checks if is a straight track part
-bool Track::isTrackLinePart(trackPartType type) {
-    return (type == horizontal ||
-            type == vertical ||
-            type == finishH ||
-            type == finishV);
 }
 
 // Gets type (curve, straight line, etc)
@@ -376,8 +366,6 @@ int Track::setNextCoord(int &row,
         col--;
     else if (sameRow && elem == upLeft && prev == downRight)
         row--;
-    else if (elem == upLeft && prev == downLeft)
-        col--;
     else if (elem == downRight && prev == upRight)
         col++;
     else if (!sameRow && elem == downRight && prev == upLeft)
@@ -459,16 +447,14 @@ Track::Track(const std::string & trackStr) {
 
 // Parses track parts in string to create a track (posx, posy, type)
 void Track::parseTrackParts(const std::string & trackStr, size_t & pos) {
-    int x;
-    int y;
     trackPartType type;
     TrackPartData part;
-    for (int i=1; i <= width*height; i++){
-        x = std::stoi(parseTrackParam(trackStr, pos, ','));
-        y = std::stoi(parseTrackParam(trackStr, pos, ','));
+    for (int i = 1; i <= width * height; i++){
+        int x = std::stoi(parseTrackParam(trackStr, pos, ','));
+        int y = std::stoi(parseTrackParam(trackStr, pos, ','));
         std::string typeStr = parseTrackParam(trackStr,pos, ',');
         type = static_cast<trackPartType>(std::stoi(typeStr));
-        part.loadPosClient(x,y);
+        part.loadPosClient(x, y);
         part.loadType(type);
         trackPartData.emplace_back(part);
     }
@@ -576,17 +562,6 @@ Point Track::getTrackPartPoint(int trackID) {
 // Gets car ID based on starting position
 int Track::getStartingID(int order) {
     return partCounter - 1 - order/STARTCARSPERBLOCK;
-}
-
-int Track::getCurrentID(int posX, int posY) {
-    int x = findNearestPos(posX);
-    int y = findNearestPos(posY);
-    std::cout << x << "," << y << " ";
-    for(auto & it : trackSequence) {
-        if (it.second.getX() == x && it.second.getY() == y)
-            return it.first;
-    }
-    return -1;
 }
 
 int Track::getPartsNumber() {

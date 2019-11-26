@@ -124,7 +124,7 @@ void Camera::vibrateCar(Car *car, int &x, int &y) {
     auto it = carVibration.find(car);
     if (it != carVibration.end()) {
         if (it->second >= 0) x += VIBRATE_MAG;
-        else if (it->second < 0) y -= VIBRATE_MAG;
+        else y -= VIBRATE_MAG;
         it->second++;
         if (it->second == VIBRATE_RATE) it->second = -VIBRATE_RATE;
     } else {
