@@ -14,7 +14,7 @@ void Ai::setColor(std::string &color) {
     this->carColor = color;
 }
 
-void Ai::setTrack(std::vector <TrackPartData> &track) {
+void Ai::setTrack(std::vector <TrackPartData> track) {
     const char *matrix[20][20];
 
     for (int i = 0; i <= 15; i++) {
@@ -67,7 +67,7 @@ const char *Ai::get_enum_as_char(trackPartType type) {
     }
 }
 
-const char *Ai::get_next_move(std::map<std::string, Car *> &cars) {
+const char *Ai::get_next_move(std::map<std::string, Car *> cars) {
     for (auto &it : cars) {
         Car *car = it.second;
         if (car->getMyColor() == this->carColor)

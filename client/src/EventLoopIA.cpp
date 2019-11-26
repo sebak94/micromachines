@@ -6,7 +6,7 @@ EventLoopIA::EventLoopIA(BlockingQueue &queue, Drawer *drawerThread,
                          ModelMonitor &modelMonitor) :
         queue(queue), drawer(drawerThread), modelMonitor(modelMonitor) {}
 
-void EventLoopIA::setTrack(std::vector <TrackPartData> &track) {
+void EventLoopIA::setTrack(std::vector <TrackPartData> track) {
     this->lua_ai.setTrack(track);
 }
 

@@ -21,7 +21,7 @@ public:
     EventLoopIA(BlockingQueue &queue, Drawer *drawerThread,
                 ModelMonitor &modelMonitor);
     ~EventLoopIA();
-    void setTrack(std::vector <TrackPartData> &track);
+    void setTrack(std::vector <TrackPartData> track);
     void setColor(std::string &color);
     virtual void run() override;
     virtual void stop() override;

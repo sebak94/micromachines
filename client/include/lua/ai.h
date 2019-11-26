@@ -40,9 +40,9 @@ private:
 public:
     Ai();
     void setColor(std::string &color);
-    void setTrack(std::vector <TrackPartData> &track);
+    void setTrack(std::vector <TrackPartData> track);
     const char *get_enum_as_char(trackPartType type);
-    const char *get_next_move(std::map<std::string, Car *> &cars);
+    const char *get_next_move(std::map<std::string, Car *> cars);
     ~Ai();
 };
 
