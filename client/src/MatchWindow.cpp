@@ -78,7 +78,7 @@ void MatchWindow::resetMatchButtons() {
 void MatchWindow::updateSelectingButtons(const SDL_Event *event) {
     createMatchButton.updateEvent(event);
     joinMatchButton.updateEvent(event);
-    if (createMatchButton.isClicked() && !trackNames.empty()) {
+    if (createMatchButton.isClicked()) {
         state = creatingMatch;
     }
     if (joinMatchButton.isClicked()) {
@@ -118,7 +118,13 @@ void MatchWindow::updateNonSelectingButtons(const SDL_Event *event) {
         if (itScripts == scripts.end())
             itScripts = scripts.begin();
     }
-    if (playButton.isClicked()) {
+    if (state == creatingMatch &&
+        playButton.isClicked() &&
+        !trackNames.empty()) {
+        ready = true;
+    } else if (state == joiningMatch &&
+        playButton.isClicked() &&
+        !matchNames.empty()) {
         ready = true;
     }
     if (returnButton.isClicked()) {

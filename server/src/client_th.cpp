@@ -215,6 +215,7 @@ void ClientTh::run() {
                 while (keep_talking && state == playing) {
                     char action;
                     receive(&action);
+                    std:: cout << action << std::endl;
                     Lock l(m);
                     actions.push(action);
                 }
@@ -225,6 +226,7 @@ void ClientTh::run() {
                 while (keep_talking && state == waitingEnd && !flushed) {
                     char action;
                     receive(&action);
+                    //std:: cout << action << std::endl;
                     if (action == 'I') flushed = true;
                 }
                 break;
