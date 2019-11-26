@@ -11,7 +11,7 @@ private:
     SdlTexture &texture;
     std::vector<SDL_Rect> spriteClips;
     std::vector<SDL_Rect>::iterator spIt;
-    int spriteStart;
+    int spriteStart = 0;
     int spriteLen;  // ms
     bool started = false;
     bool triggered = false;
@@ -21,7 +21,6 @@ public:
                  int framesInY, int widthFrame, int heightFrame,
                  int spriteLen);
     ~SdlAnimation();
-    void renderLooped(SDL_Rect &sdlDest, SdlWindow &window);
     void render(SDL_Rect &sdlDest, SdlWindow &window);
     bool isTriggered();
     void trigger();

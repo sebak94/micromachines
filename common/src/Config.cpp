@@ -32,10 +32,6 @@ bool Config::isSet(const std::string & request) {
     return values[request] == SET_CONDITION;
 }
 
-uint8_t Config::getAsUint8(const std::string & request) {
-    return (uint8_t) stoi(values[request]);
-}
-
 float Config::getAsFloat(const std::string & request) {
     return std::stof(values[request]);
 }

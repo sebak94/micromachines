@@ -49,13 +49,13 @@ protected:
     int startRow = 0;  // start line
     int nextToStartCol = 0;  // next to start line
     int nextToStartRow = 0;  // next to start line
-    int width = 0;  // blocks
-    int height = 0;  // blocks
+    int width;  // blocks
+    int height;  // blocks
     int partCounter = 0;  // number of track elements
     std::vector<TrackPartData> trackPartData{};  // data of blocks
     std::vector<Grandstand> grandstands;  // public
     std::map<int, Point> trackSequence;  // stores race blocks positions ordered
-    std::string name{};  // of track
+    std::string name;  // of track
 
 public:
     Track(int width, int height, const std::string &name);
@@ -79,7 +79,6 @@ public:
     bool validateTrack();
     int setNextCoord(int &row, int &col, trackPartType elem,
                      trackPartType prev, int lastRow);
-    int getCurrentID(int posX, int posY);
     int getStartingID(int order);
     int getPartsNumber();
     int getTrackW();
@@ -87,7 +86,6 @@ public:
     static void printElem(const TrackPartData &part);
     static bool inCurveRange(bool invertedX, bool invertedY, int x, int y);
     static bool isCurve(const trackPartType & elem);
-    static bool isTrackLinePart(trackPartType type);
     static bool isTrackPart(trackPartType type);
     static int findNearestPos(int pos);
     static int posToIndex(int pos);

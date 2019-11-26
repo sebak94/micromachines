@@ -13,7 +13,6 @@ private:
 
 public:
     Config();
-    uint8_t getAsUint8(const std::string &request);
     std::string getAsString(const std::string &request);
     uint16_t getAsUint16(const std::string &request);
     int getAsInt(const std::string &request);

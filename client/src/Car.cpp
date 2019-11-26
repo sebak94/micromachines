@@ -2,13 +2,13 @@
 
 #define MAX_HEALTH 100
 
-Car::Car(std::string carStr) {
+Car::Car(std::string &carStr) {
     setCarParams(carStr);
 }
 
 Car::~Car() {}
 
-void Car::setCarParams(std::string carStr) {
+void Car::setCarParams(std::string &carStr) {
     //serializacion: current_velocity, health, rotation, x, y, laps, color\n
     size_t pos = 0;
     parse(carStr, pos, ','); //velocidad
@@ -71,7 +71,7 @@ std::string Car::getMyColor() const {
     return this->color;
 }
 
-void Car::update(std::string carStr) {
+void Car::update(std::string &carStr) {
     setCarParams(carStr);
     if (health != lastHealth) {
         if (health == MAX_HEALTH) {
@@ -81,6 +81,4 @@ void Car::update(std::string carStr) {
         lastHealth = health;
         collision = true;
     }
-    this->x = x;
-    this->y = y;
 }

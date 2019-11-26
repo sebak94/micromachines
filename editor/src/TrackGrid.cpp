@@ -47,10 +47,9 @@ void TrackGrid::setGridSize() {
 /* Creates empty grid */
 void TrackGrid::initGrid() {
     TrackBlock auxBlock;
-    int row = 0;
-    int col = 0;
-    for (int i = 1; i <= wBlocks*hBlocks; i++) {
-        col = (i-1)%wBlocks, row = (i-1)/wBlocks;
+    for (int i = 1; i <= wBlocks * hBlocks; i++) {
+        int col = (i - 1) % wBlocks;
+        int row = (i - 1) / wBlocks;
         auxBlock.setBlock(textures[TEX_GRASS],
                 empty,
                 col * blockWidth + gridMarginWidth,
@@ -65,11 +64,10 @@ void TrackGrid::initGridFromTrack(const Track & loadedTrack) {
     TrackBlock auxBlock;
     TrackPartData auxPart;
     std::vector<TrackPartData> parts = loadedTrack.getTrackPartData();
-    int row = 0;
-    int col = 0;
-    for (int i = 1; i <= wBlocks*hBlocks; i++) {
-        col = (i-1)%wBlocks, row = (i-1)/wBlocks;
-        auxPart = parts[row*wBlocks + col];
+    for (int i = 1; i <= wBlocks * hBlocks; i++) {
+        int col = (i - 1) % wBlocks;
+        int row = (i - 1) / wBlocks;
+        auxPart = parts[row * wBlocks + col];
         auxBlock.setBlock(getTexture(auxPart.getType()),
                           auxPart.getType(),
                           col * blockWidth + gridMarginWidth,
@@ -81,9 +79,8 @@ void TrackGrid::initGridFromTrack(const Track & loadedTrack) {
 
 /* Loads one texture with blending options */
 SDL_Texture * TrackGrid::loadTexture(const std::string & img_path, SDL_Renderer * renderer) {
-    SDL_Surface* rawImage = nullptr;
+    SDL_Surface* rawImage = IMG_Load(img_path.c_str());;
     SDL_Texture* tex = nullptr;
-    rawImage = IMG_Load(img_path.c_str());
     if (rawImage == nullptr)
         throw Error("Loading Image: %s.", img_path.c_str());
     tex = SDL_CreateTextureFromSurface(renderer, rawImage);
@@ -130,7 +127,7 @@ void TrackGrid::updateSamples(const SDL_Event *event) {
 }
 
 /* Gets finish line position. Returns false if non-existent or duplicated */
-bool TrackGrid::findStartLine(int & startRow, int & startCol) {
+bool TrackGrid::findStartLine(int &startRow, int &startCol) {
     trackPartType type;
     bool found = false;
     for (size_t i = 0; i < grid.size(); i++) {

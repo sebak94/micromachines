@@ -23,24 +23,6 @@ SdlAnimation::SdlAnimation(SdlTexture &texture, int framesInX,
 
 SdlAnimation::~SdlAnimation() {}
 
-void SdlAnimation::renderLooped(SDL_Rect &sdlDest, SdlWindow &window) {
-    if (!started) {
-        started = true;
-        spriteStart = SDL_GetTicks();
-    }
-    int now = SDL_GetTicks();
-    if (now - spriteStart > spriteLen) {
-        spriteStart = SDL_GetTicks();
-        sprite++;
-        if (sprite == spriteClips.size()) {
-            sprite = 0;
-            started = false;
-        }
-    }
-    SDL_Rect currentClip = *spIt;
-    this->texture.render(currentClip, sdlDest);
-}
-
 void SdlAnimation::trigger() {
     triggered = true;
 }

@@ -105,11 +105,10 @@ void Socket::Accept(Socket *peerskt) {
 }
 
 int Socket::Send(const char *buf, size_t length) {
-	int status;
 	size_t bytes_sent = 0;
 
     while (bytes_sent < length) {
-		status = send(fd, &buf[bytes_sent], length - bytes_sent, MSG_NOSIGNAL);
+		int status = send(fd, &buf[bytes_sent], length - bytes_sent, MSG_NOSIGNAL);
 
 		if (status == INVALID_FD) {
         	throw SocketError("Error al enviar los bytes. ",
@@ -127,11 +126,10 @@ int Socket::Send(const char *buf, size_t length) {
 }
 
 int Socket::Receive(char *buf, size_t length) {
-	int status;
 	size_t bytes_recv = 0;
 
     while (bytes_recv < length) {
-		status = recv(fd, &buf[bytes_recv], length - bytes_recv, 0);
+		int status = recv(fd, &buf[bytes_recv], length - bytes_recv, 0);
 
 		if (status == INVALID_FD) {
         	throw SocketError("Error al recibir los bytes. ",

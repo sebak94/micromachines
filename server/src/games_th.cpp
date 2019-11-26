@@ -146,9 +146,8 @@ void GamesTh::createGame(ClientTh * player) {
 
 // Adds player to existent match. Receives match sent by user in setMatch()
 void GamesTh::addPlayer(ClientTh *player) {
-    int gameIndex = PLAYERTOASSIGN;
     player->setMatch();
-    gameIndex = player->getGameNumber();
+    int gameIndex = player->getGameNumber();
     player->setCar(games[gameIndex]->getNextCar());
     games[gameIndex]->addPlayer(player);
     players[player] = gameIndex;

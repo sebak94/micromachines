@@ -9,16 +9,6 @@ ModelUpdater::ModelUpdater(Socket &socket, ModelMonitor &modelMonitor, Drawer* d
 
 ModelUpdater::~ModelUpdater() {}
 
-bool ModelUpdater::updateState(std::string &received) {
-    if (received[0] == 'G') {
-        modelMonitor.setGameState(received);
-        received = receive();
-        return true;
-    } else {
-        return false;
-    }
-}
-
 void ModelUpdater::run() {
     running = true;
     while (running) {

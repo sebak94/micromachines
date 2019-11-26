@@ -26,8 +26,8 @@ private:
     std::map<std::string, SdlSurface*> &pictures;
     std::map<trackPartType, SdlSurface*> &trackPictures;
     std::map<Car*, int> carVibration;
-    double blockWidth;
-    double blockHeight;
+    double blockWidth = 0;
+    double blockHeight = 0;
     SdlSurface lapBox;
     TextTexture lapNumber;
     SdlTexture explosionTex;

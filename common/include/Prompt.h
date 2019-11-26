@@ -40,13 +40,11 @@
 #define PROMPTYSPACING 20
 #define MAX_TRACK_SIZE 32
 
-class Prompt : TrackEditor{
+class Prompt : TrackEditor {
 private:
-    Button saveButton;
     Button editButton;
     Button nextButton;
     Button newButton;
-    Button homeButton;
     Button title;
     std::string inputText = " ";
     std::string nameError = " ";
@@ -75,7 +73,6 @@ private:
     bool renderWrongMessage = false;
     bool lengthReached = false;
     bool createNewTrack = false;
-    menuState nextMenu;
     std::vector<std::string> trackNames;
 
 public:

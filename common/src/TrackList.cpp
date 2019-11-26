@@ -21,11 +21,6 @@ void TrackList::readTracks() {
     tracksFile.close();
 }
 
-// Prints sketch of track named <name> into terminal
-void TrackList::printTrack(const std::string & name) {
-    tracks[name].print();
-}
-
 // Returns data of track named <name>
 Track & TrackList::getTrack(const std::string & name) {
     return tracks[name];

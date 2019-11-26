@@ -10,7 +10,7 @@ Model::~Model() {
     }
 }
 
-void Model::setTrack(std::vector<TrackPartData> track) {
+void Model::setTrack(std::vector<TrackPartData> &track) {
     this->track = track;
 }
 
@@ -34,7 +34,7 @@ void Model::setMyColor(std::string str) {
     myColor = color;
 }
 
-void Model::setGameState(std::string str) {
+void Model::setGameState(std::string &str) {
     if (str == "G,mainMenu\n") gameState = mainMenu;
     else if (str == "G,creating\n") gameState = creating;
     else if (str == "G,joining\n") gameState = joining;

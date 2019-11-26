@@ -41,7 +41,7 @@ private:
     bool rightClicked = false;
     SDL_Texture * texture{};
     SDL_Texture * startingTexture{};
-    trackPartType type;
+    trackPartType type = empty;
     int fixedPosX = 0;
     int fixedPosY = 0;
 

@@ -48,11 +48,10 @@ void GameLoopTh::waitForPlayers() {
 void GameLoopTh::countdownWait() {
     if (running) {
         uint64_t next_game_tick = GetTickCountMs();
-        uint64_t loops;
         countdownTime = (SECSTOSTART) * (SECTOMICROSEC);  // us
         while (countdownTime > 0) {
             auto begin = std::chrono::steady_clock::now();
-            loops = 0;
+            uint64_t loops = 0;
             micromachines.updatePlayersState();
             updateWorld(next_game_tick, SKIP_TICKS, loops, 1.0 / config.getAsFloat(REFRESH_FREQ), 5, 5);
             micromachines.sendNewStateToPlayers();
@@ -65,13 +64,11 @@ void GameLoopTh::countdownWait() {
 
 void GameLoopTh::play() {
     bool ending = false;
-    std::cout << "inicio del while \n";
     uint64_t next_game_tick = GetTickCountMs();
-    uint64_t loops;
     countdownTime = (MINTOMICROSEC) * config.getAsInt(RACETIME);  // us
     while (running && countdownTime > 0 && !micromachines.allPlayersGameEnded()) {
         auto begin = std::chrono::steady_clock::now();
-        loops = 0;
+        uint64_t loops = 0;
         micromachines.updatePlayersState();
         micromachines.monitorTrack();
         micromachines.updateModifiersPosition();

@@ -17,7 +17,7 @@ class GameLoopTh: public Thread {
     MicroMachinesTh &micromachines;
     Loader loader;
     uint8_t game_loops = 1;
-    double countdownTime;
+    double countdownTime = 0;
     Config config;
     modifierChrono modifTimer = std::chrono::steady_clock::now();
 

@@ -9,7 +9,7 @@
 
 class ModelUpdater : public Thread {
 private:
-    bool running;
+    bool running = false;
     Socket &socket;
     ModelMonitor &modelMonitor;
     Drawer* drawer;
@@ -24,7 +24,6 @@ public:
 
 private:
     std::string receive();
-    bool updateState(std::string &received);
 };
 
 #endif
