@@ -156,29 +156,6 @@
          "next-to-start" : [ 9, 12 ],
          "start" : [ 8, 12 ],
          "width" : 16
-      },
-      {
-         "height" : 12,
-         "layout" : [
-            "finishV",
-            "vertical",
-            "up-left",
-            "horizontal",
-            "horizontal",
-            "horizontal",
-            "up-right",
-            "vertical",
-            "vertical",
-            "down-right",
-            "horizontal",
-            "horizontal",
-            "horizontal",
-            "down-left"
-         ],
-         "name" : "No Grandstands",
-         "next-to-start" : [ 5, 7 ],
-         "start" : [ 4, 7 ],
-         "width" : 12
       }
    ]
 }

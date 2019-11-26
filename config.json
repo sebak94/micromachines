@@ -10,6 +10,6 @@
    "draw distance [4 - 8]" : 4,
    "fps limit" : 60,
    "rec fps limit" : 30,
-   "laps" : 8,
+   "laps" : 5,
    "mods" : "false"
 }
