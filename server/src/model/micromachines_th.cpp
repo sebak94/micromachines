@@ -193,6 +193,7 @@ void MicroMachinesTh::updateWinners() {
         if (player->getLaps() == laps &&
         (std::find(winners.begin(), winners.end(), color) == winners.end())) {
             player->setState(waitingEnd);
+            player->sendGameState(waitingEnd);
             winners.push_back(color);
         }
         player->setWinners(winners);

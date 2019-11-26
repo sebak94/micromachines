@@ -229,7 +229,7 @@ void ClientTh::run() {
                 }
                 break;
             case gameEnded:
-                sendGameState(lastState, state);
+                //sendGameState(lastState, state);
                 break;
         }
         usleep(200000);

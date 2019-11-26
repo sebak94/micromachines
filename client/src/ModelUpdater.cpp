@@ -57,8 +57,7 @@ void ModelUpdater::run() {
                         modelMonitor.updateCar(text);
                     }
                 } else if (modelMonitor.getGameState() == playing
-                        || modelMonitor.getGameState() == waitingEnd
-                        || modelMonitor.getGameState() == gameEnded) {
+                        || modelMonitor.getGameState() == waitingEnd) {
                     if (text[0] == 'W') {
                         modelMonitor.updateMatchResults(text.substr(2, text.length()));
                     } else if (text[0] == 'M') {

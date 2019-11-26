@@ -134,7 +134,10 @@ void EventLoopSDL::run() {
                 }
                 break;
             case waitingEnd:
-                if (!flushed) this->queue.push("I");
+                if (!flushed) {
+                    this->queue.push("L"); // to end "playing" receive
+                    this->queue.push("I"); // to flush in "waitingEnd"
+                }
                 flushed = true;
                 quitAndResize(event);
                 break;

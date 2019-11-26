@@ -78,7 +78,7 @@ void MatchWindow::resetMatchButtons() {
 void MatchWindow::updateSelectingButtons(const SDL_Event *event) {
     createMatchButton.updateEvent(event);
     joinMatchButton.updateEvent(event);
-    if (createMatchButton.isClicked()) {
+    if (createMatchButton.isClicked() && !trackNames.empty()) {
         state = creatingMatch;
     }
     if (joinMatchButton.isClicked()) {

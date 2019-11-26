@@ -133,7 +133,6 @@ int Car::getTrackID() {
 
 void Car::updateLaps() {
     laps++;
-    std::cout << std::endl << std::endl << laps << std::endl;
 }
 
 std::string Car::serialize() {
