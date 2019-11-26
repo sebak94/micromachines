@@ -11,8 +11,8 @@
 #include "sdl/SdlTexture.h"
 #include "sdl/SdlAnimation.h"
 
-#define LAPBOXPATH "../common/images/lapCounter.png"
-#define LAPFONT "../common/fonts/OpenSans-Italic.ttf"
+#define LAPBOXPATH "../assets/images/lapCounter.png"
+#define LAPFONT "../assets/fonts/OpenSans-Italic.ttf"
 #define SECSTOSTART 5
 #define SECOND 900
 
