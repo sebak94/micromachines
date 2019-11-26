@@ -72,17 +72,21 @@ void EventLoopSDL::matchWindowInfo(SDL_Event &event) {
     if (drawer->getMatchWindow().isReady()) {
         this->queue.push(drawer->getMatchWindow().serializeData());
         this->queue.push(drawer->getMatchWindow().getSelection());
+    } else if (drawer->getMatchWindow().returnIsPressed()) {
+        this->queue.push(MatchWindow::returnSerialized());
     }
 }
 
 void EventLoopSDL::run() {
     this->running = true;
+    bool flushed = false;
     while (running) {
         SDL_Event event;
         SDL_WaitEvent(&event);
 
         switch (modelMonitor.getGameState()) {
             case mainMenu:
+                flushed = false;
                 quitAndResize(event);
                 drawer->getMatchWindow().updateMatchButtons(&event);
                 if (drawer->getMatchWindow().isModeSelected() &&
@@ -92,10 +96,12 @@ void EventLoopSDL::run() {
                 }
                 break;
             case creating:
+                selectionSent = false;
                 quitAndResize(event);
                 matchWindowInfo(event);
                 break;
             case joining:
+                selectionSent = false;
                 quitAndResize(event);
                 matchWindowInfo(event);
                 break;
@@ -128,6 +134,8 @@ void EventLoopSDL::run() {
                 }
                 break;
             case waitingEnd:
+                if (!flushed) this->queue.push("I");
+                flushed = true;
                 quitAndResize(event);
                 break;
             case gameEnded:

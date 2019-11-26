@@ -40,6 +40,7 @@ private:
     std::vector<std::string> scripts;
     std::vector<std::string>::iterator itScripts;
     bool ready = false;
+    bool returnClicked = false;
 
 public:
     explicit MatchWindow(SdlWindow &sdlWindow);
@@ -55,6 +56,10 @@ public:
     bool isModeSelected();
     std::string getSelection();
     void setMatchNames(const std::vector<std::string>& matches);
+
+    bool returnIsPressed();
+
+    static std::string returnSerialized();
 
 private:
     void createMatchButtons();
@@ -74,6 +79,7 @@ private:
                         Button &buttonToChangeText, TextTexture &text);
     void showPlayAndReturn();
     void resetMatchButtons();
+
 };
 
 #endif

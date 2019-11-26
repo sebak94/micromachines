@@ -10,17 +10,17 @@
 
 #define PLAYERTOASSIGN -1
 #define PLAYERBEINGASSIGNED -2
-#define REFRESHPLAYERSTIME 500000  // us
+#define REFRESHPLAYERSTIME 200000  // us
 #define LAPS_CONFIG "laps"
 
 void GamesTh::run() {
     while (running) {
         mapNewClients();
+        usleep(REFRESHPLAYERSTIME);
         deleteMapperThreads();
         stopGameIfAllEnded();
         gameEndedPlayersToMainMenu();
         joinEndedGames();
-        usleep(REFRESHPLAYERSTIME);
     }
 }
 
@@ -94,15 +94,19 @@ void GamesTh::stop() {
 void GamesTh::processPlayer(ClientTh * player, bool & finished) {
     TrackList tracks;
     tracks.readTracks();
-    if (player->getState() == mainMenu) {
-        printf("menu\n");
-        player->sendAllTrackNames(tracks.serialize());
-        player->setAvailableGames(serializeGames());
-        player->sendAvailableGames();
-        usleep(REFRESHPLAYERSTIME);
+    bool selected = false;
+    while (!selected) {
+        while (player->getState() == mainMenu) {
+            player->sendGameState(mainMenu);
+            printf("menu\n");
+            player->sendAllTrackNames(tracks.serialize());
+            player->setAvailableGames(serializeGames());
+            player->sendAvailableGames();
+            usleep(REFRESHPLAYERSTIME);
+        }
+        player->sendGameState(player->getState());
+        selected = player->receiveMatchSelection();
     }
-    player->setPlayerMode();
-    player->receiveMatchSelection();
     if (!player->stillTalking()) return;
     player->setPlayerMode(); //actualizo el player mode, por si cambiaron de create a join o al reves
     if (player->getState() == creating) {

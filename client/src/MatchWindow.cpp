@@ -101,6 +101,7 @@ void MatchWindow::updateNonSelectingButtons(const SDL_Event *event) {
     playButton.updateEvent(event);
     returnButton.updateEvent(event);
     ready = false;
+    returnClicked = false;
     if (arrowButton.isClicked()) {
         if (state == creatingMatch) {
             itTrackNames++;
@@ -121,8 +122,17 @@ void MatchWindow::updateNonSelectingButtons(const SDL_Event *event) {
         ready = true;
     }
     if (returnButton.isClicked()) {
+        returnClicked = true;
         state = selectingMode;
     }
+}
+
+bool MatchWindow::returnIsPressed() {
+    return returnClicked;
+}
+
+std::string MatchWindow::returnSerialized() {
+    return "B\n";
 }
 
 std::string MatchWindow::serializeData() {
@@ -260,6 +270,7 @@ std::string MatchWindow::getSelection() {
 void MatchWindow::reset() {
     state = selectingMode;
     ready = false;
+    returnClicked = false;
     resetMatchButtons();
     createMatchButtons();
     matchNames.clear();

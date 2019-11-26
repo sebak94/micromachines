@@ -82,7 +82,7 @@ class ClientTh: public Thread {
     void setWinners(std::vector<std::string> w);
     void sendWinners();
     void clean();
-    void receiveMatchSelection();
+    bool receiveMatchSelection();
 
     bool updateHealth();
 
@@ -93,6 +93,8 @@ class ClientTh: public Thread {
     int getBoost();
 
     void setBoost(int b);
+
+    void sendGameState(GameState st);
 };
 
 #endif

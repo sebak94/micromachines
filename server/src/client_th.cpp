@@ -71,7 +71,7 @@ std::string ClientTh::parse(const std::string &str, size_t &pos, const char deli
     return substr;
 }
 
-void ClientTh::receiveMatchSelection() {
+bool ClientTh::receiveMatchSelection() {
     matchSelection.clear();
     char action;
     while (keep_talking && action != '\n') {
@@ -79,6 +79,11 @@ void ClientTh::receiveMatchSelection() {
         matchSelection += action;
     }
     std::cout << "match: " << matchSelection << std::endl;
+    if (matchSelection[0] == 'B') {
+        state = mainMenu;
+        return false;
+    }
+    return true;
 }
 
 void ClientTh::setMatch() {
@@ -127,6 +132,7 @@ void ClientTh::sendGameState(GameState & previousSt, GameState & st) {
         switch (st) {
             case mainMenu:
                 send(std::string(MSG_ST_MAINMENU));
+                setPlayerMode();
                 break;
             case creating:
                 send(std::string(MSG_ST_CREATING));
@@ -153,12 +159,43 @@ void ClientTh::sendGameState(GameState & previousSt, GameState & st) {
     }
 }
 
+void ClientTh::sendGameState(GameState st) {
+        switch (st) {
+            case mainMenu:
+                send(std::string(MSG_ST_MAINMENU));
+                break;
+            case creating:
+                send(std::string(MSG_ST_CREATING));
+                break;
+            case joining:
+                send(std::string(MSG_ST_JOINING));
+                break;
+            case waitingPlayers:
+                send(std::string(MSG_ST_WAITINGPLAYERS));
+                break;
+            case startCountdown:
+                send(std::string(MSG_ST_COUNTDOWN));
+                break;
+            case playing:
+                send(std::string(MSG_ST_PLAYING));
+                break;
+            case waitingEnd:
+                send(std::string(MSG_ST_WAITINGEND));
+                break;
+            case gameEnded:
+                send(std::string(MSG_ST_GAMEENDED));
+                break;
+        }
+    }
+
 void ClientTh::run() {
     std::string strState = MSG_ST_MAINMENU;
     GameState lastState = gameEnded;
+    bool flushed = false;
     while (is_running){
         switch (state) {
             case mainMenu:
+                flushed = false;
                 sendGameState(lastState, state);
                 break;
             case creating:
@@ -184,6 +221,11 @@ void ClientTh::run() {
                 break;
             case waitingEnd:
                 sendGameState(lastState, state);
+                while (keep_talking && state == waitingEnd && !flushed) {
+                    char action;
+                    receive(&action);
+                    if (action == 'I') flushed = true;
+                }
                 break;
             case gameEnded:
                 sendGameState(lastState, state);
